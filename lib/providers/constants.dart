@@ -10,5 +10,5 @@ String timestampToString(DateTime timestamp) {
   var year = timestamp.year.toString();
   var hour = timestamp.hour.toString().padLeft(2, '0');
   var minute = timestamp.minute.toString().padLeft(2, '0');
-  return '$day:$month:$year $hour:$minute';
+  return '$day.$month.$year $hour:$minute';
 }
