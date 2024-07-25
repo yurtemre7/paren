@@ -2,8 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
-import 'package:get/get_rx/get_rx.dart';
-import 'package:get/get_state_manager/get_state_manager.dart';
+import 'package:get/get.dart';
 import 'package:paren/classes/currency.dart';
 import 'package:paren/providers/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
