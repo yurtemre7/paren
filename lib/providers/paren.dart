@@ -16,10 +16,14 @@ class Paren extends GetxController {
   final currencies = <Currency>[].obs;
   final latestTimestamp = DateTime.now().obs;
 
-  @override
-  onInit() {
-    super.onInit();
-    initCurrencies();
+  final fromCurrency = "yen".obs;
+  final toCurrency = "eur".obs;
+
+  static Future<Paren> init() async {
+    Paren paren = Paren();
+    await paren.initCurrencies();
+    log('Initialized Paren');
+    return paren;
   }
 
   Future<void> fetchCurrencyDataOnline() async {
@@ -30,24 +34,28 @@ class Paren extends GetxController {
 
       currencies.value = [
         Currency(
+          id: "eur",
           name: 'Euro',
           symbol: '€',
           flag: '🇪🇺',
           rate: 1.0,
         ),
         Currency(
+          id: "usd",
           name: 'US Dollar',
           symbol: '\$',
           flag: '🇺🇸',
           rate: rates['USD'],
         ),
         Currency(
+          id: "yen",
           name: 'Japanese Yen',
           symbol: '¥',
           flag: '🇯🇵',
           rate: rates['JPY'],
         ),
         Currency(
+          id: "try",
           name: 'Turkish Lira',
           symbol: '₺',
           flag: '🇹🇷',
@@ -67,21 +75,29 @@ class Paren extends GetxController {
 
     latestTimestamp.value = DateTime.now();
     sp.setString('latestTimestamp', latestTimestamp.value.toString());
+
+    sp.setString('fromC', fromCurrency.value);
+    sp.setString('toC', toCurrency.value);
   }
 
   Future<void> initCurrencies() async {
     var sp = await SharedPreferences.getInstance();
     var currencyList = sp.getStringList('currencies');
     if (currencyList != null) {
-      currencies.value = currencyList
-          .map(
-            (e) => Currency.fromJson(
-              Map<String, dynamic>.from(json.decode(e)),
-            ),
-          )
-          .toList();
+      try {
+        currencies.value = currencyList
+            .map(
+              (e) => Currency.fromJson(
+                Map<String, dynamic>.from(json.decode(e)),
+              ),
+            )
+            .toList();
+      } catch (e) {
+        log('An Error happened. Rebuilding database');
+      }
     } else {
       var EUR = Currency(
+        id: 'eur',
         name: 'Euro',
         symbol: '€',
         flag: '🇪🇺',
@@ -89,6 +105,7 @@ class Paren extends GetxController {
       );
 
       var USD = Currency(
+        id: 'usd',
         name: 'US Dollar',
         symbol: '\$',
         flag: '🇺🇸',
@@ -96,6 +113,7 @@ class Paren extends GetxController {
       );
 
       var YEN = Currency(
+        id: 'yen',
         name: 'Japanese Yen',
         symbol: '¥',
         flag: '🇯🇵',
@@ -103,6 +121,7 @@ class Paren extends GetxController {
       );
 
       var TRY = Currency(
+        id: 'try',
         name: 'Turkish Lira',
         symbol: '₺',
         flag: '🇹🇷',
@@ -116,6 +135,16 @@ class Paren extends GetxController {
       latestTimestamp.value = DateTime.parse(latestTimestampString);
     } else {
       latestTimestamp.value = DateTime.now();
+    }
+
+    var fromCString = sp.getString('fromC');
+    if (fromCString != null) {
+      fromCurrency.value = fromCString;
+    }
+
+    var toCString = sp.getString('toC');
+    if (toCString != null) {
+      toCurrency.value = toCString;
     }
 
     await fetchCurrencyDataOnline();
