@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:paren/classes/currency.dart';
 import 'package:paren/providers/constants.dart';
 import 'package:paren/providers/paren.dart';
+import 'package:paren/screens/settings.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -44,6 +45,16 @@ class _HomeState extends State<Home> {
       child: Scaffold(
         appBar: AppBar(
           title: const Text('Par円'),
+          actions: [
+            IconButton(
+              onPressed: () {
+                Get.to(() => const Settings());
+              },
+              icon: const Icon(
+                Icons.settings,
+              ),
+            ),
+          ],
         ),
         body: SafeArea(
           child: Obx(
@@ -199,42 +210,53 @@ class _HomeState extends State<Home> {
   Widget buildCurrencyTable(RxList<Currency> currencies) {
     return Container(
       padding: const EdgeInsets.all(16),
-      width: context.width * 2,
-      child: GridView.count(
-        physics: const NeverScrollableScrollPhysics(),
-        crossAxisCount: 3,
-        shrinkWrap: true,
-        mainAxisSpacing: 12,
-        crossAxisSpacing: 8,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          ...[1, 5, 10, 20, 50, 100, 200, 500, 1000, 2000, 5000, 10000, 15000, 20000, 25000]
-              .map((e) {
-            var fromCurrency = currencies[selectedFromCurrencyIndex.value];
-            var toCurrency = currencies[selectedToCurrencyIndex.value];
+          const Text(
+            'Quick Conversions',
+            style: TextStyle(
+              fontSize: 18,
+            ),
+          ),
+          const SizedBox(height: 8),
+          GridView.count(
+            physics: const NeverScrollableScrollPhysics(),
+            crossAxisCount: 3,
+            shrinkWrap: true,
+            mainAxisSpacing: 12,
+            crossAxisSpacing: 8,
+            children: [
+              ...[1, 5, 10, 20, 50, 100, 200, 500, 1000, 2000, 5000, 10000, 15000, 20000, 25000]
+                  .map((e) {
+                var fromCurrency = currencies[selectedFromCurrencyIndex.value];
+                var toCurrency = currencies[selectedToCurrencyIndex.value];
 
-            var fromRate = fromCurrency.rate;
-            var toRate = toCurrency.rate;
+                var fromRate = fromCurrency.rate;
+                var toRate = toCurrency.rate;
 
-            var convertedAmount = e * toRate / fromRate;
-            var roundedTo = (convertedAmount * 100).round() / 100;
-            var amountStr = roundedTo.toStringAsFixed(2).replaceAllMapped(
-                  RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
-                  (Match m) => '${m[1]},',
+                var convertedAmount = e * toRate / fromRate;
+                var roundedTo = (convertedAmount * 100).round() / 100;
+                var amountStr = roundedTo.toStringAsFixed(2).replaceAllMapped(
+                      RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
+                      (Match m) => '${m[1]},',
+                    );
+                var inputStr = e.toStringAsFixed(2).replaceAllMapped(
+                      RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
+                      (Match m) => '${m[1]},',
+                    );
+
+                return Card(
+                  child: Center(
+                    child: Text(
+                      '$inputStr ${currencies[selectedFromCurrencyIndex.value].symbol}\n→\n$amountStr ${currencies[selectedToCurrencyIndex.value].symbol}',
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
                 );
-            var inputStr = e.toStringAsFixed(2).replaceAllMapped(
-                  RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
-                  (Match m) => '${m[1]},',
-                );
-
-            return Card(
-              child: Center(
-                child: Text(
-                  '$inputStr ${currencies[selectedFromCurrencyIndex.value].symbol}\n→\n$amountStr ${currencies[selectedToCurrencyIndex.value].symbol}',
-                  textAlign: TextAlign.center,
-                ),
-              ),
-            );
-          })
+              })
+            ],
+          ),
         ],
       ),
     );
