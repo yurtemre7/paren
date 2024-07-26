@@ -24,42 +24,77 @@ class _SettingsState extends State<Settings> {
         var currencies = paren.currencies;
         return ListView(
           children: [
+            buildAppInfo(),
             buildCurrencyChangerRow(currencies),
-            const Divider(),
-            // ENGLISH
-            const ListTile(
-              title: Text('App Info'),
-              subtitle: Text(
-                'The App is open source & even works offline, if you have used it once before with internet.',
-              ),
-            ),
-            Container(
-              padding: const EdgeInsets.only(right: 8),
-              child: ButtonBar(
-                children: [
-                  ActionChip.elevated(
-                    label: const Text('GitHub'),
-                    onPressed: () {
-                      launchUrl(
-                        Uri.parse('https://github.com/yurtemre7/paren'),
-                      );
-                    },
-                  ),
-                  4.w,
-                  ActionChip.elevated(
-                    label: const Text('E-Mail'),
-                    onPressed: () {
-                      launchUrl(
-                        Uri.parse('mailto:yurtemre7@icloud.com'),
-                      );
-                    },
-                  ),
-                ],
-              ),
-            ),
+            buildAutofocusSwitch(),
+            buildFeedback(),
+            24.h,
+            const Center(
+              child: Text('Made in 🇩🇪'),
+            )
           ],
         );
       }),
+    );
+  }
+
+  Container buildFeedback() {
+    return Container(
+      padding: const EdgeInsets.only(right: 8),
+      child: Column(
+        children: [
+          const ListTile(
+            title: Text('Contact & Feedback'),
+            subtitle: Text(
+              'Feel free to reach out to me, as I take any request serious and as an opportunity to improve my app.',
+            ),
+          ),
+          ButtonBar(
+            children: [
+              ActionChip.elevated(
+                label: const Text('GitHub'),
+                onPressed: () {
+                  launchUrl(
+                    Uri.parse('https://github.com/yurtemre7/paren'),
+                  );
+                },
+              ),
+              4.w,
+              ActionChip.elevated(
+                label: const Text('E-Mail'),
+                onPressed: () {
+                  launchUrl(
+                    Uri.parse('mailto:yurtemre7@icloud.com'),
+                  );
+                },
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  ListTile buildAppInfo() {
+    return const ListTile(
+      title: Text('App Info'),
+      subtitle: Text(
+        'The App is open source & even works offline, if you have used it once before with internet.',
+      ),
+    );
+  }
+
+  SwitchListTile buildAutofocusSwitch() {
+    return SwitchListTile(
+      title: const Text('Autofocus Textfield'),
+      subtitle: const Text(
+        'With this setting on, it will autofocus the converter textfield.',
+      ),
+      value: paren.autofocusTextField.value,
+      onChanged: (v) {
+        paren.autofocusTextField.value = v;
+        paren.saveSettings();
+      },
     );
   }
 
