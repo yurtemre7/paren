@@ -13,15 +13,21 @@ class Paren extends GetxController {
       baseUrl: baseUrl,
     ),
   );
+  late SharedPreferences sp;
+
   final currencies = <Currency>[].obs;
   final latestTimestamp = DateTime.now().obs;
 
   final fromCurrency = "yen".obs;
   final toCurrency = "eur".obs;
 
+  final autofocusTextField = false.obs;
+
   static Future<Paren> init() async {
     Paren paren = Paren();
+    paren.sp = await SharedPreferences.getInstance();
     await paren.initCurrencies();
+    await paren.initSettings();
     log('Initialized Paren');
     return paren;
   }
@@ -70,7 +76,6 @@ class Paren extends GetxController {
   }
 
   Future<void> updateCurrencies() async {
-    var sp = await SharedPreferences.getInstance();
     var currencyList = currencies.map((e) => json.encode(e.toJson())).toList();
     await sp.setStringList('currencies', currencyList);
 
@@ -79,14 +84,24 @@ class Paren extends GetxController {
   }
 
   Future<void> updateDefaultConversion() async {
-    var sp = await SharedPreferences.getInstance();
-
     sp.setString('fromC', fromCurrency.value);
     sp.setString('toC', toCurrency.value);
   }
 
+  Future<void> saveSettings() async {
+    sp.setBool('autofocusTextField', autofocusTextField.value);
+  }
+
+  Future<void> initSettings() async {
+    var autofocusValue = sp.getBool('autofocusTextField');
+    if (autofocusValue != null) {
+      autofocusTextField.value = autofocusValue;
+    }
+
+    await saveSettings();
+  }
+
   Future<void> initCurrencies() async {
-    var sp = await SharedPreferences.getInstance();
     var currencyList = sp.getStringList('currencies');
     if (currencyList != null) {
       try {
