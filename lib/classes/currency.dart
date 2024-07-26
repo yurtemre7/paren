@@ -1,10 +1,12 @@
 class Currency {
+  final String id;
   final String name;
   final String symbol;
   final String flag;
   final double rate;
 
   Currency({
+    required this.id,
     required this.name,
     required this.symbol,
     required this.flag,
@@ -13,6 +15,7 @@ class Currency {
 
   factory Currency.fromJson(Map<String, dynamic> json) {
     return Currency(
+      id: json['id'],
       name: json['name'],
       symbol: json['symbol'],
       flag: json['flag'],
@@ -21,6 +24,7 @@ class Currency {
   }
 
   Map<String, dynamic> toJson() => {
+        'id': id,
         'name': name,
         'symbol': symbol,
         'flag': flag,
