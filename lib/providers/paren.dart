@@ -62,7 +62,8 @@ class Paren extends GetxController {
           rate: rates['TRY'],
         ),
       ];
-      await updateCurrencies();
+      updateCurrencies();
+      updateDefaultConversion();
     } catch (e) {
       log('Error fetching currency data: $e');
     }
@@ -75,9 +76,6 @@ class Paren extends GetxController {
 
     latestTimestamp.value = DateTime.now();
     sp.setString('latestTimestamp', latestTimestamp.value.toString());
-
-    sp.setString('fromC', fromCurrency.value);
-    sp.setString('toC', toCurrency.value);
   }
 
   Future<void> updateDefaultConversion() async {
