@@ -3,8 +3,9 @@ import 'package:get/get.dart';
 import 'package:paren/providers/paren.dart';
 import 'package:paren/screens/home.dart';
 
-void main() {
-  Get.put(Paren());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  Get.put(await Paren.init());
   runApp(const MyApp());
 }
 
