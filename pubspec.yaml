@@ -38,6 +38,7 @@ dependencies:
   get: ^4.6.6
   dio: ^5.5.0+1
   shared_preferences: ^2.2.3
+  url_launcher: ^6.3.0
   # image_picker: ^1.1.2
 
 dev_dependencies:
