@@ -23,6 +23,8 @@ class _HomeState extends State<Home> {
   final selectedToCurrencyIndex = 0.obs;
   final selectedFromCurrencyIndex = 2.obs;
 
+  final showGrid = false.obs;
+
   @override
   void initState() {
     super.initState();
@@ -86,12 +88,21 @@ class _HomeState extends State<Home> {
                   children: [
                     buildConvertTextField(currencies),
                     buildCurrencyTable(currencies),
-                    buildLastUpdatedInfo(),
                     12.h,
+                    buildLastUpdatedInfo(),
+                    96.h,
                   ],
                 ),
               );
             },
+          ),
+        ),
+        floatingActionButton: Obx(
+          () => FloatingActionButton.extended(
+            onPressed: () {
+              showGrid.toggle();
+            },
+            label: Text(showGrid.value ? 'Hide Quick Conversions' : 'Show Quick Conversions'),
           ),
         ),
         bottomNavigationBar: Obx(
@@ -230,72 +241,71 @@ class _HomeState extends State<Home> {
   }
 
   Widget buildCurrencyTable(RxList<Currency> currencies) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text(
-            'Quick Conversions',
-            style: TextStyle(
-              fontSize: 18,
+    return AnimatedContainer(
+      duration: 500.milliseconds,
+      // opacity: showGrid.value ? 1 : 0,
+      height: showGrid.value ? null : 0,
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'Quick Conversions',
+              style: TextStyle(
+                fontSize: 18,
+              ),
             ),
-          ),
-          8.h,
-          GridView.count(
-            physics: const NeverScrollableScrollPhysics(),
-            crossAxisCount: 3,
-            shrinkWrap: true,
-            mainAxisSpacing: 12,
-            crossAxisSpacing: 8,
-            children: [
-              ...[1, 5, 10, 20, 50, 100, 200, 500, 1000, 2000, 5000, 10000, 15000, 20000, 25000]
-                  .map((e) {
-                var fromCurrency = currencies[selectedFromCurrencyIndex.value];
-                var toCurrency = currencies[selectedToCurrencyIndex.value];
+            8.h,
+            GridView.count(
+              physics: const NeverScrollableScrollPhysics(),
+              crossAxisCount: 3,
+              shrinkWrap: true,
+              mainAxisSpacing: 12,
+              crossAxisSpacing: 8,
+              children: [
+                ...[1, 5, 10, 20, 50, 100, 200, 500, 1000, 2000, 5000, 10000, 15000, 20000, 25000]
+                    .map((e) {
+                  var fromCurrency = currencies[selectedFromCurrencyIndex.value];
+                  var toCurrency = currencies[selectedToCurrencyIndex.value];
 
-                var fromRate = fromCurrency.rate;
-                var toRate = toCurrency.rate;
+                  var fromRate = fromCurrency.rate;
+                  var toRate = toCurrency.rate;
 
-                var convertedAmount = e * toRate / fromRate;
-                var roundedTo = (convertedAmount * 100).round() / 100;
-                var amountStr = roundedTo.toStringAsFixed(2).replaceAllMapped(
-                      RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
-                      (Match m) => '${m[1]},',
-                    );
-                var inputStr = e.toStringAsFixed(2).replaceAllMapped(
-                      RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
-                      (Match m) => '${m[1]},',
-                    );
+                  var convertedAmount = e * toRate / fromRate;
+                  var roundedTo = (convertedAmount * 100).round() / 100;
+                  var amountStr = roundedTo.toStringAsFixed(2).replaceAllMapped(
+                        RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
+                        (Match m) => '${m[1]},',
+                      );
+                  var inputStr = e.toStringAsFixed(2).replaceAllMapped(
+                        RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
+                        (Match m) => '${m[1]},',
+                      );
 
-                return Card(
-                  child: Center(
-                    child: Text(
-                      '$inputStr ${currencies[selectedFromCurrencyIndex.value].symbol}\n→\n$amountStr ${currencies[selectedToCurrencyIndex.value].symbol}',
-                      textAlign: TextAlign.center,
+                  return Card(
+                    child: Center(
+                      child: Text(
+                        '$inputStr ${currencies[selectedFromCurrencyIndex.value].symbol}\n→\n$amountStr ${currencies[selectedToCurrencyIndex.value].symbol}',
+                        textAlign: TextAlign.center,
+                      ),
                     ),
-                  ),
-                );
-              })
-            ],
-          ),
-        ],
+                  );
+                })
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
 
   Widget buildLastUpdatedInfo() {
-    return Container(
-      padding: const EdgeInsets.only(right: 16),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          Text(
-            'Currencies last updated: ${timestampToString(paren.latestTimestamp.value)}',
-            textAlign: TextAlign.right,
-            style: const TextStyle(fontSize: 12),
-          ),
-        ],
+    return Center(
+      child: Text(
+        'Currencies last updated: ${timestampToString(paren.latestTimestamp.value)}',
+        textAlign: TextAlign.center,
+        style: const TextStyle(fontSize: 13),
       ),
     );
   }
