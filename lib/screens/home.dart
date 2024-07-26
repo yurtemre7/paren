@@ -119,6 +119,7 @@ class _HomeState extends State<Home> {
               Expanded(
                 child: TextFormField(
                   controller: currencyTextInputController,
+                  autofocus: paren.autofocusTextField.value,
                   decoration: InputDecoration(
                     labelText:
                         'Enter amount in ${currencies[selectedFromCurrencyIndex.value].symbol} / ${currencies[selectedToCurrencyIndex.value].symbol}',
