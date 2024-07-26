@@ -27,7 +27,18 @@ class _HomeState extends State<Home> {
   void initState() {
     super.initState();
 
-    Future.microtask(() async {});
+    Future.microtask(() async {
+      var currencies = paren.currencies;
+      if (currencies.isEmpty) return;
+      var idxFrom = currencies.indexWhere((currency) => currency.id == paren.fromCurrency.value);
+      if (idxFrom != -1) {
+        selectedFromCurrencyIndex.value = idxFrom;
+      }
+      var idxTo = currencies.indexWhere((currency) => currency.id == paren.toCurrency.value);
+      if (idxTo != -1) {
+        selectedToCurrencyIndex.value = idxTo;
+      }
+    });
   }
 
   @override
