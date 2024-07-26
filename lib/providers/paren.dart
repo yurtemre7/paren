@@ -80,6 +80,13 @@ class Paren extends GetxController {
     sp.setString('toC', toCurrency.value);
   }
 
+  Future<void> updateDefaultConversion() async {
+    var sp = await SharedPreferences.getInstance();
+
+    sp.setString('fromC', fromCurrency.value);
+    sp.setString('toC', toCurrency.value);
+  }
+
   Future<void> initCurrencies() async {
     var sp = await SharedPreferences.getInstance();
     var currencyList = sp.getStringList('currencies');
