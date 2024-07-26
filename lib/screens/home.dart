@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:paren/classes/currency.dart';
 import 'package:paren/providers/constants.dart';
+import 'package:paren/providers/extensions.dart';
 import 'package:paren/providers/paren.dart';
 import 'package:paren/screens/settings.dart';
 
@@ -19,7 +20,6 @@ class _HomeState extends State<Home> {
   final Paren paren = Get.find();
 
   final currencyTextInputController = TextEditingController(text: '1');
-  final manualClose = true.obs;
   final selectedToCurrencyIndex = 0.obs;
   final selectedFromCurrencyIndex = 2.obs;
 
@@ -27,18 +27,19 @@ class _HomeState extends State<Home> {
   void initState() {
     super.initState();
 
-    Future.microtask(() async {
-      var currencies = paren.currencies;
-      if (currencies.isEmpty) return;
-      var idxFrom = currencies.indexWhere((currency) => currency.id == paren.fromCurrency.value);
-      if (idxFrom != -1) {
-        selectedFromCurrencyIndex.value = idxFrom;
-      }
-      var idxTo = currencies.indexWhere((currency) => currency.id == paren.toCurrency.value);
-      if (idxTo != -1) {
-        selectedToCurrencyIndex.value = idxTo;
-      }
-    });
+    updateCurrencySwap();
+  }
+
+  Future<void> updateCurrencySwap() async {
+    var currencies = paren.currencies;
+    var idxFrom = currencies.indexWhere((currency) => currency.id == paren.fromCurrency.value);
+    if (idxFrom != -1) {
+      selectedFromCurrencyIndex.value = idxFrom;
+    }
+    var idxTo = currencies.indexWhere((currency) => currency.id == paren.toCurrency.value);
+    if (idxTo != -1) {
+      selectedToCurrencyIndex.value = idxTo;
+    }
   }
 
   @override
@@ -58,8 +59,9 @@ class _HomeState extends State<Home> {
           title: const Text('Par円'),
           actions: [
             IconButton(
-              onPressed: () {
-                Get.to(() => const Settings());
+              onPressed: () async {
+                await Get.to(() => const Settings());
+                updateCurrencySwap();
               },
               icon: const Icon(
                 Icons.settings,
@@ -76,6 +78,7 @@ class _HomeState extends State<Home> {
                   child: CircularProgressIndicator(),
                 );
               }
+
               return SingleChildScrollView(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -84,17 +87,24 @@ class _HomeState extends State<Home> {
                     buildConvertTextField(currencies),
                     buildCurrencyTable(currencies),
                     buildLastUpdatedInfo(),
-                    const SizedBox(height: 12),
+                    12.h,
                   ],
                 ),
               );
             },
           ),
         ),
-        bottomNavigationBar: Obx(() {
-          var currencies = paren.currencies;
-          return SafeArea(child: buildCurrencyChangerRow(currencies));
-        }),
+        bottomNavigationBar: Obx(
+          () {
+            var currencies = paren.currencies;
+            return SafeArea(
+              child: Container(
+                margin: const EdgeInsets.only(top: 4),
+                child: buildCurrencyChangerRow(currencies),
+              ),
+            );
+          },
+        ),
       ),
     );
   }
@@ -151,7 +161,7 @@ class _HomeState extends State<Home> {
               ),
             ],
           ),
-          const SizedBox(height: 12),
+          12.h,
           Builder(
             builder: (context) {
               var currencyTextInput = currencyTextInputController.text;
@@ -230,7 +240,7 @@ class _HomeState extends State<Home> {
               fontSize: 18,
             ),
           ),
-          const SizedBox(height: 8),
+          8.h,
           GridView.count(
             physics: const NeverScrollableScrollPhysics(),
             crossAxisCount: 3,
@@ -319,17 +329,16 @@ class _HomeState extends State<Home> {
             ),
           ),
         ),
-        const SizedBox(width: 12),
+        12.w,
         IconButton(
-          icon: const Icon(Icons.arrow_forward),
+          icon: const Icon(Icons.compare_arrows_outlined),
           onPressed: () {
             var temp = selectedFromCurrencyIndex.value;
             selectedFromCurrencyIndex.value = selectedToCurrencyIndex.value;
             selectedToCurrencyIndex.value = temp;
-            setState(() {});
           },
         ),
-        const SizedBox(width: 12),
+        12.w,
         Card(
           child: Container(
             padding: const EdgeInsets.all(10),
