@@ -19,8 +19,8 @@ class Paren extends GetxController {
   final currencies = <Currency>[].obs;
   final latestTimestamp = DateTime.now().obs;
 
-  final fromCurrency = "jpy".obs;
-  final toCurrency = "eur".obs;
+  final fromCurrency = 'jpy'.obs;
+  final toCurrency = 'eur'.obs;
 
   final autofocusTextField = false.obs;
 
