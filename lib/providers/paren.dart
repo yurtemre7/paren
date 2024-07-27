@@ -3,6 +3,7 @@ import 'dart:developer';
 
 import 'package:dio/dio.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:paren/classes/currency.dart';
 import 'package:paren/providers/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -18,8 +19,8 @@ class Paren extends GetxController {
   final currencies = <Currency>[].obs;
   final latestTimestamp = DateTime.now().obs;
 
-  final fromCurrency = "yen".obs;
-  final toCurrency = "eur".obs;
+  final fromCurrency = "JPY".obs;
+  final toCurrency = "EUR".obs;
 
   final autofocusTextField = false.obs;
 
@@ -36,38 +37,31 @@ class Paren extends GetxController {
     try {
       log('Fetching currency data online');
       var resp = await dio.get(latest);
-      var rates = resp.data['rates'];
-
-      currencies.value = [
-        Currency(
-          id: "eur",
-          name: 'Euro',
-          symbol: '€',
-          flag: '🇪🇺',
-          rate: 1.0,
-        ),
-        Currency(
-          id: "usd",
-          name: 'US Dollar',
-          symbol: '\$',
-          flag: '🇺🇸',
-          rate: rates['USD'],
-        ),
-        Currency(
-          id: "yen",
-          name: 'Japanese Yen',
-          symbol: '¥',
-          flag: '🇯🇵',
-          rate: rates['JPY'],
-        ),
-        Currency(
-          id: "try",
-          name: 'Turkish Lira',
-          symbol: '₺',
-          flag: '🇹🇷',
-          rate: rates['TRY'],
-        ),
+      var currenciesResp = await dio.get(currencieNames);
+      Map rates = resp.data['rates'];
+      Map currencieNamesMap = currenciesResp.data;
+      var onlineCurrencies = <Currency>[
+        Currency(id: 'eur', name: 'Euro', symbol: '€', rate: 1.0),
       ];
+
+      rates.forEach((var key, var value) {
+        onlineCurrencies.add(
+          Currency(
+            id: key.toString().toLowerCase(),
+            name: currencieNamesMap[key.toString()],
+            symbol: NumberFormat().simpleCurrencySymbol(key.toString()),
+            rate: double.tryParse(value.toString()) ?? 1.0,
+          ),
+        );
+      });
+
+      currencies.value = onlineCurrencies;
+      if (!currencieNamesMap.containsKey(fromCurrency.value.toUpperCase())) {
+        fromCurrency.value = currencieNamesMap.entries.first.key.toString().toLowerCase();
+      }
+      if (!currencieNamesMap.containsKey(toCurrency.value.toUpperCase())) {
+        toCurrency.value = currencieNamesMap.entries.first.key.toString().toLowerCase();
+      }
       updateCurrencies();
       updateDefaultConversion();
     } catch (e) {
@@ -120,7 +114,6 @@ class Paren extends GetxController {
         id: 'eur',
         name: 'Euro',
         symbol: '€',
-        flag: '🇪🇺',
         rate: 1.0,
       );
 
@@ -128,15 +121,13 @@ class Paren extends GetxController {
         id: 'usd',
         name: 'US Dollar',
         symbol: '\$',
-        flag: '🇺🇸',
         rate: 1.09,
       );
 
       var YEN = Currency(
-        id: 'yen',
+        id: 'jpy',
         name: 'Japanese Yen',
         symbol: '¥',
-        flag: '🇯🇵',
         rate: 170.0,
       );
 
@@ -144,7 +135,6 @@ class Paren extends GetxController {
         id: 'try',
         name: 'Turkish Lira',
         symbol: '₺',
-        flag: '🇹🇷',
         rate: 35.1,
       );
 
