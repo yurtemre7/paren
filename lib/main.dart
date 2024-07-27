@@ -20,13 +20,13 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
-          seedColor: const Color(0x00d65836),
+          seedColor: const Color(0xFFd65836),
         ),
         useMaterial3: true,
       ),
       darkTheme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
-          seedColor: const Color(0x00d65836),
+          seedColor: const Color(0xFFd65836),
           brightness: Brightness.dark,
         ),
         useMaterial3: true,
