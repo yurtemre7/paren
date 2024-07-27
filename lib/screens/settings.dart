@@ -117,12 +117,12 @@ class _SettingsState extends State<Settings> {
                       return DropdownMenuItem(
                         value: currency.id,
                         child: Text(
-                          currency.flag,
-                          style: const TextStyle(fontSize: 24),
+                          currency.id.toUpperCase(),
                         ),
                       );
                     },
                   ).toList(),
+                  isDense: true,
                   underline: Container(),
                   onChanged: (value) {
                     if (value == null) return;
@@ -153,12 +153,12 @@ class _SettingsState extends State<Settings> {
                       return DropdownMenuItem(
                         value: currency.id,
                         child: Text(
-                          currency.flag,
-                          style: const TextStyle(fontSize: 24),
+                          currency.id.toUpperCase(),
                         ),
                       );
                     },
                   ).toList(),
+                  isDense: true,
                   underline: Container(),
                   onChanged: (value) {
                     if (value == null) return;
