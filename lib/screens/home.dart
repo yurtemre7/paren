@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -148,17 +149,21 @@ class _HomeState extends State<Home> {
                   onChanged: (value) {
                     setState(() {});
                   },
-                  keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                  inputFormatters: [
-                    TextInputFormatter.withFunction((v1, v2) {
-                      var text = v2.text.replaceAll(',', '.');
+                  keyboardType:
+                      kIsWeb ? null : const TextInputType.numberWithOptions(decimal: true),
+                  inputFormatters: kIsWeb
+                      ? null
+                      : [
+                          TextInputFormatter.withFunction((v1, v2) {
+                            var text = v2.text.replaceAll(',', '.');
 
-                      if (text.length > 30) {
-                        return v1;
-                      }
-                      return TextEditingValue(text: text);
-                    })
-                  ],
+                            if (text.length > 21) {
+                              return v1;
+                            }
+                            return TextEditingValue(text: text);
+                          })
+                        ],
+                  maxLength: 21,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Enter a valid decimal number (i.e., 123.456)';
