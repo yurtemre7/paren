@@ -110,7 +110,7 @@ class _HomeState extends State<Home> {
             var currencies = paren.currencies;
             return SafeArea(
               child: Container(
-                margin: const EdgeInsets.only(top: 4),
+                margin: const EdgeInsets.symmetric(vertical: 8),
                 child: buildCurrencyChangerRow(currencies),
               ),
             );
@@ -257,9 +257,9 @@ class _HomeState extends State<Home> {
               ),
             ),
             8.h,
-            GridView.count(
+            GridView.extent(
               physics: const NeverScrollableScrollPhysics(),
-              crossAxisCount: 3,
+              maxCrossAxisExtent: 120,
               shrinkWrap: true,
               mainAxisSpacing: 12,
               crossAxisSpacing: 8,
@@ -326,12 +326,12 @@ class _HomeState extends State<Home> {
                   return DropdownMenuItem(
                     value: i,
                     child: Text(
-                      e.flag,
-                      style: const TextStyle(fontSize: 24),
+                      e.id.toUpperCase(),
                     ),
                   );
                 },
               ).toList(),
+              isDense: true,
               underline: Container(),
               onChanged: (value) {
                 selectedFromCurrencyIndex.value = value ?? 0;
@@ -362,12 +362,12 @@ class _HomeState extends State<Home> {
                   return DropdownMenuItem(
                     value: i,
                     child: Text(
-                      e.flag,
-                      style: const TextStyle(fontSize: 24),
+                      e.id.toUpperCase(),
                     ),
                   );
                 },
               ).toList(),
+              isDense: true,
               underline: Container(),
               onChanged: (value) {
                 selectedToCurrencyIndex.value = value ?? 0;
