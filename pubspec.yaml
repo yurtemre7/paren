@@ -40,6 +40,7 @@ dependencies:
   shared_preferences: ^2.2.3
   url_launcher: ^6.3.0
   share_plus: ^9.0.0
+  url_strategy: ^0.2.0
   # image_picker: ^1.1.2
 
 dev_dependencies:
