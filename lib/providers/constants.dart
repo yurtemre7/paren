@@ -1,5 +1,6 @@
 const baseUrl = 'https://api.frankfurter.app';
 const latest = '/latest';
+const currencieNames = '/currencies';
 
 // convert timestamp to day:month:year hours:minutes
 // use leading zero for single digit numbers
