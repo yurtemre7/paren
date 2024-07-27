@@ -98,11 +98,13 @@ class _HomeState extends State<Home> {
           ),
         ),
         floatingActionButton: Obx(
-          () => FloatingActionButton.extended(
+          () => FloatingActionButton(
             onPressed: () {
               showGrid.toggle();
             },
-            label: Text(showGrid.value ? 'Hide Quick Conversions' : 'Show Quick Conversions'),
+            elevation: 4,
+            child:
+                Icon(showGrid.value ? Icons.money_off_csred_outlined : Icons.attach_money_outlined),
           ),
         ),
         bottomNavigationBar: Obx(
