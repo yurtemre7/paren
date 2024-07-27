@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:paren/classes/currency.dart';
 import 'package:paren/providers/extensions.dart';
 import 'package:paren/providers/paren.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class Settings extends StatefulWidget {
@@ -43,6 +44,20 @@ class _SettingsState extends State<Settings> {
       padding: const EdgeInsets.only(right: 8),
       child: Column(
         children: [
+          ListTile(
+            title: const Text('Share App'),
+            subtitle: const Text(
+              'Please share this App with your Friends & Family for that they can also benefit from the convenience of it! Thank you!',
+            ),
+            trailing: IconButton(
+              onPressed: () {
+                Share.share(
+                  'With Par円 you can convert money in your travels faster than ever!\nDownload here: https://apps.apple.com/us/app/paren/id6578395712',
+                );
+              },
+              icon: const Icon(Icons.share_outlined),
+            ),
+          ),
           const ListTile(
             title: Text('Contact & Feedback'),
             subtitle: Text(
