@@ -19,8 +19,8 @@ class Paren extends GetxController {
   final currencies = <Currency>[].obs;
   final latestTimestamp = DateTime.now().obs;
 
-  final fromCurrency = "JPY".obs;
-  final toCurrency = "EUR".obs;
+  final fromCurrency = "jpy".obs;
+  final toCurrency = "eur".obs;
 
   final autofocusTextField = false.obs;
 
@@ -78,8 +78,8 @@ class Paren extends GetxController {
   }
 
   Future<void> updateDefaultConversion() async {
-    sp.setString('fromC', fromCurrency.value);
-    sp.setString('toC', toCurrency.value);
+    sp.setString('fromC', fromCurrency.value.toLowerCase());
+    sp.setString('toC', toCurrency.value.toLowerCase());
   }
 
   Future<void> saveSettings() async {
@@ -149,12 +149,12 @@ class Paren extends GetxController {
 
     var fromCString = sp.getString('fromC');
     if (fromCString != null) {
-      fromCurrency.value = fromCString;
+      fromCurrency.value = fromCString.toLowerCase();
     }
 
     var toCString = sp.getString('toC');
     if (toCString != null) {
-      toCurrency.value = toCString;
+      toCurrency.value = toCString.toLowerCase();
     }
 
     await fetchCurrencyDataOnline();
