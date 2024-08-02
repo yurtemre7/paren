@@ -36,10 +36,14 @@ class Paren extends GetxController {
   Future<void> fetchCurrencyDataOnline() async {
     try {
       log('Fetching currency data online');
-      var resp = await dio.get(latest);
-      var currenciesResp = await dio.get(currencieNames);
-      Map rates = resp.data['rates'];
-      Map currencieNamesMap = currenciesResp.data;
+      var responds = await Future.wait(
+        [
+          dio.get(latest),
+          dio.get(currencieNames),
+        ],
+      );
+      Map rates = responds[0].data['rates'];
+      Map currencieNamesMap = responds[1].data;
       var onlineCurrencies = <Currency>[
         Currency(id: 'eur', name: 'Euro', symbol: '€', rate: 1.0),
       ];
