@@ -26,8 +26,11 @@ class _SettingsState extends State<Settings> {
         return ListView(
           children: [
             buildAppInfo(),
+            const Divider(),
             buildCurrencyChangerRow(currencies),
+            const Divider(),
             buildAutofocusSwitch(),
+            const Divider(),
             buildFeedback(),
             24.h,
             const Center(
@@ -58,6 +61,7 @@ class _SettingsState extends State<Settings> {
               icon: const Icon(Icons.share_outlined),
             ),
           ),
+          const Divider(),
           const ListTile(
             title: Text('Contact & Feedback'),
             subtitle: Text(
@@ -91,9 +95,15 @@ class _SettingsState extends State<Settings> {
   }
 
   ListTile buildAppInfo() {
-    return const ListTile(
-      title: Text('App Info'),
-      subtitle: Text(
+    return ListTile(
+      trailing: ClipRRect(
+        borderRadius: BorderRadius.circular(12),
+        child: Image.asset(
+          'assets/icon/icon.png',
+        ),
+      ),
+      title: const Text('App Info'),
+      subtitle: const Text(
         'The App is open source & even works offline, if you have used it once before with internet.',
       ),
     );
