@@ -78,7 +78,7 @@ class _HomeState extends State<Home> {
               var currencies = paren.currencies;
               if (currencies.isEmpty) {
                 return const Center(
-                  child: CircularProgressIndicator(),
+                  child: CircularProgressIndicator.adaptive(),
                 );
               }
 
