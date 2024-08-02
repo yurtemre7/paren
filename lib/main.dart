@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:paren/providers/paren.dart';
-import 'package:paren/screens/home.dart';
+import 'package:paren/screens/loading_screen.dart';
 import 'package:url_strategy/url_strategy.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  Get.put(await Paren.init());
+
   setPathUrlStrategy();
   runApp(const MyApp());
 }
@@ -34,7 +33,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
         brightness: Brightness.dark,
       ),
-      home: const Home(),
+      home: const LoadingScreen(),
     );
   }
 }
