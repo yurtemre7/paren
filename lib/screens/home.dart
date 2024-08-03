@@ -91,6 +91,8 @@ class _HomeState extends State<Home> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     buildConvertTextField(currencies),
+                    buildCurrencyChartTile(),
+                    8.h,
                     buildCurrencyData(currencies),
                     12.h,
                     buildLastUpdatedInfo(),
@@ -122,6 +124,27 @@ class _HomeState extends State<Home> {
             );
           },
         ),
+      ),
+    );
+  }
+
+  Widget buildCurrencyChartTile() {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      child: ListTile(
+        title: Text(
+            '${paren.fromCurrency.value.toUpperCase()} → ${paren.toCurrency.value.toUpperCase()} exchange chart'),
+        trailing: const Icon(Icons.arrow_forward_ios_outlined),
+        onTap: () {
+          Get.to(
+            () => ExChart(
+              idFrom: paren.fromCurrency.value,
+              idxFrom: selectedFromCurrencyIndex.value,
+              idTo: paren.toCurrency.value,
+              idxTo: selectedToCurrencyIndex.value,
+            ),
+          );
+        },
       ),
     );
   }
@@ -301,22 +324,6 @@ class _HomeState extends State<Home> {
                   );
                 })
               ],
-            ),
-            8.h,
-            ListTile(
-              title: Text(
-                  '${paren.fromCurrency.value.toUpperCase()} → ${paren.toCurrency.value.toUpperCase()} exchange chart'),
-              trailing: const Icon(Icons.arrow_forward_ios_outlined),
-              onTap: () {
-                Get.to(
-                  () => ExChart(
-                    idFrom: paren.fromCurrency.value,
-                    idxFrom: selectedFromCurrencyIndex.value,
-                    idTo: paren.toCurrency.value,
-                    idxTo: selectedToCurrencyIndex.value,
-                  ),
-                );
-              },
             ),
           ],
         ),
