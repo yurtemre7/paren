@@ -133,15 +133,19 @@ class _HomeState extends State<Home> {
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: ListTile(
         title: Text(
-            '${paren.fromCurrency.value.toUpperCase()} → ${paren.toCurrency.value.toUpperCase()} exchange chart'),
+          '${paren.currencies[selectedFromCurrencyIndex.value].id.toUpperCase()} ↔ ${paren.currencies[selectedToCurrencyIndex.value].id.toUpperCase()} exchange chart',
+        ),
         trailing: const Icon(Icons.arrow_forward_ios_outlined),
         onTap: () {
-          Get.to(
-            () => ExChart(
-              idFrom: paren.fromCurrency.value,
-              idxFrom: selectedFromCurrencyIndex.value,
-              idTo: paren.toCurrency.value,
-              idxTo: selectedToCurrencyIndex.value,
+          Get.bottomSheet(
+            ClipRRect(
+              borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
+              child: ExChart(
+                idFrom: paren.currencies[selectedFromCurrencyIndex.value].id,
+                idxFrom: selectedFromCurrencyIndex.value,
+                idTo: paren.currencies[selectedToCurrencyIndex.value].id,
+                idxTo: selectedToCurrencyIndex.value,
+              ),
             ),
           );
         },
