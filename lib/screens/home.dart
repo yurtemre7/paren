@@ -389,7 +389,7 @@ class _HomeState extends State<Home> {
                   text: 'We use the API provided from ',
                   children: [
                     TextSpan(
-                      text: 'frankfurter',
+                      text: 'Frankfurter',
                       recognizer: TapGestureRecognizer()
                         ..onTap = () {
                           launchUrl(Uri.parse('https://www.frankfurter.app/'));
@@ -403,7 +403,7 @@ class _HomeState extends State<Home> {
                       text: ' which is open source and free to use.\nIt gets its data from the ',
                     ),
                     TextSpan(
-                      text: 'European Central Bank (ECB)',
+                      text: 'European Central Bank',
                       recognizer: TapGestureRecognizer()
                         ..onTap = () {
                           launchUrl(Uri.parse(
