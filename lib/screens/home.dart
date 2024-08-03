@@ -94,7 +94,7 @@ class _HomeState extends State<Home> {
                     buildCurrencyChartTile(),
                     8.h,
                     buildCurrencyData(currencies),
-                    12.h,
+                    8.h,
                     buildLastUpdatedInfo(),
                     96.h,
                   ],
@@ -337,26 +337,19 @@ class _HomeState extends State<Home> {
 
   Widget buildLastUpdatedInfo() {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 32),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            'Currencies last updated: ${timestampToString(paren.latestTimestamp.value)}',
-            textAlign: TextAlign.center,
-            style: const TextStyle(fontSize: 13),
-          ),
-          IconButton(
-            onPressed: () {
-              Get.bottomSheet(
-                buildDataInfoSheet(),
-              );
-            },
-            icon: const Icon(
-              Icons.info_outline,
-            ),
-          ),
-        ],
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: ListTile(
+        title: Text(
+          'Currencies last updated: ${timestampToString(paren.latestTimestamp.value)}',
+        ),
+        trailing: const Icon(
+          Icons.info_outline,
+        ),
+        onTap: () {
+          Get.bottomSheet(
+            buildDataInfoSheet(),
+          );
+        },
       ),
     );
   }
