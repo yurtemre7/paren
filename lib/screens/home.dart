@@ -90,7 +90,7 @@ class _HomeState extends State<Home> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     buildConvertTextField(currencies),
-                    buildCurrencyTable(currencies),
+                    buildCurrencyData(currencies),
                     12.h,
                     buildLastUpdatedInfo(),
                     96.h,
@@ -249,10 +249,8 @@ class _HomeState extends State<Home> {
     );
   }
 
-  Widget buildCurrencyTable(RxList<Currency> currencies) {
-    return AnimatedContainer(
-      duration: 500.milliseconds,
-      // opacity: showGrid.value ? 1 : 0,
+  Widget buildCurrencyData(RxList<Currency> currencies) {
+    return SizedBox(
       height: showGrid.value ? null : 0,
       child: Container(
         padding: const EdgeInsets.all(16),
