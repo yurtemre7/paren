@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -9,6 +10,7 @@ import 'package:paren/providers/constants.dart';
 import 'package:paren/providers/extensions.dart';
 import 'package:paren/providers/paren.dart';
 import 'package:paren/screens/settings.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -308,11 +310,93 @@ class _HomeState extends State<Home> {
   }
 
   Widget buildLastUpdatedInfo() {
-    return Center(
-      child: Text(
-        'Currencies last updated: ${timestampToString(paren.latestTimestamp.value)}',
-        textAlign: TextAlign.center,
-        style: const TextStyle(fontSize: 13),
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 32),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            'Currencies last updated: ${timestampToString(paren.latestTimestamp.value)}',
+            textAlign: TextAlign.center,
+            style: const TextStyle(fontSize: 13),
+          ),
+          IconButton(
+            onPressed: () {
+              Get.bottomSheet(
+                buildDataInfoSheet(),
+              );
+            },
+            icon: const Icon(
+              Icons.info_outline,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget buildDataInfoSheet() {
+    return Card(
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(20),
+        ),
+      ),
+      child: SafeArea(
+        child: Container(
+          padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 32),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Container(
+                alignment: Alignment.center,
+                child: const Text(
+                  'From where do we fetch the data?',
+                  style: TextStyle(fontSize: 20),
+                ),
+              ),
+              10.h,
+              Text.rich(
+                TextSpan(
+                  text: 'We use the API provided from ',
+                  children: [
+                    TextSpan(
+                      text: 'frankfurter',
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () {
+                          launchUrl(Uri.parse('https://www.frankfurter.app/'));
+                        },
+                      style: TextStyle(
+                        color: context.theme.colorScheme.tertiary,
+                        decoration: TextDecoration.underline,
+                      ),
+                    ),
+                    const TextSpan(
+                      text: ' which is open source and free to use.\nIt gets its data from the ',
+                    ),
+                    TextSpan(
+                      text: 'European Central Bank (ECB)',
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () {
+                          launchUrl(Uri.parse(
+                              'https://www.ecb.europa.eu/stats/policy_and_exchange_rates/euro_reference_exchange_rates/html/index.en.html'));
+                        },
+                      style: TextStyle(
+                        color: context.theme.colorScheme.tertiary,
+                        decoration: TextDecoration.underline,
+                      ),
+                    ),
+                    const TextSpan(
+                      text:
+                          ', which is a trusted source.\n\nAlso, we only need to fetch the data once a day, so the App only fetches it, if that duration has passed from the previous fetch.',
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
