@@ -103,6 +103,30 @@ class _SettingsState extends State<Settings> {
       subtitle: const Text(
         'The App is open source & even works offline, if you have used it once before with internet.',
       ),
+      onLongPress: () {
+        Get.dialog(
+          AlertDialog(
+            title: const Text('Delete App Data'),
+            content: const Text(
+                'Are you sure, you want to delete all the app data?\n\nThis contains the data of the offline currency values, your default currency selection and the autofocus status.'),
+            actions: [
+              TextButton(
+                onPressed: () => Get.back(),
+                child: const Text('Abort'),
+              ),
+              OutlinedButton(
+                onPressed: () async {
+                  await paren.reset();
+                  await paren.fetchCurrencyDataOnline();
+                  Get.back();
+                  Get.back();
+                },
+                child: const Text('Delete'),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 
