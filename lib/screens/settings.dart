@@ -26,16 +26,13 @@ class _SettingsState extends State<Settings> {
         return ListView(
           children: [
             buildAppInfo(),
-            const Divider(),
             buildCurrencyChangerRow(currencies),
-            const Divider(),
             buildAutofocusSwitch(),
-            const Divider(),
             buildFeedback(),
             24.h,
             const Center(
-              child: Text('Made in 🇩🇪'),
-            )
+              child: Text('Made in 🇩🇪 by Emre'),
+            ),
           ],
         );
       }),
@@ -61,7 +58,6 @@ class _SettingsState extends State<Settings> {
               icon: const Icon(Icons.share_outlined),
             ),
           ),
-          const Divider(),
           const ListTile(
             title: Text('Contact & Feedback'),
             subtitle: Text(
