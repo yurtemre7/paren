@@ -13,23 +13,37 @@ if [[ ! $selection =~ ^[0-9]+$ ]] ; then
 fi
 
 if [ $selection = "0" ] ; then
-    echo "Pushing all";
+    echo "Pushing all"
+    echo ""
+    echo "Pushing ios"
     ./release-ios.sh
+    echo ""
+    echo "Pushing android"
     ./release-android.sh
+    echo ""
+    echo "Pushing web"
     ./release-web.sh
+    echo ""
+    echo "Finished"
 fi
 
 if [ $selection = "1" ] ; then
     echo "Pushing ios"
     ./release-ios.sh
+    echo ""
+    echo "Finished"
 fi
 
 if [ $selection = "2" ] ; then
     echo "Pushing android"
     ./release-android.sh
+    echo ""
+    echo "Finished"
 fi
 
 if [ $selection = "3" ] ; then
     echo "Pushing web"
     ./release-web.sh
+    echo ""
+    echo "Finished"
 fi
