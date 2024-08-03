@@ -1,6 +1,36 @@
+import 'package:paren/classes/currency.dart';
+
 const baseUrl = 'https://api.frankfurter.app';
 const latest = '/latest';
 const currencieNames = '/currencies';
+
+var EUR = Currency(
+  id: 'eur',
+  name: 'Euro',
+  symbol: '€',
+  rate: 1.0,
+);
+
+var USD = Currency(
+  id: 'usd',
+  name: 'US Dollar',
+  symbol: '\$',
+  rate: 1.09,
+);
+
+var YEN = Currency(
+  id: 'jpy',
+  name: 'Japanese Yen',
+  symbol: '¥',
+  rate: 170.0,
+);
+
+var TRY = Currency(
+  id: 'try',
+  name: 'Turkish Lira',
+  symbol: '₺',
+  rate: 35.1,
+);
 
 // convert timestamp to day:month:year hours:minutes
 // use leading zero for single digit numbers

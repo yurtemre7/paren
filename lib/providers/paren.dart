@@ -33,6 +33,14 @@ class Paren extends GetxController {
     return paren;
   }
 
+  Future<void> reset() async {
+    await sp.clear();
+    latestTimestamp.value = DateTime.now();
+    fromCurrency.value = 'eur';
+    toCurrency.value = 'jpy';
+    autofocusTextField.value = false;
+  }
+
   Future<void> fetchCurrencyDataOnline() async {
     try {
       log('Fetching currency data online');
@@ -114,34 +122,6 @@ class Paren extends GetxController {
         log('An Error happened. Rebuilding database');
       }
     } else {
-      var EUR = Currency(
-        id: 'eur',
-        name: 'Euro',
-        symbol: '€',
-        rate: 1.0,
-      );
-
-      var USD = Currency(
-        id: 'usd',
-        name: 'US Dollar',
-        symbol: '\$',
-        rate: 1.09,
-      );
-
-      var YEN = Currency(
-        id: 'jpy',
-        name: 'Japanese Yen',
-        symbol: '¥',
-        rate: 170.0,
-      );
-
-      var TRY = Currency(
-        id: 'try',
-        name: 'Turkish Lira',
-        symbol: '₺',
-        rate: 35.1,
-      );
-
       currencies.value = [EUR, USD, YEN, TRY];
     }
     var today = DateTime.now();
@@ -150,6 +130,7 @@ class Paren extends GetxController {
       latestTimestamp.value = DateTime.parse(latestTimestampString);
     } else {
       latestTimestamp.value = today;
+      fetchCurrencyDataOnline();
     }
 
     var fromCString = sp.getString('fromC');
