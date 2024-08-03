@@ -26,7 +26,7 @@ class _HomeState extends State<Home> {
   final selectedToCurrencyIndex = 0.obs;
   final selectedFromCurrencyIndex = 2.obs;
 
-  final showGrid = false.obs;
+  final showMore = false.obs;
 
   @override
   void initState() {
@@ -103,11 +103,11 @@ class _HomeState extends State<Home> {
         floatingActionButton: Obx(
           () => FloatingActionButton(
             onPressed: () {
-              showGrid.toggle();
+              showMore.toggle();
             },
             elevation: 4,
             child:
-                Icon(showGrid.value ? Icons.money_off_csred_outlined : Icons.attach_money_outlined),
+                Icon(showMore.value ? Icons.money_off_csred_outlined : Icons.attach_money_outlined),
           ),
         ),
         bottomNavigationBar: Obx(
@@ -251,7 +251,7 @@ class _HomeState extends State<Home> {
 
   Widget buildCurrencyData(RxList<Currency> currencies) {
     return SizedBox(
-      height: showGrid.value ? null : 0,
+      height: showMore.value ? null : 0,
       child: Container(
         padding: const EdgeInsets.all(16),
         child: Column(
