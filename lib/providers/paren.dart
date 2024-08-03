@@ -144,11 +144,12 @@ class Paren extends GetxController {
 
       currencies.value = [EUR, USD, YEN, TRY];
     }
+    var today = DateTime.now();
     var latestTimestampString = sp.getString('latestTimestamp');
     if (latestTimestampString != null) {
       latestTimestamp.value = DateTime.parse(latestTimestampString);
     } else {
-      latestTimestamp.value = DateTime.now();
+      latestTimestamp.value = today;
     }
 
     var fromCString = sp.getString('fromC');
@@ -161,6 +162,8 @@ class Paren extends GetxController {
       toCurrency.value = toCString.toLowerCase();
     }
 
-    await fetchCurrencyDataOnline();
+    if (today.difference(latestTimestamp.value) >= 1.days) {
+      fetchCurrencyDataOnline();
+    }
   }
 }
