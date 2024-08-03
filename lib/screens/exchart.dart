@@ -104,6 +104,7 @@ class _ExChartState extends State<ExChart> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(onPressed: () => Get.back(), icon: const Icon(Icons.close)),
         title: Obx(() => Text('$localIdFrom → $localIdTo')),
         actions: [
           Obx(
@@ -150,11 +151,12 @@ class _ExChartState extends State<ExChart> {
           }
 
           return ListView(
+            padding: EdgeInsets.zero,
             children: [
               48.h,
               Container(
                 margin: const EdgeInsets.only(
-                  right: 18,
+                  right: 32,
                 ),
                 child: AspectRatio(
                   aspectRatio: 16 / 9,

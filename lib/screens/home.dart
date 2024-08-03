@@ -139,7 +139,7 @@ class _HomeState extends State<Home> {
         onTap: () {
           Get.bottomSheet(
             ClipRRect(
-              borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
+              borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
               child: ExChart(
                 idFrom: paren.currencies[selectedFromCurrencyIndex.value].id,
                 idxFrom: selectedFromCurrencyIndex.value,
@@ -363,6 +363,7 @@ class _HomeState extends State<Home> {
 
   Widget buildDataInfoSheet() {
     return Card(
+      margin: EdgeInsets.zero,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(
           top: Radius.circular(20),
