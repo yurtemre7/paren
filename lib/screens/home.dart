@@ -157,13 +157,13 @@ class _HomeState extends State<Home> {
                           TextInputFormatter.withFunction((v1, v2) {
                             var text = v2.text.replaceAll(',', '.');
 
-                            if (text.length > 21) {
+                            if (text.length > 20) {
                               return v1;
                             }
                             return TextEditingValue(text: text);
                           })
                         ],
-                  maxLength: 21,
+                  maxLength: 20,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Enter a valid decimal number (i.e., 123.456)';
