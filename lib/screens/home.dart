@@ -9,6 +9,7 @@ import 'package:paren/classes/currency.dart';
 import 'package:paren/providers/constants.dart';
 import 'package:paren/providers/extensions.dart';
 import 'package:paren/providers/paren.dart';
+import 'package:paren/screens/exchart.dart';
 import 'package:paren/screens/settings.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -300,6 +301,22 @@ class _HomeState extends State<Home> {
                   );
                 })
               ],
+            ),
+            8.h,
+            ListTile(
+              title: Text(
+                  '${paren.fromCurrency.value.toUpperCase()} → ${paren.toCurrency.value.toUpperCase()} exchange chart'),
+              trailing: const Icon(Icons.arrow_forward_ios_outlined),
+              onTap: () {
+                Get.to(
+                  () => ExChart(
+                    idFrom: paren.fromCurrency.value,
+                    idxFrom: selectedFromCurrencyIndex.value,
+                    idTo: paren.toCurrency.value,
+                    idxTo: selectedToCurrencyIndex.value,
+                  ),
+                );
+              },
             ),
           ],
         ),
