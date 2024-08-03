@@ -33,6 +33,7 @@ class _SettingsState extends State<Settings> {
             const Center(
               child: Text('Made in 🇩🇪 by Emre'),
             ),
+            24.h,
           ],
         );
       }),
