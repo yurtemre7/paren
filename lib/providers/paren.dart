@@ -28,7 +28,6 @@ class Paren extends GetxController {
     paren.sp = await SharedPreferences.getInstance();
     await paren.initCurrencies();
     await paren.initSettings();
-    logMessage('Initialized Paren');
     return paren;
   }
 
