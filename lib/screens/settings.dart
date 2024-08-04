@@ -15,6 +15,7 @@ class Settings extends StatefulWidget {
 
 class _SettingsState extends State<Settings> {
   final Paren paren = Get.find();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,7 +41,7 @@ class _SettingsState extends State<Settings> {
     );
   }
 
-  Container buildFeedback() {
+  Widget buildFeedback() {
     return Container(
       padding: const EdgeInsets.only(right: 8),
       child: Column(
@@ -91,7 +92,7 @@ class _SettingsState extends State<Settings> {
     );
   }
 
-  ListTile buildAppInfo() {
+  Widget buildAppInfo() {
     return ListTile(
       trailing: ClipRRect(
         borderRadius: BorderRadius.circular(12),
@@ -131,7 +132,7 @@ class _SettingsState extends State<Settings> {
     );
   }
 
-  SwitchListTile buildAutofocusSwitch() {
+  Widget buildAutofocusSwitch() {
     return SwitchListTile(
       title: const Text('Autofocus Textfield'),
       subtitle: const Text(
