@@ -1,4 +1,4 @@
-import 'dart:developer';
+import 'dart:math';
 
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
@@ -67,8 +67,10 @@ class _ExChartState extends State<ExChart> {
     hasError.value = false;
     try {
       var beginDate = DateTime.now().subtract(localDuration.value);
-      var beginDateString =
-          "${beginDate.year}-${beginDate.month.toString().padLeft(2, '0')}-${beginDate.day.toString().padLeft(2, '0')}";
+      var year = beginDate.year;
+      var month = beginDate.month.toString().padLeft(2, '0');
+      var day = beginDate.day.toString().padLeft(2, '0');
+      var beginDateString = '$year-$month-$day';
       var resp = await paren.dio.get(
         '/$beginDateString..?from=$from&to=$to',
       );
@@ -79,7 +81,7 @@ class _ExChartState extends State<ExChart> {
         var ratesList = rates.entries.map(
           (e) {
             var key = e.key.toString();
-            var dateKey = DateTime.parse(key).toLocal();
+            var dateKey = DateTime.parse(key);
             var value = e.value.toString();
             var dataValue =
                 double.tryParse(value.toString().substring(5, value.length - 1).trim()) ?? 0.0;
@@ -91,10 +93,20 @@ class _ExChartState extends State<ExChart> {
         ).toList();
         currencyDataList.value = ratesList;
         currencyDataList.refresh();
-        log('Fetched data: ${ratesList.toString()}');
+        // logMessage('Listenlänge: ${currencyDataList.length}');
+        // for (final (double, double) date in currencyDataList) {
+        //   var datum = DateTime.fromMillisecondsSinceEpoch(date.$1.toInt());
+        //   logMessage('${datum.toIso8601String()} ${date.$2}');
+        // }
+        // currencyDataList.refresh();
+        // logMessage('Fetched data: ${ratesList.toString()}');
       }
-    } catch (e) {
-      log('An error has occured: ${e.toString()}');
+    } catch (error, stackTrace) {
+      logError(
+        'An error has occured',
+        error: error,
+        stackTrace: stackTrace,
+      );
       hasError.value = true;
     }
     isLoading.value = false;
@@ -153,7 +165,7 @@ class _ExChartState extends State<ExChart> {
           return ListView(
             padding: EdgeInsets.zero,
             children: [
-              48.h,
+              58.h,
               Container(
                 margin: const EdgeInsets.only(
                   right: 32,
@@ -196,7 +208,7 @@ class _ExChartState extends State<ExChart> {
   Widget bottomTitleWidgets(double value, TitleMeta meta) {
     const style = TextStyle(
       fontWeight: FontWeight.bold,
-      fontSize: 16,
+      fontSize: 15,
     );
     Widget text;
     var date = DateTime.fromMillisecondsSinceEpoch(value.toInt());
@@ -219,34 +231,20 @@ class _ExChartState extends State<ExChart> {
           text = const Text('', style: style);
       }
     } else if (localDuration.value == 30.days) {
-      switch (date.day) {
-        case 1:
-          text = Text(weekdayFromInt(date.weekday), style: style);
-        case 8:
-          text = Text(weekdayFromInt(date.weekday), style: style);
-        case 15:
-          text = Text(weekdayFromInt(date.weekday), style: style);
-        case 22:
-          text = Text(weekdayFromInt(date.weekday), style: style);
-        case 30:
-          text = Text(weekdayFromInt(date.weekday), style: style);
+      switch (date.weekday) {
+        case 1 || 2 || 3 || 4 || 5:
+          var month = date.month.toString().padLeft(2, '0');
+          var day = date.day.toString().padLeft(2, '0');
+          text = Text('$day/$month', style: style);
         default:
           text = const Text('', style: style);
       }
     } else if (localDuration.value == 7.days) {
       switch (date.weekday) {
-        case 1:
-          text = Text(weekdayFromInt(date.weekday), style: style);
-        case 2:
-          text = Text(weekdayFromInt(date.weekday), style: style);
-        case 3:
-          text = Text(weekdayFromInt(date.weekday), style: style);
-        case 5:
-          text = Text(weekdayFromInt(date.weekday), style: style);
-        case 7:
-          text = Text(weekdayFromInt(date.weekday), style: style);
-        default:
+        case 6 || 7:
           text = const Text('', style: style);
+        default:
+          text = Text(weekdayFromInt(date.weekday), style: style);
       }
     } else {
       text = const Text(
@@ -257,6 +255,8 @@ class _ExChartState extends State<ExChart> {
 
     return SideTitleWidget(
       axisSide: meta.axisSide,
+      angle: pi / 5,
+      space: 12,
       child: text,
     );
   }
@@ -266,7 +266,7 @@ class _ExChartState extends State<ExChart> {
       fontWeight: FontWeight.bold,
       fontSize: 14,
     );
-    String text = '$value ${paren.currencies[localIdxTo.value].symbol}';
+    String text = '${value.toPrecision(5)} ${paren.currencies[localIdxTo.value].symbol}';
 
     return SideTitleWidget(
       axisSide: meta.axisSide,
@@ -276,6 +276,7 @@ class _ExChartState extends State<ExChart> {
 
   LineChartData mainData() {
     return LineChartData(
+      clipData: const FlClipData.all(),
       lineTouchData: LineTouchData(
         touchTooltipData: LineTouchTooltipData(
           getTooltipColor: (touchedSpot) {
@@ -284,6 +285,19 @@ class _ExChartState extends State<ExChart> {
           tooltipBorder: const BorderSide(
             color: Colors.black,
           ),
+          getTooltipItems: (touchedSpots) {
+            return touchedSpots
+                .map(
+                  (e) => LineTooltipItem(
+                    '${e.y} ${paren.currencies[localIdxTo.value].symbol}',
+                    TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: context.theme.colorScheme.primary,
+                    ),
+                  ),
+                )
+                .toList();
+          },
         ),
       ),
       titlesData: FlTitlesData(
@@ -298,7 +312,10 @@ class _ExChartState extends State<ExChart> {
           sideTitles: SideTitles(
             showTitles: true,
             getTitlesWidget: bottomTitleWidgets,
-            reservedSize: 28,
+            reservedSize: 30,
+            interval: localDuration.value == 7.days || localDuration.value == 30.days
+                ? Duration.millisecondsPerDay.toDouble() * 3
+                : null,
           ),
         ),
         leftTitles: AxisTitles(
@@ -306,7 +323,7 @@ class _ExChartState extends State<ExChart> {
             showTitles: true,
             getTitlesWidget: leftTitleWidgets,
             interval: paren.currencies[localIdxTo.value].rate,
-            reservedSize: 100,
+            reservedSize: 90,
           ),
         ),
       ),
