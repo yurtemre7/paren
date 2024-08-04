@@ -23,7 +23,8 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   final Paren paren = Get.find();
 
-  final currencyTextInputController = TextEditingController(text: '1');
+  final currencyTextInputController = TextEditingController(text: '1').obs;
+  final currencyTextInputFocus = FocusNode();
   final selectedToCurrencyIndex = 0.obs;
   final selectedFromCurrencyIndex = 2.obs;
 
@@ -50,7 +51,8 @@ class _HomeState extends State<Home> {
 
   @override
   void dispose() {
-    currencyTextInputController.dispose();
+    currencyTextInputController.value.dispose();
+    currencyTextInputFocus.dispose();
     super.dispose();
   }
 
@@ -92,9 +94,7 @@ class _HomeState extends State<Home> {
                   children: [
                     buildConvertTextField(currencies),
                     buildCurrencyChartTile(),
-                    8.h,
                     buildCurrencyData(currencies),
-                    8.h,
                     buildLastUpdatedInfo(),
                     96.h,
                   ],
@@ -118,95 +118,62 @@ class _HomeState extends State<Home> {
     );
   }
 
-  Widget buildCurrencyChartTile() {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      child: ListTile(
-        title: Text(
-          '${paren.currencies[selectedFromCurrencyIndex.value].id.toUpperCase()} ↔ ${paren.currencies[selectedToCurrencyIndex.value].id.toUpperCase()} exchange chart',
-        ),
-        trailing: const Icon(Icons.arrow_forward_ios_outlined),
-        onTap: () {
-          Get.bottomSheet(
-            ClipRRect(
-              borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
-              child: ExChart(
-                idFrom: paren.currencies[selectedFromCurrencyIndex.value].id,
-                idxFrom: selectedFromCurrencyIndex.value,
-                idTo: paren.currencies[selectedToCurrencyIndex.value].id,
-                idxTo: selectedToCurrencyIndex.value,
-              ),
-            ),
-            settings: const RouteSettings(
-              name: 'Exchange Chart',
-            ),
-          );
-        },
-      ),
-    );
-  }
-
   Widget buildConvertTextField(RxList<Currency> currencies) {
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.only(left: 16, right: 16, top: 16),
       child: Column(
         children: [
-          Row(
-            children: [
-              Expanded(
-                child: TextFormField(
-                  controller: currencyTextInputController,
-                  autofocus: paren.autofocusTextField.value,
-                  decoration: InputDecoration(
-                    labelText:
-                        'Enter amount in ${currencies[selectedFromCurrencyIndex.value].symbol} / ${currencies[selectedToCurrencyIndex.value].symbol}',
-                    border: const OutlineInputBorder(),
-                    suffixIcon: IconButton(
-                      icon: const Icon(Icons.close),
-                      onPressed: () {
-                        currencyTextInputController.clear();
-                        setState(() {});
-                      },
-                    ),
-                  ),
-                  onChanged: (value) {
-                    setState(() {});
-                  },
-                  keyboardType:
-                      kIsWeb ? null : const TextInputType.numberWithOptions(decimal: true),
-                  inputFormatters: kIsWeb
-                      ? null
-                      : [
-                          TextInputFormatter.withFunction((v1, v2) {
-                            var text = v2.text.replaceAll(',', '.');
-
-                            if (text.length > 20) {
-                              return v1;
-                            }
-                            return TextEditingValue(text: text);
-                          })
-                        ],
-                  maxLength: 20,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Enter a valid decimal number (i.e., 123.456)';
-                    }
-                    var toDouble = double.tryParse(value);
-                    if (toDouble == null) {
-                      return 'Please check your entered decimal number';
-                    }
-                    return null;
-                  },
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
-                  textInputAction: TextInputAction.done,
-                ),
+          TextFormField(
+            focusNode: currencyTextInputFocus,
+            controller: currencyTextInputController.value,
+            autofocus: paren.autofocusTextField.value,
+            decoration: InputDecoration(
+              labelText:
+                  'Enter amount in ${currencies[selectedFromCurrencyIndex.value].symbol} / ${currencies[selectedToCurrencyIndex.value].symbol}',
+              border: const OutlineInputBorder(),
+              suffixIcon: IconButton(
+                icon: const Icon(Icons.close),
+                onPressed: () {
+                  currencyTextInputController.value.clear();
+                  currencyTextInputController.refresh();
+                  currencyTextInputFocus.requestFocus();
+                },
               ),
-            ],
+            ),
+            onChanged: (value) {
+              currencyTextInputController.refresh();
+            },
+            keyboardType: kIsWeb ? null : const TextInputType.numberWithOptions(decimal: true),
+            inputFormatters: kIsWeb
+                ? null
+                : [
+                    TextInputFormatter.withFunction((v1, v2) {
+                      var text = v2.text.replaceAll(',', '.');
+
+                      if (text.length > 20) {
+                        return v1;
+                      }
+                      return TextEditingValue(text: text);
+                    })
+                  ],
+            maxLength: 20,
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Enter a valid decimal number (i.e., 123.456)';
+              }
+              var toDouble = double.tryParse(value);
+              if (toDouble == null) {
+                return 'Please check your entered decimal number';
+              }
+              return null;
+            },
+            autovalidateMode: AutovalidateMode.onUserInteraction,
+            textInputAction: TextInputAction.done,
           ),
           12.h,
-          Builder(
-            builder: (context) {
-              var currencyTextInput = currencyTextInputController.text;
+          Obx(
+            () {
+              var currencyTextInput = currencyTextInputController.value.text;
               if (currencyTextInput.isEmpty) {
                 currencyTextInput = '0';
               }
@@ -241,31 +208,62 @@ class _HomeState extends State<Home> {
                     (Match m) => '${m[1]},',
                   );
 
-              return Column(
-                children: [
-                  Text(
-                    '$inputStr ${fromCurrency.symbol} → $amountStr ${toCurrency.symbol}',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: context.theme.colorScheme.primary,
+              return SelectionArea(
+                child: Column(
+                  children: [
+                    Text(
+                      '$inputStr ${fromCurrency.symbol} → $amountStr ${toCurrency.symbol}',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: context.theme.colorScheme.primary,
+                      ),
+                      textAlign: TextAlign.center,
                     ),
-                    textAlign: TextAlign.center,
-                  ),
-                  Text(
-                    '$inputStr ${toCurrency.symbol} → $reAmountStr ${fromCurrency.symbol}',
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold,
-                      color: context.theme.colorScheme.primary,
+                    Text(
+                      '$inputStr ${toCurrency.symbol} → $reAmountStr ${fromCurrency.symbol}',
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                        color: context.theme.colorScheme.primary,
+                      ),
+                      textAlign: TextAlign.center,
                     ),
-                    textAlign: TextAlign.center,
-                  ),
-                ],
+                  ],
+                ),
               );
             },
           ),
+          12.h,
         ],
+      ),
+    );
+  }
+
+  Widget buildCurrencyChartTile() {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: ListTile(
+        title: Text(
+          '${paren.currencies[selectedFromCurrencyIndex.value].id.toUpperCase()} ↔ ${paren.currencies[selectedToCurrencyIndex.value].id.toUpperCase()} exchange chart',
+        ),
+        trailing: const Icon(Icons.arrow_forward_ios_outlined),
+        onTap: () {
+          Get.bottomSheet(
+            ClipRRect(
+              borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+              child: ExChart(
+                idFrom: paren.currencies[selectedFromCurrencyIndex.value].id,
+                idxFrom: selectedFromCurrencyIndex.value,
+                idTo: paren.currencies[selectedToCurrencyIndex.value].id,
+                idxTo: selectedToCurrencyIndex.value,
+              ),
+            ),
+            settings: const RouteSettings(
+              name: 'Exchange Chart',
+            ),
+          );
+        },
       ),
     );
   }
@@ -285,6 +283,7 @@ class _HomeState extends State<Home> {
               showMore.value ? 'Hide quick conversions' : 'Show quick conversions',
             ),
           ),
+          if (showMore.value) 8.h,
           SizedBox(
             height: showMore.value ? null : 0,
             child: GridView.extent(
@@ -335,7 +334,7 @@ class _HomeState extends State<Home> {
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: ListTile(
         title: const Text(
-          'Currencies last updated:',
+          'Currencies last updated',
         ),
         subtitle: Text(timestampToString(paren.latestTimestamp.value)),
         trailing: const Icon(
