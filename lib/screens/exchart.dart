@@ -29,7 +29,7 @@ class _ExChartState extends State<ExChart> {
 
   final isLoading = true.obs;
   final hasError = false.obs;
-  final currencyDataList = <(double, double)>[].obs;
+  final currencyDataList = <({double x, double y})>[].obs;
 
   final localIdFrom = ''.obs;
   final localIdTo = ''.obs;
@@ -86,19 +86,14 @@ class _ExChartState extends State<ExChart> {
             var dataValue =
                 double.tryParse(value.toString().substring(5, value.length - 1).trim()) ?? 0.0;
             return (
-              dateKey.millisecondsSinceEpoch.toDouble(),
-              dataValue,
+              x: dateKey.millisecondsSinceEpoch.toDouble(),
+              y: dataValue,
             );
           },
         ).toList();
         currencyDataList.value = ratesList;
         currencyDataList.refresh();
         // logMessage('Listenlänge: ${currencyDataList.length}');
-        // for (final (double, double) date in currencyDataList) {
-        //   var datum = DateTime.fromMillisecondsSinceEpoch(date.$1.toInt());
-        //   logMessage('${datum.toIso8601String()} ${date.$2}');
-        // }
-        // currencyDataList.refresh();
         // logMessage('Fetched data: ${ratesList.toString()}');
       }
     } catch (error, stackTrace) {
@@ -282,9 +277,7 @@ class _ExChartState extends State<ExChart> {
           getTooltipColor: (touchedSpot) {
             return context.theme.colorScheme.onSecondary;
           },
-          tooltipBorder: const BorderSide(
-            color: Colors.black,
-          ),
+          tooltipBorder: const BorderSide(),
           getTooltipItems: (touchedSpots) {
             return touchedSpots
                 .map(
@@ -301,13 +294,8 @@ class _ExChartState extends State<ExChart> {
         ),
       ),
       titlesData: FlTitlesData(
-        show: true,
-        rightTitles: const AxisTitles(
-          sideTitles: SideTitles(showTitles: false),
-        ),
-        topTitles: const AxisTitles(
-          sideTitles: SideTitles(showTitles: false),
-        ),
+        rightTitles: const AxisTitles(),
+        topTitles: const AxisTitles(),
         bottomTitles: AxisTitles(
           sideTitles: SideTitles(
             showTitles: true,
@@ -331,8 +319,8 @@ class _ExChartState extends State<ExChart> {
         LineChartBarData(
           spots: [
             ...currencyDataList.map((e) {
-              final (double x, double y) position = e;
-              return FlSpot(position.$1, position.$2);
+              ({double x, double y}) position = e;
+              return FlSpot(position.x, position.y);
             }),
           ],
           gradient: LinearGradient(

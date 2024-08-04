@@ -365,7 +365,6 @@ class _HomeState extends State<Home> {
           padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 32),
           child: Column(
             mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Container(
                 alignment: Alignment.center,
@@ -428,7 +427,7 @@ class _HomeState extends State<Home> {
             padding: const EdgeInsets.all(10),
             child: DropdownButton(
               items: currencies.indexed.map(
-                ((int, Currency) position) {
+                ((int i, Currency e) position) {
                   var i = position.$1;
                   var e = position.$2;
 
