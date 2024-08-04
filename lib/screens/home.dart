@@ -339,9 +339,10 @@ class _HomeState extends State<Home> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: ListTile(
-        title: Text(
-          'Currencies last updated: ${timestampToString(paren.latestTimestamp.value)}',
+        title: const Text(
+          'Currencies last updated:',
         ),
+        subtitle: Text(timestampToString(paren.latestTimestamp.value)),
         trailing: const Icon(
           Icons.info_outline,
         ),
