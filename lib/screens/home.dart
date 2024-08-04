@@ -103,16 +103,6 @@ class _HomeState extends State<Home> {
             },
           ),
         ),
-        floatingActionButton: Obx(
-          () => FloatingActionButton(
-            onPressed: () {
-              showMore.toggle();
-            },
-            elevation: 4,
-            child:
-                Icon(showMore.value ? Icons.money_off_csred_outlined : Icons.attach_money_outlined),
-          ),
-        ),
         bottomNavigationBar: Obx(
           () {
             var currencies = paren.currencies;
@@ -281,23 +271,25 @@ class _HomeState extends State<Home> {
   }
 
   Widget buildCurrencyData(RxList<Currency> currencies) {
-    return SizedBox(
-      height: showMore.value ? null : 0,
-      child: Container(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              'Quick Conversions',
-              style: TextStyle(
-                fontSize: 18,
-              ),
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: Column(
+        children: [
+          SwitchListTile(
+            value: showMore.value,
+            onChanged: (v) {
+              showMore.value = v;
+            },
+            title: const Text('Quick Conversions'),
+            subtitle: Text(
+              showMore.value ? 'Hide quick conversions' : 'Show quick conversions',
             ),
-            8.h,
-            GridView.extent(
+          ),
+          SizedBox(
+            height: showMore.value ? null : 0,
+            child: GridView.extent(
               physics: const NeverScrollableScrollPhysics(),
-              maxCrossAxisExtent: 120,
+              maxCrossAxisExtent: 130,
               shrinkWrap: true,
               mainAxisSpacing: 12,
               crossAxisSpacing: 8,
@@ -332,8 +324,8 @@ class _HomeState extends State<Home> {
                 })
               ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
