@@ -1,7 +1,6 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:paren/providers/constants.dart';
 import 'package:paren/providers/paren.dart';
 import 'package:paren/screens/home.dart';
 import 'package:url_strategy/url_strategy.dart';
@@ -18,7 +17,7 @@ Future<void> initParen() async {
   Get.put(await Paren.init());
   var time2 = DateTime.now().millisecondsSinceEpoch;
   var diff = time2 - time1;
-  log('Loading time taken: ${diff}ms');
+  logMessage('Loading time taken: ${diff}ms');
 }
 
 class MyApp extends StatelessWidget {

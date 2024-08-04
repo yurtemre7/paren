@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
 
 import 'package:dio/dio.dart';
 import 'package:get/get.dart';
@@ -29,7 +28,7 @@ class Paren extends GetxController {
     paren.sp = await SharedPreferences.getInstance();
     await paren.initCurrencies();
     await paren.initSettings();
-    log('Initialized Paren');
+    logMessage('Initialized Paren');
     return paren;
   }
 
@@ -43,7 +42,7 @@ class Paren extends GetxController {
 
   Future<void> fetchCurrencyDataOnline() async {
     try {
-      log('Fetching currency data online');
+      logMessage('Fetching currency data online');
       var responds = await Future.wait(
         [
           dio.get(latest),
@@ -76,8 +75,12 @@ class Paren extends GetxController {
       }
       updateCurrencies();
       updateDefaultConversion();
-    } catch (e) {
-      log('Error fetching currency data: $e');
+    } catch (error, stackTrace) {
+      logError(
+        'Error fetching currency data',
+        error: error,
+        stackTrace: stackTrace,
+      );
     }
   }
 
@@ -118,8 +121,12 @@ class Paren extends GetxController {
               ),
             )
             .toList();
-      } catch (e) {
-        log('An Error happened. Rebuilding database');
+      } catch (error, stackTrace) {
+        logError(
+          'An Error happened. Rebuilding database',
+          error: error,
+          stackTrace: stackTrace,
+        );
       }
     } else {
       currencies.value = [EUR, USD, YEN, TRY];

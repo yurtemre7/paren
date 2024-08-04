@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:paren/classes/currency.dart';
 
 const baseUrl = 'https://api.frankfurter.app';
@@ -63,4 +65,22 @@ String weekdayFromInt(int weekday) {
     default:
       return 'DAY';
   }
+}
+
+logMessage(String msg, {String tag = 'Paren'}) {
+  log(
+    msg,
+    name: tag,
+    time: DateTime.now(),
+  );
+}
+
+logError(String msg, {String tag = 'Paren', Object? error, StackTrace? stackTrace}) {
+  log(
+    msg,
+    name: tag,
+    error: error,
+    stackTrace: stackTrace,
+    time: DateTime.now(),
+  );
 }
