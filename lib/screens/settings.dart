@@ -66,26 +66,31 @@ class _SettingsState extends State<Settings> {
               'Feel free to reach out to me, as I take any request serious and as an opportunity to improve my app.',
             ),
           ),
-          ButtonBar(
-            children: [
-              ActionChip.elevated(
-                label: const Text('GitHub'),
-                onPressed: () {
-                  launchUrl(
-                    Uri.parse('https://github.com/yurtemre7/paren'),
-                  );
-                },
-              ),
-              4.w,
-              ActionChip.elevated(
-                label: const Text('E-Mail'),
-                onPressed: () {
-                  launchUrl(
-                    Uri.parse('mailto:yurtemre7@icloud.com'),
-                  );
-                },
-              ),
-            ],
+          Container(
+            padding: const EdgeInsets.only(right: 8),
+            child: OverflowBar(
+              alignment: MainAxisAlignment.end,
+              spacing: 8,
+              children: [
+                ActionChip.elevated(
+                  label: const Text('GitHub'),
+                  onPressed: () {
+                    launchUrl(
+                      Uri.parse('https://github.com/yurtemre7/paren'),
+                    );
+                  },
+                ),
+                4.w,
+                ActionChip.elevated(
+                  label: const Text('E-Mail'),
+                  onPressed: () {
+                    launchUrl(
+                      Uri.parse('mailto:yurtemre7@icloud.com'),
+                    );
+                  },
+                ),
+              ],
+            ),
           ),
         ],
       ),
@@ -134,9 +139,9 @@ class _SettingsState extends State<Settings> {
 
   Widget buildAutofocusSwitch() {
     return SwitchListTile(
-      title: const Text('Autofocus Textfield'),
+      title: const Text('Autofocus Text field'),
       subtitle: const Text(
-        'With this setting on, it will autofocus the converter textfield.',
+        'With this setting on, it will autofocus the converter text field.',
       ),
       value: paren.autofocusTextField.value,
       onChanged: (v) {
@@ -151,7 +156,8 @@ class _SettingsState extends State<Settings> {
       children: [
         const ListTile(
           title: Text('Default Currency Conversion'),
-          subtitle: Text('Change it to the currencies you want to convert from by default.'),
+          subtitle: Text(
+              'Change it to the currencies you want to convert from by default.'),
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
