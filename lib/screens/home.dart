@@ -87,17 +87,23 @@ class _HomeState extends State<Home> {
                 );
               }
 
-              return SingleChildScrollView(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    buildConvertTextField(currencies),
-                    buildCurrencyChartTile(),
-                    buildCurrencyData(currencies),
-                    buildLastUpdatedInfo(),
-                    96.h,
-                  ],
+              return RefreshIndicator(
+                onRefresh: () async {
+                  await paren.fetchCurrencyDataOnline();
+                },
+                child: SingleChildScrollView(
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      buildConvertTextField(currencies),
+                      buildCurrencyChartTile(),
+                      buildCurrencyData(currencies),
+                      buildLastUpdatedInfo(),
+                      96.h,
+                    ],
+                  ),
                 ),
               );
             },
@@ -406,7 +412,7 @@ class _HomeState extends State<Home> {
                     ),
                     const TextSpan(
                       text:
-                          ', which is a trusted source.\n\nAlso, we only need to fetch the data once a day, so the App only fetches it, if that duration has passed from the previous fetch.',
+                          ', which is a trusted source.\n\nAlso, we only need to fetch the data once a day, so the App only fetches it, if that duration has passed from the previous fetch. But you can force refresh by pulling from the top.',
                     ),
                   ],
                 ),
