@@ -199,7 +199,7 @@ class Paren extends GetxController {
     var priceString = '$inputStr ${fromCurrency.symbol} → $amountStr ${toCurrency.symbol}';
     var priceReString = '$inputStr ${toCurrency.symbol} → $reAmountStr ${fromCurrency.symbol}';
 
-    var results = await Future.wait([
+    await Future.wait([
       HomeWidget.saveWidgetData(
         'price_string',
         priceString,
@@ -214,19 +214,10 @@ class Paren extends GetxController {
       ),
     ]);
 
-    for (var result in results) {
-      logMessage('Saved Widget Data $result');
-    }
-
-    var res = await Future.wait([
+    await Future.wait([
       HomeWidget.updateWidget(
         iOSName: 'ParenW',
       ),
     ]);
-
-    logMessage('ParenW Widget updated ${res[0]}');
-    logMessage(priceString);
-    logMessage(priceReString);
-    logMessage(timestampToString(latestTimestamp.value));
   }
 }
