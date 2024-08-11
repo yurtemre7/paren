@@ -69,6 +69,7 @@ class Paren extends GetxController {
       });
 
       currencies.value = onlineCurrencies;
+      currencies.refresh();
       if (!currencieNamesMap.containsKey(fromCurrency.value.toUpperCase())) {
         fromCurrency.value = currencieNamesMap.entries.first.key.toString().toLowerCase();
       }
@@ -139,7 +140,7 @@ class Paren extends GetxController {
       latestTimestamp.value = DateTime.parse(latestTimestampString);
     } else {
       latestTimestamp.value = today;
-      fetchCurrencyDataOnline();
+      await fetchCurrencyDataOnline();
     }
 
     var fromCString = sp.getString('fromC');
@@ -153,7 +154,7 @@ class Paren extends GetxController {
     }
 
     if (today.difference(latestTimestamp.value) >= 1.days) {
-      fetchCurrencyDataOnline();
+      await fetchCurrencyDataOnline();
     }
   }
 
