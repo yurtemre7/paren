@@ -156,8 +156,7 @@ class _SettingsState extends State<Settings> {
       children: [
         const ListTile(
           title: Text('Default Currency Conversion'),
-          subtitle: Text(
-              'Change it to the currencies you want to convert from by default.'),
+          subtitle: Text('Change it to the currencies you want to convert from by default.'),
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
