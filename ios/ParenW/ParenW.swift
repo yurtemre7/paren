@@ -8,7 +8,7 @@
 import SwiftUI
 import WidgetKit
 
-private let widgetGroupId = "de.emredev.paren.ParenW"
+private let widgetGroupId = "group.de.emredev.paren"
 
 struct Provider: AppIntentTimelineProvider {
   func placeholder(in context: Context) -> SimpleEntry {
@@ -52,7 +52,7 @@ struct ParenWEntryView: View {
   init(entry: Provider.Entry) {
     self.entry = entry
     priceString = data?.string(forKey: "price_string") ?? "1.00 ¥ = 0.01 €"
-    priceReString = data?.string(forKey: "price_string") ?? "1.00 € = 160.00 ¥"
+    priceReString = data?.string(forKey: "price_restring") ?? "1.00 € = 160.00 ¥"
     priceDatum = data?.string(forKey: "price_datum") ?? "TODAY"
   }
 
