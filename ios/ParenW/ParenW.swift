@@ -58,17 +58,17 @@ struct ParenWEntryView: View {
     
     var body: some View {
         VStack {
-            Text(self.entry.configuration.favoriteEmoji)
+            Text(entry.configuration.favoriteEmoji)
                 .multilineTextAlignment(.center)
-                .font(.body)
+                .font(.title)
                 .padding(.bottom)
             VStack {
                 Text(priceString)
                     .multilineTextAlignment(.center)
-                    .font(.body)
+                    .font(.footnote)
                 Text(priceReString)
                     .multilineTextAlignment(.center)
-                    .font(.body)
+                    .font(.footnote)
             }
             .padding(.bottom)
             Text(priceDatum)
@@ -87,6 +87,8 @@ struct ParenW: Widget {
             ParenWEntryView(entry: entry)
                 .containerBackground(.fill.tertiary, for: .widget)
         }
+        .configurationDisplayName("Currency Exchange")
+        .description("Displays the current exchange rate for your default currencies.")
     }
 }
 
