@@ -265,9 +265,6 @@ class _HomeState extends State<Home> {
                 idxTo: selectedToCurrencyIndex.value,
               ),
             ),
-            settings: const RouteSettings(
-              name: 'Exchange Chart',
-            ),
           );
         },
       ),
@@ -349,9 +346,6 @@ class _HomeState extends State<Home> {
         onTap: () {
           Get.bottomSheet(
             buildDataInfoSheet(),
-            settings: const RouteSettings(
-              name: 'Currency Info',
-            ),
           );
         },
       ),

@@ -131,7 +131,6 @@ class _SettingsState extends State<Settings> {
               ),
             ],
           ),
-          name: 'Delete data dialog',
         );
       },
     );

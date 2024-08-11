@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:home_widget/home_widget.dart';
 import 'package:intl/intl.dart';
@@ -29,8 +30,10 @@ class Paren extends GetxController {
     paren.sp = await SharedPreferences.getInstance();
     await paren.initCurrencies();
     await paren.initSettings();
-    await HomeWidget.setAppGroupId('group.de.emredev.paren');
-    paren.updateWidgetData();
+    if (GetPlatform.isIOS && !kIsWeb) {
+      await HomeWidget.setAppGroupId('group.de.emredev.paren');
+      paren.updateWidgetData();
+    }
     return paren;
   }
 
