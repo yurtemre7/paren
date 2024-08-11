@@ -51,9 +51,9 @@ struct ParenWEntryView: View {
 
   init(entry: Provider.Entry) {
     self.entry = entry
-    priceString = data?.string(forKey: "price_string") ?? "1.00 ¥ = 0.01 €"
-    priceReString = data?.string(forKey: "price_restring") ?? "1.00 € = 160.00 ¥"
-    priceDatum = data?.string(forKey: "price_datum") ?? "TODAY"
+    self.priceString = data?.string(forKey: "price_string") ?? "1.00 ¥ = 0.01 €"
+    self.priceReString = data?.string(forKey: "price_restring") ?? "1.00 € = 160.00 ¥"
+    self.priceDatum = data?.string(forKey: "price_datum") ?? "TODAY"
   }
 
   var body: some View {

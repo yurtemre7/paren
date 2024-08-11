@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:get/get.dart';
+import 'package:home_widget/home_widget.dart';
 import 'package:intl/intl.dart';
 import 'package:paren/classes/currency.dart';
 import 'package:paren/providers/constants.dart';
@@ -28,6 +29,8 @@ class Paren extends GetxController {
     paren.sp = await SharedPreferences.getInstance();
     await paren.initCurrencies();
     await paren.initSettings();
+    await HomeWidget.setAppGroupId('group.de.emredev.paren');
+    paren.updateWidgetData();
     return paren;
   }
 
@@ -152,5 +155,77 @@ class Paren extends GetxController {
     if (today.difference(latestTimestamp.value) >= 1.days) {
       fetchCurrencyDataOnline();
     }
+  }
+
+  Future<void> updateWidgetData() async {
+    int selectedFromCurrencyIndex = 0;
+    int selectedToCurrencyIndex = 0;
+    var idxFrom = currencies.indexWhere((currency) => currency.id == this.fromCurrency.value);
+    if (idxFrom != -1) {
+      selectedFromCurrencyIndex = idxFrom;
+    }
+    var idxTo = currencies.indexWhere((currency) => currency.id == this.toCurrency.value);
+    if (idxTo != -1) {
+      selectedToCurrencyIndex = idxTo;
+    }
+    var fromCurrency = currencies[selectedFromCurrencyIndex];
+    var toCurrency = currencies[selectedToCurrencyIndex];
+
+    var fromRate = fromCurrency.rate;
+    var toRate = toCurrency.rate;
+
+    var inputConverted = 1.0;
+
+    var convertedAmount = 1.0 * toRate / fromRate;
+
+    var reConvertedAmount = 1.0 * fromRate / toRate;
+
+    var roundedTo = (convertedAmount * 100).round() / 100;
+    var reRoundedTo = (reConvertedAmount * 100).round() / 100;
+    var amountStr = roundedTo.toStringAsFixed(2).replaceAllMapped(
+          RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
+          (Match m) => '${m[1]},',
+        );
+    var reAmountStr = reRoundedTo.toStringAsFixed(2).replaceAllMapped(
+          RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
+          (Match m) => '${m[1]},',
+        );
+    var inputStr = inputConverted.toStringAsFixed(2).replaceAllMapped(
+          RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
+          (Match m) => '${m[1]},',
+        );
+
+    var priceString = '$inputStr ${fromCurrency.symbol} → $amountStr ${toCurrency.symbol}';
+    var priceReString = '$inputStr ${toCurrency.symbol} → $reAmountStr ${fromCurrency.symbol}';
+
+    var results = await Future.wait([
+      HomeWidget.saveWidgetData(
+        'price_string',
+        priceString,
+      ),
+      HomeWidget.saveWidgetData(
+        'price_restring',
+        priceReString,
+      ),
+      HomeWidget.saveWidgetData(
+        'price_datum',
+        timestampToString(latestTimestamp.value),
+      ),
+    ]);
+
+    for (var result in results) {
+      logMessage('Saved Widget Data $result');
+    }
+
+    var res = await Future.wait([
+      HomeWidget.updateWidget(
+        iOSName: 'ParenW',
+      ),
+    ]);
+
+    logMessage('ParenW Widget updated ${res[0]}');
+    logMessage(priceString);
+    logMessage(priceReString);
+    logMessage(timestampToString(latestTimestamp.value));
   }
 }
