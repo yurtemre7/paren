@@ -412,7 +412,7 @@ class _HomeState extends State<Home> {
                     ),
                     const TextSpan(
                       text:
-                          ', which is a trusted source.\n\nAlso, we only need to fetch the data once a day, so the App only fetches it, if that duration has passed from the previous fetch. But you can force refresh by pulling from the top.',
+                          ', which is a trusted source.\n\nAlso, we only need to fetch the data once a day, so the App only fetches it, if that duration has passed from the previous fetch. But you can force refresh by pulling from the top.\n\nTo update the values in the widgets, just simply open the app once that day.',
                     ),
                   ],
                 ),
