@@ -302,7 +302,7 @@ class _ExChartState extends State<ExChart> {
             getTitlesWidget: bottomTitleWidgets,
             reservedSize: 30,
             interval: localDuration.value == 7.days || localDuration.value == 30.days
-                ? Duration.millisecondsPerDay.toDouble() * 3
+                ? Duration.millisecondsPerDay.toDouble() * 7
                 : null,
           ),
         ),
@@ -310,7 +310,7 @@ class _ExChartState extends State<ExChart> {
           sideTitles: SideTitles(
             showTitles: true,
             getTitlesWidget: leftTitleWidgets,
-            interval: paren.currencies[localIdxTo.value].rate,
+            interval: paren.currencies[localIdxTo.value].rate * 100,
             reservedSize: 90,
           ),
         ),
