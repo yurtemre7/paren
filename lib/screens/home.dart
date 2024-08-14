@@ -209,7 +209,7 @@ class _HomeState extends State<Home> {
             autovalidateMode: AutovalidateMode.onUserInteraction,
             textInputAction: TextInputAction.done,
           ),
-          12.h,
+          4.h,
           Obx(
             () {
               var currencyTextInput = currencyTextInputController.value.text;
@@ -253,7 +253,7 @@ class _HomeState extends State<Home> {
                     Text(
                       '$inputStr ${fromCurrency.symbol} → $amountStr ${toCurrency.symbol}',
                       style: TextStyle(
-                        fontSize: 18,
+                        fontSize: 20,
                         fontWeight: FontWeight.bold,
                         color: context.theme.colorScheme.primary,
                       ),
@@ -262,7 +262,7 @@ class _HomeState extends State<Home> {
                     Text(
                       '$inputStr ${toCurrency.symbol} → $reAmountStr ${fromCurrency.symbol}',
                       style: TextStyle(
-                        fontSize: 14,
+                        fontSize: 16,
                         fontWeight: FontWeight.bold,
                         color: context.theme.colorScheme.primary,
                       ),
