@@ -251,7 +251,7 @@ class _HomeState extends State<Home> {
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: ListTile(
         title: Text(
-          '${paren.currencies[selectedFromCurrencyIndex.value].id.toUpperCase()} ↔ ${paren.currencies[selectedToCurrencyIndex.value].id.toUpperCase()} exchange chart',
+          '${paren.currencies[selectedFromCurrencyIndex.value].id.toUpperCase()} - ${paren.currencies[selectedToCurrencyIndex.value].id.toUpperCase()} exchange chart',
         ),
         trailing: const Icon(Icons.arrow_forward_ios_outlined),
         onTap: () {
