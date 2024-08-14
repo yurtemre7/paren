@@ -81,6 +81,9 @@ class Paren extends GetxController {
       }
       updateCurrencies();
       updateDefaultConversion();
+      if (GetPlatform.isIOS && !kIsWeb) {
+        updateWidgetData();
+      }
     } catch (error, stackTrace) {
       logError(
         'Error fetching currency data',

@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:paren/classes/currency.dart';
@@ -180,6 +181,9 @@ class _SettingsState extends State<Settings> {
                     if (value == null) return;
                     paren.fromCurrency.value = value;
                     paren.updateDefaultConversion();
+                    if (GetPlatform.isIOS && !kIsWeb) {
+                      paren.updateWidgetData();
+                    }
                   },
                   value: paren.fromCurrency.value,
                 ),
@@ -193,6 +197,9 @@ class _SettingsState extends State<Settings> {
                 paren.fromCurrency.value = paren.toCurrency.value;
                 paren.toCurrency.value = temp;
                 paren.updateDefaultConversion();
+                if (GetPlatform.isIOS && !kIsWeb) {
+                  paren.updateWidgetData();
+                }
               },
             ),
             12.w,
