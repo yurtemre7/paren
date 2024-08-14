@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:home_widget/home_widget.dart';
 import 'package:intl/intl.dart';
@@ -24,16 +25,15 @@ class Paren extends GetxController {
   final toCurrency = 'eur'.obs;
 
   final autofocusTextField = false.obs;
+  final appColor = Colors.orange.value.obs;
 
   static Future<Paren> init() async {
     Paren paren = Paren();
     paren.sp = await SharedPreferences.getInstance();
     await paren.initCurrencies();
     await paren.initSettings();
-    if (GetPlatform.isIOS && !kIsWeb) {
-      await HomeWidget.setAppGroupId('group.de.emredev.paren');
-      paren.updateWidgetData();
-    }
+    paren.updateWidgetData();
+
     return paren;
   }
 
@@ -43,6 +43,7 @@ class Paren extends GetxController {
     fromCurrency.value = 'eur';
     toCurrency.value = 'jpy';
     autofocusTextField.value = false;
+    appColor.value = Colors.orange.value;
   }
 
   Future<void> fetchCurrencyDataOnline() async {
@@ -81,9 +82,7 @@ class Paren extends GetxController {
       }
       updateCurrencies();
       updateDefaultConversion();
-      if (GetPlatform.isIOS && !kIsWeb) {
-        updateWidgetData();
-      }
+      updateWidgetData();
     } catch (error, stackTrace) {
       logError(
         'Error fetching currency data',
@@ -108,12 +107,18 @@ class Paren extends GetxController {
 
   Future<void> saveSettings() async {
     sp.setBool('autofocusTextField', autofocusTextField.value);
+    sp.setInt('appColor', appColor.value);
   }
 
   Future<void> initSettings() async {
     var autofocusValue = sp.getBool('autofocusTextField');
     if (autofocusValue != null) {
       autofocusTextField.value = autofocusValue;
+    }
+
+    var appColorValue = sp.getInt('appColor');
+    if (appColorValue != null) {
+      appColor.value = appColorValue;
     }
 
     await saveSettings();
@@ -165,6 +170,11 @@ class Paren extends GetxController {
   }
 
   Future<void> updateWidgetData() async {
+    if (!GetPlatform.isIOS || kIsWeb) {
+      logMessage('Not updating widget, unsupported platform.');
+      return;
+    }
+    logMessage('Updating widget');
     int selectedFromCurrencyIndex = 0;
     int selectedToCurrencyIndex = 0;
     var idxFrom = currencies.indexWhere((currency) => currency.id == this.fromCurrency.value);
@@ -225,5 +235,16 @@ class Paren extends GetxController {
         iOSName: 'ParenW',
       ),
     ]);
+  }
+
+  void setTheme() {
+    Get.changeTheme(
+      ThemeData(
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Color(appColor.value),
+        ),
+        useMaterial3: true,
+      ),
+    );
   }
 }

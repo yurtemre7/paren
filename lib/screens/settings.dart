@@ -1,5 +1,5 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:paren/classes/currency.dart';
 import 'package:paren/providers/extensions.dart';
@@ -29,6 +29,7 @@ class _SettingsState extends State<Settings> {
           children: [
             buildAppInfo(),
             buildCurrencyChangerRow(currencies),
+            buildAppColorChanger(),
             buildAutofocusSwitch(),
             buildFeedback(),
             24.h,
@@ -39,6 +40,52 @@ class _SettingsState extends State<Settings> {
           ],
         );
       }),
+    );
+  }
+
+  ListTile buildAppColorChanger() {
+    return ListTile(
+      title: const Text('App Color Theme'),
+      subtitle: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Obx(
+          () => Row(
+            children: [
+              ...Colors.primaries.map((color) {
+                return Container(
+                  margin: const EdgeInsets.only(right: 8, top: 8),
+                  child: ChoiceChip(
+                    label: Text(
+                      'Color',
+                      style: TextStyle(
+                        color: color.computeLuminance() > 0.5 ? Colors.black : Colors.white,
+                      ),
+                    ),
+                    backgroundColor: color,
+                    selectedColor: color,
+                    color: WidgetStatePropertyAll(color),
+                    checkmarkColor: color.computeLuminance() > 0.5 ? Colors.black : Colors.white,
+                    selected: color.value == paren.appColor.value,
+                    onSelected: (value) {
+                      paren.appColor.value = color.value;
+                      paren.saveSettings();
+                      paren.setTheme();
+                      Future.delayed(500.milliseconds, () {
+                        if (!mounted) return;
+                        SystemChrome.setSystemUIOverlayStyle(
+                          SystemUiOverlayStyle(
+                            systemNavigationBarColor: context.theme.colorScheme.surface,
+                          ),
+                        );
+                      });
+                    },
+                  ),
+                );
+              }),
+            ],
+          ),
+        ),
+      ),
     );
   }
 
@@ -181,9 +228,7 @@ class _SettingsState extends State<Settings> {
                     if (value == null) return;
                     paren.fromCurrency.value = value;
                     paren.updateDefaultConversion();
-                    if (GetPlatform.isIOS && !kIsWeb) {
-                      paren.updateWidgetData();
-                    }
+                    paren.updateWidgetData();
                   },
                   value: paren.fromCurrency.value,
                 ),
@@ -197,9 +242,7 @@ class _SettingsState extends State<Settings> {
                 paren.fromCurrency.value = paren.toCurrency.value;
                 paren.toCurrency.value = temp;
                 paren.updateDefaultConversion();
-                if (GetPlatform.isIOS && !kIsWeb) {
-                  paren.updateWidgetData();
-                }
+                paren.updateWidgetData();
               },
             ),
             12.w,

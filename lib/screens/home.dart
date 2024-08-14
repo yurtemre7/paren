@@ -35,6 +35,14 @@ class _HomeState extends State<Home> {
     super.initState();
 
     updateCurrencySwap();
+    Future.delayed(0.seconds, () {
+      if (!mounted) return;
+      SystemChrome.setSystemUIOverlayStyle(
+        SystemUiOverlayStyle(
+          systemNavigationBarColor: context.theme.colorScheme.surface,
+        ),
+      );
+    });
   }
 
   Future<void> updateCurrencySwap() async {
