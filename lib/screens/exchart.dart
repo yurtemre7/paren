@@ -118,7 +118,15 @@ class _ExChartState extends State<ExChart> {
           ),
           color: context.theme.colorScheme.primary,
         ),
-        title: Obx(() => Text('$localIdFrom → $localIdTo')),
+        title: Obx(
+          () => Text(
+            '$localIdFrom → $localIdTo',
+            style: TextStyle(
+              color: context.theme.colorScheme.primary,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
         actions: [
           Obx(
             () => Container(
@@ -128,7 +136,12 @@ class _ExChartState extends State<ExChart> {
                   (localDur) {
                     return DropdownMenuItem<Duration>(
                       value: localDur,
-                      child: Text('${localDur.inDays.toInt()} days'),
+                      child: Text(
+                        '${localDur.inDays.toInt()} days',
+                        style: TextStyle(
+                          color: context.theme.colorScheme.primary,
+                        ),
+                      ),
                     );
                   },
                 ).toList(),
@@ -137,7 +150,9 @@ class _ExChartState extends State<ExChart> {
                   localDuration.value = v;
                   fetchChartData(localIdFrom.value, localIdTo.value);
                 },
+                underline: 0.h,
                 value: localDuration.value,
+                iconEnabledColor: context.theme.colorScheme.primary,
               ),
             ),
           ),
