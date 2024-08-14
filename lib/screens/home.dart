@@ -85,7 +85,13 @@ class _HomeState extends State<Home> {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Par円'),
+          title: Text(
+            'Par円',
+            style: TextStyle(
+              color: context.theme.colorScheme.primary,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
           actions: [
             IconButton(
               onPressed: () async {
@@ -95,6 +101,7 @@ class _HomeState extends State<Home> {
               icon: const Icon(
                 Icons.settings,
               ),
+              color: context.theme.colorScheme.primary,
             ),
           ],
         ),
@@ -155,11 +162,16 @@ class _HomeState extends State<Home> {
             controller: currencyTextInputController.value,
             autofocus: paren.autofocusTextField.value,
             decoration: InputDecoration(
-              labelText:
+              hintText:
                   'Enter amount in ${currencies[selectedFromCurrencyIndex.value].symbol} / ${currencies[selectedToCurrencyIndex.value].symbol}',
-              border: const OutlineInputBorder(),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(18),
+              ),
+              filled: true,
+              fillColor: context.theme.colorScheme.primaryContainer.withOpacity(0.3),
               suffixIcon: IconButton(
                 icon: const Icon(Icons.close),
+                color: context.theme.colorScheme.error,
                 onPressed: () {
                   currencyTextInputController.value.clear();
                   currencyTextInputController.refresh();
@@ -274,7 +286,10 @@ class _HomeState extends State<Home> {
         title: Text(
           '${paren.currencies[selectedFromCurrencyIndex.value].id.toUpperCase()} - ${paren.currencies[selectedToCurrencyIndex.value].id.toUpperCase()} exchange chart',
         ),
-        trailing: const Icon(Icons.arrow_forward_ios_outlined),
+        trailing: Icon(
+          Icons.line_axis_outlined,
+          color: context.theme.colorScheme.primary,
+        ),
         onTap: () {
           Get.bottomSheet(
             ClipRRect(
@@ -361,8 +376,9 @@ class _HomeState extends State<Home> {
           'Currencies last updated',
         ),
         subtitle: Text(timestampToString(paren.latestTimestamp.value)),
-        trailing: const Icon(
+        trailing: Icon(
           Icons.info_outline,
+          color: context.theme.colorScheme.primary,
         ),
         onTap: () {
           Get.bottomSheet(
@@ -472,6 +488,7 @@ class _HomeState extends State<Home> {
         12.w,
         IconButton(
           icon: const Icon(Icons.compare_arrows_outlined),
+          color: context.theme.colorScheme.primary,
           onPressed: () {
             var temp = selectedFromCurrencyIndex.value;
             selectedFromCurrencyIndex.value = selectedToCurrencyIndex.value;

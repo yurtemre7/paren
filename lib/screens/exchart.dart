@@ -111,7 +111,13 @@ class _ExChartState extends State<ExChart> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(onPressed: () => Get.back(), icon: const Icon(Icons.close)),
+        leading: IconButton(
+          onPressed: () => Get.back(),
+          icon: const Icon(
+            Icons.close,
+          ),
+          color: context.theme.colorScheme.primary,
+        ),
         title: Obx(() => Text('$localIdFrom → $localIdTo')),
         actions: [
           Obx(
@@ -189,7 +195,9 @@ class _ExChartState extends State<ExChart> {
                     fetchChartData(localIdFrom.value, localIdTo.value);
                   },
                   label: const Text('Swap'),
-                  icon: const Icon(Icons.swap_horiz_outlined),
+                  icon: const Icon(
+                    Icons.swap_horiz_outlined,
+                  ),
                 ),
               ),
               24.h,

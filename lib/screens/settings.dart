@@ -21,7 +21,20 @@ class _SettingsState extends State<Settings> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Settings'),
+        leading: IconButton(
+          onPressed: () => Get.back(),
+          icon: const Icon(
+            Icons.arrow_back_ios_new_outlined,
+          ),
+          color: context.theme.colorScheme.primary,
+        ),
+        title: Text(
+          'Settings',
+          style: TextStyle(
+            color: context.theme.colorScheme.primary,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
       ),
       body: Obx(() {
         var currencies = paren.currencies;
@@ -105,7 +118,10 @@ class _SettingsState extends State<Settings> {
                   'With Par円 you can convert money in your travels faster than ever!\nDownload here: https://apps.apple.com/us/app/paren/id6578395712',
                 );
               },
-              icon: const Icon(Icons.share_outlined),
+              icon: const Icon(
+                Icons.share_outlined,
+              ),
+              color: context.theme.colorScheme.primary,
             ),
           ),
           const ListTile(
@@ -237,6 +253,7 @@ class _SettingsState extends State<Settings> {
             12.w,
             IconButton(
               icon: const Icon(Icons.compare_arrows),
+              color: context.theme.colorScheme.primary,
               onPressed: () {
                 var temp = paren.fromCurrency.value;
                 paren.fromCurrency.value = paren.toCurrency.value;
