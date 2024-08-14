@@ -45,6 +45,19 @@ class _HomeState extends State<Home> {
     });
   }
 
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    Future.delayed(0.seconds, () {
+      if (!mounted) return;
+      SystemChrome.setSystemUIOverlayStyle(
+        SystemUiOverlayStyle(
+          systemNavigationBarColor: context.theme.colorScheme.surface,
+        ),
+      );
+    });
+  }
+
   Future<void> updateCurrencySwap() async {
     var currencies = paren.currencies;
     var idxFrom = currencies.indexWhere((currency) => currency.id == paren.fromCurrency.value);
