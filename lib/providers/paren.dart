@@ -170,7 +170,7 @@ class Paren extends GetxController {
   }
 
   Future<void> updateWidgetData() async {
-    if (!GetPlatform.isIOS || kIsWeb) {
+    if (!(GetPlatform.isIOS || GetPlatform.isAndroid) || kIsWeb) {
       logMessage('Not updating widget, unsupported platform.');
       return;
     }
@@ -229,12 +229,18 @@ class Paren extends GetxController {
         timestampToString(latestTimestamp.value),
       ),
     ]);
-
-    await Future.wait([
-      HomeWidget.updateWidget(
+    if (GetPlatform.isIOS) {
+      var iosRes = await HomeWidget.updateWidget(
         iOSName: 'ParenW',
-      ),
-    ]);
+      );
+
+      logMessage('iOS Widget Updated: $iosRes');
+    } else if (GetPlatform.isAndroid) {
+      var androidRes = await HomeWidget.updateWidget(
+        qualifiedAndroidName: 'de.emredev.paren.glance.ParenWReceiver',
+      );
+      logMessage('Android Widget Updated: $androidRes');
+    }
   }
 
   void setTheme() {
