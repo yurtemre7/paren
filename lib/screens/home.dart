@@ -84,6 +84,7 @@ class _HomeState extends State<Home> {
         FocusScope.of(context).unfocus();
       },
       child: Scaffold(
+        backgroundColor: context.theme.colorScheme.surface,
         appBar: AppBar(
           title: Text(
             'Par円',
@@ -115,6 +116,8 @@ class _HomeState extends State<Home> {
                 );
               }
 
+              var keyboardVisible = context.mediaQuery.viewInsets.bottom > 0;
+
               return RefreshIndicator(
                 onRefresh: () async {
                   await paren.fetchCurrencyDataOnline();
@@ -126,9 +129,11 @@ class _HomeState extends State<Home> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       buildConvertTextField(currencies),
-                      buildCurrencyChartTile(),
-                      buildCurrencyData(currencies),
-                      buildLastUpdatedInfo(),
+                      if (!keyboardVisible) ...[
+                        buildCurrencyChartTile(),
+                        buildCurrencyData(currencies),
+                        buildLastUpdatedInfo(),
+                      ],
                       96.h,
                     ],
                   ),
@@ -253,7 +258,7 @@ class _HomeState extends State<Home> {
                     Text(
                       '$inputStr ${fromCurrency.symbol} → $amountStr ${toCurrency.symbol}',
                       style: TextStyle(
-                        fontSize: 20,
+                        fontSize: paren.conv1Size.value,
                         fontWeight: FontWeight.bold,
                         color: context.theme.colorScheme.primary,
                       ),
@@ -262,7 +267,7 @@ class _HomeState extends State<Home> {
                     Text(
                       '$inputStr ${toCurrency.symbol} → $reAmountStr ${fromCurrency.symbol}',
                       style: TextStyle(
-                        fontSize: 16,
+                        fontSize: paren.conv2Size.value,
                         fontWeight: FontWeight.bold,
                         color: context.theme.colorScheme.primary,
                       ),
@@ -273,8 +278,75 @@ class _HomeState extends State<Home> {
               );
             },
           ),
+          2.h,
+          Align(
+            alignment: Alignment.centerRight,
+            child: TextButton(
+              onPressed: () async {
+                await Get.bottomSheet(
+                  buildTextSizeAdjustSheet(),
+                );
+                paren.saveSettings();
+              },
+              child: const Text('Adjust Text Size'),
+            ),
+          ),
           12.h,
         ],
+      ),
+    );
+  }
+
+  Widget buildTextSizeAdjustSheet() {
+    return Card(
+      margin: EdgeInsets.zero,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(20),
+        ),
+      ),
+      child: SafeArea(
+        child: Container(
+          padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 32),
+          child: Obx(() {
+            return Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  alignment: Alignment.center,
+                  child: const Text(
+                    'Adjust Text Size',
+                    style: TextStyle(fontSize: 20),
+                  ),
+                ),
+                20.h,
+                const Text('Primary Conversion'),
+                Slider(
+                  value: paren.conv1Size.value,
+                  onChanged: (value) {
+                    paren.conv1Size.value = value;
+                  },
+                  min: paren.convSizeRanges.min,
+                  max: paren.convSizeRanges.max,
+                  divisions: 20,
+                  label: '${paren.conv1Size.value}',
+                ),
+                const Divider(),
+                const Text('Secondary Conversion'),
+                Slider(
+                  value: paren.conv2Size.value,
+                  onChanged: (value) {
+                    paren.conv2Size.value = value;
+                  },
+                  min: paren.convSizeRanges.min,
+                  max: paren.convSizeRanges.max,
+                  divisions: 20,
+                  label: '${paren.conv2Size.value}',
+                ),
+              ],
+            );
+          }),
+        ),
       ),
     );
   }

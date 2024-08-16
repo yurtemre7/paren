@@ -26,6 +26,9 @@ class Paren extends GetxController {
 
   final autofocusTextField = false.obs;
   final appColor = Colors.orange.value.obs;
+  final conv1Size = 20.0.obs;
+  final conv2Size = 16.0.obs;
+  final convSizeRanges = (min: 14.0, max: 34.0);
 
   static Future<Paren> init() async {
     Paren paren = Paren();
@@ -44,6 +47,8 @@ class Paren extends GetxController {
     toCurrency.value = 'jpy';
     autofocusTextField.value = false;
     appColor.value = Colors.orange.value;
+    conv1Size.value = 20.0;
+    conv2Size.value = 16.0;
   }
 
   Future<void> fetchCurrencyDataOnline() async {
@@ -108,6 +113,8 @@ class Paren extends GetxController {
   Future<void> saveSettings() async {
     sp.setBool('autofocusTextField', autofocusTextField.value);
     sp.setInt('appColor', appColor.value);
+    sp.setDouble('conv1Size', conv1Size.value);
+    sp.setDouble('conv2Size', conv2Size.value);
   }
 
   Future<void> initSettings() async {
@@ -119,6 +126,16 @@ class Paren extends GetxController {
     var appColorValue = sp.getInt('appColor');
     if (appColorValue != null) {
       appColor.value = appColorValue;
+    }
+
+    var conv1Value = sp.getDouble('conv1Size');
+    if (conv1Value != null) {
+      conv1Size.value = conv1Value;
+    }
+
+    var conv2Value = sp.getDouble('conv2Size');
+    if (conv2Value != null) {
+      conv2Size.value = conv2Value;
     }
 
     await saveSettings();
