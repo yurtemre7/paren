@@ -250,7 +250,6 @@ class Paren extends GetxController {
       var iosRes = await HomeWidget.updateWidget(
         iOSName: 'ParenW',
       );
-
       logMessage('iOS Widget Updated: $iosRes');
     } else if (GetPlatform.isAndroid) {
       var androidRes = await HomeWidget.updateWidget(
