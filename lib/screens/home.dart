@@ -472,12 +472,16 @@ class _HomeState extends State<Home> {
                     value: i,
                     child: Text(
                       e.id.toUpperCase(),
+                      style: TextStyle(
+                        color: context.theme.colorScheme.primary,
+                      ),
                     ),
                   );
                 },
               ).toList(),
               isDense: true,
               underline: Container(),
+              iconEnabledColor: context.theme.colorScheme.primary,
               onChanged: (value) {
                 selectedFromCurrencyIndex.value = value ?? 0;
               },
@@ -509,12 +513,16 @@ class _HomeState extends State<Home> {
                     value: i,
                     child: Text(
                       e.id.toUpperCase(),
+                      style: TextStyle(
+                        color: context.theme.colorScheme.primary,
+                      ),
                     ),
                   );
                 },
               ).toList(),
               isDense: true,
               underline: Container(),
+              iconEnabledColor: context.theme.colorScheme.primary,
               onChanged: (value) {
                 selectedToCurrencyIndex.value = value ?? 0;
               },

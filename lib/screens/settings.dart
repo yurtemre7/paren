@@ -234,12 +234,16 @@ class _SettingsState extends State<Settings> {
                         value: currency.id,
                         child: Text(
                           currency.id.toUpperCase(),
+                          style: TextStyle(
+                            color: context.theme.colorScheme.primary,
+                          ),
                         ),
                       );
                     },
                   ).toList(),
                   isDense: true,
                   underline: Container(),
+                  iconEnabledColor: context.theme.colorScheme.primary,
                   onChanged: (value) {
                     if (value == null) return;
                     paren.fromCurrency.value = value;
@@ -273,12 +277,16 @@ class _SettingsState extends State<Settings> {
                         value: currency.id,
                         child: Text(
                           currency.id.toUpperCase(),
+                          style: TextStyle(
+                            color: context.theme.colorScheme.primary,
+                          ),
                         ),
                       );
                     },
                   ).toList(),
                   isDense: true,
                   underline: Container(),
+                  iconEnabledColor: context.theme.colorScheme.primary,
                   onChanged: (value) {
                     if (value == null) return;
                     paren.toCurrency.value = value;
