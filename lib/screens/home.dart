@@ -120,6 +120,7 @@ class _HomeState extends State<Home> {
 
               return RefreshIndicator(
                 onRefresh: () async {
+                  paren.latestTimestamp.value = DateTime.now();
                   await paren.fetchCurrencyDataOnline();
                 },
                 child: SingleChildScrollView(
