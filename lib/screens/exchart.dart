@@ -273,7 +273,7 @@ class _ExChartState extends State<ExChart> {
 
     return SideTitleWidget(
       axisSide: meta.axisSide,
-      angle: pi / 5,
+      angle: pi / 6,
       space: 12,
       child: text,
     );
