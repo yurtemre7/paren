@@ -17,8 +17,8 @@ dependencies:
   url_launcher: ^6.3.0
   share_plus: ^10.0.2
   url_strategy: ^0.3.0
-  fl_chart: ^0.68.0
-  home_widget: ^0.6.0
+  fl_chart: ^0.69.0
+  home_widget: ^0.7.0
   # image_picker: ^1.1.2
 
 dev_dependencies:
