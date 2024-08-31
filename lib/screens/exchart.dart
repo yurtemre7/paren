@@ -293,6 +293,15 @@ class _ExChartState extends State<ExChart> {
   }
 
   LineChartData mainData() {
+    double? getDateInterval() {
+      if (localDuration.value == 7.days) {
+        return Duration.millisecondsPerDay.toDouble();
+      } else if (localDuration.value == 30.days) {
+        return Duration.millisecondsPerDay.toDouble() * 7;
+      }
+      return null;
+    }
+
     return LineChartData(
       clipData: const FlClipData.all(),
       lineTouchData: LineTouchData(
@@ -324,17 +333,19 @@ class _ExChartState extends State<ExChart> {
             showTitles: true,
             getTitlesWidget: bottomTitleWidgets,
             reservedSize: 30,
-            interval: localDuration.value == 7.days || localDuration.value == 30.days
-                ? Duration.millisecondsPerDay.toDouble() * 7
-                : null,
+            interval: getDateInterval(),
+            maxIncluded: false,
+            minIncluded: false,
           ),
         ),
         leftTitles: AxisTitles(
           sideTitles: SideTitles(
             showTitles: true,
             getTitlesWidget: leftTitleWidgets,
-            interval: paren.currencies[localIdxTo.value].rate * 100,
+            // interval: paren.currencies[localIdxTo.value].rate,
             reservedSize: 90,
+            maxIncluded: false,
+            minIncluded: false,
           ),
         ),
       ),
