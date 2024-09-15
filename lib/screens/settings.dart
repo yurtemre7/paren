@@ -178,7 +178,8 @@ class _SettingsState extends State<Settings> {
           AlertDialog(
             title: const Text('Delete App Data'),
             content: const Text(
-                'Are you sure, you want to delete all the app data?\n\nThis contains the data of the offline currency values, your default currency selection and the autofocus status.'),
+              'Are you sure, you want to delete all the app data?\n\nThis contains the data of the offline currency values, your default currency selection and the autofocus status.',
+            ),
             actions: [
               TextButton(
                 onPressed: () => Get.back(),

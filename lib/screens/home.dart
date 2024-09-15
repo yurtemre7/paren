@@ -133,7 +133,7 @@ class _HomeState extends State<Home> {
                     children: [
                       buildConvertTextField(currencies),
                       if (currencyTextInputController.value.text.isNotEmpty) ...[
-                        buildTipCalculator(currencies)
+                        buildTipCalculator(currencies),
                       ],
                       if (!keyboardVisible) ...[
                         buildCurrencyChartTile(),
@@ -194,7 +194,7 @@ class _HomeState extends State<Home> {
                                       return v1;
                                     }
                                     return TextEditingValue(text: text);
-                                  })
+                                  }),
                                 ],
                           maxLength: 2,
                         ),
@@ -397,7 +397,7 @@ class _HomeState extends State<Home> {
                         return v1;
                       }
                       return TextEditingValue(text: text);
-                    })
+                    }),
                   ],
             maxLength: 20,
             validator: (value) {
@@ -630,7 +630,7 @@ class _HomeState extends State<Home> {
                       ),
                     ),
                   );
-                })
+                }),
               ],
             ),
           ),
@@ -704,8 +704,11 @@ class _HomeState extends State<Home> {
                       text: 'European Central Bank',
                       recognizer: TapGestureRecognizer()
                         ..onTap = () {
-                          launchUrl(Uri.parse(
-                              'https://www.ecb.europa.eu/stats/policy_and_exchange_rates/euro_reference_exchange_rates/html/index.en.html'));
+                          launchUrl(
+                            Uri.parse(
+                              'https://www.ecb.europa.eu/stats/policy_and_exchange_rates/euro_reference_exchange_rates/html/index.en.html',
+                            ),
+                          );
                         },
                       style: TextStyle(
                         color: context.theme.colorScheme.tertiary,
