@@ -46,6 +46,13 @@ String timestampToString(DateTime timestamp) {
   return '$day.$month.$year $hour:$minute';
 }
 
+String timestampToStringNoTime(DateTime timestamp) {
+  var day = timestamp.day.toString().padLeft(2, '0');
+  var month = timestamp.month.toString().padLeft(2, '0');
+  var year = timestamp.year.toString();
+  return '$day.$month.$year';
+}
+
 String weekdayFromInt(int weekday) {
   switch (weekday) {
     case 1:
