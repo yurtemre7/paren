@@ -39,8 +39,11 @@ class _ExChartState extends State<ExChart> {
 
   final localDurations = [
     7.days,
+    14.days,
     30.days,
-    365.days,
+    90.days,
+    180.days,
+    360.days,
   ];
 
   List<Color> get gradientColors => [
@@ -231,7 +234,9 @@ class _ExChartState extends State<ExChart> {
     Widget text;
     var date = DateTime.fromMillisecondsSinceEpoch(value.toInt());
 
-    if (localDuration.value == 365.days) {
+    if (localDuration.value == 90.days ||
+        localDuration.value == 180.days ||
+        localDuration.value == 360.days) {
       switch (date.month) {
         case DateTime.january:
           text = const Text('JAN', style: style);
@@ -248,7 +253,7 @@ class _ExChartState extends State<ExChart> {
         default:
           text = const Text('', style: style);
       }
-    } else if (localDuration.value == 30.days) {
+    } else if (localDuration.value == 14.days || localDuration.value == 30.days) {
       switch (date.weekday) {
         case 1 || 2 || 3 || 4 || 5:
           var month = date.month.toString().padLeft(2, '0');
@@ -298,6 +303,8 @@ class _ExChartState extends State<ExChart> {
         return Duration.millisecondsPerDay.toDouble();
       } else if (localDuration.value == 30.days) {
         return Duration.millisecondsPerDay.toDouble() * 7;
+      } else if (localDuration.value == 90.days || localDuration.value == 180.days) {
+        return Duration.millisecondsPerDay.toDouble() * 30;
       }
       return null;
     }
@@ -314,11 +321,18 @@ class _ExChartState extends State<ExChart> {
             return touchedSpots
                 .map(
                   (e) => LineTooltipItem(
-                    '${e.y} ${paren.currencies[localIdxTo.value].symbol}',
+                    '${e.y} ${paren.currencies[localIdxTo.value].symbol}\n',
                     TextStyle(
                       fontWeight: FontWeight.bold,
                       color: context.theme.colorScheme.primary,
                     ),
+                    children: [
+                      TextSpan(
+                        text: timestampToStringNoTime(
+                          DateTime.fromMillisecondsSinceEpoch(e.x.toInt()),
+                        ),
+                      ),
+                    ],
                   ),
                 )
                 .toList();
