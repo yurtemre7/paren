@@ -14,8 +14,8 @@ dependencies:
   get: ^4.6.6
   dio: ^5.7.0
   shared_preferences: ^2.3.2
-  url_launcher: ^6.3.0
-  share_plus: ^10.0.2
+  url_launcher: ^6.3.1
+  share_plus: ^10.1.0
   url_strategy: ^0.3.0
   fl_chart: ^0.69.0
   home_widget: ^0.7.0
@@ -25,7 +25,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  flutter_lints: ^4.0.0
+  flutter_lints: ^5.0.0
   # flutter pub run flutter_launcher_icons:main
   flutter_launcher_icons:
     git:
