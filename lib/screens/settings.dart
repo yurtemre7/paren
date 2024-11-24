@@ -41,10 +41,14 @@ class _SettingsState extends State<Settings> {
         return ListView(
           children: [
             buildAppInfo(),
-            buildCurrencyChangerRow(currencies),
-            buildAppColorChanger(),
             buildAutofocusSwitch(),
+            buildCurrencyChangerRow(currencies),
+            Divider(),
+            buildAppThemeChanger(),
+            buildAppColorChanger(),
+            Divider(),
             buildFeedback(),
+            Divider(),
             24.h,
             const Center(
               child: Text('Made in 🇩🇪 by Emre'),
@@ -97,6 +101,59 @@ class _SettingsState extends State<Settings> {
               }),
             ],
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget buildAppThemeChanger() {
+    var themeMode = paren.appThemeMode.value.index;
+    DropdownButton<int> dropdownButton = DropdownButton<int>(
+      value: themeMode,
+      items: [
+        ...ThemeMode.values.map((mode) {
+          return DropdownMenuItem(
+            value: mode.index,
+            child: Text(
+              mode.name[0].toUpperCase() + mode.name.substring(1),
+              style: TextStyle(
+                color: context.theme.colorScheme.primary,
+              ),
+            ),
+          );
+        }),
+      ],
+      onChanged: (v) async {
+        paren.appThemeMode.value = ThemeMode.values[v!];
+        paren.setTheme();
+        await paren.saveSettings();
+        if (!mounted) return;
+        Future.delayed(500.milliseconds, () {
+          if (!mounted) return;
+          SystemChrome.setSystemUIOverlayStyle(
+            SystemUiOverlayStyle(
+              systemNavigationBarColor: context.theme.colorScheme.surface,
+            ),
+          );
+        });
+        // pop();
+      },
+      isDense: true,
+      underline: Container(),
+      iconEnabledColor: context.theme.colorScheme.primary,
+    );
+
+    return ListTile(
+      title: Text(
+        'App Theme Mode',
+      ),
+      subtitle: Text(
+        'To all you darkmode fans!',
+      ),
+      trailing: Card(
+        child: Container(
+          padding: const EdgeInsets.all(5),
+          child: dropdownButton,
         ),
       ),
     );

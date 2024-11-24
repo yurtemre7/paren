@@ -26,6 +26,7 @@ class Paren extends GetxController {
 
   final autofocusTextField = false.obs;
   final appColor = Colors.orange.value.obs;
+  final appThemeMode = ThemeMode.system.obs;
   final conv1Size = 20.0.obs;
   final conv2Size = 16.0.obs;
   final convSizeRanges = (min: 14.0, max: 34.0);
@@ -47,6 +48,7 @@ class Paren extends GetxController {
     toCurrency.value = 'jpy';
     autofocusTextField.value = false;
     appColor.value = Colors.orange.value;
+    appThemeMode.value = ThemeMode.system;
     conv1Size.value = 20.0;
     conv2Size.value = 16.0;
   }
@@ -113,6 +115,7 @@ class Paren extends GetxController {
   Future<void> saveSettings() async {
     sp.setBool('autofocusTextField', autofocusTextField.value);
     sp.setInt('appColor', appColor.value);
+    sp.setInt('appThemeMode', appThemeMode.value.index);
     sp.setDouble('conv1Size', conv1Size.value);
     sp.setDouble('conv2Size', conv2Size.value);
   }
@@ -126,6 +129,11 @@ class Paren extends GetxController {
     var appColorValue = sp.getInt('appColor');
     if (appColorValue != null) {
       appColor.value = appColorValue;
+    }
+
+    var appThemeModeValue = sp.getInt('appThemeMode');
+    if (appThemeModeValue != null) {
+      appThemeMode.value = ThemeMode.values[appThemeModeValue];
     }
 
     var conv1Value = sp.getDouble('conv1Size');
