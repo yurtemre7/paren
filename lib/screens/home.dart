@@ -106,8 +106,6 @@ class _HomeState extends State<Home> {
           actions: [
             IconButton(
               onPressed: () async {
-                // await Get.to(() => const Settings());
-                // updateCurrencySwap();
                 scaffoldKey.currentState?.openEndDrawer();
               },
               icon: const Icon(
