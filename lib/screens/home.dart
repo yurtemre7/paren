@@ -31,6 +31,8 @@ class _HomeState extends State<Home> {
   final showMore = false.obs;
   final customTipController = TextEditingController().obs;
 
+  final scaffoldKey = GlobalKey<ScaffoldState>();
+
   @override
   void initState() {
     super.initState();
@@ -86,6 +88,12 @@ class _HomeState extends State<Home> {
         FocusScope.of(context).unfocus();
       },
       child: Scaffold(
+        key: scaffoldKey,
+        onEndDrawerChanged: (isOpened) {
+          if (!isOpened) {
+            updateCurrencySwap();
+          }
+        },
         backgroundColor: context.theme.colorScheme.surface,
         appBar: AppBar(
           title: Text(
@@ -98,8 +106,9 @@ class _HomeState extends State<Home> {
           actions: [
             IconButton(
               onPressed: () async {
-                await Get.to(() => const Settings());
-                updateCurrencySwap();
+                // await Get.to(() => const Settings());
+                // updateCurrencySwap();
+                scaffoldKey.currentState?.openEndDrawer();
               },
               icon: const Icon(
                 Icons.settings,
@@ -108,6 +117,7 @@ class _HomeState extends State<Home> {
             ),
           ],
         ),
+        endDrawer: Drawer(child: Settings()),
         body: SafeArea(
           child: Obx(
             () {
