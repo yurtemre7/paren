@@ -60,7 +60,7 @@ class _SettingsState extends State<Settings> {
     );
   }
 
-  ListTile buildAppColorChanger() {
+  Widget buildAppColorChanger() {
     return ListTile(
       title: const Text('App Color Theme'),
       subtitle: SingleChildScrollView(
