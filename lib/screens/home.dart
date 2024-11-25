@@ -132,9 +132,9 @@ class _HomeState extends State<Home> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       buildConvertTextField(currencies),
-                      if (currencyTextInputController.value.text.isNotEmpty) ...[
-                        buildTipCalculator(currencies),
-                      ],
+                      // if (currencyTextInputController.value.text.isNotEmpty) ...[
+                      //   buildTipCalculator(currencies),
+                      // ],
                       if (!keyboardVisible) ...[
                         buildCurrencyChartTile(),
                         buildCurrencyData(currencies),
@@ -477,17 +477,18 @@ class _HomeState extends State<Home> {
               );
             },
           ),
-          2.h,
+          12.h,
           Align(
             alignment: Alignment.centerRight,
-            child: TextButton(
+            child: TextButton.icon(
               onPressed: () async {
                 await Get.bottomSheet(
                   buildTextSizeAdjustSheet(),
                 );
                 paren.saveSettings();
               },
-              child: const Text('Adjust Text Size'),
+              label: const Text('Adjust Text Size'),
+              icon: Icon(Icons.text_fields_outlined),
             ),
           ),
           12.h,
