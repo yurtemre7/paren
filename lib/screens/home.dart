@@ -583,56 +583,15 @@ class _HomeState extends State<Home> {
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Column(
         children: [
-          SwitchListTile(
-            value: showMore.value,
-            onChanged: (v) {
-              showMore.value = v;
-            },
+          ListTile(
             title: const Text('Quick Conversions'),
-            subtitle: Text(
-              showMore.value ? 'Hide quick conversions' : 'Show quick conversions',
-            ),
-          ),
-          if (showMore.value) 8.h,
-          SizedBox(
-            height: showMore.value ? null : 0,
-            child: GridView.extent(
-              physics: const NeverScrollableScrollPhysics(),
-              maxCrossAxisExtent: 130,
-              shrinkWrap: true,
-              mainAxisSpacing: 12,
-              crossAxisSpacing: 8,
-              children: [
-                ...[1, 5, 10, 20, 50, 100, 200, 500, 1000, 2000, 5000, 10000, 15000, 20000, 25000]
-                    .map((e) {
-                  var fromCurrency = currencies[selectedFromCurrencyIndex.value];
-                  var toCurrency = currencies[selectedToCurrencyIndex.value];
-
-                  var fromRate = fromCurrency.rate;
-                  var toRate = toCurrency.rate;
-
-                  var convertedAmount = e * toRate / fromRate;
-                  var roundedTo = (convertedAmount * 100).round() / 100;
-                  var amountStr = roundedTo.toStringAsFixed(2).replaceAllMapped(
-                        RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
-                        (Match m) => '${m[1]},',
-                      );
-                  var inputStr = e.toStringAsFixed(2).replaceAllMapped(
-                        RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
-                        (Match m) => '${m[1]},',
-                      );
-
-                  return Card(
-                    child: Center(
-                      child: Text(
-                        '$inputStr ${currencies[selectedFromCurrencyIndex.value].symbol}\n→\n$amountStr ${currencies[selectedToCurrencyIndex.value].symbol}',
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                  );
-                }),
-              ],
-            ),
+            onTap: () {
+              Get.bottomSheet(
+                buildQuickConversions(currencies),
+              );
+            },
+            trailing: Icon(Icons.table_chart_outlined),
+            iconColor: context.theme.colorScheme.primary,
           ),
         ],
       ),
@@ -656,6 +615,71 @@ class _HomeState extends State<Home> {
             buildDataInfoSheet(),
           );
         },
+      ),
+    );
+  }
+
+  Widget buildQuickConversions(List<Currency> currencies) {
+    return Card(
+      margin: EdgeInsets.zero,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(20),
+        ),
+      ),
+      child: SafeArea(
+        child: Container(
+          padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 32),
+          child: ListView(
+            children: [
+              Container(
+                alignment: Alignment.center,
+                child: const Text(
+                  'Quick Conversions',
+                  style: TextStyle(fontSize: 20),
+                ),
+              ),
+              12.h,
+              GridView.extent(
+                maxCrossAxisExtent: 130,
+                shrinkWrap: true,
+                mainAxisSpacing: 12,
+                crossAxisSpacing: 8,
+                children: [
+                  ...[1, 5, 10, 20, 50, 100, 200, 500, 1000, 2000, 5000, 10000, 15000, 20000, 25000]
+                      .map((e) {
+                    var fromCurrency = currencies[selectedFromCurrencyIndex.value];
+                    var toCurrency = currencies[selectedToCurrencyIndex.value];
+
+                    var fromRate = fromCurrency.rate;
+                    var toRate = toCurrency.rate;
+
+                    var convertedAmount = e * toRate / fromRate;
+                    var roundedTo = (convertedAmount * 100).round() / 100;
+                    var amountStr = roundedTo.toStringAsFixed(2).replaceAllMapped(
+                          RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
+                          (Match m) => '${m[1]},',
+                        );
+                    var inputStr = e.toStringAsFixed(2).replaceAllMapped(
+                          RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
+                          (Match m) => '${m[1]},',
+                        );
+
+                    return Card(
+                      color: context.theme.colorScheme.secondaryContainer,
+                      child: Center(
+                        child: Text(
+                          '$inputStr ${currencies[selectedFromCurrencyIndex.value].symbol}\n→\n$amountStr ${currencies[selectedToCurrencyIndex.value].symbol}',
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    );
+                  }),
+                ],
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
