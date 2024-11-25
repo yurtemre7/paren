@@ -103,6 +103,7 @@ class _HomeState extends State<Home> {
             IconButton(
               onPressed: () async {
                 scaffoldKey.currentState?.openEndDrawer();
+                currencyTextInputFocus.unfocus();
               },
               icon: const Icon(
                 Icons.settings,
@@ -111,7 +112,9 @@ class _HomeState extends State<Home> {
             ),
           ],
         ),
-        endDrawer: Drawer(child: Settings()),
+        endDrawer: Drawer(
+          child: Settings(),
+        ),
         body: SafeArea(
           child: Obx(
             () {
@@ -453,6 +456,7 @@ class _HomeState extends State<Home> {
               ),
               12.h,
               GridView.extent(
+                physics: NeverScrollableScrollPhysics(),
                 maxCrossAxisExtent: 130,
                 shrinkWrap: true,
                 mainAxisSpacing: 12,
@@ -489,6 +493,7 @@ class _HomeState extends State<Home> {
                   }),
                 ],
               ),
+              12.h,
             ],
           ),
         ),
