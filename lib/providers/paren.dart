@@ -8,6 +8,7 @@ import 'package:home_widget/home_widget.dart';
 import 'package:intl/intl.dart';
 import 'package:paren/classes/currency.dart';
 import 'package:paren/providers/constants.dart';
+import 'package:paren/providers/extensions.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Paren extends GetxController {
@@ -25,7 +26,7 @@ class Paren extends GetxController {
   final toCurrency = 'eur'.obs;
 
   final autofocusTextField = false.obs;
-  final appColor = Colors.orange.value.obs;
+  final appColor = Colors.orange.getValue.obs;
   final appThemeMode = ThemeMode.system.obs;
   final conv1Size = 20.0.obs;
   final conv2Size = 16.0.obs;
@@ -47,7 +48,7 @@ class Paren extends GetxController {
     fromCurrency.value = 'eur';
     toCurrency.value = 'jpy';
     autofocusTextField.value = false;
-    appColor.value = Colors.orange.value;
+    appColor.value = Colors.orange.getValue;
     appThemeMode.value = ThemeMode.system;
     conv1Size.value = 20.0;
     conv2Size.value = 16.0;

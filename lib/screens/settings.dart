@@ -82,9 +82,9 @@ class _SettingsState extends State<Settings> {
                     selectedColor: color,
                     color: WidgetStatePropertyAll(color),
                     checkmarkColor: color.computeLuminance() > 0.5 ? Colors.black : Colors.white,
-                    selected: color.value == paren.appColor.value,
+                    selected: color.getValue == paren.appColor.value,
                     onSelected: (value) {
-                      paren.appColor.value = color.value;
+                      paren.appColor.value = color.getValue;
                       paren.saveSettings();
                       paren.setTheme();
                       Future.delayed(500.milliseconds, () {

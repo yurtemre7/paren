@@ -382,7 +382,7 @@ class _ExChartState extends State<ExChart> {
           belowBarData: BarAreaData(
             show: true,
             gradient: LinearGradient(
-              colors: gradientColors.map((color) => color.withOpacity(0.3)).toList(),
+              colors: gradientColors.map((color) => color.withValues(alpha: 0.3)).toList(),
             ),
           ),
         ),

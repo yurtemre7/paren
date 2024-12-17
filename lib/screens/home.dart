@@ -186,7 +186,7 @@ class _HomeState extends State<Home> {
                 borderRadius: BorderRadius.circular(18),
               ),
               filled: true,
-              fillColor: context.theme.colorScheme.primaryContainer.withOpacity(0.3),
+              fillColor: context.theme.colorScheme.primaryContainer.withValues(alpha: 0.3),
               suffixIcon: IconButton(
                 icon: const Icon(Icons.close),
                 color: context.theme.colorScheme.error,
