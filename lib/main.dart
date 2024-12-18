@@ -18,11 +18,13 @@ void main() async {
 }
 
 Future<void> initParen() async {
-  var time1 = DateTime.now().millisecondsSinceEpoch;
-  Get.put(await Paren.init());
-  var time2 = DateTime.now().millisecondsSinceEpoch;
-  var diff = time2 - time1;
-  logMessage('Loading time taken: ${diff}ms');
+  var stopwatch = Stopwatch()..start();
+  try {
+    Get.put(await Paren.init());
+  } finally {
+    stopwatch.stop();
+    logMessage('Loading time taken: ${stopwatch.elapsedMilliseconds}ms');
+  }
 }
 
 class MyApp extends StatelessWidget {
