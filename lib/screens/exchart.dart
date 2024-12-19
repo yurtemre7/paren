@@ -184,7 +184,7 @@ class _ExChartState extends State<ExChart> {
           return ListView(
             padding: EdgeInsets.zero,
             children: [
-              58.h,
+              24.h,
               Container(
                 margin: const EdgeInsets.only(
                   right: 32,
@@ -337,6 +337,8 @@ class _ExChartState extends State<ExChart> {
                 )
                 .toList();
           },
+          fitInsideHorizontally: true,
+          fitInsideVertically: true,
         ),
       ),
       titlesData: FlTitlesData(
