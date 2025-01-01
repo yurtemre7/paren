@@ -34,61 +34,59 @@ class QuickConversions extends StatelessWidget {
         ),
       ),
       body: SafeArea(
-        child: Expanded(
-          child: Container(
-            margin: EdgeInsets.symmetric(horizontal: 12),
-            child: GridView.extent(
-              maxCrossAxisExtent: 130,
-              shrinkWrap: true,
-              mainAxisSpacing: 12,
-              crossAxisSpacing: 8,
-              children: [
-                ...[
-                  1,
-                  5,
-                  10,
-                  20,
-                  50,
-                  100,
-                  200,
-                  500,
-                  1000,
-                  2000,
-                  5000,
-                  10000,
-                  15000,
-                  20000,
-                  25000,
-                ].map((e) {
-                  var fromCurrency = currencies[fromCurr];
-                  var toCurrency = currencies[toCurr];
+        child: Container(
+          margin: EdgeInsets.symmetric(horizontal: 12),
+          child: GridView.extent(
+            maxCrossAxisExtent: 130,
+            shrinkWrap: true,
+            mainAxisSpacing: 12,
+            crossAxisSpacing: 8,
+            children: [
+              ...[
+                1,
+                5,
+                10,
+                20,
+                50,
+                100,
+                200,
+                500,
+                1000,
+                2000,
+                5000,
+                10000,
+                15000,
+                20000,
+                25000,
+              ].map((e) {
+                var fromCurrency = currencies[fromCurr];
+                var toCurrency = currencies[toCurr];
 
-                  var fromRate = fromCurrency.rate;
-                  var toRate = toCurrency.rate;
+                var fromRate = fromCurrency.rate;
+                var toRate = toCurrency.rate;
 
-                  var convertedAmount = e * toRate / fromRate;
-                  var roundedTo = (convertedAmount * 100).round() / 100;
-                  var amountStr = roundedTo.toStringAsFixed(2).replaceAllMapped(
-                        RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
-                        (Match m) => '${m[1]},',
-                      );
-                  var inputStr = e.toStringAsFixed(2).replaceAllMapped(
-                        RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
-                        (Match m) => '${m[1]},',
-                      );
+                var convertedAmount = e * toRate / fromRate;
+                var roundedTo = (convertedAmount * 100).round() / 100;
+                var amountStr = roundedTo.toStringAsFixed(2).replaceAllMapped(
+                      RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
+                      (Match m) => '${m[1]},',
+                    );
+                var inputStr = e.toStringAsFixed(2).replaceAllMapped(
+                      RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
+                      (Match m) => '${m[1]},',
+                    );
 
-                  return Card(
-                    color: context.theme.colorScheme.secondaryContainer,
-                    child: Center(
-                      child: Text(
-                        '$inputStr ${currencies[fromCurr].symbol}\n→\n$amountStr ${currencies[toCurr].symbol}',
-                        textAlign: TextAlign.center,
-                      ),
+                return Card(
+                  color: context.theme.colorScheme.secondaryContainer,
+                  child: Center(
+                    child: Text(
+                      '$inputStr ${currencies[fromCurr].symbol}\n→\n$amountStr ${currencies[toCurr].symbol}',
+                      textAlign: TextAlign.center,
                     ),
-                  );
-                }),
-              ],
-            ),
+                  ),
+                );
+              }),
+            ],
           ),
         ),
       ),
