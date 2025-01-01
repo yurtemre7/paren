@@ -10,6 +10,7 @@ import 'package:paren/providers/constants.dart';
 import 'package:paren/providers/extensions.dart';
 import 'package:paren/providers/paren.dart';
 import 'package:paren/screens/exchart.dart';
+import 'package:paren/screens/quick_conversions.dart';
 import 'package:paren/screens/settings.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -393,7 +394,7 @@ class _HomeState extends State<Home> {
     );
   }
 
-  Widget buildCurrencyData(RxList<Currency> currencies) {
+  Widget buildCurrencyData(List<Currency> currencies) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Column(
@@ -426,7 +427,7 @@ class _HomeState extends State<Home> {
           color: context.theme.colorScheme.primary,
         ),
         onTap: () {
-          Get.bottomSheet(
+          Get.dialog(
             buildDataInfoSheet(),
           );
         },
@@ -442,130 +443,70 @@ class _HomeState extends State<Home> {
           top: Radius.circular(20),
         ),
       ),
-      child: SafeArea(
-        child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 32),
-          child: ListView(
-            children: [
-              Container(
-                alignment: Alignment.center,
-                child: const Text(
-                  'Quick Conversions',
-                  style: TextStyle(fontSize: 20),
-                ),
-              ),
-              12.h,
-              GridView.extent(
-                physics: NeverScrollableScrollPhysics(),
-                maxCrossAxisExtent: 130,
-                shrinkWrap: true,
-                mainAxisSpacing: 12,
-                crossAxisSpacing: 8,
-                children: [
-                  ...[1, 5, 10, 20, 50, 100, 200, 500, 1000, 2000, 5000, 10000, 15000, 20000, 25000]
-                      .map((e) {
-                    var fromCurrency = currencies[selectedFromCurrencyIndex.value];
-                    var toCurrency = currencies[selectedToCurrencyIndex.value];
-
-                    var fromRate = fromCurrency.rate;
-                    var toRate = toCurrency.rate;
-
-                    var convertedAmount = e * toRate / fromRate;
-                    var roundedTo = (convertedAmount * 100).round() / 100;
-                    var amountStr = roundedTo.toStringAsFixed(2).replaceAllMapped(
-                          RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
-                          (Match m) => '${m[1]},',
-                        );
-                    var inputStr = e.toStringAsFixed(2).replaceAllMapped(
-                          RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
-                          (Match m) => '${m[1]},',
-                        );
-
-                    return Card(
-                      color: context.theme.colorScheme.secondaryContainer,
-                      child: Center(
-                        child: Text(
-                          '$inputStr ${currencies[selectedFromCurrencyIndex.value].symbol}\n→\n$amountStr ${currencies[selectedToCurrencyIndex.value].symbol}',
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                    );
-                  }),
-                ],
-              ),
-              12.h,
-            ],
-          ),
+      child: ClipRRect(
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+        child: QuickConversions(
+          currencies: currencies,
+          fromCurr: selectedFromCurrencyIndex.value,
+          toCurr: selectedToCurrencyIndex.value,
         ),
       ),
     );
   }
 
   Widget buildDataInfoSheet() {
-    return Card(
-      margin: EdgeInsets.zero,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(
-          top: Radius.circular(20),
-        ),
+    return AlertDialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),
       ),
-      child: SafeArea(
-        child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 32),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Container(
-                alignment: Alignment.center,
-                child: const Text(
-                  'From where do we fetch the data?',
-                  style: TextStyle(fontSize: 20),
-                ),
-              ),
-              10.h,
-              Text.rich(
+      title: const Text(
+        'From where do we fetch the data?',
+        style: TextStyle(fontSize: 20),
+      ),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text.rich(
+            TextSpan(
+              text: 'We use the API provided from ',
+              children: [
                 TextSpan(
-                  text: 'We use the API provided from ',
-                  children: [
-                    TextSpan(
-                      text: 'Frankfurter',
-                      recognizer: TapGestureRecognizer()
-                        ..onTap = () {
-                          launchUrl(Uri.parse('https://www.frankfurter.app/'));
-                        },
-                      style: TextStyle(
-                        color: context.theme.colorScheme.tertiary,
-                        decoration: TextDecoration.underline,
-                      ),
-                    ),
-                    const TextSpan(
-                      text: ' which is open source and free to use.\nIt gets its data from the ',
-                    ),
-                    TextSpan(
-                      text: 'European Central Bank',
-                      recognizer: TapGestureRecognizer()
-                        ..onTap = () {
-                          launchUrl(
-                            Uri.parse(
-                              'https://www.ecb.europa.eu/stats/policy_and_exchange_rates/euro_reference_exchange_rates/html/index.en.html',
-                            ),
-                          );
-                        },
-                      style: TextStyle(
-                        color: context.theme.colorScheme.tertiary,
-                        decoration: TextDecoration.underline,
-                      ),
-                    ),
-                    const TextSpan(
-                      text:
-                          ', which is a trusted source.\n\nAlso, we only need to fetch the data once a day, so the App only fetches it, if that duration has passed from the previous fetch. But you can force refresh by pulling from the top.\n\nTo update the values in the widgets, just simply open the app once that day.',
-                    ),
-                  ],
+                  text: 'Frankfurter',
+                  recognizer: TapGestureRecognizer()
+                    ..onTap = () {
+                      launchUrl(Uri.parse('https://www.frankfurter.app/'));
+                    },
+                  style: TextStyle(
+                    color: context.theme.colorScheme.tertiary,
+                    decoration: TextDecoration.underline,
+                  ),
                 ),
-              ),
-            ],
+                const TextSpan(
+                  text: ' which is open source and free to use.\nIt gets its data from the ',
+                ),
+                TextSpan(
+                  text: 'European Central Bank',
+                  recognizer: TapGestureRecognizer()
+                    ..onTap = () {
+                      launchUrl(
+                        Uri.parse(
+                          'https://www.ecb.europa.eu/stats/policy_and_exchange_rates/euro_reference_exchange_rates/html/index.en.html',
+                        ),
+                      );
+                    },
+                  style: TextStyle(
+                    color: context.theme.colorScheme.tertiary,
+                    decoration: TextDecoration.underline,
+                  ),
+                ),
+                const TextSpan(
+                  text:
+                      ', which is a trusted source.\n\nAlso, we only need to fetch the data once a day, so the App only fetches it, if that duration has passed from the previous fetch. But you can force refresh by pulling from the top.\n\nTo update the values in the widgets, just simply open the app once that day.',
+                ),
+              ],
+            ),
           ),
-        ),
+        ],
       ),
     );
   }
