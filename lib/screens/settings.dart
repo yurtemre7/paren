@@ -38,23 +38,25 @@ class _SettingsState extends State<Settings> {
       ),
       body: Obx(() {
         var currencies = paren.currencies;
-        return ListView(
-          children: [
-            buildAppInfo(),
-            buildAutofocusSwitch(),
-            buildCurrencyChangerRow(currencies),
-            Divider(),
-            buildAppThemeChanger(),
-            buildAppColorChanger(),
-            Divider(),
-            buildFeedback(),
-            Divider(),
-            24.h,
-            const Center(
-              child: Text('Made in 🇩🇪 by Emre'),
-            ),
-            96.h,
-          ],
+        return SafeArea(
+          child: ListView(
+            children: [
+              buildAppInfo(),
+              buildAutofocusSwitch(),
+              buildCurrencyChangerRow(currencies),
+              Divider(),
+              buildAppThemeChanger(),
+              buildAppColorChanger(),
+              Divider(),
+              buildFeedback(),
+              Divider(),
+              24.h,
+              const Center(
+                child: Text('Made in 🇩🇪 by Emre'),
+              ),
+              24.h,
+            ],
+          ),
         );
       }),
     );
