@@ -329,9 +329,13 @@ class _HomeState extends State<Home> {
               children: [
                 Container(
                   alignment: Alignment.center,
-                  child: const Text(
+                  child: Text(
                     'Adjust Text Size',
-                    style: TextStyle(fontSize: 20),
+                    style: TextStyle(
+                      color: context.theme.colorScheme.primary,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                    ),
                   ),
                 ),
                 20.h,
@@ -459,9 +463,12 @@ class _HomeState extends State<Home> {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20),
       ),
-      title: const Text(
+      title: Text(
         'From where do we fetch the data?',
-        style: TextStyle(fontSize: 20),
+        style: TextStyle(
+          color: context.theme.colorScheme.primary,
+          fontWeight: FontWeight.bold,
+        ),
       ),
       content: Column(
         mainAxisSize: MainAxisSize.min,
@@ -481,7 +488,7 @@ class _HomeState extends State<Home> {
                     decoration: TextDecoration.underline,
                   ),
                 ),
-                const TextSpan(
+                TextSpan(
                   text: ' which is open source and free to use.\nIt gets its data from the ',
                 ),
                 TextSpan(
@@ -499,7 +506,7 @@ class _HomeState extends State<Home> {
                     decoration: TextDecoration.underline,
                   ),
                 ),
-                const TextSpan(
+                TextSpan(
                   text:
                       ', which is a trusted source.\n\nAlso, we only need to fetch the data once a day, so the App only fetches it, if that duration has passed from the previous fetch. But you can force refresh by pulling from the top.\n\nTo update the values in the widgets, just simply open the app once that day.',
                 ),
