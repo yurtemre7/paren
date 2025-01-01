@@ -43,7 +43,7 @@ class _ExChartState extends State<ExChart> {
     30.days,
     90.days,
     180.days,
-    360.days,
+    365.days,
   ];
 
   List<Color> get gradientColors => [
@@ -236,7 +236,7 @@ class _ExChartState extends State<ExChart> {
 
     if (localDuration.value == 90.days ||
         localDuration.value == 180.days ||
-        localDuration.value == 360.days) {
+        localDuration.value == 365.days) {
       switch (date.month) {
         case DateTime.january:
           text = const Text('JAN', style: style);
