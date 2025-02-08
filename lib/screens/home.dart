@@ -470,50 +470,52 @@ class _HomeState extends State<Home> {
           fontWeight: FontWeight.bold,
         ),
       ),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text.rich(
-            TextSpan(
-              text: 'We use the API provided from ',
-              children: [
-                TextSpan(
-                  text: 'Frankfurter',
-                  recognizer: TapGestureRecognizer()
-                    ..onTap = () {
-                      launchUrl(Uri.parse('https://www.frankfurter.app/'));
-                    },
-                  style: TextStyle(
-                    color: context.theme.colorScheme.tertiary,
-                    decoration: TextDecoration.underline,
+      content: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text.rich(
+              TextSpan(
+                text: 'We use the API provided from ',
+                children: [
+                  TextSpan(
+                    text: 'Frankfurter',
+                    recognizer: TapGestureRecognizer()
+                      ..onTap = () {
+                        launchUrl(Uri.parse('https://www.frankfurter.app/'));
+                      },
+                    style: TextStyle(
+                      color: context.theme.colorScheme.tertiary,
+                      decoration: TextDecoration.underline,
+                    ),
                   ),
-                ),
-                TextSpan(
-                  text: ' which is open source and free to use.\nIt gets its data from the ',
-                ),
-                TextSpan(
-                  text: 'European Central Bank',
-                  recognizer: TapGestureRecognizer()
-                    ..onTap = () {
-                      launchUrl(
-                        Uri.parse(
-                          'https://www.ecb.europa.eu/stats/policy_and_exchange_rates/euro_reference_exchange_rates/html/index.en.html',
-                        ),
-                      );
-                    },
-                  style: TextStyle(
-                    color: context.theme.colorScheme.tertiary,
-                    decoration: TextDecoration.underline,
+                  TextSpan(
+                    text: ' which is open source and free to use.\nIt gets its data from the ',
                   ),
-                ),
-                TextSpan(
-                  text:
-                      ', which is a trusted source.\n\nAlso, we only need to fetch the data once a day, so the App only fetches it, if that duration has passed from the previous fetch. But you can force refresh by pulling from the top.\n\nTo update the values in the widgets, just simply open the app once that day.',
-                ),
-              ],
+                  TextSpan(
+                    text: 'European Central Bank',
+                    recognizer: TapGestureRecognizer()
+                      ..onTap = () {
+                        launchUrl(
+                          Uri.parse(
+                            'https://www.ecb.europa.eu/stats/policy_and_exchange_rates/euro_reference_exchange_rates/html/index.en.html',
+                          ),
+                        );
+                      },
+                    style: TextStyle(
+                      color: context.theme.colorScheme.tertiary,
+                      decoration: TextDecoration.underline,
+                    ),
+                  ),
+                  TextSpan(
+                    text:
+                        ', which is a trusted source.\n\nAlso, we only need to fetch the data once a day, so the App only fetches it, if that duration has passed from the previous fetch. But you can force refresh by pulling from the top.\n\nTo update the values in the widgets, just simply open the app once that day.',
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

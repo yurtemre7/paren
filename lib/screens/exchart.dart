@@ -277,7 +277,7 @@ class _ExChartState extends State<ExChart> {
     }
 
     return SideTitleWidget(
-      axisSide: meta.axisSide,
+      meta: meta,
       angle: pi / 6,
       space: 12,
       child: text,
@@ -292,7 +292,7 @@ class _ExChartState extends State<ExChart> {
     String text = '${value.toPrecision(5)} ${paren.currencies[localIdxTo.value].symbol}';
 
     return SideTitleWidget(
-      axisSide: meta.axisSide,
+      meta: meta,
       child: Text(text, style: style, textAlign: TextAlign.right),
     );
   }

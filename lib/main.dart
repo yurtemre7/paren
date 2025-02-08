@@ -5,7 +5,7 @@ import 'package:home_widget/home_widget.dart';
 import 'package:paren/providers/constants.dart';
 import 'package:paren/providers/paren.dart';
 import 'package:paren/screens/home.dart';
-import 'package:url_strategy/url_strategy.dart';
+import 'package:flutter_web_plugins/url_strategy.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -13,7 +13,7 @@ void main() async {
     await HomeWidget.setAppGroupId('group.de.emredev.paren');
   }
   await initParen();
-  setPathUrlStrategy();
+  usePathUrlStrategy();
   runApp(const MyApp());
 }
 
