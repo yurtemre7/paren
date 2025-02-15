@@ -17,7 +17,7 @@ class Paren extends GetxController {
       baseUrl: baseUrl,
     ),
   );
-  late SharedPreferences sp;
+  final SharedPreferencesAsync sp;
 
   final currencies = <Currency>[].obs;
   final latestTimestamp = DateTime.now().obs;
@@ -32,14 +32,11 @@ class Paren extends GetxController {
   final conv2Size = 16.0.obs;
   final convSizeRanges = (min: 14.0, max: 34.0);
 
-  static Future<Paren> init() async {
-    Paren paren = Paren();
-    paren.sp = await SharedPreferences.getInstance();
-    await paren.initCurrencies();
-    await paren.initSettings();
-    paren.updateWidgetData();
+  Paren(this.sp);
 
-    return paren;
+  Future<void> init() async {
+    await initCurrencies();
+    updateWidgetData();
   }
 
   Future<void> reset() async {
@@ -105,92 +102,71 @@ class Paren extends GetxController {
     await sp.setStringList('currencies', currencyList);
 
     latestTimestamp.value = DateTime.now();
-    sp.setString('latestTimestamp', latestTimestamp.value.toString());
+    await sp.setString('latestTimestamp', latestTimestamp.value.toString());
   }
 
   Future<void> updateDefaultConversion() async {
-    sp.setString('fromC', fromCurrency.value.toLowerCase());
-    sp.setString('toC', toCurrency.value.toLowerCase());
+    await sp.setString('fromC', fromCurrency.value.toLowerCase());
+    await sp.setString('toC', toCurrency.value.toLowerCase());
   }
 
   Future<void> saveSettings() async {
-    sp.setBool('autofocusTextField', autofocusTextField.value);
-    sp.setInt('appColor', appColor.value);
-    sp.setInt('appThemeMode', appThemeMode.value.index);
-    sp.setDouble('conv1Size', conv1Size.value);
-    sp.setDouble('conv2Size', conv2Size.value);
+    await sp.setBool('autofocusTextField', autofocusTextField.value);
+    await sp.setInt('appColor', appColor.value);
+    await sp.setInt('appThemeMode', appThemeMode.value.index);
+    await sp.setDouble('conv1Size', conv1Size.value);
+    await sp.setDouble('conv2Size', conv2Size.value);
   }
 
   Future<void> initSettings() async {
-    var autofocusValue = sp.getBool('autofocusTextField');
-    if (autofocusValue != null) {
-      autofocusTextField.value = autofocusValue;
-    }
+    var autofocusValue = await sp.getBool('autofocusTextField');
+    autofocusTextField.value = autofocusValue ?? false;
 
-    var appColorValue = sp.getInt('appColor');
-    if (appColorValue != null) {
-      appColor.value = appColorValue;
-    }
+    var appColorValue = await sp.getInt('appColor');
+    appColor.value = appColorValue ?? Colors.orange.getValue;
 
-    var appThemeModeValue = sp.getInt('appThemeMode');
-    if (appThemeModeValue != null) {
-      appThemeMode.value = ThemeMode.values[appThemeModeValue];
-    }
+    var appThemeModeValue = await sp.getInt('appThemeMode');
+    appThemeMode.value = ThemeMode.values[appThemeModeValue ?? ThemeMode.system.index];
 
-    var conv1Value = sp.getDouble('conv1Size');
-    if (conv1Value != null) {
-      conv1Size.value = conv1Value;
-    }
+    var conv1Value = await sp.getDouble('conv1Size');
+    conv1Size.value = conv1Value ?? 20.0;
 
-    var conv2Value = sp.getDouble('conv2Size');
-    if (conv2Value != null) {
-      conv2Size.value = conv2Value;
-    }
+    var conv2Value = await sp.getDouble('conv2Size');
+    conv2Size.value = conv2Value ?? 16.0;
 
-    await saveSettings();
+    saveSettings();
   }
 
   Future<void> initCurrencies() async {
-    var currencyList = sp.getStringList('currencies');
-    if (currencyList != null) {
-      try {
-        currencies.value = currencyList
-            .map(
-              (e) => Currency.fromJson(
-                Map<String, dynamic>.from(json.decode(e)),
-              ),
-            )
-            .toList();
-      } catch (error, stackTrace) {
-        logError(
-          'An Error happened. Rebuilding database',
-          error: error,
-          stackTrace: stackTrace,
-        );
-      }
-    } else {
-      currencies.value = [EUR, USD, YEN, TRY];
+    var currencyList = await sp.getStringList('currencies') ?? [];
+    try {
+      currencies.value = currencyList
+          .map(
+            (e) => Currency.fromJson(
+              Map<String, dynamic>.from(json.decode(e)),
+            ),
+          )
+          .toList();
+    } catch (error, stackTrace) {
+      logError(
+        'An Error happened. Rebuilding database',
+        error: error,
+        stackTrace: stackTrace,
+      );
     }
     var today = DateTime.now();
-    var latestTimestampString = sp.getString('latestTimestamp');
-    if (latestTimestampString != null) {
-      latestTimestamp.value = DateTime.parse(latestTimestampString);
-    } else {
-      latestTimestamp.value = today;
-      await fetchCurrencyDataOnline();
-    }
+    var yesterday = DateTime.now().subtract(1.days);
+    var latestTimestampString = await sp.getString('latestTimestamp');
+    latestTimestamp.value =
+        latestTimestampString != null ? DateTime.parse(latestTimestampString) : yesterday;
 
-    var fromCString = sp.getString('fromC');
-    if (fromCString != null) {
-      fromCurrency.value = fromCString.toLowerCase();
-    }
+    var fromCString = await sp.getString('fromC') ?? 'eur';
+    fromCurrency.value = fromCString.toLowerCase();
 
-    var toCString = sp.getString('toC');
-    if (toCString != null) {
-      toCurrency.value = toCString.toLowerCase();
-    }
+    var toCString = await sp.getString('toC') ?? 'jpy';
+    toCurrency.value = toCString.toLowerCase();
 
-    if (today.difference(latestTimestamp.value) >= 1.days) {
+    if (today.difference(latestTimestamp.value).abs() >= 1.days) {
       await fetchCurrencyDataOnline();
     }
   }
@@ -198,6 +174,9 @@ class Paren extends GetxController {
   Future<void> updateWidgetData() async {
     if (!(GetPlatform.isIOS || GetPlatform.isAndroid) || kIsWeb) {
       logMessage('Not updating widget, unsupported platform.');
+      return;
+    }
+    if (currencies.isEmpty) {
       return;
     }
     logMessage('Updating widget');

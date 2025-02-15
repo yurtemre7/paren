@@ -31,19 +31,30 @@ class _HomeState extends State<Home> {
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
+  final loading = true.obs;
+
   @override
   void initState() {
     super.initState();
 
-    updateCurrencySwap();
-    Future.delayed(0.seconds, () {
+    Future.delayed(0.seconds, () async {
       if (!mounted) return;
-      SystemChrome.setSystemUIOverlayStyle(
-        SystemUiOverlayStyle(
-          systemNavigationBarColor: context.theme.colorScheme.surface,
-        ),
-      );
+      await initParen();
+      updateCurrencySwap();
+      await SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
     });
+  }
+
+  Future<void> initParen() async {
+    loading.value = true;
+    var stopwatch = Stopwatch()..start();
+    try {
+      await paren.init();
+    } finally {
+      stopwatch.stop();
+      logMessage('Loading time taken: ${stopwatch.elapsedMilliseconds}ms');
+      loading.value = false;
+    }
   }
 
   @override
@@ -59,7 +70,7 @@ class _HomeState extends State<Home> {
     });
   }
 
-  Future<void> updateCurrencySwap() async {
+  void updateCurrencySwap() {
     var currencies = paren.currencies;
     var idxFrom = currencies.indexWhere((currency) => currency.id == paren.fromCurrency.value);
     if (idxFrom != -1) {
@@ -100,6 +111,16 @@ class _HomeState extends State<Home> {
               fontWeight: FontWeight.bold,
             ),
           ),
+          leading: IconButton(
+            onPressed: () {
+              Get.dialog(
+                buildDataInfoSheet(),
+              );
+            },
+            icon: Icon(Icons.info_outline),
+            color: context.theme.colorScheme.primary,
+            tooltip: 'Last update info',
+          ),
           actions: [
             IconButton(
               onPressed: () async {
@@ -119,10 +140,16 @@ class _HomeState extends State<Home> {
         body: SafeArea(
           child: Obx(
             () {
+              if (loading.value) {
+                return const Center(
+                  child: CircularProgressIndicator.adaptive(),
+                );
+              }
+
               var currencies = paren.currencies;
               if (currencies.isEmpty) {
                 return const Center(
-                  child: CircularProgressIndicator.adaptive(),
+                  child: Text('Currencies is empty, an error must have occured.'),
                 );
               }
 
@@ -146,7 +173,7 @@ class _HomeState extends State<Home> {
                       if (!keyboardVisible) ...[
                         buildCurrencyChartTile(),
                         buildCurrencyData(currencies),
-                        buildLastUpdatedInfo(),
+                        // buildLastUpdatedInfo(),
                       ],
                       96.h,
                     ],
@@ -158,6 +185,7 @@ class _HomeState extends State<Home> {
         ),
         bottomNavigationBar: Obx(
           () {
+            if (loading.value) return 0.h;
             var currencies = paren.currencies;
             return SafeArea(
               child: Container(
@@ -511,8 +539,14 @@ class _HomeState extends State<Home> {
                     text:
                         ', which is a trusted source.\n\nAlso, we only need to fetch the data once a day, so the App only fetches it, if that duration has passed from the previous fetch. But you can force refresh by pulling from the top.\n\nTo update the values in the widgets, just simply open the app once that day.',
                   ),
+                  TextSpan(
+                    text:
+                        '\n\nCurrencies last updated:\n${timestampToString(paren.latestTimestamp.value)}',
+                    style: TextStyle(color: context.theme.colorScheme.secondary),
+                  ),
                 ],
               ),
+              textAlign: TextAlign.center,
             ),
           ],
         ),

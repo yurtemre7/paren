@@ -36,14 +36,13 @@ class _SettingsState extends State<Settings> {
           ),
         ),
       ),
-      body: Obx(() {
-        var currencies = paren.currencies;
-        return SafeArea(
+      body: Obx(
+        () => SafeArea(
           child: ListView(
             children: [
               buildAppInfo(),
               buildAutofocusSwitch(),
-              buildCurrencyChangerRow(currencies),
+              buildCurrencyChangerRow(),
               Divider(),
               buildAppThemeChanger(),
               buildAppColorChanger(),
@@ -57,8 +56,8 @@ class _SettingsState extends State<Settings> {
               24.h,
             ],
           ),
-        );
-      }),
+        ),
+      ),
     );
   }
 
@@ -274,7 +273,8 @@ class _SettingsState extends State<Settings> {
     );
   }
 
-  Widget buildCurrencyChangerRow(RxList<Currency> currencies) {
+  Widget buildCurrencyChangerRow() {
+    var currencies = paren.currencies;
     return Column(
       children: [
         const ListTile(

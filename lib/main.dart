@@ -2,29 +2,20 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:home_widget/home_widget.dart';
-import 'package:paren/providers/constants.dart';
 import 'package:paren/providers/paren.dart';
 import 'package:paren/screens/home.dart';
 import 'package:flutter_web_plugins/url_strategy.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   if (GetPlatform.isIOS && !kIsWeb) {
     await HomeWidget.setAppGroupId('group.de.emredev.paren');
   }
-  await initParen();
+  var paren = Get.put(Paren(SharedPreferencesAsync()));
+  await paren.initSettings();
   usePathUrlStrategy();
   runApp(const MyApp());
-}
-
-Future<void> initParen() async {
-  var stopwatch = Stopwatch()..start();
-  try {
-    Get.put(await Paren.init());
-  } finally {
-    stopwatch.stop();
-    logMessage('Loading time taken: ${stopwatch.elapsedMilliseconds}ms');
-  }
 }
 
 class MyApp extends StatelessWidget {

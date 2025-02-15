@@ -13,9 +13,9 @@ dependencies:
     sdk: flutter
   intl: ^0.20.2
 
-  get: ^4.6.6
+  get: ^4.7.2
   dio: ^5.8.0+1
-  shared_preferences: ^2.5.1
+  shared_preferences: ^2.5.2
   url_launcher: ^6.3.1
   share_plus: ^10.1.4
   fl_chart: ^0.70.2
