@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:paren/providers/constants.dart';
@@ -37,7 +39,7 @@ class FavoritesScreen extends StatelessWidget {
             );
           }
 
-          return ListView.separated(
+          return ReorderableListView.builder(
             itemCount: favorites.length,
             itemBuilder: (context, index) {
               var favorite = favorites[index];
@@ -58,16 +60,12 @@ class FavoritesScreen extends StatelessWidget {
                 key: Key(favorite.id),
                 background: Container(color: Colors.red),
                 onDismissed: (_) => paren.removeFavorite(favorite.id),
+                direction: DismissDirection.endToStart,
                 child: ListTile(
                   title: Text('${favorite.amount} ${fromCurrency.symbol} → '
                       '${convertedAmount.toStringAsFixed(2)} ${toCurrency.symbol}'),
                   subtitle: Text('${fromCurrency.id.toUpperCase()} to '
                       '${toCurrency.id.toUpperCase()} - ${timestampToString(favorite.timestamp)}'),
-                  trailing: IconButton(
-                    icon: const Icon(Icons.delete),
-                    onPressed: () => paren.removeFavorite(favorite.id),
-                    color: context.theme.colorScheme.error,
-                  ),
                   onTap: () {
                     paren.fromCurrency.value = favorite.fromCurrency;
                     paren.toCurrency.value = favorite.toCurrency;
@@ -76,13 +74,35 @@ class FavoritesScreen extends StatelessWidget {
                 ),
               );
             },
-            separatorBuilder: (context, index) {
-              return Divider(
-                color: context.theme.colorScheme.primary,
-                indent: 16,
-                endIndent: 16 + 8,
+            onReorder: (oldIndex, newIndex) {
+              if (oldIndex < newIndex) {
+                newIndex -= 1;
+              }
+              var item = paren.favorites.removeAt(oldIndex);
+              paren.favorites.insert(newIndex, item);
+            },
+            proxyDecorator: (child, index, animation) {
+              return AnimatedBuilder(
+                animation: animation,
+                builder: (BuildContext context, Widget? child) {
+                  double animValue = Curves.easeInOut.transform(animation.value);
+                  double elevation = lerpDouble(0, 6, animValue)!;
+                  return Material(
+                    elevation: elevation,
+                    color: context.theme.colorScheme.onSecondary,
+                    child: child,
+                  );
+                },
+                child: child,
               );
             },
+            // separatorBuilder: (context, index) {
+            //   return Divider(
+            //     color: context.theme.colorScheme.primary,
+            //     indent: 16,
+            //     endIndent: 16 + 8,
+            //   );
+            // },
           );
         },
       ),
