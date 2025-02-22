@@ -10,8 +10,10 @@ import 'package:paren/providers/constants.dart';
 import 'package:paren/providers/extensions.dart';
 import 'package:paren/providers/paren.dart';
 import 'package:paren/screens/exchart.dart';
+import 'package:paren/screens/favorites.dart';
 import 'package:paren/screens/quick_conversions.dart';
 import 'package:paren/screens/settings.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class Home extends StatefulWidget {
@@ -173,6 +175,7 @@ class _HomeState extends State<Home> {
                       if (!keyboardVisible) ...[
                         buildCurrencyChartTile(),
                         buildCurrencyData(currencies),
+                        buildSaveConversion(),
                         // buildLastUpdatedInfo(),
                       ],
                       96.h,
@@ -199,7 +202,24 @@ class _HomeState extends State<Home> {
     );
   }
 
-  Widget buildConvertTextField(RxList<Currency> currencies) {
+  Widget buildSaveConversion() {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: ListTile(
+        title: const Text('Saved Conversions'),
+        trailing: Icon(
+          Icons.favorite,
+          color: context.theme.colorScheme.primary,
+        ),
+        onTap: () async {
+          await Get.to(() => const FavoritesScreen());
+          updateCurrencySwap();
+        },
+      ),
+    );
+  }
+
+  Widget buildConvertTextField(List<Currency> currencies) {
     return Container(
       padding: const EdgeInsets.only(left: 16, right: 16, top: 16),
       child: Column(
@@ -233,14 +253,7 @@ class _HomeState extends State<Home> {
             inputFormatters: kIsWeb
                 ? null
                 : [
-                    TextInputFormatter.withFunction((v1, v2) {
-                      var text = v2.text.replaceAll(',', '.');
-
-                      if (text.length > 20) {
-                        return v1;
-                      }
-                      return TextEditingValue(text: text);
-                    }),
+                    FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d{0,2}')),
                   ],
             maxLength: 20,
             validator: (value) {
@@ -315,24 +328,68 @@ class _HomeState extends State<Home> {
                       ),
                       textAlign: TextAlign.center,
                     ),
+                    12.h,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          children: [
+                            IconButton(
+                              icon: Obx(
+                                () {
+                                  return Icon(
+                                    paren.favorites.any(
+                                      (fav) {
+                                        return fav.fromCurrency ==
+                                                currencies[selectedFromCurrencyIndex.value].id &&
+                                            fav.toCurrency ==
+                                                currencies[selectedToCurrencyIndex.value].id &&
+                                            fav.amount.toStringAsFixed(2) ==
+                                                inputConverted.toStringAsFixed(2);
+                                      },
+                                    )
+                                        ? Icons.favorite_outlined
+                                        : Icons.favorite_border_outlined,
+                                    color: context.theme.colorScheme.primary,
+                                  );
+                                },
+                              ),
+                              onPressed: () {
+                                var amount = inputConverted;
+                                if (amount > 0) {
+                                  paren.toggleFavorite(amount);
+                                }
+                              },
+                            ),
+                            IconButton(
+                              icon: Icon(
+                                Icons.share_outlined,
+                                color: context.theme.colorScheme.primary,
+                              ),
+                              onPressed: () {
+                                Share.share(
+                                  '$inputStr ${toCurrency.symbol} → $reAmountStr ${fromCurrency.symbol}',
+                                );
+                              },
+                            ),
+                          ],
+                        ),
+                        TextButton.icon(
+                          onPressed: () async {
+                            await Get.bottomSheet(
+                              buildTextSizeAdjustSheet(),
+                            );
+                            paren.saveSettings();
+                          },
+                          label: const Text('Adjust Text Size'),
+                          icon: Icon(Icons.text_fields_outlined),
+                        ),
+                      ],
+                    ),
                   ],
                 ),
               );
             },
-          ),
-          12.h,
-          Align(
-            alignment: Alignment.centerRight,
-            child: TextButton.icon(
-              onPressed: () async {
-                await Get.bottomSheet(
-                  buildTextSizeAdjustSheet(),
-                );
-                paren.saveSettings();
-              },
-              label: const Text('Adjust Text Size'),
-              icon: Icon(Icons.text_fields_outlined),
-            ),
           ),
           12.h,
         ],
@@ -554,7 +611,7 @@ class _HomeState extends State<Home> {
     );
   }
 
-  Widget buildCurrencyChangerRow(RxList<Currency> currencies) {
+  Widget buildCurrencyChangerRow(List<Currency> currencies) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
