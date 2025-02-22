@@ -317,6 +317,7 @@ class _HomeState extends State<Home> {
                       inputConverted,
                       inputStr,
                       toCurrency,
+                      amountStr,
                       reAmountStr,
                       fromCurrency,
                     ),
@@ -336,6 +337,7 @@ class _HomeState extends State<Home> {
     double inputConverted,
     String inputStr,
     Currency toCurrency,
+    String amountStr,
     String reAmountStr,
     Currency fromCurrency,
   ) {
@@ -377,9 +379,20 @@ class _HomeState extends State<Home> {
                 ),
                 onPressed: () {
                   Share.share(
-                    '$inputStr ${toCurrency.symbol} → $reAmountStr ${fromCurrency.symbol}',
+                    '$inputStr ${fromCurrency.symbol} → $amountStr ${toCurrency.symbol}',
                   );
                 },
+              ),
+              IconButton(
+                icon: Icon(
+                  Icons.content_copy,
+                  color: context.theme.colorScheme.primary,
+                ),
+                onPressed: () => Clipboard.setData(
+                  ClipboardData(
+                    text: '$inputStr ${fromCurrency.symbol} → $amountStr ${toCurrency.symbol}',
+                  ),
+                ),
               ),
             ],
           ),
@@ -650,81 +663,105 @@ class _HomeState extends State<Home> {
   }
 
   Widget buildCurrencyChangerRow(List<Currency> currencies) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Card(
-          child: Container(
-            padding: const EdgeInsets.all(10),
-            child: DropdownButton(
-              items: currencies.indexed.map(
-                ((int i, Currency e) position) {
-                  var i = position.$1;
-                  var e = position.$2;
-
-                  return DropdownMenuItem(
-                    value: i,
-                    child: Text(
-                      e.id.toUpperCase(),
-                      style: TextStyle(
-                        color: context.theme.colorScheme.primary,
-                      ),
-                    ),
-                  );
-                },
-              ).toList(),
-              isDense: true,
-              underline: Container(),
-              iconEnabledColor: context.theme.colorScheme.primary,
-              onChanged: (value) {
-                selectedFromCurrencyIndex.value = value ?? 0;
-              },
-              value: selectedFromCurrencyIndex.value,
-            ),
+    return AnimatedSwitcher(
+      duration: 500.milliseconds,
+      switchInCurve: Curves.easeInOutCubic,
+      switchOutCurve: Curves.easeInOutCubic,
+      layoutBuilder: (currentChild, previousChildren) {
+        return Stack(
+          alignment: Alignment.center,
+          children: <Widget>[currentChild!],
+        );
+      },
+      transitionBuilder: (Widget child, Animation<double> animation) {
+        return RotationTransition(
+          turns: Tween<double>(begin: -0.5, end: 0.0).animate(animation),
+          child: FadeTransition(
+            opacity: animation,
+            child: child,
           ),
+        );
+      },
+      child: Container(
+        key: ValueKey<String>(
+          '${selectedFromCurrencyIndex}_$selectedToCurrencyIndex',
         ),
-        12.w,
-        IconButton(
-          icon: const Icon(Icons.compare_arrows_outlined),
-          color: context.theme.colorScheme.primary,
-          onPressed: () {
-            var temp = selectedFromCurrencyIndex.value;
-            selectedFromCurrencyIndex.value = selectedToCurrencyIndex.value;
-            selectedToCurrencyIndex.value = temp;
-          },
-        ),
-        12.w,
-        Card(
-          child: Container(
-            padding: const EdgeInsets.all(10),
-            child: DropdownButton(
-              items: currencies.indexed.map(
-                ((int, Currency) position) {
-                  var i = position.$1;
-                  var e = position.$2;
-
-                  return DropdownMenuItem(
-                    value: i,
-                    child: Text(
-                      e.id.toUpperCase(),
-                      style: TextStyle(
-                        color: context.theme.colorScheme.primary,
-                      ),
-                    ),
-                  );
-                },
-              ).toList(),
-              isDense: true,
-              underline: Container(),
-              iconEnabledColor: context.theme.colorScheme.primary,
-              onChanged: (value) {
-                selectedToCurrencyIndex.value = value ?? 0;
-              },
-              value: selectedToCurrencyIndex.value,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Card(
+              child: Container(
+                padding: const EdgeInsets.all(10),
+                child: DropdownButton(
+                  items: currencies.indexed.map(
+                    ((int i, Currency e) position) {
+                      var i = position.$1;
+                      var e = position.$2;
+                      return DropdownMenuItem(
+                        value: i,
+                        child: Text(
+                          e.id.toUpperCase(),
+                          style: TextStyle(
+                            color: context.theme.colorScheme.primary,
+                          ),
+                        ),
+                      );
+                    },
+                  ).toList(),
+                  isDense: true,
+                  underline: Container(),
+                  iconEnabledColor: context.theme.colorScheme.primary,
+                  onChanged: (value) {
+                    selectedFromCurrencyIndex.value = value ?? 0;
+                  },
+                  value: selectedFromCurrencyIndex.value,
+                ),
+              ),
             ),
-          ),
+            12.w,
+            IconButton(
+              icon: const Icon(Icons.compare_arrows_outlined),
+              color: context.theme.colorScheme.primary,
+              onPressed: () {
+                HapticFeedback.selectionClick();
+                var temp = selectedFromCurrencyIndex.value;
+                selectedFromCurrencyIndex.value = selectedToCurrencyIndex.value;
+                selectedToCurrencyIndex.value = temp;
+              },
+            ),
+            12.w,
+            Card(
+              child: Container(
+                padding: const EdgeInsets.all(10),
+                child: DropdownButton(
+                  items: currencies.indexed.map(
+                    ((int, Currency) position) {
+                      var i = position.$1;
+                      var e = position.$2;
+                      return DropdownMenuItem(
+                        value: i,
+                        child: Text(
+                          e.id.toUpperCase(),
+                          style: TextStyle(
+                            color: context.theme.colorScheme.primary,
+                          ),
+                        ),
+                      );
+                    },
+                  ).toList(),
+                  isDense: true,
+                  underline: Container(),
+                  iconEnabledColor: context.theme.colorScheme.primary,
+                  onChanged: (value) {
+                    selectedToCurrencyIndex.value = value ?? 0;
+                  },
+                  value: selectedToCurrencyIndex.value,
+                ),
+              ),
+            ),
+          ],
         ),
-      ],
+      ),
     );
   }
 }
