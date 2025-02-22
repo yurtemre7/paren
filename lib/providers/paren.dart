@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:home_widget/home_widget.dart';
 import 'package:intl/intl.dart';
 import 'package:paren/classes/currency.dart';
+import 'package:paren/classes/favorite_conversion.dart';
 import 'package:paren/providers/constants.dart';
 import 'package:paren/providers/extensions.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -32,10 +33,13 @@ class Paren extends GetxController {
   final conv2Size = 16.0.obs;
   final convSizeRanges = (min: 14.0, max: 34.0);
 
+  final favorites = <FavoriteConversion>[].obs;
+
   Paren(this.sp);
 
   Future<void> init() async {
     await initCurrencies();
+    await initFavorites();
     updateWidgetData();
   }
 
@@ -256,5 +260,46 @@ class Paren extends GetxController {
         useMaterial3: true,
       ),
     );
+  }
+
+  Future<void> initFavorites() async {
+    var favoritesJson = await sp.getStringList('favorites') ?? [];
+    favorites.value =
+        favoritesJson.map((json) => FavoriteConversion.fromJson(jsonDecode(json))).toList();
+  }
+
+  Future<void> _saveFavorites() async {
+    var favoritesJson = favorites.map((fav) => jsonEncode(fav.toJson())).toList();
+    await sp.setStringList('favorites', favoritesJson);
+  }
+
+  Future<void> toggleFavorite(double amount) async {
+    var existing = favorites.firstWhereOrNull(
+      (fav) =>
+          fav.fromCurrency == fromCurrency.value &&
+          fav.toCurrency == toCurrency.value &&
+          fav.amount == amount,
+    );
+
+    if (existing != null) {
+      favorites.remove(existing);
+    } else {
+      var now = DateTime.now();
+      favorites.add(
+        FavoriteConversion(
+          id: now.millisecondsSinceEpoch.toString(),
+          fromCurrency: fromCurrency.value,
+          toCurrency: toCurrency.value,
+          amount: amount,
+          timestamp: now,
+        ),
+      );
+    }
+    await _saveFavorites();
+  }
+
+  Future<void> removeFavorite(String id) async {
+    favorites.removeWhere((fav) => fav.id == id);
+    await _saveFavorites();
   }
 }

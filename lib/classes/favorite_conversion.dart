@@ -6,15 +6,15 @@ class FavoriteConversion {
   final DateTime timestamp;
 
   FavoriteConversion({
+    required this.id,
     required this.fromCurrency,
     required this.toCurrency,
     required this.amount,
     DateTime? timestamp,
-  })  : id = '${DateTime.now().millisecondsSinceEpoch}',
-        timestamp = timestamp ?? DateTime.now();
+  }) : timestamp = timestamp ?? DateTime.now();
 
   Map<String, dynamic> toJson() => {
-        'id': id,
+        'id': timestamp.millisecondsSinceEpoch.toString(),
         'fromCurrency': fromCurrency,
         'toCurrency': toCurrency,
         'amount': amount,
@@ -22,6 +22,7 @@ class FavoriteConversion {
       };
 
   factory FavoriteConversion.fromJson(Map<String, dynamic> json) => FavoriteConversion(
+        id: json['id'],
         fromCurrency: json['fromCurrency'],
         toCurrency: json['toCurrency'],
         amount: json['amount'],
