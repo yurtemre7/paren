@@ -12,7 +12,20 @@ class FavoritesScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Saved Conversions'),
+        leading: IconButton(
+          onPressed: () => Get.back(),
+          icon: const Icon(
+            Icons.close,
+          ),
+          color: context.theme.colorScheme.primary,
+        ),
+        title: Text(
+          'Saved Conversions',
+          style: TextStyle(
+            color: context.theme.colorScheme.primary,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
       ),
       body: Obx(
         () {
@@ -24,7 +37,7 @@ class FavoritesScreen extends StatelessWidget {
             );
           }
 
-          return ListView.builder(
+          return ListView.separated(
             itemCount: favorites.length,
             itemBuilder: (context, index) {
               var favorite = favorites[index];
@@ -53,6 +66,7 @@ class FavoritesScreen extends StatelessWidget {
                   trailing: IconButton(
                     icon: const Icon(Icons.delete),
                     onPressed: () => paren.removeFavorite(favorite.id),
+                    color: context.theme.colorScheme.error,
                   ),
                   onTap: () {
                     paren.fromCurrency.value = favorite.fromCurrency;
@@ -60,6 +74,13 @@ class FavoritesScreen extends StatelessWidget {
                     Get.back();
                   },
                 ),
+              );
+            },
+            separatorBuilder: (context, index) {
+              return Divider(
+                color: context.theme.colorScheme.primary,
+                indent: 16,
+                endIndent: 16 + 8,
               );
             },
           );

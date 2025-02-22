@@ -202,23 +202,6 @@ class _HomeState extends State<Home> {
     );
   }
 
-  Widget buildSaveConversion() {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: ListTile(
-        title: const Text('Saved Conversions'),
-        trailing: Icon(
-          Icons.favorite,
-          color: context.theme.colorScheme.primary,
-        ),
-        onTap: () async {
-          await Get.to(() => const FavoritesScreen());
-          updateCurrencySwap();
-        },
-      ),
-    );
-  }
-
   Widget buildConvertTextField(List<Currency> currencies) {
     return Container(
       padding: const EdgeInsets.only(left: 16, right: 16, top: 16),
@@ -329,62 +312,13 @@ class _HomeState extends State<Home> {
                       textAlign: TextAlign.center,
                     ),
                     12.h,
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          children: [
-                            IconButton(
-                              icon: Obx(
-                                () {
-                                  return Icon(
-                                    paren.favorites.any(
-                                      (fav) {
-                                        return fav.fromCurrency ==
-                                                currencies[selectedFromCurrencyIndex.value].id &&
-                                            fav.toCurrency ==
-                                                currencies[selectedToCurrencyIndex.value].id &&
-                                            fav.amount.toStringAsFixed(2) ==
-                                                inputConverted.toStringAsFixed(2);
-                                      },
-                                    )
-                                        ? Icons.favorite_outlined
-                                        : Icons.favorite_border_outlined,
-                                    color: context.theme.colorScheme.primary,
-                                  );
-                                },
-                              ),
-                              onPressed: () {
-                                var amount = inputConverted;
-                                if (amount > 0) {
-                                  paren.toggleFavorite(amount);
-                                }
-                              },
-                            ),
-                            IconButton(
-                              icon: Icon(
-                                Icons.share_outlined,
-                                color: context.theme.colorScheme.primary,
-                              ),
-                              onPressed: () {
-                                Share.share(
-                                  '$inputStr ${toCurrency.symbol} → $reAmountStr ${fromCurrency.symbol}',
-                                );
-                              },
-                            ),
-                          ],
-                        ),
-                        TextButton.icon(
-                          onPressed: () async {
-                            await Get.bottomSheet(
-                              buildTextSizeAdjustSheet(),
-                            );
-                            paren.saveSettings();
-                          },
-                          label: const Text('Adjust Text Size'),
-                          icon: Icon(Icons.text_fields_outlined),
-                        ),
-                      ],
+                    buildConversionActions(
+                      currencies,
+                      inputConverted,
+                      inputStr,
+                      toCurrency,
+                      reAmountStr,
+                      fromCurrency,
                     ),
                   ],
                 ),
@@ -394,6 +328,73 @@ class _HomeState extends State<Home> {
           12.h,
         ],
       ),
+    );
+  }
+
+  Widget buildConversionActions(
+    List<Currency> currencies,
+    double inputConverted,
+    String inputStr,
+    Currency toCurrency,
+    String reAmountStr,
+    Currency fromCurrency,
+  ) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Expanded(
+          child: Wrap(
+            children: [
+              IconButton(
+                icon: Obx(
+                  () {
+                    return Icon(
+                      paren.favorites.any(
+                        (fav) {
+                          return fav.fromCurrency ==
+                                  currencies[selectedFromCurrencyIndex.value].id &&
+                              fav.toCurrency == currencies[selectedToCurrencyIndex.value].id &&
+                              fav.amount.toStringAsFixed(2) == inputConverted.toStringAsFixed(2);
+                        },
+                      )
+                          ? Icons.favorite_outlined
+                          : Icons.favorite_border_outlined,
+                      color: context.theme.colorScheme.primary,
+                    );
+                  },
+                ),
+                onPressed: () {
+                  var amount = inputConverted;
+                  if (amount > 0) {
+                    paren.toggleFavorite(amount);
+                  }
+                },
+              ),
+              IconButton(
+                icon: Icon(
+                  Icons.share_outlined,
+                  color: context.theme.colorScheme.primary,
+                ),
+                onPressed: () {
+                  Share.share(
+                    '$inputStr ${toCurrency.symbol} → $reAmountStr ${fromCurrency.symbol}',
+                  );
+                },
+              ),
+            ],
+          ),
+        ),
+        TextButton.icon(
+          onPressed: () async {
+            await Get.bottomSheet(
+              buildTextSizeAdjustSheet(),
+            );
+            paren.saveSettings();
+          },
+          label: const Text('Adjust Text Size'),
+          icon: Icon(Icons.text_fields_outlined),
+        ),
+      ],
     );
   }
 
@@ -468,15 +469,19 @@ class _HomeState extends State<Home> {
         ),
         onTap: () {
           Get.bottomSheet(
-            ClipRRect(
-              borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
-              child: ExChart(
-                idFrom: paren.currencies[selectedFromCurrencyIndex.value].id,
-                idxFrom: selectedFromCurrencyIndex.value,
-                idTo: paren.currencies[selectedToCurrencyIndex.value].id,
-                idxTo: selectedToCurrencyIndex.value,
+            Container(
+              constraints: BoxConstraints(maxHeight: context.height * 0.80),
+              child: ClipRRect(
+                borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+                child: ExChart(
+                  idFrom: paren.currencies[selectedFromCurrencyIndex.value].id,
+                  idxFrom: selectedFromCurrencyIndex.value,
+                  idTo: paren.currencies[selectedToCurrencyIndex.value].id,
+                  idxTo: selectedToCurrencyIndex.value,
+                ),
               ),
             ),
+            isScrollControlled: true,
           );
         },
       ),
@@ -543,6 +548,38 @@ class _HomeState extends State<Home> {
     );
   }
 
+  Widget buildSaveConversion() {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: ListTile(
+        title: const Text('Saved Conversions'),
+        trailing: Icon(
+          Icons.favorite,
+          color: context.theme.colorScheme.primary,
+        ),
+        onTap: () async {
+          await Get.bottomSheet(buildFavoriteSheet());
+          updateCurrencySwap();
+        },
+      ),
+    );
+  }
+
+  Widget buildFavoriteSheet() {
+    return Card(
+      margin: EdgeInsets.zero,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(20),
+        ),
+      ),
+      child: ClipRRect(
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+        child: const FavoritesScreen(),
+      ),
+    );
+  }
+
   Widget buildDataInfoSheet() {
     return AlertDialog(
       shape: RoundedRectangleBorder(
@@ -554,6 +591,7 @@ class _HomeState extends State<Home> {
           color: context.theme.colorScheme.primary,
           fontWeight: FontWeight.bold,
         ),
+        textAlign: TextAlign.center,
       ),
       content: SingleChildScrollView(
         child: Column(
