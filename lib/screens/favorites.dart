@@ -96,13 +96,6 @@ class FavoritesScreen extends StatelessWidget {
                 child: child,
               );
             },
-            // separatorBuilder: (context, index) {
-            //   return Divider(
-            //     color: context.theme.colorScheme.primary,
-            //     indent: 16,
-            //     endIndent: 16 + 8,
-            //   );
-            // },
           );
         },
       ),
