@@ -55,9 +55,9 @@ class QuickConversions extends StatelessWidget {
                 2000,
                 5000,
                 10000,
-                15000,
                 20000,
-                25000,
+                50000,
+                100000,
               ].map((e) {
                 var fromCurrency = currencies[fromCurr];
                 var toCurrency = currencies[toCurr];
