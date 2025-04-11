@@ -54,24 +54,16 @@ String timestampToStringNoTime(DateTime timestamp) {
 }
 
 String weekdayFromInt(int weekday) {
-  switch (weekday) {
-    case 1:
-      return 'MON';
-    case 2:
-      return 'TUE';
-    case 3:
-      return 'WED';
-    case 4:
-      return 'THU';
-    case 5:
-      return 'FRI';
-    case 6:
-      return 'SAT';
-    case 7:
-      return 'SUN';
-    default:
-      return 'DAY';
-  }
+  const weekdayMap = {
+    1: 'MON',
+    2: 'TUE',
+    3: 'WED',
+    4: 'THU',
+    5: 'FRI',
+    6: 'SAT',
+    7: 'SUN',
+  };
+  return weekdayMap[weekday] ?? 'DAY';
 }
 
 logMessage(String msg, {String tag = 'Paren'}) {
