@@ -686,8 +686,9 @@ class _HomeState extends State<Home> {
         key: ValueKey<String>(
           '${selectedFromCurrencyIndex}_$selectedToCurrencyIndex',
         ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
+        child: Wrap(
+          alignment: WrapAlignment.center,
+          crossAxisAlignment: WrapCrossAlignment.center,
           children: [
             Card(
               child: Container(
@@ -699,17 +700,20 @@ class _HomeState extends State<Home> {
                       var e = position.$2;
                       return DropdownMenuItem(
                         value: i,
+                        alignment: Alignment.center,
                         child: Text(
-                          e.id.toUpperCase(),
+                          '${e.id.toUpperCase()} (${e.symbol})',
                           style: TextStyle(
                             color: context.theme.colorScheme.primary,
                           ),
+                          textAlign: TextAlign.center,
                         ),
                       );
                     },
                   ).toList(),
                   isDense: true,
                   underline: Container(),
+                  alignment: Alignment.center,
                   iconEnabledColor: context.theme.colorScheme.primary,
                   onChanged: (value) {
                     selectedFromCurrencyIndex.value = value ?? 0;
@@ -740,17 +744,20 @@ class _HomeState extends State<Home> {
                       var e = position.$2;
                       return DropdownMenuItem(
                         value: i,
+                        alignment: Alignment.center,
                         child: Text(
-                          e.id.toUpperCase(),
+                          '${e.id.toUpperCase()} (${e.symbol})',
                           style: TextStyle(
                             color: context.theme.colorScheme.primary,
                           ),
+                          textAlign: TextAlign.center,
                         ),
                       );
                     },
                   ).toList(),
                   isDense: true,
                   underline: Container(),
+                  alignment: Alignment.center,
                   iconEnabledColor: context.theme.colorScheme.primary,
                   onChanged: (value) {
                     selectedToCurrencyIndex.value = value ?? 0;

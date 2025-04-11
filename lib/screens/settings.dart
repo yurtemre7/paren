@@ -152,7 +152,7 @@ class _SettingsState extends State<Settings> {
       ),
       trailing: Card(
         child: Container(
-          padding: const EdgeInsets.all(5),
+          padding: const EdgeInsets.all(10),
           child: dropdownButton,
         ),
       ),
@@ -280,10 +280,10 @@ class _SettingsState extends State<Settings> {
           title: Text('Default Currency Conversion'),
           subtitle: Text('Change it to the currencies you want to convert from by default.'),
         ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
+        Column(
           children: [
             Card(
+              margin: EdgeInsets.zero,
               child: Container(
                 padding: const EdgeInsets.all(10),
                 child: DropdownButton<String>(
@@ -291,17 +291,20 @@ class _SettingsState extends State<Settings> {
                     (currency) {
                       return DropdownMenuItem(
                         value: currency.id,
+                        alignment: Alignment.center,
                         child: Text(
-                          currency.id.toUpperCase(),
+                          '${currency.id.toUpperCase()} (${currency.symbol})',
                           style: TextStyle(
                             color: context.theme.colorScheme.primary,
                           ),
+                          textAlign: TextAlign.center,
                         ),
                       );
                     },
                   ).toList(),
                   isDense: true,
                   underline: Container(),
+                  alignment: Alignment.center,
                   iconEnabledColor: context.theme.colorScheme.primary,
                   onChanged: (value) {
                     if (value == null) return;
@@ -327,6 +330,7 @@ class _SettingsState extends State<Settings> {
             ),
             12.w,
             Card(
+              margin: EdgeInsets.zero,
               child: Container(
                 padding: const EdgeInsets.all(10),
                 child: DropdownButton<String>(
@@ -334,17 +338,20 @@ class _SettingsState extends State<Settings> {
                     (currency) {
                       return DropdownMenuItem(
                         value: currency.id,
+                        alignment: Alignment.center,
                         child: Text(
-                          currency.id.toUpperCase(),
+                          '${currency.id.toUpperCase()} (${currency.symbol})',
                           style: TextStyle(
                             color: context.theme.colorScheme.primary,
                           ),
+                          textAlign: TextAlign.center,
                         ),
                       );
                     },
                   ).toList(),
                   isDense: true,
                   underline: Container(),
+                  alignment: Alignment.center,
                   iconEnabledColor: context.theme.colorScheme.primary,
                   onChanged: (value) {
                     if (value == null) return;
