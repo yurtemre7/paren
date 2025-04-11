@@ -158,6 +158,11 @@ class Paren extends GetxController {
         stackTrace: stackTrace,
       );
     }
+
+    if (currencies.isEmpty) {
+      await fetchCurrencyDataOnline();
+    }
+
     var today = DateTime.now();
     var yesterday = DateTime.now().subtract(1.days);
     var latestTimestampString = await sp.getString('latestTimestamp');
