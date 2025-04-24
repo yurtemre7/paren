@@ -378,8 +378,10 @@ class _HomeState extends State<Home> {
                   color: context.theme.colorScheme.primary,
                 ),
                 onPressed: () {
-                  Share.share(
-                    '$inputStr ${fromCurrency.symbol} → $amountStr ${toCurrency.symbol}',
+                  SharePlus.instance.share(
+                    ShareParams(
+                      text: '$inputStr ${fromCurrency.symbol} → $amountStr ${toCurrency.symbol}',
+                    ),
                   );
                 },
               ),

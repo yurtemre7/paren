@@ -171,8 +171,11 @@ class _SettingsState extends State<Settings> {
             ),
             trailing: IconButton(
               onPressed: () {
-                Share.share(
-                  'With Par円 you can convert money in your travels faster than ever!\nDownload here: https://apps.apple.com/us/app/paren/id6578395712',
+                SharePlus.instance.share(
+                  ShareParams(
+                    text:
+                        'With Par円 you can convert money in your travels faster than ever!\nDownload here: https://apps.apple.com/us/app/paren/id6578395712',
+                  ),
                 );
               },
               icon: const Icon(
