@@ -18,7 +18,7 @@ class Paren extends GetxController {
       baseUrl: baseUrl,
     ),
   );
-  final SharedPreferencesAsync sp;
+  final SharedPreferencesAsync sp = SharedPreferencesAsync();
 
   final currencies = <Currency>[].obs;
   final latestTimestamp = DateTime.now().obs;
@@ -35,7 +35,7 @@ class Paren extends GetxController {
 
   final favorites = <FavoriteConversion>[].obs;
 
-  Paren(this.sp);
+  Paren();
 
   Future<void> init() async {
     await initCurrencies();
