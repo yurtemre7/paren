@@ -1,19 +1,18 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
 import 'package:home_widget/home_widget.dart';
 import 'package:paren/providers/paren.dart';
 import 'package:paren/screens/home.dart';
 import 'package:flutter_web_plugins/url_strategy.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   if (GetPlatform.isIOS && !kIsWeb) {
     await HomeWidget.setAppGroupId('group.de.emredev.paren');
   }
-  var paren = Get.put(Paren(SharedPreferencesAsync()));
-  await paren.initSettings();
+  await Get.put(Paren()).initSettings();
   usePathUrlStrategy();
   runApp(const MyApp());
 }
@@ -44,6 +43,16 @@ class MyApp extends StatelessWidget {
         ),
         themeMode: paren.appThemeMode.value,
         home: const Home(),
+        supportedLocales: [
+          Locale('de'), // German
+          Locale('en'), // English
+          Locale('ja'), // Japanese
+        ],
+        localizationsDelegates: [
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
       ),
     );
   }
