@@ -62,7 +62,7 @@ class _SettingsState extends State<Settings> {
 
   Widget buildAppColorChanger() {
     return ListTile(
-      title: const Text('App Color Theme'),
+      title: const Text('App Color'),
       subtitle: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         child: Obx(
@@ -145,10 +145,10 @@ class _SettingsState extends State<Settings> {
 
     return ListTile(
       title: Text(
-        'App Theme Mode',
+        'App Theme',
       ),
       subtitle: Text(
-        'To all you darkmode fans!',
+        'Customize the apps theme.',
       ),
       trailing: Card(
         child: Container(
@@ -165,9 +165,9 @@ class _SettingsState extends State<Settings> {
       child: Column(
         children: [
           ListTile(
-            title: const Text('Share App'),
+            title: const Text('Share the App'),
             subtitle: const Text(
-              'Please share this App with your Friends & Family for that they can also benefit from the convenience of it! Thank you!',
+              'With your help the app can help more people on their vacations! I appreciate you.',
             ),
             trailing: IconButton(
               onPressed: () {
@@ -185,9 +185,9 @@ class _SettingsState extends State<Settings> {
             ),
           ),
           const ListTile(
-            title: Text('Contact & Feedback'),
+            title: Text('Contact / Feedback'),
             subtitle: Text(
-              'Feel free to reach out to me, as I take any request serious and as an opportunity to improve my app.',
+              'Feel free to reach out to me, as I take any request seriously and see it as an opportunity to improve my app.',
             ),
           ),
           Container(
@@ -231,7 +231,7 @@ class _SettingsState extends State<Settings> {
       ),
       title: const Text('App Info'),
       subtitle: const Text(
-        'The App is open source & even works offline, if you have used it once before with internet.',
+        'Thank you for being here.',
       ),
       onLongPress: () {
         Get.dialog(
@@ -263,9 +263,9 @@ class _SettingsState extends State<Settings> {
 
   Widget buildAutofocusSwitch() {
     return SwitchListTile(
-      title: const Text('Autofocus Text field'),
+      title: const Text('Focus Text field'),
       subtitle: const Text(
-        'With this setting on, it will autofocus the converter text field.',
+        'With this setting on, it will focus the converter text field automatically.',
       ),
       value: paren.autofocusTextField.value,
       onChanged: (v) {
@@ -281,7 +281,7 @@ class _SettingsState extends State<Settings> {
       children: [
         const ListTile(
           title: Text('Default Currency Conversion'),
-          subtitle: Text('Change it to the currencies you want to convert from by default.'),
+          subtitle: Text('Change it to the currencies you want to convert from and to by default.'),
         ),
         Column(
           children: [
