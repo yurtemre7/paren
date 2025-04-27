@@ -2,7 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:paren/providers/constants.dart';
+import 'package:intl/intl.dart';
 import 'package:paren/providers/paren.dart';
 
 class FavoritesScreen extends StatelessWidget {
@@ -54,7 +54,17 @@ class FavoritesScreen extends StatelessWidget {
                 return const ListTile(title: Text('Invalid currency'));
               }
 
+              NumberFormat numberFormatFrom = NumberFormat.simpleCurrency(
+                name: fromCurrency.id.toUpperCase(),
+              );
+              NumberFormat numberFormatTo = NumberFormat.simpleCurrency(
+                name: toCurrency.id.toUpperCase(),
+              );
+
               var convertedAmount = favorite.amount * toCurrency.rate / fromCurrency.rate;
+
+              String inputFrom = numberFormatFrom.format(favorite.amount);
+              String inputTo = numberFormatTo.format(convertedAmount);
 
               return Dismissible(
                 key: Key(favorite.id),
@@ -62,10 +72,9 @@ class FavoritesScreen extends StatelessWidget {
                 onDismissed: (_) => paren.removeFavorite(favorite.id),
                 direction: DismissDirection.endToStart,
                 child: ListTile(
-                  title: Text('${favorite.amount} ${fromCurrency.symbol} → '
-                      '${convertedAmount.toStringAsFixed(2)} ${toCurrency.symbol}'),
-                  subtitle: Text('${fromCurrency.id.toUpperCase()} to '
-                      '${toCurrency.id.toUpperCase()} - ${timestampToString(favorite.timestamp)}'),
+                  title: Text('$inputFrom → $inputTo'),
+                  subtitle:
+                      Text('${fromCurrency.id.toUpperCase()} → ${toCurrency.id.toUpperCase()}'),
                   onTap: () {
                     paren.fromCurrency.value = favorite.fromCurrency;
                     paren.toCurrency.value = favorite.toCurrency;

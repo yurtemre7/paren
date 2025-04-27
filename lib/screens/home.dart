@@ -5,6 +5,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:paren/classes/currency.dart';
 import 'package:paren/providers/constants.dart';
 import 'package:paren/providers/extensions.dart';
@@ -126,13 +127,14 @@ class _HomeState extends State<Home> {
           actions: [
             IconButton(
               onPressed: () async {
-                scaffoldKey.currentState?.openEndDrawer();
                 currencyTextInputFocus.unfocus();
+                scaffoldKey.currentState?.openEndDrawer();
               },
               icon: const Icon(
                 Icons.settings,
               ),
               color: context.theme.colorScheme.primary,
+              tooltip: 'Settings',
             ),
           ],
         ),
@@ -218,7 +220,7 @@ class _HomeState extends State<Home> {
                 borderRadius: BorderRadius.circular(18),
               ),
               filled: true,
-              fillColor: context.theme.colorScheme.primaryContainer.withValues(alpha: 0.3),
+              fillColor: context.theme.colorScheme.primaryContainer.withValues(alpha: 0.1),
               suffixIcon: IconButton(
                 icon: const Icon(Icons.close),
                 color: context.theme.colorScheme.error,
@@ -227,6 +229,7 @@ class _HomeState extends State<Home> {
                   currencyTextInputController.refresh();
                   currencyTextInputFocus.requestFocus();
                 },
+                tooltip: 'Clear',
               ),
             ),
             onChanged: (value) {
@@ -238,10 +241,10 @@ class _HomeState extends State<Home> {
                 : [
                     FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d{0,2}')),
                   ],
-            maxLength: 20,
+            maxLength: 30,
             validator: (value) {
               if (value == null || value.isEmpty) {
-                return 'Enter a valid decimal number (i.e., 123.456)';
+                return 'Enter a valid decimal number (i.e., 123.45)';
               }
               var toDouble = double.tryParse(value);
               if (toDouble == null) {
@@ -270,31 +273,29 @@ class _HomeState extends State<Home> {
               var toRate = toCurrency.rate;
 
               var inputConverted = (double.tryParse(currencyTextInput) ?? 0);
-
               var convertedAmount = (double.tryParse(currencyTextInput) ?? 0) * toRate / fromRate;
-
               var reConvertedAmount = (double.tryParse(currencyTextInput) ?? 0) * fromRate / toRate;
 
-              var roundedTo = (convertedAmount * 100).round() / 100;
-              var reRoundedTo = (reConvertedAmount * 100).round() / 100;
-              var amountStr = roundedTo.toStringAsFixed(2).replaceAllMapped(
-                    RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
-                    (Match m) => '${m[1]},',
-                  );
-              var reAmountStr = reRoundedTo.toStringAsFixed(2).replaceAllMapped(
-                    RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
-                    (Match m) => '${m[1]},',
-                  );
-              var inputStr = inputConverted.toStringAsFixed(2).replaceAllMapped(
-                    RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
-                    (Match m) => '${m[1]},',
-                  );
+              NumberFormat numberFormatFrom = NumberFormat.simpleCurrency(
+                name: fromCurrency.id.toUpperCase(),
+              );
+              NumberFormat numberFormatRe = NumberFormat.simpleCurrency(
+                name: fromCurrency.id.toUpperCase(),
+              );
+              NumberFormat numberFormatTo = NumberFormat.simpleCurrency(
+                name: toCurrency.id.toUpperCase(),
+              );
+
+              String amountStr = numberFormatTo.format(convertedAmount);
+              String reAmountStr = numberFormatRe.format(reConvertedAmount);
+              String inputStr = numberFormatFrom.format(inputConverted);
+              String inputStrRe = numberFormatTo.format(inputConverted);
 
               return SelectionArea(
                 child: Column(
                   children: [
                     Text(
-                      '$inputStr ${fromCurrency.symbol} → $amountStr ${toCurrency.symbol}',
+                      '$inputStr → $amountStr',
                       style: TextStyle(
                         fontSize: paren.conv1Size.value,
                         fontWeight: FontWeight.bold,
@@ -303,7 +304,7 @@ class _HomeState extends State<Home> {
                       textAlign: TextAlign.center,
                     ),
                     Text(
-                      '$inputStr ${toCurrency.symbol} → $reAmountStr ${fromCurrency.symbol}',
+                      '$inputStrRe → $reAmountStr',
                       style: TextStyle(
                         fontSize: paren.conv2Size.value,
                         fontWeight: FontWeight.bold,
@@ -371,6 +372,7 @@ class _HomeState extends State<Home> {
                     paren.toggleFavorite(amount);
                   }
                 },
+                tooltip: 'Favorite',
               ),
               IconButton(
                 icon: Icon(
@@ -384,6 +386,7 @@ class _HomeState extends State<Home> {
                     ),
                   );
                 },
+                tooltip: 'Share',
               ),
               IconButton(
                 icon: Icon(
@@ -395,19 +398,23 @@ class _HomeState extends State<Home> {
                     text: '$inputStr ${fromCurrency.symbol} → $amountStr ${toCurrency.symbol}',
                   ),
                 ),
+                tooltip: 'Copy',
               ),
             ],
           ),
         ),
-        TextButton.icon(
+        IconButton(
           onPressed: () async {
             await Get.bottomSheet(
               buildTextSizeAdjustSheet(),
             );
             paren.saveSettings();
           },
-          label: const Text('Adjust Text Size'),
-          icon: Icon(Icons.text_fields_outlined),
+          tooltip: 'Adjust Text Size',
+          icon: Icon(
+            Icons.text_fields_outlined,
+            color: context.theme.colorScheme.primary,
+          ),
         ),
       ],
     );
