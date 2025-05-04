@@ -30,6 +30,9 @@ class _ExChartState extends State<ExChart> {
   final isLoading = true.obs;
   final hasError = false.obs;
   final currencyDataList = <({double x, double y})>[].obs;
+  final showPrediction = false.obs;
+  final predictionDuration = 0.days.obs;
+  List<({double x, double y})> predictionPoints = [];
 
   final localIdFrom = ''.obs;
   final localIdTo = ''.obs;
@@ -95,6 +98,11 @@ class _ExChartState extends State<ExChart> {
           },
         ).toList();
         currencyDataList.value = ratesList;
+        // Generate prediction if enabled
+        if (showPrediction.value && ratesList.isNotEmpty) {
+          var predictionData = calculatePrediction(ratesList);
+          predictionPoints = predictionData;
+        }
         currencyDataList.refresh();
         // logMessage('Listenlänge: ${currencyDataList.length}');
         // logMessage('Fetched data: ${ratesList.toString()}');
@@ -108,6 +116,45 @@ class _ExChartState extends State<ExChart> {
       hasError.value = true;
     }
     isLoading.value = false;
+  }
+
+  List<({double x, double y})> calculatePrediction(
+    List<({double x, double y})> historicalData,
+  ) {
+    predictionDuration.value = localDuration.value ~/ 3;
+
+    if (historicalData.length < 2) return [];
+
+    // Calculate average daily change (drift) and volatility (stdDev)
+    double totalChange = 0;
+    double totalChangeSquared = 0;
+    for (int i = 1; i < historicalData.length; i++) {
+      double change = historicalData[i].y - historicalData[i - 1].y;
+      totalChange += change;
+      totalChangeSquared += change * change;
+    }
+    int n = historicalData.length - 1;
+    double avgDailyChange = totalChange / n;
+    double variance = (totalChangeSquared / n) - (avgDailyChange * avgDailyChange);
+    double stdDev = sqrt(variance).toDouble();
+
+    var lastX = historicalData.last.x;
+    var lastY = historicalData.last.y;
+    var step = Duration.millisecondsPerDay.toDouble();
+
+    // Generate predictions with random noise
+    Random random = Random(); // Seed with a fixed value for consistency if needed
+    List<({double x, double y})> prediction = [];
+    double currentY = lastY;
+    for (int i = 0; i < predictionDuration.value.inDays; i++) {
+      double newX = lastX + (i + 1) * step;
+      double noise =
+          (random.nextDouble() * 2 - 1) * stdDev * 0.5; // Noise scaled by 50% of volatility
+      double newY = currentY + avgDailyChange + noise;
+      prediction.add((x: newX, y: newY));
+      currentY = newY;
+    }
+    return prediction;
   }
 
   @override
@@ -199,23 +246,47 @@ class _ExChartState extends State<ExChart> {
               ),
               24.h,
               Center(
-                child: OutlinedButton.icon(
-                  onPressed: () {
-                    if (isLoading.value) return;
-                    var temp = localIdFrom.value;
-                    localIdFrom.value = localIdTo.value;
-                    localIdTo.value = temp;
+                child: Column(
+                  children: [
+                    SwitchListTile(
+                      secondary: IconButton(
+                        onPressed: () {
+                          Get.dialog(
+                            buildPredictionInfoDialog(),
+                          );
+                        },
+                        icon: Icon(Icons.info_outline),
+                        color: context.theme.colorScheme.primary,
+                      ),
+                      title: Text('Show simple prediction'),
+                      subtitle: Text('This is just for fun, no financial advice.'),
+                      value: showPrediction.value,
+                      onChanged: (value) {
+                        showPrediction.value = value;
+                        fetchChartData(localIdFrom.value, localIdTo.value);
+                      },
+                      activeColor: context.theme.colorScheme.primary,
+                    ),
+                    8.h,
+                    OutlinedButton.icon(
+                      onPressed: () {
+                        if (isLoading.value) return;
+                        var temp = localIdFrom.value;
+                        localIdFrom.value = localIdTo.value;
+                        localIdTo.value = temp;
 
-                    var tempIdx = localIdxFrom.value;
-                    localIdxFrom.value = localIdxTo.value;
-                    localIdxTo.value = tempIdx;
+                        var tempIdx = localIdxFrom.value;
+                        localIdxFrom.value = localIdxTo.value;
+                        localIdxTo.value = tempIdx;
 
-                    fetchChartData(localIdFrom.value, localIdTo.value);
-                  },
-                  label: const Text('Swap'),
-                  icon: const Icon(
-                    Icons.swap_horiz_outlined,
-                  ),
+                        fetchChartData(localIdFrom.value, localIdTo.value);
+                      },
+                      label: const Text('Swap'),
+                      icon: const Icon(
+                        Icons.swap_horiz_outlined,
+                      ),
+                    ),
+                  ],
                 ),
               ),
               24.h,
@@ -223,6 +294,29 @@ class _ExChartState extends State<ExChart> {
           );
         },
       ),
+    );
+  }
+
+  Widget buildPredictionInfoDialog() {
+    return AlertDialog(
+      title: Text('How Predictions Work'),
+      content: SingleChildScrollView(
+        child: Text(
+          'The prediction uses the last ${localDuration.value.inDays} days of data to estimate ${predictionDuration.value.inDays} days of future data. \n\n'
+          '• It follows the average daily trend from historical data.\n'
+          '• Adds realistic random fluctuations based on past volatility.\n'
+          '• Shorter historical data → shorter predictions -> less accuracy.\n'
+          '• Longer historical data → longer predictions -> higher accuracy.\n\n'
+          '⚠️ This is a simplified model. Real-world rates may vary significantly!',
+          style: TextStyle(fontSize: 14),
+        ),
+      ),
+      actions: [
+        TextButton(
+          onPressed: Get.back,
+          child: Text('OK'),
+        ),
+      ],
     );
   }
 
@@ -318,24 +412,26 @@ class _ExChartState extends State<ExChart> {
           },
           tooltipBorder: const BorderSide(),
           getTooltipItems: (touchedSpots) {
-            return touchedSpots
-                .map(
-                  (e) => LineTooltipItem(
-                    '${e.y} ${paren.currencies[localIdxTo.value].symbol}\n',
-                    TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: context.theme.colorScheme.primary,
-                    ),
-                    children: [
-                      TextSpan(
-                        text: timestampToStringNoTime(
-                          DateTime.fromMillisecondsSinceEpoch(e.x.toInt()),
-                        ),
-                      ),
-                    ],
+            return touchedSpots.map(
+              (e) {
+                var isPrediction = predictionPoints.any((p) => p.x == e.x);
+                return LineTooltipItem(
+                  '${e.y} ${paren.currencies[localIdxTo.value].symbol}'
+                  '${isPrediction ? '\n(Prediction)\n' : '\n'}',
+                  TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: context.theme.colorScheme.primary,
                   ),
-                )
-                .toList();
+                  children: [
+                    TextSpan(
+                      text: timestampToStringNoTime(
+                        DateTime.fromMillisecondsSinceEpoch(e.x.toInt()),
+                      ),
+                    ),
+                  ],
+                );
+              },
+            ).toList();
           },
           fitInsideHorizontally: true,
           fitInsideVertically: true,
@@ -388,6 +484,23 @@ class _ExChartState extends State<ExChart> {
             ),
           ),
         ),
+        if (showPrediction.value && predictionPoints.isNotEmpty)
+          LineChartBarData(
+            spots: predictionPoints.map((e) => FlSpot(e.x, e.y.toPrecision(2))).toList(),
+            color: context.theme.colorScheme.tertiary.withValues(alpha: 0.7),
+            isStrokeCapRound: true,
+            dotData: const FlDotData(show: false),
+            dashArray: [8, 4],
+            belowBarData: BarAreaData(
+              show: true,
+              gradient: LinearGradient(
+                colors: [
+                  context.theme.colorScheme.tertiary.withValues(alpha: 0.1),
+                  context.theme.colorScheme.tertiary.withValues(alpha: 0.1),
+                ],
+              ),
+            ),
+          ),
       ],
     );
   }
