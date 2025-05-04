@@ -386,7 +386,7 @@ class _HomeState extends State<Home> {
                 onPressed: () {
                   SharePlus.instance.share(
                     ShareParams(
-                      text: '$inputStr ${fromCurrency.symbol} → $amountStr ${toCurrency.symbol}',
+                      text: '$inputStr → $amountStr',
                     ),
                   );
                 },
@@ -399,7 +399,7 @@ class _HomeState extends State<Home> {
                 ),
                 onPressed: () => Clipboard.setData(
                   ClipboardData(
-                    text: '$inputStr ${fromCurrency.symbol} → $amountStr ${toCurrency.symbol}',
+                    text: '$inputStr → $amountStr',
                   ),
                 ),
                 tooltip: 'Copy',
