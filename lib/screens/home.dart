@@ -696,17 +696,21 @@ class _HomeState extends State<Home> {
         );
       },
       child: Container(
+        margin: EdgeInsets.symmetric(horizontal: 2),
         key: ValueKey<String>(
           '${selectedFromCurrencyIndex}_$selectedToCurrencyIndex',
         ),
         child: Wrap(
           alignment: WrapAlignment.center,
           crossAxisAlignment: WrapCrossAlignment.center,
+          runSpacing: 4,
           children: [
             Card(
+              margin: EdgeInsets.zero,
               child: Container(
-                padding: const EdgeInsets.all(10),
+                padding: const EdgeInsets.all(4),
                 child: DropdownButton(
+                  menuMaxHeight: context.height * 0.4,
                   items: currencies.indexed.map(
                     ((int i, Currency e) position) {
                       var i = position.$1;
@@ -726,6 +730,7 @@ class _HomeState extends State<Home> {
                   ).toList(),
                   isDense: true,
                   underline: Container(),
+                  focusColor: Colors.transparent,
                   alignment: Alignment.center,
                   iconEnabledColor: context.theme.colorScheme.primary,
                   onChanged: (value) {
@@ -735,8 +740,9 @@ class _HomeState extends State<Home> {
                 ),
               ),
             ),
-            12.w,
+            4.w,
             IconButton(
+              visualDensity: VisualDensity.compact,
               icon: const Icon(Icons.compare_arrows_outlined),
               color: context.theme.colorScheme.primary,
               onPressed: () {
@@ -746,11 +752,13 @@ class _HomeState extends State<Home> {
                 selectedToCurrencyIndex.value = temp;
               },
             ),
-            12.w,
+            4.w,
             Card(
+              margin: EdgeInsets.zero,
               child: Container(
-                padding: const EdgeInsets.all(10),
+                padding: const EdgeInsets.all(4),
                 child: DropdownButton(
+                  menuMaxHeight: context.height * 0.4,
                   items: currencies.indexed.map(
                     ((int, Currency) position) {
                       var i = position.$1;
@@ -770,6 +778,7 @@ class _HomeState extends State<Home> {
                   ).toList(),
                   isDense: true,
                   underline: Container(),
+                  focusColor: Colors.transparent,
                   alignment: Alignment.center,
                   iconEnabledColor: context.theme.colorScheme.primary,
                   onChanged: (value) {

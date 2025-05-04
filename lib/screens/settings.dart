@@ -283,89 +283,100 @@ class _SettingsState extends State<Settings> {
           title: Text('Default Currency Conversion'),
           subtitle: Text('Change it to the currencies you want to convert from and to by default.'),
         ),
-        Column(
-          children: [
-            Card(
-              margin: EdgeInsets.zero,
-              child: Container(
-                padding: const EdgeInsets.all(10),
-                child: DropdownButton<String>(
-                  items: currencies.map(
-                    (currency) {
-                      return DropdownMenuItem(
-                        value: currency.id,
-                        alignment: Alignment.center,
-                        child: Text(
-                          '${currency.id.toUpperCase()} (${currency.symbol})',
-                          style: TextStyle(
-                            color: context.theme.colorScheme.primary,
+        Container(
+          margin: EdgeInsets.symmetric(horizontal: 2),
+          child: Wrap(
+            alignment: WrapAlignment.center,
+            crossAxisAlignment: WrapCrossAlignment.center,
+            runSpacing: 4,
+            children: [
+              Card(
+                margin: EdgeInsets.zero,
+                child: Container(
+                  padding: const EdgeInsets.all(4),
+                  child: DropdownButton<String>(
+                    menuMaxHeight: context.height * 0.4,
+                    items: currencies.map(
+                      (currency) {
+                        return DropdownMenuItem(
+                          value: currency.id,
+                          alignment: Alignment.center,
+                          child: Text(
+                            '${currency.id.toUpperCase()} (${currency.symbol})',
+                            style: TextStyle(
+                              color: context.theme.colorScheme.primary,
+                            ),
+                            textAlign: TextAlign.center,
                           ),
-                          textAlign: TextAlign.center,
-                        ),
-                      );
+                        );
+                      },
+                    ).toList(),
+                    isDense: true,
+                    underline: Container(),
+                    focusColor: Colors.transparent,
+                    alignment: Alignment.center,
+                    iconEnabledColor: context.theme.colorScheme.primary,
+                    onChanged: (value) {
+                      if (value == null) return;
+                      paren.fromCurrency.value = value;
+                      paren.updateDefaultConversion();
+                      paren.updateWidgetData();
                     },
-                  ).toList(),
-                  isDense: true,
-                  underline: Container(),
-                  alignment: Alignment.center,
-                  iconEnabledColor: context.theme.colorScheme.primary,
-                  onChanged: (value) {
-                    if (value == null) return;
-                    paren.fromCurrency.value = value;
-                    paren.updateDefaultConversion();
-                    paren.updateWidgetData();
-                  },
-                  value: paren.fromCurrency.value,
+                    value: paren.fromCurrency.value,
+                  ),
                 ),
               ),
-            ),
-            12.w,
-            IconButton(
-              icon: const Icon(Icons.compare_arrows),
-              color: context.theme.colorScheme.primary,
-              onPressed: () {
-                var temp = paren.fromCurrency.value;
-                paren.fromCurrency.value = paren.toCurrency.value;
-                paren.toCurrency.value = temp;
-                paren.updateDefaultConversion();
-                paren.updateWidgetData();
-              },
-            ),
-            12.w,
-            Card(
-              margin: EdgeInsets.zero,
-              child: Container(
-                padding: const EdgeInsets.all(10),
-                child: DropdownButton<String>(
-                  items: currencies.map(
-                    (currency) {
-                      return DropdownMenuItem(
-                        value: currency.id,
-                        alignment: Alignment.center,
-                        child: Text(
-                          '${currency.id.toUpperCase()} (${currency.symbol})',
-                          style: TextStyle(
-                            color: context.theme.colorScheme.primary,
+              4.w,
+              IconButton(
+                visualDensity: VisualDensity.compact,
+                icon: const Icon(Icons.compare_arrows),
+                color: context.theme.colorScheme.primary,
+                onPressed: () {
+                  var temp = paren.fromCurrency.value;
+                  paren.fromCurrency.value = paren.toCurrency.value;
+                  paren.toCurrency.value = temp;
+                  paren.updateDefaultConversion();
+                  paren.updateWidgetData();
+                },
+              ),
+              4.w,
+              Card(
+                margin: EdgeInsets.zero,
+                child: Container(
+                  padding: const EdgeInsets.all(4),
+                  child: DropdownButton<String>(
+                    menuMaxHeight: context.height * 0.4,
+                    items: currencies.map(
+                      (currency) {
+                        return DropdownMenuItem(
+                          value: currency.id,
+                          alignment: Alignment.center,
+                          child: Text(
+                            '${currency.id.toUpperCase()} (${currency.symbol})',
+                            style: TextStyle(
+                              color: context.theme.colorScheme.primary,
+                            ),
+                            textAlign: TextAlign.center,
                           ),
-                          textAlign: TextAlign.center,
-                        ),
-                      );
+                        );
+                      },
+                    ).toList(),
+                    isDense: true,
+                    underline: Container(),
+                    focusColor: Colors.transparent,
+                    alignment: Alignment.center,
+                    iconEnabledColor: context.theme.colorScheme.primary,
+                    onChanged: (value) {
+                      if (value == null) return;
+                      paren.toCurrency.value = value;
+                      paren.updateDefaultConversion();
                     },
-                  ).toList(),
-                  isDense: true,
-                  underline: Container(),
-                  alignment: Alignment.center,
-                  iconEnabledColor: context.theme.colorScheme.primary,
-                  onChanged: (value) {
-                    if (value == null) return;
-                    paren.toCurrency.value = value;
-                    paren.updateDefaultConversion();
-                  },
-                  value: paren.toCurrency.value,
+                    value: paren.toCurrency.value,
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
         8.h,
       ],
