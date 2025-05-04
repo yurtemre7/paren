@@ -278,12 +278,9 @@ class Paren extends GetxController {
     await sp.setStringList('favorites', favoritesJson);
   }
 
-  Future<void> toggleFavorite(double amount) async {
+  Future<void> toggleFavorite(double amount, String from, String to) async {
     var existing = favorites.firstWhereOrNull(
-      (fav) =>
-          fav.fromCurrency == fromCurrency.value &&
-          fav.toCurrency == toCurrency.value &&
-          fav.amount == amount,
+      (fav) => fav.fromCurrency == from && fav.toCurrency == to && fav.amount == amount,
     );
 
     if (existing != null) {
@@ -293,8 +290,8 @@ class Paren extends GetxController {
       favorites.add(
         FavoriteConversion(
           id: now.millisecondsSinceEpoch.toString(),
-          fromCurrency: fromCurrency.value,
-          toCurrency: toCurrency.value,
+          fromCurrency: from,
+          toCurrency: to,
           amount: amount,
           timestamp: now,
         ),

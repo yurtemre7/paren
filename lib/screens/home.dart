@@ -369,7 +369,11 @@ class _HomeState extends State<Home> {
                 onPressed: () {
                   var amount = inputConverted;
                   if (amount > 0) {
-                    paren.toggleFavorite(amount);
+                    paren.toggleFavorite(
+                      amount,
+                      currencies[selectedFromCurrencyIndex.value].id,
+                      currencies[selectedToCurrencyIndex.value].id,
+                    );
                   }
                 },
                 tooltip: 'Favorite',
