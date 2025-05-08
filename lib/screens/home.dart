@@ -220,12 +220,15 @@ class _HomeState extends State<Home> {
             inputFormatters: kIsWeb
                 ? null
                 : [
-                    FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d{0,2}')),
+                    FilteringTextInputFormatter.allow(RegExp(r'^\d*([.,]?\d{0,2})?')),
                   ],
             maxLength: 30,
             validator: (value) {
               if (value == null || value.isEmpty) {
                 return 'Enter a valid decimal number (i.e., 123.45)';
+              }
+              if (value.contains(',')) {
+                value = value.replaceAll(',', '.');
               }
               var toDouble = double.tryParse(value);
               if (toDouble == null) {
