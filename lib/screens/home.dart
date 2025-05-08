@@ -14,6 +14,7 @@ import 'package:paren/screens/exchart.dart';
 import 'package:paren/screens/favorites.dart';
 import 'package:paren/screens/quick_conversions.dart';
 import 'package:paren/screens/settings.dart';
+import 'package:paren/screens/home_header.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -106,37 +107,17 @@ class _HomeState extends State<Home> {
           }
         },
         backgroundColor: context.theme.colorScheme.surface,
-        appBar: AppBar(
-          title: Text(
-            'Par円',
-            style: TextStyle(
-              color: context.theme.colorScheme.primary,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          leading: IconButton(
-            onPressed: () {
-              Get.dialog(
-                buildDataInfoSheet(),
-              );
+        appBar: PreferredSize(
+          preferredSize: const Size.fromHeight(80),
+          child: HomeHeader(
+            onInfo: () {
+              Get.dialog(buildDataInfoSheet());
             },
-            icon: Icon(Icons.info_outline),
-            color: context.theme.colorScheme.primary,
-            tooltip: 'Last update info',
+            onSettings: () async {
+              currencyTextInputFocus.unfocus();
+              scaffoldKey.currentState?.openEndDrawer();
+            },
           ),
-          actions: [
-            IconButton(
-              onPressed: () async {
-                currencyTextInputFocus.unfocus();
-                scaffoldKey.currentState?.openEndDrawer();
-              },
-              icon: const Icon(
-                Icons.settings,
-              ),
-              color: context.theme.colorScheme.primary,
-              tooltip: 'Settings',
-            ),
-          ],
         ),
         endDrawer: Drawer(
           child: Settings(),
