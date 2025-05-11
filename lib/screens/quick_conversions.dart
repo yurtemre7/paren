@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:paren/classes/currency.dart';
 
 class QuickConversions extends StatelessWidget {
@@ -58,30 +59,37 @@ class QuickConversions extends StatelessWidget {
                 20000,
                 50000,
                 100000,
-              ].map((e) {
+              ].map((currentValue) {
                 var fromCurrency = currencies[fromCurr];
                 var toCurrency = currencies[toCurr];
 
                 var fromRate = fromCurrency.rate;
                 var toRate = toCurrency.rate;
 
-                var convertedAmount = e * toRate / fromRate;
-                var roundedTo = (convertedAmount * 100).round() / 100;
-                var amountStr = roundedTo.toStringAsFixed(2).replaceAllMapped(
-                      RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
-                      (Match m) => '${m[1]},',
-                    );
-                var inputStr = e.toStringAsFixed(2).replaceAllMapped(
-                      RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
-                      (Match m) => '${m[1]},',
-                    );
+                var convertedAmount = currentValue * toRate / fromRate;
+
+                NumberFormat numberFormatFrom = NumberFormat.simpleCurrency(
+                  name: fromCurrency.id.toUpperCase(),
+                );
+                NumberFormat numberFormatTo = NumberFormat.simpleCurrency(
+                  name: toCurrency.id.toUpperCase(),
+                );
+
+                var amountStr = numberFormatTo.format(convertedAmount);
+                var inputStr = numberFormatFrom.format(currentValue);
 
                 return Card(
                   color: context.theme.colorScheme.secondaryContainer,
-                  child: Center(
-                    child: Text(
-                      '$inputStr ${currencies[fromCurr].symbol}\n→\n$amountStr ${currencies[toCurr].symbol}',
-                      textAlign: TextAlign.center,
+                  child: InkWell(
+                    borderRadius: BorderRadius.circular(8),
+                    onTap: () {
+                      Get.back(result: currentValue);
+                    },
+                    child: Center(
+                      child: Text(
+                        '$inputStr\n→\n$amountStr',
+                        textAlign: TextAlign.center,
+                      ),
                     ),
                   ),
                 );

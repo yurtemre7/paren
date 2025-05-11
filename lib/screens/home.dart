@@ -197,21 +197,21 @@ class _HomeState extends State<Home> {
             decoration: InputDecoration(
               hintText:
                   'Enter amount in ${currencies[selectedFromCurrencyIndex.value].symbol} / ${currencies[selectedToCurrencyIndex.value].symbol}',
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(18),
-              ),
               filled: true,
-              fillColor: context.theme.colorScheme.primaryContainer.withValues(alpha: 0.1),
-              suffixIcon: IconButton(
-                icon: const Icon(Icons.close),
-                color: context.theme.colorScheme.error,
-                onPressed: () {
-                  currencyTextInputController.value.clear();
-                  currencyTextInputController.refresh();
-                  currencyTextInputFocus.requestFocus();
-                },
-                tooltip: 'Clear',
-              ),
+              fillColor: context.theme.colorScheme.surfaceBright.withValues(alpha: 0.5),
+              suffixIcon: currencyTextInputController.value.text.isNotEmpty
+                  ? IconButton(
+                      icon: const Icon(Icons.close),
+                      color: context.theme.colorScheme.error,
+                      onPressed: () {
+                        currencyTextInputController.value.clear();
+                        currencyTextInputController.refresh();
+                        currencyTextInputFocus.requestFocus();
+                      },
+                      tooltip: 'Clear',
+                    )
+                  : null,
+              counter: 0.w,
             ),
             onChanged: (value) {
               currencyTextInputController.refresh();
@@ -225,7 +225,7 @@ class _HomeState extends State<Home> {
             maxLength: 30,
             validator: (value) {
               if (value == null || value.isEmpty) {
-                return 'Enter a valid decimal number (i.e., 123.45)';
+                return null;
               }
               if (value.contains(',')) {
                 value = value.replaceAll(',', '.');
@@ -278,23 +278,73 @@ class _HomeState extends State<Home> {
               return SelectionArea(
                 child: Column(
                   children: [
-                    Text(
-                      '$inputStr → $amountStr',
-                      style: TextStyle(
-                        fontSize: paren.conv1Size.value,
-                        fontWeight: FontWeight.bold,
-                        color: context.theme.colorScheme.primary,
-                      ),
-                      textAlign: TextAlign.center,
+                    Wrap(
+                      spacing: 12,
+                      alignment: WrapAlignment.center,
+                      crossAxisAlignment: WrapCrossAlignment.center,
+                      children: [
+                        Text(
+                          inputStr,
+                          style: TextStyle(
+                            fontSize: paren.conv1Size.value,
+                            fontWeight: FontWeight.bold,
+                            color: context.theme.colorScheme.primary,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                        Text(
+                          '→',
+                          style: TextStyle(
+                            fontSize: paren.conv1Size.value,
+                            fontWeight: FontWeight.bold,
+                            color: context.theme.colorScheme.primary,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                        Text(
+                          amountStr,
+                          style: TextStyle(
+                            fontSize: paren.conv1Size.value,
+                            fontWeight: FontWeight.bold,
+                            color: context.theme.colorScheme.primary,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
                     ),
-                    Text(
-                      '$inputStrRe → $reAmountStr',
-                      style: TextStyle(
-                        fontSize: paren.conv2Size.value,
-                        fontWeight: FontWeight.bold,
-                        color: context.theme.colorScheme.primary,
-                      ),
-                      textAlign: TextAlign.center,
+                    Wrap(
+                      spacing: 12,
+                      alignment: WrapAlignment.center,
+                      crossAxisAlignment: WrapCrossAlignment.center,
+                      children: [
+                        Text(
+                          inputStrRe,
+                          style: TextStyle(
+                            fontSize: paren.conv2Size.value,
+                            fontWeight: FontWeight.bold,
+                            color: context.theme.colorScheme.primary.withValues(alpha: 0.75),
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                        Text(
+                          '→',
+                          style: TextStyle(
+                            fontSize: paren.conv2Size.value,
+                            fontWeight: FontWeight.bold,
+                            color: context.theme.colorScheme.primary.withValues(alpha: 0.75),
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                        Text(
+                          reAmountStr,
+                          style: TextStyle(
+                            fontSize: paren.conv2Size.value,
+                            fontWeight: FontWeight.bold,
+                            color: context.theme.colorScheme.primary.withValues(alpha: 0.75),
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
                     ),
                     12.h,
                     buildConversionActions(
@@ -505,10 +555,15 @@ class _HomeState extends State<Home> {
         children: [
           ListTile(
             title: const Text('Quick Conversions'),
-            onTap: () {
-              Get.bottomSheet(
+            onTap: () async {
+              var result = await Get.bottomSheet(
                 buildQuickConversions(currencies),
               );
+              if (result != null) {
+                currencyTextInputController.value.text = result.toString();
+                currencyTextInputController.refresh();
+                currencyTextInputFocus.requestFocus();
+              }
             },
             trailing: Icon(Icons.table_chart_outlined),
             iconColor: context.theme.colorScheme.primary,
