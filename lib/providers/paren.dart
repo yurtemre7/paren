@@ -226,8 +226,8 @@ class Paren extends GetxController {
           (Match m) => '${m[1]},',
         );
 
-    var priceString = '$inputStr ${fromCurrency.symbol} → $amountStr ${toCurrency.symbol}';
-    var priceReString = '$inputStr ${toCurrency.symbol} → $reAmountStr ${fromCurrency.symbol}';
+    var priceString = '$inputStr ${fromCurrency.symbol} ➜ $amountStr ${toCurrency.symbol}';
+    var priceReString = '$inputStr ${toCurrency.symbol} ➜ $reAmountStr ${fromCurrency.symbol}';
 
     await Future.wait([
       HomeWidget.saveWidgetData(

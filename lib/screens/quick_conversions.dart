@@ -87,7 +87,7 @@ class QuickConversions extends StatelessWidget {
                     },
                     child: Center(
                       child: Text(
-                        '$inputStr\n→\n$amountStr',
+                        '$inputStr\n➜\n$amountStr',
                         textAlign: TextAlign.center,
                       ),
                     ),

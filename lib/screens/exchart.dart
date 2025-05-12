@@ -171,7 +171,7 @@ class _ExChartState extends State<ExChart> {
         ),
         title: Obx(
           () => Text(
-            '$localIdFrom → $localIdTo',
+            '$localIdFrom ➜ $localIdTo',
             style: TextStyle(
               color: context.theme.colorScheme.primary,
               fontWeight: FontWeight.bold,
@@ -306,8 +306,8 @@ class _ExChartState extends State<ExChart> {
           'The prediction uses the last ${localDuration.value.inDays} days of data to estimate ${predictionDuration.value.inDays} days of future data. \n\n'
           '• It follows the average daily trend from historical data.\n'
           '• Adds realistic random fluctuations based on past volatility.\n'
-          '• Shorter historical data → shorter predictions -> less accuracy.\n'
-          '• Longer historical data → longer predictions -> higher accuracy.\n\n'
+          '• Shorter historical data ➜ shorter predictions -> less accuracy.\n'
+          '• Longer historical data ➜ longer predictions -> higher accuracy.\n\n'
           '⚠️ This is a simplified model. Real-world rates may vary significantly!',
           style: TextStyle(fontSize: 14),
         ),

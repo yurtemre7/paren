@@ -40,8 +40,8 @@ class ParenWAppWidget : GlanceAppWidget() {
     private fun GlanceContent(context: Context, currentState: HomeWidgetGlanceState) {
         val data = currentState.preferences
 
-        val priceString = data.getString("price_string", "") ?: "1.00¥ → 0.01€"
-        val priceReString = data.getString("price_restring", "") ?: "1.00€ → 160.33¥"
+        val priceString = data.getString("price_string", "") ?: "1.00¥ ➜ 0.01€"
+        val priceReString = data.getString("price_restring", "") ?: "1.00€ ➜ 160.33¥"
         val priceDatum = data.getString("price_datum", "") ?: "11.08.2024 15:29"
 
         Box(

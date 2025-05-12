@@ -99,87 +99,97 @@ class _HomeState extends State<Home> {
       onTap: () {
         FocusScope.of(context).unfocus();
       },
-      child: Scaffold(
-        key: scaffoldKey,
-        onEndDrawerChanged: (isOpened) {
-          if (!isOpened) {
-            updateCurrencySwap();
+      child: PopScope(
+        canPop: false,
+        onPopInvokedWithResult: (didPop, result) async {
+          if (!didPop) {
+            if (scaffoldKey.currentState?.isEndDrawerOpen ?? false) {
+              scaffoldKey.currentState?.closeEndDrawer();
+            }
           }
         },
-        backgroundColor: context.theme.colorScheme.surface,
-        appBar: PreferredSize(
-          preferredSize: const Size.fromHeight(80),
-          child: HomeHeader(
-            onInfo: () {
-              Get.dialog(buildDataInfoSheet());
-            },
-            onSettings: () async {
-              currencyTextInputFocus.unfocus();
-              scaffoldKey.currentState?.openEndDrawer();
-            },
+        child: Scaffold(
+          key: scaffoldKey,
+          onEndDrawerChanged: (isOpened) {
+            if (!isOpened) {
+              updateCurrencySwap();
+            }
+          },
+          backgroundColor: context.theme.colorScheme.surface,
+          appBar: PreferredSize(
+            preferredSize: const Size.fromHeight(80),
+            child: HomeHeader(
+              onInfo: () {
+                Get.dialog(buildDataInfoSheet());
+              },
+              onSettings: () async {
+                currencyTextInputFocus.unfocus();
+                scaffoldKey.currentState?.openEndDrawer();
+              },
+            ),
           ),
-        ),
-        endDrawer: Drawer(
-          child: Settings(),
-        ),
-        body: SafeArea(
-          child: Obx(
-            () {
-              if (loading.value) {
-                return const Center(
-                  child: CircularProgressIndicator.adaptive(),
-                );
-              }
+          endDrawer: Drawer(
+            child: Settings(),
+          ),
+          body: SafeArea(
+            child: Obx(
+              () {
+                if (loading.value) {
+                  return const Center(
+                    child: CircularProgressIndicator.adaptive(),
+                  );
+                }
 
-              var currencies = paren.currencies;
-              if (currencies.isEmpty) {
-                return const Center(
-                  child: Text('Currencies is empty, an error must have occured.'),
-                );
-              }
+                var currencies = paren.currencies;
+                if (currencies.isEmpty) {
+                  return const Center(
+                    child: Text('Currencies is empty, an error must have occured.'),
+                  );
+                }
 
-              var keyboardVisible = context.mediaQuery.viewInsets.bottom > 0;
+                var keyboardVisible = context.mediaQuery.viewInsets.bottom > 0;
 
-              return RefreshIndicator(
-                onRefresh: () async {
-                  paren.latestTimestamp.value = DateTime.now();
-                  await paren.fetchCurrencyDataOnline();
-                },
-                child: SingleChildScrollView(
-                  physics: const AlwaysScrollableScrollPhysics(),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      buildConvertTextField(currencies),
-                      // if (currencyTextInputController.value.text.isNotEmpty) ...[
-                      //   buildTipCalculator(currencies),
-                      // ],
-                      if (!keyboardVisible) ...[
-                        buildCurrencyChartTile(),
-                        buildCurrencyData(currencies),
-                        buildSaveConversion(),
-                        // buildLastUpdatedInfo(),
+                return RefreshIndicator(
+                  onRefresh: () async {
+                    paren.latestTimestamp.value = DateTime.now();
+                    await paren.fetchCurrencyDataOnline();
+                  },
+                  child: SingleChildScrollView(
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        buildConvertTextField(currencies),
+                        // if (currencyTextInputController.value.text.isNotEmpty) ...[
+                        //   buildTipCalculator(currencies),
+                        // ],
+                        if (!keyboardVisible) ...[
+                          buildCurrencyChartTile(),
+                          buildCurrencyData(currencies),
+                          buildSaveConversion(),
+                          // buildLastUpdatedInfo(),
+                        ],
+                        96.h,
                       ],
-                      96.h,
-                    ],
+                    ),
                   ),
+                );
+              },
+            ),
+          ),
+          bottomNavigationBar: Obx(
+            () {
+              if (loading.value) return 0.h;
+              var currencies = paren.currencies;
+              return SafeArea(
+                child: Container(
+                  margin: const EdgeInsets.symmetric(vertical: 8),
+                  child: buildCurrencyChangerRow(currencies),
                 ),
               );
             },
           ),
-        ),
-        bottomNavigationBar: Obx(
-          () {
-            if (loading.value) return 0.h;
-            var currencies = paren.currencies;
-            return SafeArea(
-              child: Container(
-                margin: const EdgeInsets.symmetric(vertical: 8),
-                child: buildCurrencyChangerRow(currencies),
-              ),
-            );
-          },
         ),
       ),
     );
@@ -187,7 +197,7 @@ class _HomeState extends State<Home> {
 
   Widget buildConvertTextField(List<Currency> currencies) {
     return Container(
-      padding: const EdgeInsets.only(left: 16, right: 16, top: 16),
+      padding: const EdgeInsets.only(left: 16, right: 16, top: 8),
       child: Column(
         children: [
           TextFormField(
@@ -195,23 +205,28 @@ class _HomeState extends State<Home> {
             controller: currencyTextInputController.value,
             autofocus: paren.autofocusTextField.value,
             decoration: InputDecoration(
+              contentPadding: EdgeInsets.symmetric(horizontal: 16),
               hintText:
                   'Enter amount in ${currencies[selectedFromCurrencyIndex.value].symbol} / ${currencies[selectedToCurrencyIndex.value].symbol}',
               filled: true,
               fillColor: context.theme.colorScheme.surfaceBright.withValues(alpha: 0.5),
-              suffixIcon: currencyTextInputController.value.text.isNotEmpty
-                  ? IconButton(
-                      icon: const Icon(Icons.close),
-                      color: context.theme.colorScheme.error,
-                      onPressed: () {
-                        currencyTextInputController.value.clear();
+              suffix: currencyTextInputController.value.text.isNotEmpty
+                  ? InkWell(
+                      onTap: () {
+                        currencyTextInputController.value.text = '';
                         currencyTextInputController.refresh();
                         currencyTextInputFocus.requestFocus();
                       },
-                      tooltip: 'Clear',
+                      child: Text(
+                        'Clear',
+                        style: TextStyle(
+                          color: context.theme.colorScheme.error,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                     )
                   : null,
-              counter: 0.w,
+              counter: 0.h,
             ),
             onChanged: (value) {
               currencyTextInputController.refresh();
@@ -239,7 +254,7 @@ class _HomeState extends State<Home> {
             autovalidateMode: AutovalidateMode.onUserInteraction,
             textInputAction: TextInputAction.done,
           ),
-          4.h,
+          8.h,
           Obx(
             () {
               var currencyTextInput = currencyTextInputController.value.text;
@@ -293,7 +308,7 @@ class _HomeState extends State<Home> {
                           textAlign: TextAlign.center,
                         ),
                         Text(
-                          '→',
+                          '➜',
                           style: TextStyle(
                             fontSize: paren.conv1Size.value,
                             fontWeight: FontWeight.bold,
@@ -327,7 +342,7 @@ class _HomeState extends State<Home> {
                           textAlign: TextAlign.center,
                         ),
                         Text(
-                          '→',
+                          '➜',
                           style: TextStyle(
                             fontSize: paren.conv2Size.value,
                             fontWeight: FontWeight.bold,
@@ -420,7 +435,7 @@ class _HomeState extends State<Home> {
                 onPressed: () {
                   SharePlus.instance.share(
                     ShareParams(
-                      text: '$inputStr → $amountStr',
+                      text: '$inputStr ➜ $amountStr',
                     ),
                   );
                 },
@@ -433,7 +448,7 @@ class _HomeState extends State<Home> {
                 ),
                 onPressed: () => Clipboard.setData(
                   ClipboardData(
-                    text: '$inputStr → $amountStr',
+                    text: '$inputStr ➜ $amountStr',
                   ),
                 ),
                 tooltip: 'Copy',

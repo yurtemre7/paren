@@ -72,9 +72,9 @@ class FavoritesScreen extends StatelessWidget {
                 onDismissed: (_) => paren.removeFavorite(favorite.id),
                 direction: DismissDirection.endToStart,
                 child: ListTile(
-                  title: Text('$inputFrom → $inputTo'),
+                  title: Text('$inputFrom ➜ $inputTo'),
                   subtitle:
-                      Text('${fromCurrency.id.toUpperCase()} → ${toCurrency.id.toUpperCase()}'),
+                      Text('${fromCurrency.id.toUpperCase()} ➜ ${toCurrency.id.toUpperCase()}'),
                   onTap: () {
                     paren.fromCurrency.value = favorite.fromCurrency;
                     paren.toCurrency.value = favorite.toCurrency;
