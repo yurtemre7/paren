@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:paren/providers/constants.dart';
 import 'package:paren/providers/extensions.dart';
 import 'package:paren/providers/paren.dart';
@@ -68,7 +69,7 @@ class _ExChartState extends State<ExChart> {
     });
   }
 
-  Future<void> fetchChartData(from, to) async {
+  Future<void> fetchChartData(String from, String to) async {
     isLoading.value = true;
     hasError.value = false;
     try {
@@ -383,7 +384,14 @@ class _ExChartState extends State<ExChart> {
       fontWeight: FontWeight.bold,
       fontSize: 14,
     );
-    String text = '${value.toPrecision(5)} ${paren.currencies[localIdxTo.value].symbol}';
+    NumberFormat numberFormatTo = NumberFormat.simpleCurrency(
+      name: paren.currencies[localIdxTo.value].id.toUpperCase(),
+      decimalDigits: 5,
+    );
+
+    var text = numberFormatTo.format(value);
+    // remove trailing zeros
+    text = text.replaceAll(RegExp(r'(\.0+|(?<=\.\d)0+)$'), '');
 
     return SideTitleWidget(
       meta: meta,
@@ -415,8 +423,18 @@ class _ExChartState extends State<ExChart> {
             return touchedSpots.map(
               (e) {
                 var isPrediction = predictionPoints.any((p) => p.x == e.x);
+
+                NumberFormat numberFormatTo = NumberFormat.simpleCurrency(
+                  name: paren.currencies[localIdxTo.value].id.toUpperCase(),
+                  decimalDigits: 5,
+                );
+
+                var text = numberFormatTo.format(e.y);
+                // remove trailing zeros
+                text = text.replaceAll(RegExp(r'(\.0+|(?<=\.\d)0+)$'), '');
+
                 return LineTooltipItem(
-                  '${e.y} ${paren.currencies[localIdxTo.value].symbol}'
+                  '$text'
                   '${isPrediction ? '\n(Prediction)\n' : '\n'}',
                   TextStyle(
                     fontWeight: FontWeight.bold,
@@ -486,7 +504,7 @@ class _ExChartState extends State<ExChart> {
         ),
         if (showPrediction.value && predictionPoints.isNotEmpty)
           LineChartBarData(
-            spots: predictionPoints.map((e) => FlSpot(e.x, e.y.toPrecision(2))).toList(),
+            spots: predictionPoints.map((e) => FlSpot(e.x, e.y.toPrecision(5))).toList(),
             color: context.theme.colorScheme.tertiary.withValues(alpha: 0.7),
             isStrokeCapRound: true,
             dotData: const FlDotData(show: false),
