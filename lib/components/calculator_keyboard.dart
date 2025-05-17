@@ -61,8 +61,11 @@ class CalculatorKeyboard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: context.width * 0.5,
+    return Container(
+      constraints: BoxConstraints(
+        maxWidth: 200,
+        // maxWidth: context.width * 0.5,
+      ),
       child: GridView.count(
         crossAxisCount: 3,
         shrinkWrap: true,
