@@ -141,7 +141,9 @@ class _CalcButtonState extends State<_CalcButton> with SingleTickerProviderState
         );
       },
       child: Material(
-        color: Theme.of(context).colorScheme.primaryContainer.withValues(alpha: 0.15),
+        color: context.theme.colorScheme.primaryContainer.withValues(
+          alpha: context.theme.brightness == Brightness.light ? 1 : 0.5,
+        ),
         borderRadius: BorderRadius.circular(12),
         child: InkWell(
           borderRadius: BorderRadius.circular(12),
@@ -152,7 +154,7 @@ class _CalcButtonState extends State<_CalcButton> with SingleTickerProviderState
               widget.label,
               style: TextStyle(
                 fontSize: 18,
-                color: widget.color ?? Theme.of(context).colorScheme.primary,
+                color: widget.color ?? context.theme.colorScheme.primary,
                 fontWeight: FontWeight.bold,
               ),
             ),
