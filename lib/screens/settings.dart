@@ -40,8 +40,8 @@ class _SettingsState extends State<Settings> {
           child: ListView(
             children: [
               buildAppInfo(),
-              buildAutofocusSwitch(),
-              buildCurrencyChangerRow(),
+              // buildAutofocusSwitch(),
+              // buildCurrencyChangerRow(),
               Divider(),
               buildAppThemeChanger(),
               buildAppColorChanger(),
