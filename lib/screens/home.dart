@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:paren/classes/currency.dart';
+import 'package:paren/components/budget_planner.dart';
 import 'package:paren/components/calculator_keyboard.dart';
 import 'package:paren/components/currency_changer_row.dart';
 import 'package:paren/providers/constants.dart';
@@ -143,6 +144,7 @@ class _HomeState extends State<Home> {
                         buildCurrencyChartTile(),
                         buildCurrencyData(currencies),
                         buildSaveConversion(),
+                        buildBudgetPlanner(),
 
                         // buildLastUpdatedInfo(),
                         // 96.h,
@@ -693,5 +695,34 @@ class _HomeState extends State<Home> {
 
   Widget buildCurrencyChangerRow(List<Currency> currencies) {
     return CurrencyChangerRow();
+  }
+
+  Widget buildBudgetPlanner() {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: ListTile(
+        title: const Text('Budget Planner'),
+        trailing: Icon(
+          Icons.monetization_on_outlined,
+          color: context.theme.colorScheme.primary,
+        ),
+        onTap: () {
+          Get.bottomSheet(
+            Card(
+              margin: EdgeInsets.zero,
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.vertical(
+                  top: Radius.circular(20),
+                ),
+              ),
+              child: ClipRRect(
+                borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+                child: BudgetPlanner(),
+              ),
+            ),
+          );
+        },
+      ),
+    );
   }
 }
