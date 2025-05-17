@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:paren/classes/currency.dart';
+import 'package:paren/providers/extensions.dart';
 import 'package:paren/providers/paren.dart';
 
 class CurrencyChangerRow extends StatefulWidget {
@@ -49,19 +50,26 @@ class _CurrencyChangerRowState extends State<CurrencyChangerRow>
   }
 
   Future<void> _showCurrencyPicker(bool isFrom) async {
-    String? selected = await showModalBottomSheet<String>(
-      context: context,
-      // isScrollControlled: true,
+    String? selected = await Get.bottomSheet(
+      Card(
+        margin: EdgeInsets.zero,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(
+            top: Radius.circular(20),
+          ),
+        ),
+        child: ClipRRect(
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+          child: CurrencyPickerSheet(
+            currencies: paren.currencies,
+            initialCurrency: isFrom ? paren.fromCurrency.value : paren.toCurrency.value,
+          ),
+        ),
+      ),
       backgroundColor: Theme.of(context).colorScheme.surface,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
-      builder: (context) {
-        return CurrencyPickerSheet(
-          currencies: paren.currencies,
-          initialCurrency: isFrom ? paren.fromCurrency.value : paren.toCurrency.value,
-        );
-      },
     );
     if (selected == null) return;
     if (isFrom) {
@@ -82,7 +90,7 @@ class _CurrencyChangerRowState extends State<CurrencyChangerRow>
       (currency) => currency.id == paren.toCurrency.value,
     );
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
+      padding: const EdgeInsets.symmetric(horizontal: 24),
       child: AnimatedBuilder(
         animation: _offsetAnimation,
         builder: (context, child) {
@@ -103,31 +111,20 @@ class _CurrencyChangerRowState extends State<CurrencyChangerRow>
                   margin: EdgeInsets.zero,
                   child: Container(
                     padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(
-                          from.id.toUpperCase(),
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18,
-                            color: context.theme.colorScheme.primary,
-                          ),
-                        ),
-                        Text(
-                          from.symbol,
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: context.theme.colorScheme.primary.withValues(alpha: 0.7),
-                          ),
-                        ),
-                      ],
+                    child: Text(
+                      '${from.id.toUpperCase()} (${from.symbol})',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
+                        color: context.theme.colorScheme.primary,
+                      ),
+                      textAlign: TextAlign.center,
                     ),
                   ),
                 ),
               ),
             ),
-            Padding(
+            Container(
               padding: const EdgeInsets.symmetric(horizontal: 8),
               child: IconButton(
                 visualDensity: VisualDensity.compact,
@@ -143,25 +140,14 @@ class _CurrencyChangerRowState extends State<CurrencyChangerRow>
                   margin: EdgeInsets.zero,
                   child: Padding(
                     padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(
-                          to.id.toUpperCase(),
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18,
-                            color: context.theme.colorScheme.primary,
-                          ),
-                        ),
-                        Text(
-                          to.symbol,
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: context.theme.colorScheme.primary.withValues(alpha: 0.7),
-                          ),
-                        ),
-                      ],
+                    child: Text(
+                      '${to.id.toUpperCase()} (${to.symbol})',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
+                        color: context.theme.colorScheme.primary,
+                      ),
+                      textAlign: TextAlign.center,
                     ),
                   ),
                 ),
@@ -216,44 +202,62 @@ class _CurrencyPickerSheetState extends State<CurrencyPickerSheet> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Padding(
-        padding: EdgeInsets.only(
-          bottom: MediaQuery.of(context).viewInsets.bottom,
-          top: 16,
-          left: 16,
-          right: 16,
+    return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+          onPressed: () => Get.back(),
+          icon: const Icon(
+            Icons.close,
+          ),
+          color: context.theme.colorScheme.primary,
         ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            TextField(
-              controller: _searchController,
-              decoration: InputDecoration(
-                hintText: 'Search currency',
-                prefixIcon: Icon(Icons.search),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
+        title: Text(
+          'Select Currency',
+          style: TextStyle(
+            color: context.theme.colorScheme.primary,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
+      body: SafeArea(
+        child: Padding(
+          padding: EdgeInsets.only(
+            bottom: MediaQuery.of(context).viewInsets.bottom,
+            top: 8,
+            left: 16,
+            right: 16,
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextField(
+                controller: _searchController,
+                decoration: InputDecoration(
+                  hintText: 'Search currency',
+                  prefixIcon: Icon(Icons.search),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
                 ),
               ),
-            ),
-            SizedBox(height: 16),
-            Expanded(
-              child: ListView.builder(
-                shrinkWrap: true,
-                itemCount: _filteredIndices.length,
-                itemBuilder: (context, idx) {
-                  var i = _filteredIndices[idx];
-                  var currency = widget.currencies[i];
-                  return ListTile(
-                    title: Text('${currency.id.toUpperCase()} (${currency.symbol})'),
-                    selected: currency.id == widget.initialCurrency,
-                    onTap: () => Navigator.of(context).pop(currency.id),
-                  );
-                },
+              8.h,
+              Expanded(
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: _filteredIndices.length,
+                  itemBuilder: (context, idx) {
+                    var i = _filteredIndices[idx];
+                    var currency = widget.currencies[i];
+                    return ListTile(
+                      title: Text('${currency.id.toUpperCase()} (${currency.symbol})'),
+                      selected: currency.id == widget.initialCurrency,
+                      onTap: () => Navigator.of(context).pop(currency.id),
+                    );
+                  },
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
