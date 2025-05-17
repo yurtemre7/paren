@@ -423,51 +423,70 @@ class _HomeState extends State<Home> {
           top: Radius.circular(20),
         ),
       ),
-      child: SafeArea(
-        child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 32),
-          child: Obx(() {
-            return Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Container(
-                  alignment: Alignment.center,
-                  child: Text(
-                    'Adjust Text Size',
-                    style: TextStyle(
-                      color: context.theme.colorScheme.primary,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20,
+      child: ClipRRect(
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+        child: Scaffold(
+          appBar: AppBar(
+            leading: IconButton(
+              onPressed: () => Get.back(),
+              icon: const Icon(
+                Icons.close,
+              ),
+              color: context.theme.colorScheme.primary,
+            ),
+            title: Text(
+              'Adjust Text Size',
+              style: TextStyle(
+                color: context.theme.colorScheme.primary,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+          body: SafeArea(
+            child: Container(
+              padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 32),
+              child: Obx(() {
+                return Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Text(
+                      'Primary Conversion',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                  ),
-                ),
-                20.h,
-                const Text('Primary Conversion'),
-                Slider(
-                  value: paren.conv1Size.value,
-                  onChanged: (value) {
-                    paren.conv1Size.value = value;
-                  },
-                  min: paren.convSizeRanges.min,
-                  max: paren.convSizeRanges.max,
-                  divisions: 20,
-                  label: '${paren.conv1Size.value}',
-                ),
-                const Divider(),
-                const Text('Secondary Conversion'),
-                Slider(
-                  value: paren.conv2Size.value,
-                  onChanged: (value) {
-                    paren.conv2Size.value = value;
-                  },
-                  min: paren.convSizeRanges.min,
-                  max: paren.convSizeRanges.max,
-                  divisions: 20,
-                  label: '${paren.conv2Size.value}',
-                ),
-              ],
-            );
-          }),
+                    Slider(
+                      value: paren.conv1Size.value,
+                      onChanged: (value) {
+                        paren.conv1Size.value = value;
+                      },
+                      min: paren.convSizeRanges.min,
+                      max: paren.convSizeRanges.max,
+                      divisions: 20,
+                      label: '${paren.conv1Size.value}',
+                    ),
+                    const Divider(),
+                    const Text(
+                      'Secondary Conversion',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Slider(
+                      value: paren.conv2Size.value,
+                      onChanged: (value) {
+                        paren.conv2Size.value = value;
+                      },
+                      min: paren.convSizeRanges.min,
+                      max: paren.convSizeRanges.max,
+                      divisions: 20,
+                      label: '${paren.conv2Size.value}',
+                    ),
+                  ],
+                );
+              }),
+            ),
+          ),
         ),
       ),
     );
