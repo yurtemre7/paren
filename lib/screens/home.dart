@@ -490,7 +490,7 @@ class _HomeState extends State<Home> {
                 ),
               ),
             ),
-            isScrollControlled: true,
+            isScrollControlled: !(GetPlatform.isIOS || GetPlatform.isAndroid),
           );
         },
       ),
