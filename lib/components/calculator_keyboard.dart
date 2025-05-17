@@ -2,6 +2,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:paren/providers/extensions.dart';
 
 /// Calculator-style numeric keyboard widget.
 class CalculatorKeyboard extends StatelessWidget {
@@ -49,14 +50,18 @@ class CalculatorKeyboard extends StatelessWidget {
   void _delete() {
     var text = input.value;
     if (text.isNotEmpty) {
-      input.value = text.substring(0, text.length - 1);
+      if (text.length == 1) {
+        input.value = '0';
+      } else {
+        input.value = text.substring(0, text.length - 1);
+      }
     }
     // print('input: $text');
     // print('input.value: ${input.value}');
   }
 
   void _clear() {
-    input.value = '';
+    input.value = '0';
   }
 
   @override
@@ -66,31 +71,46 @@ class CalculatorKeyboard extends StatelessWidget {
         maxWidth: 200,
         // maxWidth: context.width * 0.5,
       ),
-      child: GridView.count(
-        crossAxisCount: 3,
-        shrinkWrap: true,
-        physics: const NeverScrollableScrollPhysics(),
-        mainAxisSpacing: 8,
-        crossAxisSpacing: 8,
+      child: Column(
         children: [
-          for (var i = 1; i <= 9; i++)
-            _CalcButton(
-              label: '$i',
-              onTap: () => _append('$i'),
+          Obx(
+            () => Text(
+              input.value,
+              style: TextStyle(
+                fontSize: 24,
+                color: context.theme.colorScheme.primary,
+                fontWeight: FontWeight.bold,
+              ),
             ),
-          _CalcButton(
-            label: '.',
-            onTap: () => _append('.'),
           ),
-          _CalcButton(
-            label: '0',
-            onTap: () => _append('0'),
-          ),
-          _CalcButton(
-            label: 'C',
-            onTap: _delete,
-            onLongPress: _clear,
-            color: Theme.of(context).colorScheme.error,
+          8.h,
+          GridView.count(
+            crossAxisCount: 3,
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            mainAxisSpacing: 8,
+            crossAxisSpacing: 8,
+            children: [
+              for (var i = 1; i <= 9; i++)
+                _CalcButton(
+                  label: '$i',
+                  onTap: () => _append('$i'),
+                ),
+              _CalcButton(
+                label: '.',
+                onTap: () => _append('.'),
+              ),
+              _CalcButton(
+                label: '0',
+                onTap: () => _append('0'),
+              ),
+              _CalcButton(
+                label: 'C',
+                onTap: _delete,
+                onLongPress: _clear,
+                color: Theme.of(context).colorScheme.error,
+              ),
+            ],
           ),
         ],
       ),
