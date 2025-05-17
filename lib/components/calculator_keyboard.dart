@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:paren/providers/extensions.dart';
 
@@ -157,11 +158,13 @@ class _CalcButtonState extends State<_CalcButton> with SingleTickerProviderState
 
   void _onTap() {
     _controller.forward(from: 0.0);
+    HapticFeedback.mediumImpact();
     widget.onTap();
   }
 
   void _onLongPress() {
     _controller.forward(from: 0.0);
+    HapticFeedback.mediumImpact();
     widget.onLongPress?.call();
   }
 
