@@ -35,127 +35,146 @@ class _SettingsState extends State<Settings> {
           ),
         ),
       ),
-      body: Obx(
-        () => SafeArea(
-          child: ListView(
-            children: [
-              buildAppInfo(),
-              // buildAutofocusSwitch(),
-              // buildCurrencyChangerRow(),
-              Divider(),
-              buildAppThemeChanger(),
-              buildAppColorChanger(),
-              Divider(),
-              buildFeedback(),
-              Divider(),
-              24.h,
-              const Center(
-                child: Text('Made in 🇩🇪 by Emre'),
-              ),
-              24.h,
-            ],
-          ),
+      body: SafeArea(
+        child: ListView(
+          children: [
+            buildAppInfo(),
+            // buildAutofocusSwitch(),
+            // buildCurrencyChangerRow(),
+            Divider(),
+            buildAppThemeChanger(),
+            buildAppColorChanger(),
+            Divider(),
+            buildFeedback(),
+            Divider(),
+            24.h,
+            const Center(
+              child: Text('Made in 🇩🇪 by Emre'),
+            ),
+            24.h,
+          ],
         ),
       ),
     );
   }
 
   Widget buildAppColorChanger() {
-    return ListTile(
-      title: const Text('App Color'),
-      subtitle: SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        child: Obx(
-          () => Row(
-            children: [
-              ...Colors.primaries.map((color) {
-                return Container(
-                  margin: const EdgeInsets.only(right: 8, top: 8),
-                  child: ChoiceChip(
-                    label: Text(
-                      'Color',
-                      style: TextStyle(
-                        color: color.computeLuminance() > 0.5 ? Colors.black : Colors.white,
-                      ),
-                    ),
-                    backgroundColor: color,
-                    selectedColor: color,
-                    color: WidgetStatePropertyAll(color),
-                    checkmarkColor: color.computeLuminance() > 0.5 ? Colors.black : Colors.white,
-                    selected: color.getValue == paren.appColor.value,
-                    onSelected: (value) {
-                      paren.appColor.value = color.getValue;
-                      paren.saveSettings();
-                      paren.setTheme();
-                      Future.delayed(500.milliseconds, () {
-                        if (!mounted) return;
-                        SystemChrome.setSystemUIOverlayStyle(
-                          SystemUiOverlayStyle(
-                            systemNavigationBarColor: context.theme.colorScheme.surface,
-                          ),
-                        );
-                      });
-                    },
-                  ),
-                );
-              }),
-            ],
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+      child: Column(
+        children: [
+          const Text(
+            'App Color',
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+            ),
           ),
-        ),
+          Obx(
+            () => SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: [
+                  ...Colors.primaries.map((color) {
+                    return Container(
+                      margin: const EdgeInsets.only(right: 8, top: 8),
+                      child: ChoiceChip(
+                        label: Text(
+                          'Color',
+                          style: TextStyle(
+                            color: color.computeLuminance() > 0.5 ? Colors.black : Colors.white,
+                          ),
+                        ),
+                        backgroundColor: color,
+                        selectedColor: color,
+                        color: WidgetStatePropertyAll(color),
+                        checkmarkColor:
+                            color.computeLuminance() > 0.5 ? Colors.black : Colors.white,
+                        selected: color.getValue == paren.appColor.value,
+                        onSelected: (value) {
+                          paren.appColor.value = color.getValue;
+                          paren.saveSettings();
+                          paren.setTheme();
+                          Future.delayed(500.milliseconds, () {
+                            if (!mounted) return;
+                            SystemChrome.setSystemUIOverlayStyle(
+                              SystemUiOverlayStyle(
+                                systemNavigationBarColor: context.theme.colorScheme.surface,
+                              ),
+                            );
+                          });
+                        },
+                      ),
+                    );
+                  }),
+                ],
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
 
   Widget buildAppThemeChanger() {
-    var themeMode = paren.appThemeMode.value.index;
-    DropdownButton<int> dropdownButton = DropdownButton<int>(
-      value: themeMode,
-      items: [
-        ...ThemeMode.values.map((mode) {
-          return DropdownMenuItem(
-            value: mode.index,
-            child: Text(
-              mode.name[0].toUpperCase() + mode.name.substring(1),
-              style: TextStyle(
-                color: context.theme.colorScheme.primary,
-              ),
-            ),
-          );
-        }),
-      ],
-      onChanged: (v) async {
-        paren.appThemeMode.value = ThemeMode.values[v!];
-        paren.setTheme();
-        await paren.saveSettings();
-        if (!mounted) return;
-        Future.delayed(500.milliseconds, () {
-          if (!mounted) return;
-          SystemChrome.setSystemUIOverlayStyle(
-            SystemUiOverlayStyle(
-              systemNavigationBarColor: context.theme.colorScheme.surface,
-            ),
-          );
-        });
-        // pop();
-      },
-      isDense: true,
-      underline: Container(),
-      iconEnabledColor: context.theme.colorScheme.primary,
-    );
+    var themeOptions = [
+      {'icon': Icons.phone_android, 'label': 'System'},
+      {'icon': Icons.light_mode, 'label': 'Light'},
+      {'icon': Icons.dark_mode, 'label': 'Dark'},
+    ];
 
-    return ListTile(
-      title: Text(
-        'App Theme',
-      ),
-      subtitle: Text(
-        'Customize the apps theme.',
-      ),
-      trailing: Card(
-        child: Container(
-          padding: const EdgeInsets.all(10),
-          child: dropdownButton,
+    return Column(
+      children: [
+        const Text(
+          'App Theme',
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+          ),
         ),
-      ),
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+          child: Obx(
+            () => ToggleButtons(
+              borderRadius: BorderRadius.circular(8),
+              isSelected: List.generate(3, (i) => i == paren.appThemeMode.value.index),
+              onPressed: (int index) async {
+                if (paren.appThemeMode.value.index == index) return;
+                paren.appThemeMode.value = ThemeMode.values[index];
+                paren.setTheme();
+                await paren.saveSettings();
+                if (!mounted) return;
+                Future.delayed(500.milliseconds, () {
+                  if (!mounted) return;
+                  SystemChrome.setSystemUIOverlayStyle(
+                    SystemUiOverlayStyle(
+                      systemNavigationBarColor: context.theme.colorScheme.surface,
+                    ),
+                  );
+                });
+              },
+              selectedColor: context.theme.colorScheme.onPrimary,
+              fillColor: context.theme.colorScheme.primary,
+              color: context.theme.colorScheme.primary,
+              children: themeOptions
+                  .map(
+                    (option) => Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(option['icon'] as IconData, size: 20),
+                          const SizedBox(height: 2),
+                          Text(option['label'] as String, style: const TextStyle(fontSize: 12)),
+                        ],
+                      ),
+                    ),
+                  )
+                  .toList(),
+            ),
+          ),
+        ),
+      ],
     );
   }
 
