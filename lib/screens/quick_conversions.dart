@@ -5,8 +5,8 @@ import 'package:paren/classes/currency.dart';
 
 class QuickConversions extends StatelessWidget {
   final List<Currency> currencies;
-  final int toCurr;
-  final int fromCurr;
+  final String toCurr;
+  final String fromCurr;
 
   const QuickConversions({
     super.key,
@@ -60,8 +60,12 @@ class QuickConversions extends StatelessWidget {
                 50000,
                 100000,
               ].map((currentValue) {
-                var fromCurrency = currencies[fromCurr];
-                var toCurrency = currencies[toCurr];
+                var fromCurrency = currencies.firstWhere(
+                  (element) => element.id == fromCurr,
+                );
+                var toCurrency = currencies.firstWhere(
+                  (element) => element.id == toCurr,
+                );
 
                 var fromRate = fromCurrency.rate;
                 var toRate = toCurrency.rate;
