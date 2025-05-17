@@ -376,11 +376,23 @@ class _HomeState extends State<Home> {
                   Icons.content_copy,
                   color: context.theme.colorScheme.primary,
                 ),
-                onPressed: () => Clipboard.setData(
-                  ClipboardData(
-                    text: '$inputStr ➜ $amountStr',
-                  ),
-                ),
+                onPressed: () {
+                  Clipboard.setData(
+                    ClipboardData(
+                      text: '$inputStr ➜ $amountStr',
+                    ),
+                  );
+                  Get.snackbar(
+                    'Copied to clipboard',
+                    '$inputStr ➜ $amountStr',
+                    duration: const Duration(
+                      seconds: 1,
+                    ),
+                    snackPosition: SnackPosition.BOTTOM,
+                    backgroundColor: context.theme.colorScheme.primaryContainer,
+                    colorText: context.theme.colorScheme.primary,
+                  );
+                },
                 tooltip: 'Copy',
               ),
             ],
