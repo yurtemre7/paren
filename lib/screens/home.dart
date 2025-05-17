@@ -29,11 +29,10 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   final Paren paren = Get.find();
 
-  final currencyTextInputController = TextEditingController(text: '1').obs;
-
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   final loading = true.obs;
+  final currencyTextInput = '1'.obs;
 
   @override
   void initState() {
@@ -73,7 +72,6 @@ class _HomeState extends State<Home> {
 
   @override
   void dispose() {
-    currencyTextInputController.value.dispose();
     super.dispose();
   }
 
@@ -137,15 +135,17 @@ class _HomeState extends State<Home> {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         buildConvertTextField(currencies),
+                        buildCurrencyChangerRow(currencies),
                         // if (currencyTextInputController.value.text.isNotEmpty) ...[
                         //   buildTipCalculator(currencies),
                         // ],
+                        8.h,
                         buildCurrencyChartTile(),
                         buildCurrencyData(currencies),
                         buildSaveConversion(),
-                        buildCurrencyChangerRow(currencies),
+
                         // buildLastUpdatedInfo(),
-                        96.h,
+                        // 96.h,
                       ],
                     ),
                   ),
@@ -163,10 +163,7 @@ class _HomeState extends State<Home> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       CalculatorKeyboard(
-                        controller: currencyTextInputController.value,
-                        onChanged: () {
-                          currencyTextInputController.refresh();
-                        },
+                        input: currencyTextInput,
                       ),
                     ],
                   ),
@@ -186,12 +183,11 @@ class _HomeState extends State<Home> {
         children: [
           Obx(
             () {
-              var currencyTextInput = currencyTextInputController.value.text;
-              if (currencyTextInput.isEmpty) {
-                currencyTextInput = '0';
+              if (currencyTextInput.value.isEmpty) {
+                currencyTextInput.value = '0';
               }
-              if (currencyTextInput.contains(',')) {
-                currencyTextInput = currencyTextInput.replaceAll(',', '.');
+              if (currencyTextInput.value.contains(',')) {
+                currencyTextInput.value = currencyTextInput.value.replaceAll(',', '.');
               }
 
               var fromCurrency = currencies.firstWhere(
@@ -204,9 +200,11 @@ class _HomeState extends State<Home> {
               var fromRate = fromCurrency.rate;
               var toRate = toCurrency.rate;
 
-              var inputConverted = (double.tryParse(currencyTextInput) ?? 0);
-              var convertedAmount = (double.tryParse(currencyTextInput) ?? 0) * toRate / fromRate;
-              var reConvertedAmount = (double.tryParse(currencyTextInput) ?? 0) * fromRate / toRate;
+              var inputConverted = (double.tryParse(currencyTextInput.value) ?? 0);
+              var convertedAmount =
+                  (double.tryParse(currencyTextInput.value) ?? 0) * toRate / fromRate;
+              var reConvertedAmount =
+                  (double.tryParse(currencyTextInput.value) ?? 0) * fromRate / toRate;
 
               NumberFormat numberFormatFrom = NumberFormat.simpleCurrency(
                 name: fromCurrency.id.toUpperCase(),
@@ -511,8 +509,7 @@ class _HomeState extends State<Home> {
                 buildQuickConversions(currencies),
               );
               if (result != null) {
-                currencyTextInputController.value.text = result.toString();
-                currencyTextInputController.refresh();
+                currencyTextInput.value = result.toString();
               }
             },
             trailing: Icon(Icons.table_chart_outlined),
