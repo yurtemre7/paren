@@ -1,12 +1,13 @@
 import 'dart:async';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:paren/classes/currency.dart';
+import 'package:paren/components/calculator_keyboard.dart';
+import 'package:paren/components/currency_changer_row.dart';
 import 'package:paren/providers/constants.dart';
 import 'package:paren/providers/extensions.dart';
 import 'package:paren/providers/paren.dart';
@@ -29,9 +30,6 @@ class _HomeState extends State<Home> {
   final Paren paren = Get.find();
 
   final currencyTextInputController = TextEditingController(text: '1').obs;
-  final currencyTextInputFocus = FocusNode();
-  final selectedToCurrencyIndex = 0.obs;
-  final selectedFromCurrencyIndex = 2.obs;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -44,7 +42,6 @@ class _HomeState extends State<Home> {
     Future.delayed(0.seconds, () async {
       if (!mounted) return;
       await initParen();
-      updateCurrencySwap();
       await SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
     });
   }
@@ -74,22 +71,9 @@ class _HomeState extends State<Home> {
     });
   }
 
-  void updateCurrencySwap() {
-    var currencies = paren.currencies;
-    var idxFrom = currencies.indexWhere((currency) => currency.id == paren.fromCurrency.value);
-    if (idxFrom != -1) {
-      selectedFromCurrencyIndex.value = idxFrom;
-    }
-    var idxTo = currencies.indexWhere((currency) => currency.id == paren.toCurrency.value);
-    if (idxTo != -1) {
-      selectedToCurrencyIndex.value = idxTo;
-    }
-  }
-
   @override
   void dispose() {
     currencyTextInputController.value.dispose();
-    currencyTextInputFocus.dispose();
     super.dispose();
   }
 
@@ -110,11 +94,6 @@ class _HomeState extends State<Home> {
         },
         child: Scaffold(
           key: scaffoldKey,
-          onEndDrawerChanged: (isOpened) {
-            if (!isOpened) {
-              updateCurrencySwap();
-            }
-          },
           backgroundColor: context.theme.colorScheme.surface,
           appBar: PreferredSize(
             preferredSize: const Size.fromHeight(80),
@@ -123,7 +102,6 @@ class _HomeState extends State<Home> {
                 Get.dialog(buildDataInfoSheet());
               },
               onSettings: () async {
-                currencyTextInputFocus.unfocus();
                 scaffoldKey.currentState?.openEndDrawer();
               },
             ),
@@ -147,8 +125,6 @@ class _HomeState extends State<Home> {
                   );
                 }
 
-                var keyboardVisible = context.mediaQuery.viewInsets.bottom > 0;
-
                 return RefreshIndicator(
                   onRefresh: () async {
                     paren.latestTimestamp.value = DateTime.now();
@@ -164,12 +140,11 @@ class _HomeState extends State<Home> {
                         // if (currencyTextInputController.value.text.isNotEmpty) ...[
                         //   buildTipCalculator(currencies),
                         // ],
-                        if (!keyboardVisible) ...[
-                          buildCurrencyChartTile(),
-                          buildCurrencyData(currencies),
-                          buildSaveConversion(),
-                          // buildLastUpdatedInfo(),
-                        ],
+                        buildCurrencyChartTile(),
+                        buildCurrencyData(currencies),
+                        buildSaveConversion(),
+                        buildCurrencyChangerRow(currencies),
+                        // buildLastUpdatedInfo(),
                         96.h,
                       ],
                     ),
@@ -181,11 +156,20 @@ class _HomeState extends State<Home> {
           bottomNavigationBar: Obx(
             () {
               if (loading.value) return 0.h;
-              var currencies = paren.currencies;
               return SafeArea(
                 child: Container(
                   margin: const EdgeInsets.symmetric(vertical: 8),
-                  child: buildCurrencyChangerRow(currencies),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      CalculatorKeyboard(
+                        controller: currencyTextInputController.value,
+                        onChanged: () {
+                          currencyTextInputController.refresh();
+                        },
+                      ),
+                    ],
+                  ),
                 ),
               );
             },
@@ -197,64 +181,9 @@ class _HomeState extends State<Home> {
 
   Widget buildConvertTextField(List<Currency> currencies) {
     return Container(
-      padding: const EdgeInsets.only(left: 16, right: 16, top: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Column(
         children: [
-          TextFormField(
-            focusNode: currencyTextInputFocus,
-            controller: currencyTextInputController.value,
-            autofocus: paren.autofocusTextField.value,
-            decoration: InputDecoration(
-              contentPadding: EdgeInsets.symmetric(horizontal: 16),
-              hintText:
-                  'Enter amount in ${currencies[selectedFromCurrencyIndex.value].symbol} / ${currencies[selectedToCurrencyIndex.value].symbol}',
-              filled: true,
-              fillColor: context.theme.colorScheme.surfaceBright.withValues(alpha: 0.5),
-              suffix: currencyTextInputController.value.text.isNotEmpty
-                  ? InkWell(
-                      onTap: () {
-                        currencyTextInputController.value.text = '';
-                        currencyTextInputController.refresh();
-                        currencyTextInputFocus.requestFocus();
-                      },
-                      child: Text(
-                        'Clear',
-                        style: TextStyle(
-                          color: context.theme.colorScheme.error,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    )
-                  : null,
-              counter: 0.h,
-            ),
-            onChanged: (value) {
-              currencyTextInputController.refresh();
-            },
-            keyboardType: kIsWeb ? null : const TextInputType.numberWithOptions(decimal: true),
-            inputFormatters: kIsWeb
-                ? null
-                : [
-                    FilteringTextInputFormatter.allow(RegExp(r'^\d*([.,]?\d{0,2})?')),
-                  ],
-            maxLength: 30,
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return null;
-              }
-              if (value.contains(',')) {
-                value = value.replaceAll(',', '.');
-              }
-              var toDouble = double.tryParse(value);
-              if (toDouble == null) {
-                return 'Please check your entered decimal number';
-              }
-              return null;
-            },
-            autovalidateMode: AutovalidateMode.onUserInteraction,
-            textInputAction: TextInputAction.done,
-          ),
-          8.h,
           Obx(
             () {
               var currencyTextInput = currencyTextInputController.value.text;
@@ -265,8 +194,12 @@ class _HomeState extends State<Home> {
                 currencyTextInput = currencyTextInput.replaceAll(',', '.');
               }
 
-              var fromCurrency = currencies[selectedFromCurrencyIndex.value];
-              var toCurrency = currencies[selectedToCurrencyIndex.value];
+              var fromCurrency = currencies.firstWhere(
+                (element) => element.id == paren.fromCurrency.value,
+              );
+              var toCurrency = currencies.firstWhere(
+                (element) => element.id == paren.toCurrency.value,
+              );
 
               var fromRate = fromCurrency.rate;
               var toRate = toCurrency.rate;
@@ -403,9 +336,8 @@ class _HomeState extends State<Home> {
                     return Icon(
                       paren.favorites.any(
                         (fav) {
-                          return fav.fromCurrency ==
-                                  currencies[selectedFromCurrencyIndex.value].id &&
-                              fav.toCurrency == currencies[selectedToCurrencyIndex.value].id &&
+                          return fav.fromCurrency == paren.fromCurrency.value &&
+                              fav.toCurrency == paren.toCurrency.value &&
                               fav.amount.toStringAsFixed(2) == inputConverted.toStringAsFixed(2);
                         },
                       )
@@ -420,8 +352,8 @@ class _HomeState extends State<Home> {
                   if (amount > 0) {
                     paren.toggleFavorite(
                       amount,
-                      currencies[selectedFromCurrencyIndex.value].id,
-                      currencies[selectedToCurrencyIndex.value].id,
+                      paren.fromCurrency.value,
+                      paren.toCurrency.value,
                     );
                   }
                 },
@@ -536,7 +468,7 @@ class _HomeState extends State<Home> {
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: ListTile(
         title: Text(
-          '${paren.currencies[selectedFromCurrencyIndex.value].id.toUpperCase()} - ${paren.currencies[selectedToCurrencyIndex.value].id.toUpperCase()} exchange chart',
+          '${paren.fromCurrency.toUpperCase()} - ${paren.toCurrency.toUpperCase()} exchange chart',
         ),
         trailing: Icon(
           Icons.line_axis_outlined,
@@ -549,10 +481,14 @@ class _HomeState extends State<Home> {
               child: ClipRRect(
                 borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
                 child: ExChart(
-                  idFrom: paren.currencies[selectedFromCurrencyIndex.value].id,
-                  idxFrom: selectedFromCurrencyIndex.value,
-                  idTo: paren.currencies[selectedToCurrencyIndex.value].id,
-                  idxTo: selectedToCurrencyIndex.value,
+                  idFrom: paren.fromCurrency.value,
+                  idxFrom: paren.currencies.indexWhere(
+                    (element) => element.id == paren.fromCurrency.value,
+                  ),
+                  idTo: paren.toCurrency.value,
+                  idxTo: paren.currencies.indexWhere(
+                    (element) => element.id == paren.toCurrency.value,
+                  ),
                 ),
               ),
             ),
@@ -577,7 +513,6 @@ class _HomeState extends State<Home> {
               if (result != null) {
                 currencyTextInputController.value.text = result.toString();
                 currencyTextInputController.refresh();
-                currencyTextInputFocus.requestFocus();
               }
             },
             trailing: Icon(Icons.table_chart_outlined),
@@ -621,8 +556,8 @@ class _HomeState extends State<Home> {
         borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
         child: QuickConversions(
           currencies: currencies,
-          fromCurr: selectedFromCurrencyIndex.value,
-          toCurr: selectedToCurrencyIndex.value,
+          fromCurr: paren.fromCurrency.value,
+          toCurr: paren.toCurrency.value,
         ),
       ),
     );
@@ -639,7 +574,6 @@ class _HomeState extends State<Home> {
         ),
         onTap: () async {
           await Get.bottomSheet(buildFavoriteSheet());
-          updateCurrencySwap();
         },
       ),
     );
@@ -730,121 +664,6 @@ class _HomeState extends State<Home> {
   }
 
   Widget buildCurrencyChangerRow(List<Currency> currencies) {
-    return AnimatedSwitcher(
-      duration: 500.milliseconds,
-      switchInCurve: Curves.easeInOutCubic,
-      switchOutCurve: Curves.easeInOutCubic,
-      layoutBuilder: (currentChild, previousChildren) {
-        return Stack(
-          alignment: Alignment.center,
-          children: <Widget>[currentChild!],
-        );
-      },
-      transitionBuilder: (Widget child, Animation<double> animation) {
-        return RotationTransition(
-          turns: Tween<double>(begin: -0.5, end: 0.0).animate(animation),
-          child: FadeTransition(
-            opacity: animation,
-            child: child,
-          ),
-        );
-      },
-      child: Container(
-        margin: EdgeInsets.symmetric(horizontal: 2),
-        key: ValueKey<String>(
-          '${selectedFromCurrencyIndex}_$selectedToCurrencyIndex',
-        ),
-        child: Wrap(
-          alignment: WrapAlignment.center,
-          crossAxisAlignment: WrapCrossAlignment.center,
-          runSpacing: 4,
-          children: [
-            Card(
-              margin: EdgeInsets.zero,
-              child: Container(
-                padding: const EdgeInsets.all(4),
-                child: DropdownButton(
-                  menuMaxHeight: context.height * 0.4,
-                  items: currencies.indexed.map(
-                    ((int i, Currency e) position) {
-                      var i = position.$1;
-                      var e = position.$2;
-                      return DropdownMenuItem(
-                        value: i,
-                        alignment: Alignment.center,
-                        child: Text(
-                          '${e.id.toUpperCase()} (${e.symbol})',
-                          style: TextStyle(
-                            color: context.theme.colorScheme.primary,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                      );
-                    },
-                  ).toList(),
-                  isDense: true,
-                  underline: Container(),
-                  focusColor: Colors.transparent,
-                  alignment: Alignment.center,
-                  iconEnabledColor: context.theme.colorScheme.primary,
-                  onChanged: (value) {
-                    selectedFromCurrencyIndex.value = value ?? 0;
-                  },
-                  value: selectedFromCurrencyIndex.value,
-                ),
-              ),
-            ),
-            4.w,
-            IconButton(
-              visualDensity: VisualDensity.compact,
-              icon: const Icon(Icons.compare_arrows_outlined),
-              color: context.theme.colorScheme.primary,
-              onPressed: () {
-                HapticFeedback.selectionClick();
-                var temp = selectedFromCurrencyIndex.value;
-                selectedFromCurrencyIndex.value = selectedToCurrencyIndex.value;
-                selectedToCurrencyIndex.value = temp;
-              },
-            ),
-            4.w,
-            Card(
-              margin: EdgeInsets.zero,
-              child: Container(
-                padding: const EdgeInsets.all(4),
-                child: DropdownButton(
-                  menuMaxHeight: context.height * 0.4,
-                  items: currencies.indexed.map(
-                    ((int, Currency) position) {
-                      var i = position.$1;
-                      var e = position.$2;
-                      return DropdownMenuItem(
-                        value: i,
-                        alignment: Alignment.center,
-                        child: Text(
-                          '${e.id.toUpperCase()} (${e.symbol})',
-                          style: TextStyle(
-                            color: context.theme.colorScheme.primary,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                      );
-                    },
-                  ).toList(),
-                  isDense: true,
-                  underline: Container(),
-                  focusColor: Colors.transparent,
-                  alignment: Alignment.center,
-                  iconEnabledColor: context.theme.colorScheme.primary,
-                  onChanged: (value) {
-                    selectedToCurrencyIndex.value = value ?? 0;
-                  },
-                  value: selectedToCurrencyIndex.value,
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
+    return CurrencyChangerRow();
   }
 }
