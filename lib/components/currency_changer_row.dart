@@ -105,10 +105,12 @@ class _CurrencyChangerRowState extends State<CurrencyChangerRow>
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Expanded(
-              child: GestureDetector(
-                onTap: () => _showCurrencyPicker(true),
-                child: Card(
-                  margin: EdgeInsets.zero,
+              child: Card(
+                color: context.theme.colorScheme.secondaryContainer,
+                margin: EdgeInsets.zero,
+                child: InkWell(
+                  borderRadius: BorderRadius.circular(8),
+                  onTap: () => _showCurrencyPicker(true),
                   child: Container(
                     padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
                     child: Text(
@@ -134,10 +136,12 @@ class _CurrencyChangerRowState extends State<CurrencyChangerRow>
               ),
             ),
             Expanded(
-              child: GestureDetector(
-                onTap: () => _showCurrencyPicker(false),
-                child: Card(
-                  margin: EdgeInsets.zero,
+              child: Card(
+                color: context.theme.colorScheme.secondaryContainer,
+                margin: EdgeInsets.zero,
+                child: InkWell(
+                  borderRadius: BorderRadius.circular(8),
+                  onTap: () => _showCurrencyPicker(false),
                   child: Padding(
                     padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
                     child: Text(
