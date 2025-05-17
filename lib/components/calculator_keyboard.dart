@@ -5,40 +5,58 @@ import 'package:get/get.dart';
 
 /// Calculator-style numeric keyboard widget.
 class CalculatorKeyboard extends StatelessWidget {
-  final TextEditingController controller;
-  final VoidCallback? onChanged;
+  final RxString input;
 
   const CalculatorKeyboard({
     super.key,
-    required this.controller,
-    this.onChanged,
+    required this.input,
   });
 
   void _append(String value) {
-    var text = controller.text;
-    if (value == ',' && text.contains(',')) return;
-    if (value == ',' && text.isEmpty) {
-      controller.text = '0,';
-    } else {
-      controller.text += value;
+    var text = input.value;
+
+    // Limit total length to 25
+    if (text.length >= 25) return;
+
+    // Only allow one '.'
+    if (value == '.' && text.contains('.')) return;
+
+    // If '.' is first, prepend '0'
+    if (value == '.' && text.isEmpty) {
+      input.value = '0.';
+      return;
     }
-    controller.selection = TextSelection.fromPosition(TextPosition(offset: controller.text.length));
-    onChanged?.call();
+
+    // If already has '.', allow only 2 digits after it
+    if (text.contains('.')) {
+      int dotIndex = text.indexOf('.');
+      int decimals = text.length - dotIndex - 1;
+      if (dotIndex != -1 && decimals >= 2 && value != '.') return;
+    }
+
+    // Remove leading zeros (but keep '0.' and '0')
+    String newText = text + value;
+    if (newText.startsWith('0') && !newText.startsWith('0.') && newText.length > 1) {
+      newText = newText.replaceFirst(RegExp(r'^0+'), '');
+    }
+
+    input.value = newText;
+
+    // print('input: $text');
+    // print('input.value: ${input.value}');
   }
 
   void _delete() {
-    var text = controller.text;
+    var text = input.value;
     if (text.isNotEmpty) {
-      controller.text = text.substring(0, text.length - 1);
-      controller.selection =
-          TextSelection.fromPosition(TextPosition(offset: controller.text.length));
+      input.value = text.substring(0, text.length - 1);
     }
-    onChanged?.call();
+    // print('input: $text');
+    // print('input.value: ${input.value}');
   }
 
   void _clear() {
-    controller.clear();
-    onChanged?.call();
+    input.value = '';
   }
 
   @override
@@ -58,8 +76,8 @@ class CalculatorKeyboard extends StatelessWidget {
               onTap: () => _append('$i'),
             ),
           _CalcButton(
-            label: ',',
-            onTap: () => _append(','),
+            label: '.',
+            onTap: () => _append('.'),
           ),
           _CalcButton(
             label: '0',
