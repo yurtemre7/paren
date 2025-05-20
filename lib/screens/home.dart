@@ -100,13 +100,59 @@ class _HomeState extends State<Home> {
               onInfo: () {
                 Get.dialog(buildDataInfoSheet());
               },
-              onSettings: () async {
+              onMenu: () async {
                 scaffoldKey.currentState?.openEndDrawer();
               },
             ),
           ),
           endDrawer: Drawer(
-            child: Settings(),
+            child: Scaffold(
+              appBar: AppBar(
+                title: Text(
+                  'Menu',
+                  style: TextStyle(
+                    color: context.theme.colorScheme.primary,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                leading: IconButton(
+                  onPressed: () => Get.back(),
+                  icon: const Icon(
+                    Icons.arrow_back_ios_new_outlined,
+                  ),
+                  color: context.theme.colorScheme.primary,
+                ),
+                actions: [
+                  IconButton(
+                    onPressed: () {
+                      Get.back();
+                      Get.to(() => const Settings());
+                    },
+                    icon: const Icon(
+                      Icons.settings_outlined,
+                    ),
+                    color: context.theme.colorScheme.primary,
+                  ),
+                ],
+              ),
+              body: ListView(
+                children: [
+                  buildCurrencyChartTile(),
+                  buildCurrencyData(paren.currencies),
+                  buildSaveConversion(),
+                  buildBudgetPlanner(),
+                  Divider(),
+                  buildAppThemeChanger(),
+                  buildAppColorChanger(),
+                  Divider(),
+                  12.h,
+                  const Center(
+                    child: Text('Made in 🇩🇪 by Emre'),
+                  ),
+                  12.h,
+                ],
+              ),
+            ),
           ),
           body: SafeArea(
             child: Obx(
@@ -129,49 +175,26 @@ class _HomeState extends State<Home> {
                     paren.latestTimestamp.value = DateTime.now();
                     await paren.fetchCurrencyDataOnline();
                   },
-                  child: SingleChildScrollView(
-                    physics: const AlwaysScrollableScrollPhysics(),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        buildConvertTextField(currencies),
-                        buildCurrencyChangerRow(currencies),
-                        // if (currencyTextInputController.value.text.isNotEmpty) ...[
-                        //   buildTipCalculator(currencies),
-                        // ],
-                        8.h,
-                        buildCurrencyChartTile(),
-                        buildCurrencyData(currencies),
-                        buildSaveConversion(),
-                        buildBudgetPlanner(),
-
-                        // buildLastUpdatedInfo(),
-                        // 96.h,
-                      ],
-                    ),
-                  ),
-                );
-              },
-            ),
-          ),
-          bottomNavigationBar: Obx(
-            () {
-              if (loading.value) return 0.h;
-              return SafeArea(
-                child: Container(
-                  margin: const EdgeInsets.symmetric(vertical: 8),
                   child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     mainAxisSize: MainAxisSize.min,
                     children: [
+                      Expanded(
+                        child: Column(
+                          children: [
+                            buildConvertTextField(currencies),
+                            buildCurrencyChangerRow(currencies),
+                          ],
+                        ),
+                      ),
                       CalculatorKeyboard(
                         input: currencyTextInput,
                       ),
                     ],
                   ),
-                ),
-              );
-            },
+                );
+              },
+            ),
           ),
         ),
       ),
@@ -723,6 +746,126 @@ class _HomeState extends State<Home> {
           );
         },
       ),
+    );
+  }
+
+  Widget buildAppColorChanger() {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+      child: Column(
+        children: [
+          const Text(
+            'App Color',
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          Obx(
+            () => SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: [
+                  ...Colors.primaries.map((color) {
+                    return Container(
+                      margin: const EdgeInsets.only(right: 8, top: 8),
+                      child: ChoiceChip(
+                        label: Text(
+                          'Color',
+                          style: TextStyle(
+                            color: color.computeLuminance() > 0.5 ? Colors.black : Colors.white,
+                          ),
+                        ),
+                        backgroundColor: color,
+                        selectedColor: color,
+                        color: WidgetStatePropertyAll(color),
+                        checkmarkColor:
+                            color.computeLuminance() > 0.5 ? Colors.black : Colors.white,
+                        selected: color.getValue == paren.appColor.value,
+                        onSelected: (value) {
+                          paren.appColor.value = color.getValue;
+                          paren.saveSettings();
+                          paren.setTheme();
+                          Future.delayed(500.milliseconds, () {
+                            if (!mounted) return;
+                            SystemChrome.setSystemUIOverlayStyle(
+                              SystemUiOverlayStyle(
+                                systemNavigationBarColor: context.theme.colorScheme.surface,
+                              ),
+                            );
+                          });
+                        },
+                      ),
+                    );
+                  }),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget buildAppThemeChanger() {
+    var themeOptions = [
+      {'icon': Icons.phone_android, 'label': 'System'},
+      {'icon': Icons.light_mode, 'label': 'Light'},
+      {'icon': Icons.dark_mode, 'label': 'Dark'},
+    ];
+
+    return Column(
+      children: [
+        const Text(
+          'App Theme',
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+          child: Obx(
+            () => ToggleButtons(
+              borderRadius: BorderRadius.circular(8),
+              isSelected: List.generate(3, (i) => i == paren.appThemeMode.value.index),
+              onPressed: (int index) async {
+                if (paren.appThemeMode.value.index == index) return;
+                paren.appThemeMode.value = ThemeMode.values[index];
+                paren.setTheme();
+                await paren.saveSettings();
+                if (!mounted) return;
+                Future.delayed(500.milliseconds, () {
+                  if (!mounted) return;
+                  SystemChrome.setSystemUIOverlayStyle(
+                    SystemUiOverlayStyle(
+                      systemNavigationBarColor: context.theme.colorScheme.surface,
+                    ),
+                  );
+                });
+              },
+              selectedColor: context.theme.colorScheme.onPrimary,
+              fillColor: context.theme.colorScheme.primary,
+              color: context.theme.colorScheme.primary,
+              children: themeOptions
+                  .map(
+                    (option) => Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(option['icon'] as IconData, size: 20),
+                          const SizedBox(height: 2),
+                          Text(option['label'] as String, style: const TextStyle(fontSize: 12)),
+                        ],
+                      ),
+                    ),
+                  )
+                  .toList(),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
