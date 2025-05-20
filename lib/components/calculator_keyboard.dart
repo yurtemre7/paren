@@ -4,9 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:paren/providers/extensions.dart';
+import 'package:paren/providers/paren.dart';
 
 /// Calculator-style numeric keyboard widget.
-class CalculatorKeyboard extends StatelessWidget {
+class CalculatorKeyboard extends StatefulWidget {
   final RxString input;
 
   const CalculatorKeyboard({
@@ -14,8 +15,15 @@ class CalculatorKeyboard extends StatelessWidget {
     required this.input,
   });
 
+  @override
+  State<CalculatorKeyboard> createState() => _CalculatorKeyboardState();
+}
+
+class _CalculatorKeyboardState extends State<CalculatorKeyboard> {
+  final Paren paren = Get.find();
+
   void _append(String value) {
-    var text = input.value;
+    var text = widget.input.value;
 
     // Limit total length to 25
     if (text.length >= 25) return;
@@ -25,7 +33,7 @@ class CalculatorKeyboard extends StatelessWidget {
 
     // If '.' is first, prepend '0'
     if (value == '.' && text.isEmpty) {
-      input.value = '0.';
+      widget.input.value = '0.';
       return;
     }
 
@@ -42,19 +50,19 @@ class CalculatorKeyboard extends StatelessWidget {
       newText = newText.replaceFirst(RegExp(r'^0+'), '');
     }
 
-    input.value = newText;
+    widget.input.value = newText;
 
     // print('input: $text');
     // print('input.value: ${input.value}');
   }
 
   void _delete() {
-    var text = input.value;
+    var text = widget.input.value;
     if (text.isNotEmpty) {
       if (text.length == 1) {
-        input.value = '0';
+        widget.input.value = '0';
       } else {
-        input.value = text.substring(0, text.length - 1);
+        widget.input.value = text.substring(0, text.length - 1);
       }
     }
     // print('input: $text');
@@ -62,59 +70,63 @@ class CalculatorKeyboard extends StatelessWidget {
   }
 
   void _clear() {
-    input.value = '0';
+    widget.input.value = '0';
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      constraints: BoxConstraints(
-        maxWidth: 200,
-        // maxWidth: context.width * 0.5,
-      ),
-      child: Column(
-        children: [
-          Obx(
-            () => Text(
-              input.value,
-              style: TextStyle(
-                fontSize: 24,
-                color: context.theme.colorScheme.primary,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
+    return Obx(
+      () {
+        return Container(
+          constraints: BoxConstraints(
+            maxWidth: paren.calculatorInputHeight.value,
+            // maxWidth: context.width * 0.5,
           ),
-          8.h,
-          GridView.count(
-            crossAxisCount: 3,
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            mainAxisSpacing: 8,
-            crossAxisSpacing: 8,
+          child: Column(
             children: [
-              for (var i = 1; i <= 9; i++)
-                _CalcButton(
-                  label: '$i',
-                  onTap: () => _append('$i'),
+              Obx(
+                () => Text(
+                  widget.input.value,
+                  style: TextStyle(
+                    fontSize: 24,
+                    color: context.theme.colorScheme.primary,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-              _CalcButton(
-                label: '.',
-                onTap: () => _append('.'),
               ),
-              _CalcButton(
-                label: '0',
-                onTap: () => _append('0'),
-              ),
-              _CalcButton(
-                label: 'C',
-                onTap: _delete,
-                onLongPress: _clear,
-                color: Theme.of(context).colorScheme.error,
+              8.h,
+              GridView.count(
+                crossAxisCount: 3,
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                mainAxisSpacing: 8,
+                crossAxisSpacing: 8,
+                children: [
+                  for (var i = 1; i <= 9; i++)
+                    _CalcButton(
+                      label: '$i',
+                      onTap: () => _append('$i'),
+                    ),
+                  _CalcButton(
+                    label: '.',
+                    onTap: () => _append('.'),
+                  ),
+                  _CalcButton(
+                    label: '0',
+                    onTap: () => _append('0'),
+                  ),
+                  _CalcButton(
+                    label: 'C',
+                    onTap: _delete,
+                    onLongPress: _clear,
+                    color: Theme.of(context).colorScheme.error,
+                  ),
+                ],
               ),
             ],
           ),
-        ],
-      ),
+        );
+      },
     );
   }
 }
