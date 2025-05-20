@@ -32,6 +32,8 @@ class Paren extends GetxController {
   final conv1Size = 20.0.obs;
   final conv2Size = 16.0.obs;
   final convSizeRanges = (min: 14.0, max: 34.0);
+  final calculatorInputHeight = 200.0.obs;
+  final calculatorInputHeightRange = (min: 100.0, max: 300.0);
 
   final favorites = <FavoriteConversion>[].obs;
 
@@ -53,6 +55,7 @@ class Paren extends GetxController {
     appThemeMode.value = ThemeMode.system;
     conv1Size.value = 20.0;
     conv2Size.value = 16.0;
+    calculatorInputHeight.value = 200.0;
   }
 
   Future<void> fetchCurrencyDataOnline() async {
@@ -120,6 +123,7 @@ class Paren extends GetxController {
     await sp.setInt('appThemeMode', appThemeMode.value.index);
     await sp.setDouble('conv1Size', conv1Size.value);
     await sp.setDouble('conv2Size', conv2Size.value);
+    await sp.setDouble('calculatorInputHeight', calculatorInputHeight.value);
   }
 
   Future<void> initSettings() async {
@@ -137,6 +141,9 @@ class Paren extends GetxController {
 
     var conv2Value = await sp.getDouble('conv2Size');
     conv2Size.value = conv2Value ?? 16.0;
+
+    var calculatorInputHeightValue = await sp.getDouble('calculatorInputHeight');
+    calculatorInputHeight.value = calculatorInputHeightValue ?? 200.0;
 
     saveSettings();
   }

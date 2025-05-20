@@ -170,28 +170,32 @@ class _HomeState extends State<Home> {
                   );
                 }
 
-                return RefreshIndicator(
-                  onRefresh: () async {
-                    paren.latestTimestamp.value = DateTime.now();
-                    await paren.fetchCurrencyDataOnline();
-                  },
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Expanded(
-                        child: Column(
-                          children: [
-                            buildConvertTextField(currencies),
-                            buildCurrencyChangerRow(currencies),
-                          ],
+                return Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Expanded(
+                      child: RefreshIndicator(
+                        onRefresh: () async {
+                          paren.latestTimestamp.value = DateTime.now();
+                          await paren.fetchCurrencyDataOnline();
+                        },
+                        child: SingleChildScrollView(
+                          physics: const AlwaysScrollableScrollPhysics(),
+                          child: Column(
+                            children: [
+                              buildConvertTextField(currencies),
+                              buildCurrencyChangerRow(currencies),
+                            ],
+                          ),
                         ),
                       ),
-                      CalculatorKeyboard(
-                        input: currencyTextInput,
-                      ),
-                    ],
-                  ),
+                    ),
+                    8.h,
+                    CalculatorKeyboard(
+                      input: currencyTextInput,
+                    ),
+                  ],
                 );
               },
             ),
@@ -430,9 +434,9 @@ class _HomeState extends State<Home> {
             );
             paren.saveSettings();
           },
-          tooltip: 'Adjust Text Size',
+          tooltip: 'Adjust Sizes',
           icon: Icon(
-            Icons.text_fields_outlined,
+            Icons.text_increase_rounded,
             color: context.theme.colorScheme.primary,
           ),
         ),
@@ -460,7 +464,7 @@ class _HomeState extends State<Home> {
               color: context.theme.colorScheme.primary,
             ),
             title: Text(
-              'Adjust Text Size',
+              'Adjust Sizes',
               style: TextStyle(
                 color: context.theme.colorScheme.primary,
                 fontWeight: FontWeight.bold,
@@ -507,6 +511,23 @@ class _HomeState extends State<Home> {
                       divisions: 20,
                       label: '${paren.conv2Size.value}',
                     ),
+                    const Divider(),
+                    const Text(
+                      'Calculator Input Height',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Slider(
+                      value: paren.calculatorInputHeight.value,
+                      onChanged: (value) {
+                        paren.calculatorInputHeight.value = value;
+                      },
+                      min: paren.calculatorInputHeightRange.min,
+                      max: paren.calculatorInputHeightRange.max,
+                      divisions: 20,
+                      label: '${paren.calculatorInputHeight.value}',
+                    ),
                   ],
                 );
               }),
@@ -529,6 +550,7 @@ class _HomeState extends State<Home> {
           color: context.theme.colorScheme.primary,
         ),
         onTap: () {
+          Get.back();
           Get.bottomSheet(
             Container(
               constraints: BoxConstraints(maxHeight: context.height * 0.80),
@@ -561,6 +583,7 @@ class _HomeState extends State<Home> {
           ListTile(
             title: const Text('Quick Conversions'),
             onTap: () async {
+              Get.back();
               var result = await Get.bottomSheet(
                 buildQuickConversions(currencies),
               );
@@ -626,6 +649,7 @@ class _HomeState extends State<Home> {
           color: context.theme.colorScheme.primary,
         ),
         onTap: () async {
+          Get.back();
           await Get.bottomSheet(buildFavoriteSheet());
         },
       ),
@@ -730,6 +754,7 @@ class _HomeState extends State<Home> {
           color: context.theme.colorScheme.primary,
         ),
         onTap: () {
+          Get.back();
           Get.bottomSheet(
             Card(
               margin: EdgeInsets.zero,
