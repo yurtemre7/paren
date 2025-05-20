@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:paren/providers/extensions.dart';
 import 'package:paren/providers/paren.dart';
 
 class BudgetPlanner extends StatefulWidget {
@@ -12,7 +13,7 @@ class BudgetPlanner extends StatefulWidget {
 
 class _BudgetPlannerState extends State<BudgetPlanner> {
   final Paren paren = Get.find();
-  final TextEditingController _budgetController = TextEditingController(text: '0');
+  final TextEditingController _budgetController = TextEditingController();
   DateTimeRange? _tripDates;
 
   @override
@@ -50,70 +51,77 @@ class _BudgetPlannerState extends State<BudgetPlanner> {
             NumberFormat.simpleCurrency(name: paren.toCurrency.value.toUpperCase());
         var currencyFromFormatter =
             NumberFormat.simpleCurrency(name: paren.fromCurrency.value.toUpperCase());
-        return Scaffold(
-          appBar: AppBar(
-            leading: IconButton(
-              onPressed: () => Get.back(),
-              icon: const Icon(
-                Icons.close,
-              ),
-              color: context.theme.colorScheme.primary,
-            ),
-            title: Text(
-              'Trip Budget',
-              style: TextStyle(
+        return GestureDetector(
+          onTap: () {
+            FocusScope.of(context).unfocus();
+          },
+          child: Scaffold(
+            resizeToAvoidBottomInset: false,
+            appBar: AppBar(
+              leading: IconButton(
+                onPressed: () => Get.back(),
+                icon: const Icon(
+                  Icons.close,
+                ),
                 color: context.theme.colorScheme.primary,
-                fontWeight: FontWeight.bold,
               ),
-            ),
-          ),
-          body: ListView(
-            padding: const EdgeInsets.all(16),
-            children: [
-              Card(
-                color: context.theme.colorScheme.secondaryContainer,
-                elevation: 2,
-                child: Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      TextField(
-                        controller: _budgetController,
-                        keyboardType: TextInputType.number,
-                        decoration: InputDecoration(
-                          labelText: 'Budget (${paren.fromCurrency.value.toUpperCase()})',
-                          border: const OutlineInputBorder(),
-                        ),
-                        onChanged: (_) => setState(() {}),
-                      ),
-                      const SizedBox(height: 8),
-                      Row(
-                        children: [
-                          ElevatedButton.icon(
-                            icon: const Icon(Icons.date_range),
-                            label: const Text('Trip Dates'),
-                            onPressed: _pickTripDates,
-                          ),
-                          const SizedBox(width: 8),
-                          if (_tripDates != null)
-                            Text(
-                              '${DateFormat.yMd().format(_tripDates!.start)} – ${DateFormat.yMd().format(_tripDates!.end)} (${_tripDates!.duration.inDays} days)',
-                            ),
-                        ],
-                      ),
-                      const SizedBox(height: 8),
-                      Text(
-                        'Total: ${currencyToFormatter.format(localBudget)} (${currencyFromFormatter.format(budget)})',
-                      ),
-                      Text(
-                        'Per day: ${currencyToFormatter.format(perDay)} (${currencyFromFormatter.format(perDayFrom)})',
-                      ),
-                    ],
-                  ),
+              title: Text(
+                'Trip Budget',
+                style: TextStyle(
+                  color: context.theme.colorScheme.primary,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
-            ],
+            ),
+            body: ListView(
+              padding: const EdgeInsets.all(16),
+              children: [
+                Card(
+                  color: context.theme.colorScheme.secondaryContainer,
+                  elevation: 2,
+                  child: Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        TextField(
+                          controller: _budgetController,
+                          keyboardType: TextInputType.number,
+                          decoration: InputDecoration(
+                            labelText: 'Budget (${paren.fromCurrency.value.toUpperCase()})',
+                            border: const OutlineInputBorder(),
+                          ),
+                          onChanged: (_) => setState(() {}),
+                        ),
+                        const SizedBox(height: 8),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            ElevatedButton.icon(
+                              icon: const Icon(Icons.date_range),
+                              label: const Text('Select Trip Dates'),
+                              onPressed: _pickTripDates,
+                            ),
+                            4.h,
+                            if (_tripDates != null)
+                              Text(
+                                '${DateFormat.yMd().format(_tripDates!.start)} - ${DateFormat.yMd().format(_tripDates!.end)} (${_tripDates!.duration.inDays} days)',
+                              ),
+                          ],
+                        ),
+                        8.h,
+                        Text(
+                          'Total: ${currencyToFormatter.format(localBudget)} (${currencyFromFormatter.format(budget)})',
+                        ),
+                        Text(
+                          'Per day: ${currencyToFormatter.format(perDay)} (${currencyFromFormatter.format(perDayFrom)})',
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         );
       },
