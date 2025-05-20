@@ -66,7 +66,7 @@ class _CurrencyChangerRowState extends State<CurrencyChangerRow>
           ),
         ),
       ),
-      backgroundColor: Theme.of(context).colorScheme.surface,
+      backgroundColor: context.theme.colorScheme.surface,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
@@ -175,27 +175,26 @@ class CurrencyPickerSheet extends StatefulWidget {
 
 class _CurrencyPickerSheetState extends State<CurrencyPickerSheet> {
   late TextEditingController _searchController;
-  late List<int> _filteredIndices;
+  final _filteredIndices = <int>[].obs;
 
   @override
   void initState() {
     super.initState();
     _searchController = TextEditingController();
-    _filteredIndices = List.generate(widget.currencies.length, (i) => i);
+    _filteredIndices.value = List.generate(widget.currencies.length, (i) => i);
     _searchController.addListener(_onSearchChanged);
   }
 
   void _onSearchChanged() {
     var query = _searchController.text.toLowerCase();
-    setState(() {
-      _filteredIndices = List.generate(widget.currencies.length, (i) => i)
-          .where(
-            (i) =>
-                widget.currencies[i].id.toLowerCase().contains(query) ||
-                widget.currencies[i].symbol.toLowerCase().contains(query),
-          )
-          .toList();
-    });
+
+    _filteredIndices.value = List.generate(widget.currencies.length, (i) => i)
+        .where(
+          (i) =>
+              widget.currencies[i].id.toLowerCase().contains(query) ||
+              widget.currencies[i].symbol.toLowerCase().contains(query),
+        )
+        .toList();
   }
 
   @override
@@ -207,6 +206,7 @@ class _CurrencyPickerSheetState extends State<CurrencyPickerSheet> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         leading: IconButton(
           onPressed: () => Get.back(),
@@ -224,9 +224,8 @@ class _CurrencyPickerSheetState extends State<CurrencyPickerSheet> {
         ),
       ),
       body: SafeArea(
-        child: Padding(
+        child: Container(
           padding: EdgeInsets.only(
-            bottom: MediaQuery.of(context).viewInsets.bottom,
             top: 8,
             left: 16,
             right: 16,
@@ -245,20 +244,38 @@ class _CurrencyPickerSheetState extends State<CurrencyPickerSheet> {
                 ),
               ),
               8.h,
-              Expanded(
-                child: ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: _filteredIndices.length,
-                  itemBuilder: (context, idx) {
-                    var i = _filteredIndices[idx];
-                    var currency = widget.currencies[i];
-                    return ListTile(
-                      title: Text('${currency.id.toUpperCase()} (${currency.symbol})'),
-                      selected: currency.id == widget.initialCurrency,
-                      onTap: () => Navigator.of(context).pop(currency.id),
+              Obx(
+                () {
+                  if (_filteredIndices.isEmpty) {
+                    return Expanded(
+                      child: Center(
+                        child: Text(
+                          'No results found',
+                          style: TextStyle(
+                            color: context.theme.colorScheme.primary,
+                            fontSize: 16,
+                          ),
+                        ),
+                      ),
                     );
-                  },
-                ),
+                  }
+
+                  return Expanded(
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: _filteredIndices.length,
+                      itemBuilder: (context, idx) {
+                        var i = _filteredIndices[idx];
+                        var currency = widget.currencies[i];
+                        return ListTile(
+                          title: Text('${currency.id.toUpperCase()} (${currency.symbol})'),
+                          selected: currency.id == widget.initialCurrency,
+                          onTap: () => Navigator.of(context).pop(currency.id),
+                        );
+                      },
+                    ),
+                  );
+                },
               ),
             ],
           ),

@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 
 class HomeHeader extends StatelessWidget implements PreferredSizeWidget {
   final VoidCallback onInfo;
-  final VoidCallback onSettings;
+  final VoidCallback onMenu;
   const HomeHeader({
     super.key,
     required this.onInfo,
-    required this.onSettings,
+    required this.onMenu,
   });
 
   @override
@@ -91,10 +91,10 @@ class HomeHeader extends StatelessWidget implements PreferredSizeWidget {
               ),
               const Spacer(),
               IconButton(
-                icon: const Icon(Icons.settings),
+                icon: const Icon(Icons.menu_outlined),
                 color: colorScheme.primary,
-                tooltip: 'Settings',
-                onPressed: onSettings,
+                tooltip: 'Menu',
+                onPressed: onMenu,
                 style: IconButton.styleFrom(
                   shape: const CircleBorder(),
                   backgroundColor: colorScheme.primaryContainer.withValues(alpha: 0.15),
