@@ -1,10 +1,10 @@
 name: paren
 description: "A new Flutter project."
-publish_to: 'none'
+publish_to: "none"
 version: 1.9.13+1
 
 environment:
-  sdk: '>=3.4.1 <4.0.0'
+  sdk: ">=3.4.1 <4.0.0"
 
 dependencies:
   flutter:
@@ -46,7 +46,6 @@ flutter_launcher_icons:
   adaptive_icon_monochrome: "assets/icon/mono.png"
 
 flutter:
-
   uses-material-design: true
 
   assets:
