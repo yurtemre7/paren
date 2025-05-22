@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:flutter/material.dart';
 import 'package:paren/classes/currency.dart';
 
 const baseUrl = 'https://api.frankfurter.app';
@@ -33,6 +34,12 @@ var TRY = Currency(
   symbol: '₺',
   rate: 35.1,
 );
+
+var themeOptions = [
+  {'icon': Icons.phone_android, 'label': 'System'},
+  {'icon': Icons.light_mode, 'label': 'Light'},
+  {'icon': Icons.dark_mode, 'label': 'Dark'},
+];
 
 // convert timestamp to day:month:year hours:minutes
 // use leading zero for single digit numbers

@@ -39,7 +39,7 @@ class _HomeState extends State<Home> {
   void initState() {
     super.initState();
 
-    Future.delayed(0.seconds, () async {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
       if (!mounted) return;
       await initParen();
       await SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
@@ -56,19 +56,6 @@ class _HomeState extends State<Home> {
       logMessage('Loading time taken: ${stopwatch.elapsedMilliseconds}ms');
       loading.value = false;
     }
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    Future.delayed(0.seconds, () {
-      if (!mounted) return;
-      SystemChrome.setSystemUIOverlayStyle(
-        SystemUiOverlayStyle(
-          systemNavigationBarColor: context.theme.colorScheme.surface,
-        ),
-      );
-    });
   }
 
   @override
@@ -142,8 +129,8 @@ class _HomeState extends State<Home> {
                   buildSaveConversion(),
                   buildBudgetPlanner(),
                   Divider(),
-                  buildAppThemeChanger(),
-                  buildAppColorChanger(),
+                  buildAppThemeColorChanger(),
+                  // buildAppColorChanger(),
                   Divider(),
                   12.h,
                   const Center(
@@ -774,123 +761,112 @@ class _HomeState extends State<Home> {
     );
   }
 
-  Widget buildAppColorChanger() {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-      child: Column(
-        children: [
-          const Text(
-            'App Color',
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          Obx(
-            () => SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
+  Widget buildAppThemeColorChanger() {
+    return Obx(
+      () {
+        return Container(
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+          child: Column(
+            children: [
+              const Text(
+                'App Color & Theme',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              4.h,
+              Row(
                 children: [
-                  ...Colors.primaries.map((color) {
-                    return Container(
-                      margin: const EdgeInsets.only(right: 8, top: 8),
-                      child: ChoiceChip(
-                        label: Text(
-                          'Color',
-                          style: TextStyle(
-                            color: color.computeLuminance() > 0.5 ? Colors.black : Colors.white,
-                          ),
+                  Expanded(
+                    flex: 2,
+                    child: SizedBox(
+                      height: 160,
+                      child: GridView(
+                        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          childAspectRatio: 2,
                         ),
-                        backgroundColor: color,
-                        selectedColor: color,
-                        color: WidgetStatePropertyAll(color),
-                        checkmarkColor:
-                            color.computeLuminance() > 0.5 ? Colors.black : Colors.white,
-                        selected: color.getValue == paren.appColor.value,
-                        onSelected: (value) {
-                          paren.appColor.value = color.getValue;
-                          paren.saveSettings();
-                          paren.setTheme();
-                          Future.delayed(500.milliseconds, () {
-                            if (!mounted) return;
-                            SystemChrome.setSystemUIOverlayStyle(
-                              SystemUiOverlayStyle(
-                                systemNavigationBarColor: context.theme.colorScheme.surface,
+                        shrinkWrap: true,
+                        children: [
+                          ...Colors.primaries.map((color) {
+                            return Container(
+                              margin: const EdgeInsets.only(right: 8, top: 8),
+                              child: ChoiceChip(
+                                label: Text(
+                                  'Color',
+                                  style: TextStyle(
+                                    color: color.computeLuminance() > 0.5
+                                        ? Colors.black
+                                        : Colors.white,
+                                    decoration: color.getValue == paren.appColor.value
+                                        ? TextDecoration.underline
+                                        : null,
+                                    fontWeight: color.getValue == paren.appColor.value
+                                        ? FontWeight.bold
+                                        : FontWeight.normal,
+                                  ),
+                                ),
+                                backgroundColor: color,
+                                selectedColor: color,
+                                // visualDensity: VisualDensity.compact,
+                                color: WidgetStatePropertyAll(color),
+                                selected: color.getValue == paren.appColor.value,
+                                onSelected: (value) {
+                                  paren.appColor.value = color.getValue;
+                                  paren.setTheme();
+                                  paren.saveSettings();
+                                },
+                                showCheckmark: false,
                               ),
                             );
-                          });
-                        },
-                      ),
-                    );
-                  }),
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget buildAppThemeChanger() {
-    var themeOptions = [
-      {'icon': Icons.phone_android, 'label': 'System'},
-      {'icon': Icons.light_mode, 'label': 'Light'},
-      {'icon': Icons.dark_mode, 'label': 'Dark'},
-    ];
-
-    return Column(
-      children: [
-        const Text(
-          'App Theme',
-          style: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-          child: Obx(
-            () => ToggleButtons(
-              borderRadius: BorderRadius.circular(8),
-              isSelected: List.generate(3, (i) => i == paren.appThemeMode.value.index),
-              onPressed: (int index) async {
-                if (paren.appThemeMode.value.index == index) return;
-                paren.appThemeMode.value = ThemeMode.values[index];
-                paren.setTheme();
-                await paren.saveSettings();
-                if (!mounted) return;
-                Future.delayed(500.milliseconds, () {
-                  if (!mounted) return;
-                  SystemChrome.setSystemUIOverlayStyle(
-                    SystemUiOverlayStyle(
-                      systemNavigationBarColor: context.theme.colorScheme.surface,
-                    ),
-                  );
-                });
-              },
-              selectedColor: context.theme.colorScheme.onPrimary,
-              fillColor: context.theme.colorScheme.primary,
-              color: context.theme.colorScheme.primary,
-              children: themeOptions
-                  .map(
-                    (option) => Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(option['icon'] as IconData, size: 20),
-                          const SizedBox(height: 2),
-                          Text(option['label'] as String, style: const TextStyle(fontSize: 12)),
+                          }),
                         ],
                       ),
                     ),
-                  )
-                  .toList(),
-            ),
+                  ),
+                  Expanded(
+                    child: Center(
+                      child: ToggleButtons(
+                        borderRadius: BorderRadius.circular(8),
+                        direction: Axis.vertical,
+                        isSelected: List.generate(3, (i) => i == paren.appThemeMode.value.index),
+                        onPressed: (int index) async {
+                          if (paren.appThemeMode.value.index == index) return;
+                          paren.appThemeMode.value = ThemeMode.values[index];
+                          paren.setTheme();
+                          paren.saveSettings();
+                        },
+                        selectedColor: context.theme.colorScheme.onPrimary,
+                        fillColor: context.theme.colorScheme.primary,
+                        color: context.theme.colorScheme.primary,
+                        children: [
+                          ...themeOptions.map(
+                            (option) => Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Icon(option['icon'] as IconData, size: 20),
+                                  4.h,
+                                  Text(
+                                    option['label'] as String,
+                                    style: const TextStyle(fontSize: 12),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
           ),
-        ),
-      ],
+        );
+      },
     );
   }
 }
