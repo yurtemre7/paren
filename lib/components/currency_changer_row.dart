@@ -83,83 +83,87 @@ class _CurrencyChangerRowState extends State<CurrencyChangerRow>
 
   @override
   Widget build(BuildContext context) {
-    var from = paren.currencies.firstWhere(
-      (currency) => currency.id == paren.fromCurrency.value,
-    );
-    var to = paren.currencies.firstWhere(
-      (currency) => currency.id == paren.toCurrency.value,
-    );
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 24),
-      child: AnimatedBuilder(
-        animation: _offsetAnimation,
-        builder: (context, child) {
-          double offsetX =
-              math.sin(_offsetAnimation.value * math.pi * 2) * (1 - _offsetAnimation.value) * 4;
-          return Transform.translate(
-            offset: Offset(offsetX, 0),
-            child: child,
-          );
-        },
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Expanded(
-              child: Card(
-                color: context.theme.colorScheme.secondaryContainer,
-                margin: EdgeInsets.zero,
-                child: InkWell(
-                  borderRadius: BorderRadius.circular(8),
-                  onTap: () => _showCurrencyPicker(true),
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
-                    child: Text(
-                      '${from.id.toUpperCase()} (${from.symbol})',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18,
-                        color: context.theme.colorScheme.primary,
+    return Obx(
+      () {
+        var from = paren.currencies.firstWhere(
+          (currency) => currency.id == paren.fromCurrency.value,
+        );
+        var to = paren.currencies.firstWhere(
+          (currency) => currency.id == paren.toCurrency.value,
+        );
+        return Container(
+          padding: const EdgeInsets.symmetric(horizontal: 24),
+          child: AnimatedBuilder(
+            animation: _offsetAnimation,
+            builder: (context, child) {
+              double offsetX =
+                  math.sin(_offsetAnimation.value * math.pi * 2) * (1 - _offsetAnimation.value) * 4;
+              return Transform.translate(
+                offset: Offset(offsetX, 0),
+                child: child,
+              );
+            },
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Expanded(
+                  child: Card(
+                    color: context.theme.colorScheme.secondaryContainer,
+                    margin: EdgeInsets.zero,
+                    child: InkWell(
+                      borderRadius: BorderRadius.circular(8),
+                      onTap: () => _showCurrencyPicker(true),
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
+                        child: Text(
+                          '${from.id.toUpperCase()} (${from.symbol})',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18,
+                            color: context.theme.colorScheme.primary,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
                       ),
-                      textAlign: TextAlign.center,
                     ),
                   ),
                 ),
-              ),
-            ),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 8),
-              child: IconButton(
-                visualDensity: VisualDensity.compact,
-                icon: const Icon(Icons.compare_arrows_outlined),
-                color: context.theme.colorScheme.primary,
-                onPressed: _onSwap,
-              ),
-            ),
-            Expanded(
-              child: Card(
-                color: context.theme.colorScheme.secondaryContainer,
-                margin: EdgeInsets.zero,
-                child: InkWell(
-                  borderRadius: BorderRadius.circular(8),
-                  onTap: () => _showCurrencyPicker(false),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
-                    child: Text(
-                      '${to.id.toUpperCase()} (${to.symbol})',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18,
-                        color: context.theme.colorScheme.primary,
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  child: IconButton(
+                    visualDensity: VisualDensity.compact,
+                    icon: const Icon(Icons.compare_arrows_outlined),
+                    color: context.theme.colorScheme.primary,
+                    onPressed: _onSwap,
+                  ),
+                ),
+                Expanded(
+                  child: Card(
+                    color: context.theme.colorScheme.secondaryContainer,
+                    margin: EdgeInsets.zero,
+                    child: InkWell(
+                      borderRadius: BorderRadius.circular(8),
+                      onTap: () => _showCurrencyPicker(false),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
+                        child: Text(
+                          '${to.id.toUpperCase()} (${to.symbol})',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18,
+                            color: context.theme.colorScheme.primary,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
                       ),
-                      textAlign: TextAlign.center,
                     ),
                   ),
                 ),
-              ),
+              ],
             ),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 }
