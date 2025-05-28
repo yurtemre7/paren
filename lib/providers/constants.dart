@@ -73,7 +73,7 @@ String weekdayFromInt(int weekday) {
   return weekdayMap[weekday] ?? 'DAY';
 }
 
-logMessage(String msg, {String tag = 'Paren'}) {
+void logMessage(String msg, {String tag = 'Paren'}) {
   log(
     msg,
     name: tag,
@@ -81,7 +81,7 @@ logMessage(String msg, {String tag = 'Paren'}) {
   );
 }
 
-logError(String msg, {String tag = 'Paren', Object? error, StackTrace? stackTrace}) {
+void logError(String msg, {String tag = 'Paren', Object? error, StackTrace? stackTrace}) {
   log(
     msg,
     name: tag,
