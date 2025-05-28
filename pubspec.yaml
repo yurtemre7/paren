@@ -21,14 +21,14 @@ dependencies:
   url_launcher: ^6.3.1
   share_plus: ^11.0.0
   fl_chart: ^1.0.0
-  home_widget: ^0.7.0+1
+  home_widget: ^0.8.0
   # image_picker: ^1.1.2
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  flutter_lints: ^5.0.0
+  flutter_lints: ^6.0.0
   # flutter pub run flutter_launcher_icons:main
   flutter_launcher_icons:
     git:

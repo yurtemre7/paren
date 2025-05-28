@@ -163,7 +163,7 @@ packages:
     description:
       path: "."
       ref: master
-      resolved-ref: "48d0b932d8dd6a991ea75b2bd412eddc2c7fa9cc"
+      resolved-ref: f24d6bf72267db9ef7e443a283c4549c1413d914
       url: "https://github.com/fluttercommunity/flutter_launcher_icons"
     source: git
     version: "0.14.3"
@@ -171,10 +171,10 @@ packages:
     dependency: "direct dev"
     description:
       name: flutter_lints
-      sha256: "5398f14efa795ffb7a33e9b6a08798b26a180edac4ad7db3f231e40f82ce11e1"
+      sha256: "3105dc8492f6183fb076ccf1f351ac3d60564bff92e20bfc4af9cc1651f4e7e1"
       url: "https://pub.dev"
     source: hosted
-    version: "5.0.0"
+    version: "6.0.0"
   flutter_localizations:
     dependency: "direct main"
     description: flutter
@@ -202,10 +202,10 @@ packages:
     dependency: "direct main"
     description:
       name: home_widget
-      sha256: "7430f7549d42cef2e729bd3c779de748b93f1eb78b1abfe6bca8fffd1cfce3e9"
+      sha256: ad9634ef5894f3bac73f04d59e2e5151a39798f49985399fd928dadc828d974a
       url: "https://pub.dev"
     source: hosted
-    version: "0.7.0+1"
+    version: "0.8.0"
   http_parser:
     dependency: transitive
     description:
@@ -266,10 +266,10 @@ packages:
     dependency: transitive
     description:
       name: lints
-      sha256: c35bb79562d980e9a453fc715854e1ed39e24e7d0297a880ef54e17f9874a9d7
+      sha256: a5e2b223cb7c9c8efdc663ef484fdd95bb243bff242ef5b13e26883547fce9a0
       url: "https://pub.dev"
     source: hosted
-    version: "5.1.1"
+    version: "6.0.0"
   matcher:
     dependency: transitive
     description:
@@ -660,5 +660,5 @@ packages:
     source: hosted
     version: "3.1.3"
 sdks:
-  dart: ">=3.7.0 <4.0.0"
+  dart: ">=3.8.0 <4.0.0"
   flutter: ">=3.27.4"
