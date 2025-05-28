@@ -11,6 +11,7 @@
 		18E13E0E5324345DE1499C46 /* Pods_RunnerTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9779E567E4384C6EDC151FF9 /* Pods_RunnerTests.framework */; };
 		331C808B294A63AB00263BE5 /* RunnerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 331C807B294A618700263BE5 /* RunnerTests.swift */; };
 		3B3967161E833CAA004F5970 /* AppFrameworkInfo.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3B3967151E833CAA004F5970 /* AppFrameworkInfo.plist */; };
+		6B045DAE2DE7A21E00BD6495 /* AppIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BA44D282C6644B10073D5CE /* AppIntent.swift */; };
 		6BA44D1E2C6644B10073D5CE /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6BA44D1D2C6644B10073D5CE /* WidgetKit.framework */; };
 		6BA44D202C6644B10073D5CE /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6BA44D1F2C6644B10073D5CE /* SwiftUI.framework */; };
 		6BA44D232C6644B10073D5CE /* ParenWBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BA44D222C6644B10073D5CE /* ParenWBundle.swift */; };
@@ -505,6 +506,7 @@
 			files = (
 				74858FAF1ED2DC5600515810 /* AppDelegate.swift in Sources */,
 				1498D2341E8E89220040F4C2 /* GeneratedPluginRegistrant.m in Sources */,
+				6B045DAE2DE7A21E00BD6495 /* AppIntent.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
