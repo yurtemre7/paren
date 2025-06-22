@@ -30,9 +30,11 @@ class _HomeState extends State<Home> {
   final Paren paren = Get.find();
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  final PageController pageController = PageController();
 
   final loading = true.obs;
   final currencyTextInput = '1'.obs;
+  final currentPage = 0.obs;
 
   @override
   void initState() {
@@ -43,6 +45,16 @@ class _HomeState extends State<Home> {
       await initParen();
       await SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
     });
+
+    pageController.addListener(pageControllerListener);
+  }
+
+  Future<void> pageControllerListener() async {
+    var currentController = pageController;
+    if (!currentController.hasClients) {
+      return; // no clients yet
+    }
+    currentPage.value = pageController.page?.round() ?? 0;
   }
 
   Future<void> initParen() async {
@@ -59,6 +71,7 @@ class _HomeState extends State<Home> {
 
   @override
   void dispose() {
+    pageController.dispose();
     super.dispose();
   }
 
@@ -82,61 +95,19 @@ class _HomeState extends State<Home> {
           backgroundColor: context.theme.colorScheme.surface,
           appBar: PreferredSize(
             preferredSize: const Size.fromHeight(80),
-            child: HomeHeader(
-              onInfo: () {
-                Get.dialog(buildDataInfoSheet());
-              },
-              onMenu: () async {
-                scaffoldKey.currentState?.openEndDrawer();
-              },
-            ),
-          ),
-          endDrawer: Drawer(
-            child: Scaffold(
-              appBar: AppBar(
-                title: Text(
-                  'Menu',
-                  style: TextStyle(
-                    color: context.theme.colorScheme.primary,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                leading: IconButton(
-                  onPressed: () => Get.back(),
-                  icon: const Icon(
-                    Icons.arrow_back_ios_new_outlined,
-                  ),
-                  color: context.theme.colorScheme.primary,
-                ),
-                actions: [
-                  IconButton(
-                    onPressed: () {
-                      Get.back();
-                      Get.to(() => const Settings());
-                    },
-                    icon: const Icon(
-                      Icons.settings_outlined,
-                    ),
-                    color: context.theme.colorScheme.primary,
-                  ),
-                ],
-              ),
-              body: ListView(
-                children: [
-                  buildCurrencyChartTile(),
-                  buildCurrencyData(),
-                  buildSaveConversion(),
-                  buildBudgetPlanner(),
-                  Divider(),
-                  buildAppThemeColorChanger(),
-                  // buildAppColorChanger(),
-                  Divider(),
-                  12.h,
-                  const Center(
-                    child: Text('Made in 🇩🇪 by Emre'),
-                  ),
-                  12.h,
-                ],
+            child: Obx(
+              () => HomeHeader(
+                onInfo: () {
+                  Get.dialog(buildDataInfoSheet());
+                },
+                onNavigate: () async {
+                  await pageController.animateToPage(
+                    currentPage.value > 0 ? 0 : 1,
+                    duration: 250.milliseconds,
+                    curve: Curves.decelerate,
+                  );
+                },
+                reverse: currentPage.value == 1,
               ),
             ),
           ),
@@ -155,30 +126,54 @@ class _HomeState extends State<Home> {
                   );
                 }
 
-                return Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.min,
+                return PageView(
+                  physics: NeverScrollableScrollPhysics(),
+                  controller: pageController,
                   children: [
-                    Expanded(
-                      child: RefreshIndicator(
-                        onRefresh: () async {
-                          paren.latestTimestamp.value = DateTime.now();
-                          await paren.fetchCurrencyDataOnline();
-                        },
-                        child: SingleChildScrollView(
-                          physics: const AlwaysScrollableScrollPhysics(),
-                          child: Column(
-                            children: [
-                              buildConvertTextField(),
-                              CurrencyChangerRow(),
-                            ],
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Expanded(
+                          child: RefreshIndicator(
+                            onRefresh: () async {
+                              paren.latestTimestamp.value = DateTime.now();
+                              await paren.fetchCurrencyDataOnline();
+                            },
+                            child: SingleChildScrollView(
+                              physics: const AlwaysScrollableScrollPhysics(),
+                              child: Column(
+                                children: [
+                                  buildConvertTextField(),
+                                  CurrencyChangerRow(),
+                                ],
+                              ),
+                            ),
                           ),
                         ),
-                      ),
+                        8.h,
+                        CalculatorKeyboard(
+                          input: currencyTextInput,
+                        ),
+                      ],
                     ),
-                    8.h,
-                    CalculatorKeyboard(
-                      input: currencyTextInput,
+                    ListView(
+                      children: [
+                        buildCurrencyChartTile(),
+                        buildCurrencyData(),
+                        buildSaveConversion(),
+                        buildBudgetPlanner(),
+                        Divider(),
+                        buildAppThemeColorChanger(),
+                        // buildAppColorChanger(),
+                        Divider(),
+                        Settings(),
+                        12.h,
+                        const Center(
+                          child: Text('Made in 🇩🇪 by Emre'),
+                        ),
+                        12.h,
+                      ],
                     ),
                   ],
                 );
