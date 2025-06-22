@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:paren/classes/currency.dart';
 import 'package:paren/components/budget_planner.dart';
 import 'package:paren/components/calculator_keyboard.dart';
 import 'package:paren/components/currency_changer_row.dart';
@@ -125,7 +124,7 @@ class _HomeState extends State<Home> {
               body: ListView(
                 children: [
                   buildCurrencyChartTile(),
-                  buildCurrencyData(paren.currencies),
+                  buildCurrencyData(),
                   buildSaveConversion(),
                   buildBudgetPlanner(),
                   Divider(),
@@ -150,8 +149,7 @@ class _HomeState extends State<Home> {
                   );
                 }
 
-                var currencies = paren.currencies;
-                if (currencies.isEmpty) {
+                if (paren.currencies.isEmpty) {
                   return const Center(
                     child: Text('Currencies is empty, an error must have occured.'),
                   );
@@ -171,7 +169,7 @@ class _HomeState extends State<Home> {
                           physics: const AlwaysScrollableScrollPhysics(),
                           child: Column(
                             children: [
-                              buildConvertTextField(currencies),
+                              buildConvertTextField(),
                               CurrencyChangerRow(),
                             ],
                           ),
@@ -192,7 +190,7 @@ class _HomeState extends State<Home> {
     );
   }
 
-  Widget buildConvertTextField(List<Currency> currencies) {
+  Widget buildConvertTextField() {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Column(
@@ -206,10 +204,10 @@ class _HomeState extends State<Home> {
                 currencyTextInput.value = currencyTextInput.value.replaceAll(',', '.');
               }
 
-              var fromCurrency = currencies.firstWhere(
+              var fromCurrency = paren.currencies.firstWhere(
                 (element) => element.id == paren.fromCurrency.value,
               );
-              var toCurrency = currencies.firstWhere(
+              var toCurrency = paren.currencies.firstWhere(
                 (element) => element.id == paren.toCurrency.value,
               );
 
@@ -554,7 +552,7 @@ class _HomeState extends State<Home> {
     );
   }
 
-  Widget buildCurrencyData(List<Currency> currencies) {
+  Widget buildCurrencyData() {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Column(
@@ -564,7 +562,7 @@ class _HomeState extends State<Home> {
             onTap: () async {
               Get.back();
               var result = await Get.bottomSheet(
-                buildQuickConversions(currencies),
+                buildQuickConversions(),
               );
               if (result != null) {
                 currencyTextInput.value = result.toString();
@@ -599,7 +597,7 @@ class _HomeState extends State<Home> {
     );
   }
 
-  Widget buildQuickConversions(List<Currency> currencies) {
+  Widget buildQuickConversions() {
     return Card(
       margin: EdgeInsets.zero,
       shape: const RoundedRectangleBorder(
@@ -610,7 +608,7 @@ class _HomeState extends State<Home> {
       child: ClipRRect(
         borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
         child: QuickConversions(
-          currencies: currencies,
+          currencies: paren.currencies,
           fromCurr: paren.fromCurrency.value,
           toCurr: paren.toCurrency.value,
         ),
