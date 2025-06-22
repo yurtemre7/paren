@@ -1,5 +1,6 @@
 import 'dart:math' as math;
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -84,17 +85,17 @@ class _CalculatorKeyboardState extends State<CalculatorKeyboard> {
           ),
           child: Column(
             children: [
-              Obx(
-                () => Text(
-                  widget.input.value,
-                  style: TextStyle(
-                    fontSize: 24,
-                    color: context.theme.colorScheme.primary,
-                    fontWeight: FontWeight.bold,
-                  ),
+              Text(
+                widget.input.value,
+                style: TextStyle(
+                  fontSize: 28,
+                  color: context.theme.colorScheme.primary,
+                  fontWeight: FontWeight.bold,
+                  decoration: TextDecoration.underline,
+                  decorationColor: context.theme.colorScheme.primary.withValues(alpha: 0.25),
                 ),
               ),
-              8.h,
+              16.h,
               GridView.count(
                 crossAxisCount: 3,
                 shrinkWrap: true,
@@ -123,6 +124,8 @@ class _CalculatorKeyboardState extends State<CalculatorKeyboard> {
                   ),
                 ],
               ),
+              if (GetPlatform.isDesktop || kIsWeb)
+                8.h,
             ],
           ),
         );
