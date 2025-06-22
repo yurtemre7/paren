@@ -17,31 +17,13 @@ class _SettingsState extends State<Settings> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          onPressed: () => Get.back(),
-          icon: const Icon(
-            Icons.arrow_back_ios_new_outlined,
-          ),
-          color: context.theme.colorScheme.primary,
-        ),
-        title: Text(
-          'Settings',
-          style: TextStyle(
-            color: context.theme.colorScheme.primary,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      ),
-      body: SafeArea(
-        child: ListView(
-          children: [
-            buildAppInfo(),
-            buildFeedback(),
-            Divider(),
-          ],
-        ),
+    return SafeArea(
+      child: Column(
+        children: [
+          buildAppInfo(),
+          buildFeedback(),
+          Divider(),
+        ],
       ),
     );
   }
