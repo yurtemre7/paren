@@ -310,13 +310,9 @@ class _HomeState extends State<Home> {
                     ),
                     12.h,
                     buildConversionActions(
-                      currencies,
                       inputConverted,
                       inputStr,
-                      toCurrency,
                       amountStr,
-                      reAmountStr,
-                      fromCurrency,
                     ),
                   ],
                 ),
@@ -330,13 +326,9 @@ class _HomeState extends State<Home> {
   }
 
   Widget buildConversionActions(
-    List<Currency> currencies,
     double inputConverted,
     String inputStr,
-    Currency toCurrency,
     String amountStr,
-    String reAmountStr,
-    Currency fromCurrency,
   ) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
