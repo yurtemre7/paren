@@ -1,5 +1,3 @@
-import 'dart:math' as math;
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -14,39 +12,27 @@ class CurrencyChangerRow extends StatefulWidget {
   State<CurrencyChangerRow> createState() => _CurrencyChangerRowState();
 }
 
-class _CurrencyChangerRowState extends State<CurrencyChangerRow>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
-  late Animation<double> _offsetAnimation;
-
+class _CurrencyChangerRowState extends State<CurrencyChangerRow> {
   final Paren paren = Get.find();
 
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(
-      duration: const Duration(milliseconds: 400),
-      vsync: this,
-    );
-    _offsetAnimation = Tween<double>(begin: 0, end: 1).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.elasticInOut),
-    );
   }
 
   @override
   void dispose() {
-    _controller.dispose();
     super.dispose();
   }
 
-  void _onSwap() {
-    _controller.forward(from: 0.0);
+  Future<void> _onSwap() async {
     HapticFeedback.selectionClick();
     var temp = paren.fromCurrency.value;
     paren.fromCurrency.value = paren.toCurrency.value;
     paren.toCurrency.value = temp;
     paren.updateDefaultConversion();
     paren.updateWidgetData();
+    paren.update();
   }
 
   Future<void> _showCurrencyPicker(bool isFrom) async {
@@ -85,82 +71,61 @@ class _CurrencyChangerRowState extends State<CurrencyChangerRow>
   Widget build(BuildContext context) {
     return Obx(
       () {
+        var fromId = paren.fromCurrency.value;
+        var toId = paren.toCurrency.value;
         var from = paren.currencies.firstWhere(
-          (currency) => currency.id == paren.fromCurrency.value,
+          (currency) => currency.id == fromId,
         );
         var to = paren.currencies.firstWhere(
-          (currency) => currency.id == paren.toCurrency.value,
+          (currency) => currency.id == toId,
         );
         return Container(
           padding: const EdgeInsets.symmetric(horizontal: 24),
-          child: AnimatedBuilder(
-            animation: _offsetAnimation,
-            builder: (context, child) {
-              double offsetX =
-                  math.sin(_offsetAnimation.value * math.pi * 2) * (1 - _offsetAnimation.value) * 4;
-              return Transform.translate(
-                offset: Offset(offsetX, 0),
-                child: child,
-              );
-            },
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Expanded(
-                  child: Card(
-                    color: context.theme.colorScheme.secondaryContainer,
-                    margin: EdgeInsets.zero,
-                    child: InkWell(
-                      borderRadius: BorderRadius.circular(8),
-                      onTap: () => _showCurrencyPicker(true),
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
-                        child: Text(
-                          '${from.id.toUpperCase()} (${from.symbol})',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18,
-                            color: context.theme.colorScheme.primary,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Expanded(
+                child: TextButton(
+                  onPressed: () => _showCurrencyPicker(true),
+                  // color: context.theme.colorScheme.secondaryContainer,
+                  // margin: EdgeInsets.zero,
+                  child: Text(
+                    '${fromId.toUpperCase()} (${from.symbol})',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                      color: context.theme.colorScheme.primary,
                     ),
+                    textAlign: TextAlign.center,
                   ),
                 ),
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8),
-                  child: IconButton(
-                    visualDensity: VisualDensity.compact,
-                    icon: const Icon(Icons.compare_arrows_outlined),
-                    color: context.theme.colorScheme.primary,
-                    onPressed: _onSwap,
-                  ),
+              ),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                child: IconButton(
+                  icon: const Icon(Icons.compare_arrows_outlined),
+                  iconSize: 28,
+                  color: context.theme.colorScheme.primary,
+                  onPressed: () {
+                    _onSwap();
+                  },
                 ),
-                Expanded(
-                  child: Card(
-                    color: context.theme.colorScheme.secondaryContainer,
-                    margin: EdgeInsets.zero,
-                    child: InkWell(
-                      borderRadius: BorderRadius.circular(8),
-                      onTap: () => _showCurrencyPicker(false),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
-                        child: Text(
-                          '${to.id.toUpperCase()} (${to.symbol})',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18,
-                            color: context.theme.colorScheme.primary,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
+              ),
+              Expanded(
+                child: TextButton(
+                  onPressed: () => _showCurrencyPicker(false),
+                  child: Text(
+                    '${toId.toUpperCase()} (${to.symbol})',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                      color: context.theme.colorScheme.primary,
                     ),
+                    textAlign: TextAlign.center,
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         );
       },
