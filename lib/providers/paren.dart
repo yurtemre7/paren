@@ -195,9 +195,16 @@ class Paren extends GetxController {
       return;
     }
     if (currencies.isEmpty) {
+      logMessage('No currencies, can\'t update widgets');
       return;
     }
-    logMessage('Updating widget');
+    var widgetsPinned = await HomeWidget.getInstalledWidgets();
+    if (widgetsPinned.isEmpty) {
+      logMessage('No widgets pinned');
+      return;
+    }
+
+    logMessage('Updating widgets');
 
     var fromCurrency = currencies.firstWhere(
       (currency) => currency.id == this.fromCurrency.value,
@@ -251,12 +258,12 @@ class Paren extends GetxController {
       var iosRes = await HomeWidget.updateWidget(
         iOSName: 'ParenW',
       );
-      logMessage('iOS Widget Updated: $iosRes');
+      logMessage('iOS Widgets Updated: $iosRes');
     } else if (GetPlatform.isAndroid) {
       var androidRes = await HomeWidget.updateWidget(
         qualifiedAndroidName: 'de.emredev.paren.glance.ParenWReceiver',
       );
-      logMessage('Android Widget Updated: $androidRes');
+      logMessage('Android Widgets Updated: $androidRes');
     }
   }
 
