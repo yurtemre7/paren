@@ -160,27 +160,25 @@ class _ExChartState extends State<ExChart> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          onPressed: () => Get.back(),
-          icon: const Icon(
-            Icons.close,
+    return Obx(
+      () => Scaffold(
+        appBar: AppBar(
+          leading: IconButton(
+            onPressed: () => Get.back(),
+            icon: const Icon(
+              Icons.close,
+            ),
+            color: context.theme.colorScheme.primary,
           ),
-          color: context.theme.colorScheme.primary,
-        ),
-        title: Obx(
-          () => Text(
+          title: Text(
             '$localIdFrom ➜ $localIdTo',
             style: TextStyle(
               color: context.theme.colorScheme.primary,
               fontWeight: FontWeight.bold,
             ),
           ),
-        ),
-        actions: [
-          Obx(
-            () => Container(
+          actions: [
+            Container(
               padding: const EdgeInsets.only(right: 8),
               child: DropdownButton<Duration>(
                 items: localDurations.map(
@@ -206,94 +204,94 @@ class _ExChartState extends State<ExChart> {
                 iconEnabledColor: context.theme.colorScheme.primary,
               ),
             ),
-          ),
-        ],
-      ),
-      body: Obx(
-        () {
-          if (isLoading.value) {
-            return const Center(
-              child: CircularProgressIndicator.adaptive(),
-            );
-          }
+          ],
+        ),
+        body: Obx(
+          () {
+            if (isLoading.value) {
+              return const Center(
+                child: CircularProgressIndicator.adaptive(),
+              );
+            }
 
-          if (hasError.value) {
-            return Center(
-              child: Container(
-                padding: const EdgeInsets.all(8),
-                child: const Text(
-                  'An error has occured, please try later or contact me about this.',
-                  textAlign: TextAlign.center,
-                ),
-              ),
-            );
-          }
-
-          return ListView(
-            padding: EdgeInsets.zero,
-            children: [
-              24.h,
-              Container(
-                margin: const EdgeInsets.only(
-                  right: 32,
-                ),
-                child: AspectRatio(
-                  aspectRatio: 16 / 9,
-                  child: LineChart(
-                    mainData(),
-                    duration: 500.milliseconds,
+            if (hasError.value) {
+              return Center(
+                child: Container(
+                  padding: const EdgeInsets.all(8),
+                  child: const Text(
+                    'An error has occured, please try later or contact me about this.',
+                    textAlign: TextAlign.center,
                   ),
                 ),
-              ),
-              24.h,
-              Center(
-                child: Column(
-                  children: [
-                    SwitchListTile(
-                      secondary: IconButton(
-                        onPressed: () {
-                          Get.dialog(
-                            buildPredictionInfoDialog(),
-                          );
-                        },
-                        icon: Icon(Icons.info_outline),
-                        color: context.theme.colorScheme.primary,
-                      ),
-                      title: Text('Show simple prediction'),
-                      subtitle: Text('This is just for fun, no financial advice.'),
-                      value: showPrediction.value,
-                      onChanged: (value) {
-                        showPrediction.value = value;
-                        fetchChartData(localIdFrom.value, localIdTo.value);
-                      },
-                      activeColor: context.theme.colorScheme.primary,
-                    ),
-                    8.h,
-                    OutlinedButton.icon(
-                      onPressed: () {
-                        if (isLoading.value) return;
-                        var temp = localIdFrom.value;
-                        localIdFrom.value = localIdTo.value;
-                        localIdTo.value = temp;
+              );
+            }
 
-                        var tempIdx = localIdxFrom.value;
-                        localIdxFrom.value = localIdxTo.value;
-                        localIdxTo.value = tempIdx;
-
-                        fetchChartData(localIdFrom.value, localIdTo.value);
-                      },
-                      label: const Text('Swap'),
-                      icon: const Icon(
-                        Icons.swap_horiz_outlined,
-                      ),
+            return ListView(
+              padding: EdgeInsets.zero,
+              children: [
+                24.h,
+                Container(
+                  margin: const EdgeInsets.only(
+                    right: 32,
+                  ),
+                  child: AspectRatio(
+                    aspectRatio: 16 / 9,
+                    child: LineChart(
+                      mainData(),
+                      duration: 500.milliseconds,
                     ),
-                  ],
+                  ),
                 ),
-              ),
-              24.h,
-            ],
-          );
-        },
+                24.h,
+                Center(
+                  child: Column(
+                    children: [
+                      SwitchListTile(
+                        secondary: IconButton(
+                          onPressed: () {
+                            Get.dialog(
+                              buildPredictionInfoDialog(),
+                            );
+                          },
+                          icon: Icon(Icons.info_outline),
+                          color: context.theme.colorScheme.primary,
+                        ),
+                        title: Text('Show simple prediction'),
+                        subtitle: Text('This is just for fun, no financial advice.'),
+                        value: showPrediction.value,
+                        onChanged: (value) {
+                          showPrediction.value = value;
+                          fetchChartData(localIdFrom.value, localIdTo.value);
+                        },
+                        activeColor: context.theme.colorScheme.primary,
+                      ),
+                      8.h,
+                      OutlinedButton.icon(
+                        onPressed: () {
+                          if (isLoading.value) return;
+                          var temp = localIdFrom.value;
+                          localIdFrom.value = localIdTo.value;
+                          localIdTo.value = temp;
+
+                          var tempIdx = localIdxFrom.value;
+                          localIdxFrom.value = localIdxTo.value;
+                          localIdxTo.value = tempIdx;
+
+                          fetchChartData(localIdFrom.value, localIdTo.value);
+                        },
+                        label: const Text('Swap'),
+                        icon: const Icon(
+                          Icons.swap_horiz_outlined,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                24.h,
+              ],
+            );
+          },
+        ),
       ),
     );
   }
