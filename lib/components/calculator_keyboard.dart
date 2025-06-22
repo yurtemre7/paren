@@ -85,7 +85,7 @@ class _CalculatorKeyboardState extends State<CalculatorKeyboard> {
           ),
           child: Column(
             children: [
-              Text(
+              SelectableText(
                 widget.input.value,
                 style: TextStyle(
                   fontSize: 28,
