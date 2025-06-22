@@ -124,8 +124,7 @@ class _CalculatorKeyboardState extends State<CalculatorKeyboard> {
                   ),
                 ],
               ),
-              if (GetPlatform.isDesktop || kIsWeb)
-                8.h,
+              8.h,
             ],
           ),
         );
