@@ -172,7 +172,7 @@ class _HomeState extends State<Home> {
                           child: Column(
                             children: [
                               buildConvertTextField(currencies),
-                              buildCurrencyChangerRow(currencies),
+                              CurrencyChangerRow(),
                             ],
                           ),
                         ),
@@ -725,10 +725,6 @@ class _HomeState extends State<Home> {
         ),
       ),
     );
-  }
-
-  Widget buildCurrencyChangerRow(List<Currency> currencies) {
-    return CurrencyChangerRow();
   }
 
   Widget buildBudgetPlanner() {
