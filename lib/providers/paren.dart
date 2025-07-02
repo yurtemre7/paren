@@ -38,6 +38,12 @@ class Paren extends GetxController {
 
   Paren();
 
+  @override
+  void onClose() {
+    dio.close();
+    super.onClose();
+  }
+
   Future<void> init() async {
     await Future.wait([
       initCurrencies(),
