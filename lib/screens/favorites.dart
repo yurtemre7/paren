@@ -61,7 +61,8 @@ class FavoritesScreen extends StatelessWidget {
                 name: toCurrency.id.toUpperCase(),
               );
 
-              var convertedAmount = favorite.amount * toCurrency.rate / fromCurrency.rate;
+              var convertedAmount =
+                  favorite.amount * toCurrency.rate / fromCurrency.rate;
 
               String inputFrom = numberFormatFrom.format(favorite.amount);
               String inputTo = numberFormatTo.format(convertedAmount);
@@ -73,8 +74,8 @@ class FavoritesScreen extends StatelessWidget {
                 direction: DismissDirection.endToStart,
                 child: ListTile(
                   title: Text('$inputFrom ➜ $inputTo'),
-                  subtitle:
-                      Text('${fromCurrency.id.toUpperCase()} ➜ ${toCurrency.id.toUpperCase()}'),
+                  subtitle: Text(
+                      '${fromCurrency.id.toUpperCase()} ➜ ${toCurrency.id.toUpperCase()}'),
                   onTap: () {
                     paren.fromCurrency.value = favorite.fromCurrency;
                     paren.toCurrency.value = favorite.toCurrency;
@@ -94,7 +95,8 @@ class FavoritesScreen extends StatelessWidget {
               return AnimatedBuilder(
                 animation: animation,
                 builder: (BuildContext context, Widget? child) {
-                  double animValue = Curves.easeInOut.transform(animation.value);
+                  double animValue =
+                      Curves.easeInOut.transform(animation.value);
                   double elevation = lerpDouble(0, 6, animValue)!;
                   return Material(
                     elevation: elevation,

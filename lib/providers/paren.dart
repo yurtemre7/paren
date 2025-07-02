@@ -88,10 +88,12 @@ class Paren extends GetxController {
       currencies.value = onlineCurrencies;
       currencies.refresh();
       if (!currencieNamesMap.containsKey(fromCurrency.value.toUpperCase())) {
-        fromCurrency.value = currencieNamesMap.entries.first.key.toString().toLowerCase();
+        fromCurrency.value =
+            currencieNamesMap.entries.first.key.toString().toLowerCase();
       }
       if (!currencieNamesMap.containsKey(toCurrency.value.toUpperCase())) {
-        toCurrency.value = currencieNamesMap.entries.first.key.toString().toLowerCase();
+        toCurrency.value =
+            currencieNamesMap.entries.first.key.toString().toLowerCase();
       }
       updateCurrencies();
       updateDefaultConversion();
@@ -136,7 +138,8 @@ class Paren extends GetxController {
     appColor.value = appColorValue ?? Colors.orange.getValue;
 
     var appThemeModeValue = await sp.getInt('appThemeMode');
-    appThemeMode.value = ThemeMode.values[appThemeModeValue ?? ThemeMode.system.index];
+    appThemeMode.value =
+        ThemeMode.values[appThemeModeValue ?? ThemeMode.system.index];
 
     var conv1Value = await sp.getDouble('conv1Size');
     conv1Size.value = conv1Value ?? 20.0;
@@ -144,7 +147,8 @@ class Paren extends GetxController {
     var conv2Value = await sp.getDouble('conv2Size');
     conv2Size.value = conv2Value ?? 16.0;
 
-    var calculatorInputHeightValue = await sp.getDouble('calculatorInputHeight');
+    var calculatorInputHeightValue =
+        await sp.getDouble('calculatorInputHeight');
     calculatorInputHeight.value = calculatorInputHeightValue ?? 250.0;
     if (calculatorInputHeight.value > calculatorInputHeightRange.max) {
       calculatorInputHeight.value = calculatorInputHeightRange.max;
@@ -181,8 +185,9 @@ class Paren extends GetxController {
     var today = DateTime.now();
     var yesterday = DateTime.now().subtract(1.days);
     var latestTimestampString = await sp.getString('latestTimestamp');
-    latestTimestamp.value =
-        latestTimestampString != null ? DateTime.parse(latestTimestampString) : yesterday;
+    latestTimestamp.value = latestTimestampString != null
+        ? DateTime.parse(latestTimestampString)
+        : yesterday;
 
     var fromCString = await sp.getString('fromC') ?? 'eur';
     fromCurrency.value = fromCString.toLowerCase();
@@ -286,18 +291,23 @@ class Paren extends GetxController {
 
   Future<void> initFavorites() async {
     var favoritesJson = await sp.getStringList('favorites') ?? [];
-    favorites.value =
-        favoritesJson.map((json) => FavoriteConversion.fromJson(jsonDecode(json))).toList();
+    favorites.value = favoritesJson
+        .map((json) => FavoriteConversion.fromJson(jsonDecode(json)))
+        .toList();
   }
 
   Future<void> _saveFavorites() async {
-    var favoritesJson = favorites.map((fav) => jsonEncode(fav.toJson())).toList();
+    var favoritesJson =
+        favorites.map((fav) => jsonEncode(fav.toJson())).toList();
     await sp.setStringList('favorites', favoritesJson);
   }
 
   Future<void> toggleFavorite(double amount, String from, String to) async {
     var existing = favorites.firstWhereOrNull(
-      (fav) => fav.fromCurrency == from && fav.toCurrency == to && fav.amount == amount,
+      (fav) =>
+          fav.fromCurrency == from &&
+          fav.toCurrency == to &&
+          fav.amount == amount,
     );
 
     if (existing != null) {

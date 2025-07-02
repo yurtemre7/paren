@@ -48,7 +48,8 @@ class _CurrencyChangerRowState extends State<CurrencyChangerRow> {
           borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
           child: CurrencyPickerSheet(
             currencies: paren.currencies,
-            initialCurrency: isFrom ? paren.fromCurrency.value : paren.toCurrency.value,
+            initialCurrency:
+                isFrom ? paren.fromCurrency.value : paren.toCurrency.value,
           ),
         ),
       ),
@@ -136,7 +137,8 @@ class _CurrencyChangerRowState extends State<CurrencyChangerRow> {
 class CurrencyPickerSheet extends StatefulWidget {
   final List<Currency> currencies;
   final String initialCurrency;
-  const CurrencyPickerSheet({super.key, required this.currencies, required this.initialCurrency});
+  const CurrencyPickerSheet(
+      {super.key, required this.currencies, required this.initialCurrency});
 
   @override
   State<CurrencyPickerSheet> createState() => _CurrencyPickerSheetState();
@@ -237,7 +239,8 @@ class _CurrencyPickerSheetState extends State<CurrencyPickerSheet> {
                         var i = _filteredIndices[idx];
                         var currency = widget.currencies[i];
                         return ListTile(
-                          title: Text('${currency.id.toUpperCase()} (${currency.symbol})'),
+                          title: Text(
+                              '${currency.id.toUpperCase()} (${currency.symbol})'),
                           selected: currency.id == widget.initialCurrency,
                           onTap: () => Navigator.of(context).pop(currency.id),
                         );

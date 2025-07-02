@@ -90,8 +90,9 @@ class _ExChartState extends State<ExChart> {
             var key = e.key.toString();
             var dateKey = DateTime.parse(key);
             var value = e.value.toString();
-            var dataValue =
-                double.tryParse(value.toString().substring(5, value.length - 1).trim()) ?? 0.0;
+            var dataValue = double.tryParse(
+                    value.toString().substring(5, value.length - 1).trim()) ??
+                0.0;
             return (
               x: dateKey.millisecondsSinceEpoch.toDouble(),
               y: dataValue,
@@ -136,7 +137,8 @@ class _ExChartState extends State<ExChart> {
     }
     int n = historicalData.length - 1;
     double avgDailyChange = totalChange / n;
-    double variance = (totalChangeSquared / n) - (avgDailyChange * avgDailyChange);
+    double variance =
+        (totalChangeSquared / n) - (avgDailyChange * avgDailyChange);
     double stdDev = sqrt(variance).toDouble();
 
     var lastX = historicalData.last.x;
@@ -144,13 +146,15 @@ class _ExChartState extends State<ExChart> {
     var step = Duration.millisecondsPerDay.toDouble();
 
     // Generate predictions with random noise
-    Random random = Random(); // Seed with a fixed value for consistency if needed
+    Random random =
+        Random(); // Seed with a fixed value for consistency if needed
     List<({double x, double y})> prediction = [];
     double currentY = lastY;
     for (int i = 0; i < predictionDuration.value.inDays; i++) {
       double newX = lastX + (i + 1) * step;
-      double noise =
-          (random.nextDouble() * 2 - 1) * stdDev * 0.5; // Noise scaled by 50% of volatility
+      double noise = (random.nextDouble() * 2 - 1) *
+          stdDev *
+          0.5; // Noise scaled by 50% of volatility
       double newY = currentY + avgDailyChange + noise;
       prediction.add((x: newX, y: newY));
       currentY = newY;
@@ -257,7 +261,8 @@ class _ExChartState extends State<ExChart> {
                           color: context.theme.colorScheme.primary,
                         ),
                         title: Text('Show simple prediction'),
-                        subtitle: Text('This is just for fun, no financial advice.'),
+                        subtitle:
+                            Text('This is just for fun, no financial advice.'),
                         value: showPrediction.value,
                         onChanged: (value) {
                           showPrediction.value = value;
@@ -346,7 +351,8 @@ class _ExChartState extends State<ExChart> {
         default:
           text = const Text('', style: style);
       }
-    } else if (localDuration.value == 14.days || localDuration.value == 30.days) {
+    } else if (localDuration.value == 14.days ||
+        localDuration.value == 30.days) {
       switch (date.weekday) {
         case 1 || 2 || 3 || 4 || 5:
           var month = date.month.toString().padLeft(2, '0');
@@ -403,7 +409,8 @@ class _ExChartState extends State<ExChart> {
         return Duration.millisecondsPerDay.toDouble();
       } else if (localDuration.value == 30.days) {
         return Duration.millisecondsPerDay.toDouble() * 7;
-      } else if (localDuration.value == 90.days || localDuration.value == 180.days) {
+      } else if (localDuration.value == 90.days ||
+          localDuration.value == 180.days) {
         return Duration.millisecondsPerDay.toDouble() * 30;
       }
       return null;
@@ -496,13 +503,17 @@ class _ExChartState extends State<ExChart> {
           belowBarData: BarAreaData(
             show: true,
             gradient: LinearGradient(
-              colors: gradientColors.map((color) => color.withValues(alpha: 0.3)).toList(),
+              colors: gradientColors
+                  .map((color) => color.withValues(alpha: 0.3))
+                  .toList(),
             ),
           ),
         ),
         if (showPrediction.value && predictionPoints.isNotEmpty)
           LineChartBarData(
-            spots: predictionPoints.map((e) => FlSpot(e.x, e.y.toPrecision(5))).toList(),
+            spots: predictionPoints
+                .map((e) => FlSpot(e.x, e.y.toPrecision(5)))
+                .toList(),
             color: context.theme.colorScheme.tertiary.withValues(alpha: 0.7),
             isStrokeCapRound: true,
             dotData: const FlDotData(show: false),

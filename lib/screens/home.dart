@@ -122,7 +122,8 @@ class _HomeState extends State<Home> {
 
                 if (paren.currencies.isEmpty) {
                   return const Center(
-                    child: Text('Currencies is empty, an error must have occured.'),
+                    child: Text(
+                        'Currencies is empty, an error must have occured.'),
                   );
                 }
 
@@ -196,7 +197,8 @@ class _HomeState extends State<Home> {
                 currencyTextInput.value = '0';
               }
               if (currencyTextInput.value.contains(',')) {
-                currencyTextInput.value = currencyTextInput.value.replaceAll(',', '.');
+                currencyTextInput.value =
+                    currencyTextInput.value.replaceAll(',', '.');
               }
 
               var fromCurrency = paren.currencies.firstWhere(
@@ -209,11 +211,16 @@ class _HomeState extends State<Home> {
               var fromRate = fromCurrency.rate;
               var toRate = toCurrency.rate;
 
-              var inputConverted = (double.tryParse(currencyTextInput.value) ?? 0);
+              var inputConverted =
+                  (double.tryParse(currencyTextInput.value) ?? 0);
               var convertedAmount =
-                  (double.tryParse(currencyTextInput.value) ?? 0) * toRate / fromRate;
+                  (double.tryParse(currencyTextInput.value) ?? 0) *
+                      toRate /
+                      fromRate;
               var reConvertedAmount =
-                  (double.tryParse(currencyTextInput.value) ?? 0) * fromRate / toRate;
+                  (double.tryParse(currencyTextInput.value) ?? 0) *
+                      fromRate /
+                      toRate;
 
               NumberFormat numberFormatFrom = NumberFormat.simpleCurrency(
                 name: fromCurrency.id.toUpperCase(),
@@ -277,7 +284,8 @@ class _HomeState extends State<Home> {
                           style: TextStyle(
                             fontSize: paren.conv2Size.value,
                             fontWeight: FontWeight.bold,
-                            color: context.theme.colorScheme.primary.withValues(alpha: 0.75),
+                            color: context.theme.colorScheme.primary
+                                .withValues(alpha: 0.75),
                           ),
                           textAlign: TextAlign.center,
                         ),
@@ -286,7 +294,8 @@ class _HomeState extends State<Home> {
                           style: TextStyle(
                             fontSize: paren.conv2Size.value,
                             fontWeight: FontWeight.bold,
-                            color: context.theme.colorScheme.primary.withValues(alpha: 0.75),
+                            color: context.theme.colorScheme.primary
+                                .withValues(alpha: 0.75),
                           ),
                           textAlign: TextAlign.center,
                         ),
@@ -295,7 +304,8 @@ class _HomeState extends State<Home> {
                           style: TextStyle(
                             fontSize: paren.conv2Size.value,
                             fontWeight: FontWeight.bold,
-                            color: context.theme.colorScheme.primary.withValues(alpha: 0.75),
+                            color: context.theme.colorScheme.primary
+                                .withValues(alpha: 0.75),
                           ),
                           textAlign: TextAlign.center,
                         ),
@@ -337,7 +347,8 @@ class _HomeState extends State<Home> {
                         (fav) {
                           return fav.fromCurrency == paren.fromCurrency.value &&
                               fav.toCurrency == paren.toCurrency.value &&
-                              fav.amount.toStringAsFixed(2) == inputConverted.toStringAsFixed(2);
+                              fav.amount.toStringAsFixed(2) ==
+                                  inputConverted.toStringAsFixed(2);
                         },
                       )
                           ? Icons.favorite_outlined
@@ -527,7 +538,8 @@ class _HomeState extends State<Home> {
             Container(
               constraints: BoxConstraints(maxHeight: context.height * 0.80),
               child: ClipRRect(
-                borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+                borderRadius:
+                    const BorderRadius.vertical(top: Radius.circular(20)),
                 child: ExChart(
                   idFrom: paren.fromCurrency.value,
                   idxFrom: paren.currencies.indexWhere(
@@ -676,7 +688,8 @@ class _HomeState extends State<Home> {
                     ),
                   ),
                   TextSpan(
-                    text: ' which is open source and free to use.\nIt gets its data from the ',
+                    text:
+                        ' which is open source and free to use.\nIt gets its data from the ',
                   ),
                   TextSpan(
                     text: 'European Central Bank',
@@ -700,7 +713,8 @@ class _HomeState extends State<Home> {
                   TextSpan(
                     text:
                         '\n\nCurrencies last updated:\n${timestampToString(paren.latestTimestamp.value)}',
-                    style: TextStyle(color: context.theme.colorScheme.secondary),
+                    style:
+                        TextStyle(color: context.theme.colorScheme.secondary),
                   ),
                 ],
               ),
@@ -732,7 +746,8 @@ class _HomeState extends State<Home> {
                 ),
               ),
               child: ClipRRect(
-                borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+                borderRadius:
+                    const BorderRadius.vertical(top: Radius.circular(20)),
                 child: BudgetPlanner(),
               ),
             ),
@@ -764,7 +779,8 @@ class _HomeState extends State<Home> {
                     child: SizedBox(
                       height: 160,
                       child: GridView(
-                        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 2,
                           childAspectRatio: 2,
                         ),
@@ -780,19 +796,22 @@ class _HomeState extends State<Home> {
                                     color: color.computeLuminance() > 0.5
                                         ? Colors.black
                                         : Colors.white,
-                                    decoration: color.getValue == paren.appColor.value
-                                        ? TextDecoration.underline
-                                        : null,
-                                    fontWeight: color.getValue == paren.appColor.value
-                                        ? FontWeight.bold
-                                        : FontWeight.normal,
+                                    decoration:
+                                        color.getValue == paren.appColor.value
+                                            ? TextDecoration.underline
+                                            : null,
+                                    fontWeight:
+                                        color.getValue == paren.appColor.value
+                                            ? FontWeight.bold
+                                            : FontWeight.normal,
                                   ),
                                 ),
                                 backgroundColor: color,
                                 selectedColor: color,
                                 // visualDensity: VisualDensity.compact,
                                 color: WidgetStatePropertyAll(color),
-                                selected: color.getValue == paren.appColor.value,
+                                selected:
+                                    color.getValue == paren.appColor.value,
                                 onSelected: (value) {
                                   paren.appColor.value = color.getValue;
                                   paren.setTheme();
@@ -811,7 +830,8 @@ class _HomeState extends State<Home> {
                       child: ToggleButtons(
                         borderRadius: BorderRadius.circular(8),
                         direction: Axis.vertical,
-                        isSelected: List.generate(3, (i) => i == paren.appThemeMode.value.index),
+                        isSelected: List.generate(
+                            3, (i) => i == paren.appThemeMode.value.index),
                         onPressed: (int index) async {
                           if (paren.appThemeMode.value.index == index) return;
                           paren.appThemeMode.value = ThemeMode.values[index];
@@ -824,7 +844,8 @@ class _HomeState extends State<Home> {
                         children: [
                           ...themeOptions.map(
                             (option) => Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 12, vertical: 6),
                               child: Column(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [

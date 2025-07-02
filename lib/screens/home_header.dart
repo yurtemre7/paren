@@ -115,7 +115,11 @@ class HomeHeader extends StatelessWidget implements PreferredSizeWidget {
 
   IconButton buildNavigateIconButton(ColorScheme colorScheme) {
     return IconButton(
-      icon: Icon(reverse ? Icons.arrow_back_ios_new_outlined : Icons.arrow_forward_ios_outlined),
+      icon: Icon(
+        reverse
+            ? Icons.arrow_back_ios_new_outlined
+            : Icons.arrow_forward_ios_outlined,
+      ),
       color: colorScheme.primary,
       tooltip: reverse ? 'Home' : 'Settings',
       onPressed: onNavigate,

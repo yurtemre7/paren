@@ -46,7 +46,9 @@ class _CalculatorKeyboardState extends State<CalculatorKeyboard> {
 
     // Remove leading zeros (but keep '0.' and '0')
     String newText = text + value;
-    if (newText.startsWith('0') && !newText.startsWith('0.') && newText.length > 1) {
+    if (newText.startsWith('0') &&
+        !newText.startsWith('0.') &&
+        newText.length > 1) {
       newText = newText.replaceFirst(RegExp(r'^0+'), '');
     }
 
@@ -91,7 +93,8 @@ class _CalculatorKeyboardState extends State<CalculatorKeyboard> {
                   color: context.theme.colorScheme.primary,
                   fontWeight: FontWeight.bold,
                   decoration: TextDecoration.underline,
-                  decorationColor: context.theme.colorScheme.primary.withValues(alpha: 0.25),
+                  decorationColor:
+                      context.theme.colorScheme.primary.withValues(alpha: 0.25),
                 ),
               ),
               16.h,
@@ -149,7 +152,8 @@ class _CalcButton extends StatefulWidget {
   State<_CalcButton> createState() => _CalcButtonState();
 }
 
-class _CalcButtonState extends State<_CalcButton> with SingleTickerProviderStateMixin {
+class _CalcButtonState extends State<_CalcButton>
+    with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _offsetAnimation;
 
