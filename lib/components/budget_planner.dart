@@ -14,11 +14,14 @@ class BudgetPlanner extends StatefulWidget {
 class _BudgetPlannerState extends State<BudgetPlanner> {
   final Paren paren = Get.find();
   final TextEditingController _budgetController = TextEditingController();
-  DateTimeRange? _tripDates;
+  final TextEditingController _dailyBudgetController = TextEditingController();
+  final _tripDates = Rxn<DateTimeRange>();
+  final _isDailyMode = false.obs;
 
   @override
   void dispose() {
     _budgetController.dispose();
+    _dailyBudgetController.dispose();
     super.dispose();
   }
 
@@ -28,9 +31,11 @@ class _BudgetPlannerState extends State<BudgetPlanner> {
       context: context,
       firstDate: now,
       lastDate: now.add(const Duration(days: 365)),
-      initialDateRange: _tripDates,
+      initialDateRange: _tripDates.value,
     );
-    if (picked != null) setState(() => _tripDates = picked);
+    if (picked != null) {
+      _tripDates.value = picked;
+    }
   }
 
   @override
@@ -38,19 +43,23 @@ class _BudgetPlannerState extends State<BudgetPlanner> {
     return Obx(
       () {
         var currencies = paren.currencies;
-        var fromRate = currencies.firstWhere((c) => c.id == paren.fromCurrency.value).rate;
-        var toRate = currencies.firstWhere((c) => c.id == paren.toCurrency.value).rate;
+        var fromRate =
+            currencies.firstWhere((c) => c.id == paren.fromCurrency.value).rate;
+        var toRate =
+            currencies.firstWhere((c) => c.id == paren.toCurrency.value).rate;
         var budget = double.tryParse(_budgetController.text) ?? 0;
         var localBudget = budget * toRate / fromRate;
-        var days = _tripDates?.duration.inDays ?? 0;
+        var days = _tripDates.value?.duration.inDays ?? 0;
         var effectiveDays = days > 0 ? days : 1;
         var perDay = localBudget / effectiveDays;
         var perDayFrom = budget / effectiveDays;
 
-        var currencyToFormatter =
-            NumberFormat.simpleCurrency(name: paren.toCurrency.value.toUpperCase());
-        var currencyFromFormatter =
-            NumberFormat.simpleCurrency(name: paren.fromCurrency.value.toUpperCase());
+        var currencyToFormatter = NumberFormat.simpleCurrency(
+          name: paren.toCurrency.value.toUpperCase(),
+        );
+        var currencyFromFormatter = NumberFormat.simpleCurrency(
+          name: paren.fromCurrency.value.toUpperCase(),
+        );
         return GestureDetector(
           onTap: () {
             FocusScope.of(context).unfocus();
@@ -84,16 +93,65 @@ class _BudgetPlannerState extends State<BudgetPlanner> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        TextField(
-                          controller: _budgetController,
-                          keyboardType: TextInputType.number,
-                          decoration: InputDecoration(
-                            labelText: 'Budget (${paren.fromCurrency.value.toUpperCase()})',
-                            border: const OutlineInputBorder(),
-                          ),
-                          onChanged: (_) => setState(() {}),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                ChoiceChip(
+                                  elevation: 1,
+                                  label: const Text('Total Budget'),
+                                  selected: !_isDailyMode.value,
+                                  labelStyle: TextStyle(
+                                    color: !_isDailyMode.value
+                                        ? context.theme.colorScheme
+                                            .onPrimaryContainer
+                                        : context
+                                            .theme.colorScheme.onSurfaceVariant,
+                                  ),
+                                  onSelected: (selected) {
+                                    if (selected) {
+                                      _isDailyMode.value = false;
+                                    }
+                                  },
+                                ),
+                                8.w,
+                                ChoiceChip(
+                                  elevation: 1,
+                                  label: const Text('Per-Day Budget'),
+                                  selected: _isDailyMode.value,
+                                  labelStyle: TextStyle(
+                                    color: _isDailyMode.value
+                                        ? context.theme.colorScheme
+                                            .onPrimaryContainer
+                                        : context
+                                            .theme.colorScheme.onSurfaceVariant,
+                                  ),
+                                  onSelected: (selected) {
+                                    if (selected) {
+                                      _isDailyMode.value = true;
+                                    }
+                                  },
+                                ),
+                              ],
+                            ),
+                            16.h,
+                            TextField(
+                              controller: _isDailyMode.value
+                                  ? _dailyBudgetController
+                                  : _budgetController,
+                              keyboardType: TextInputType.number,
+                              decoration: InputDecoration(
+                                labelText: _isDailyMode.value
+                                    ? 'Daily Budget (${paren.fromCurrency.value.toUpperCase()})'
+                                    : 'Total Budget (${paren.fromCurrency.value.toUpperCase()})',
+                                border: const OutlineInputBorder(),
+                              ),
+                              onChanged: (_) => setState(() {}),
+                            ),
+                          ],
                         ),
-                        const SizedBox(height: 8),
+                        8.h,
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -103,19 +161,30 @@ class _BudgetPlannerState extends State<BudgetPlanner> {
                               onPressed: _pickTripDates,
                             ),
                             4.h,
-                            if (_tripDates != null)
+                            if (_tripDates.value != null)
                               Text(
-                                '${DateFormat.yMd().format(_tripDates!.start)} - ${DateFormat.yMd().format(_tripDates!.end)} (${_tripDates!.duration.inDays} days)',
+                                '${DateFormat.yMd().format(_tripDates.value!.start)} - ${DateFormat.yMd().format(_tripDates.value!.end)} (${_tripDates.value!.duration.inDays} days)',
                               ),
                           ],
                         ),
                         8.h,
-                        Text(
-                          'Total: ${currencyToFormatter.format(localBudget)} (${currencyFromFormatter.format(budget)})',
-                        ),
-                        Text(
-                          'Per day: ${currencyToFormatter.format(perDay)} (${currencyFromFormatter.format(perDayFrom)})',
-                        ),
+                        8.h,
+                        if (!_isDailyMode.value) ...[
+                          Text(
+                            'Total: ${currencyToFormatter.format(localBudget)} (${currencyFromFormatter.format(budget)})',
+                          ),
+                          Text(
+                            'Per day: ${currencyToFormatter.format(perDay)} (${currencyFromFormatter.format(perDayFrom)})',
+                          ),
+                        ] else ...[
+                          // Calculate from daily input
+                          Text(
+                            'Daily: ${currencyFromFormatter.format(double.tryParse(_dailyBudgetController.text) ?? 0)} (${currencyToFormatter.format((double.tryParse(_dailyBudgetController.text) ?? 0) * toRate / fromRate)})',
+                          ),
+                          Text(
+                            'Total: ${currencyToFormatter.format((double.tryParse(_dailyBudgetController.text) ?? 0) * effectiveDays)} (${currencyFromFormatter.format((double.tryParse(_dailyBudgetController.text) ?? 0) * effectiveDays)})',
+                          ),
+                        ],
                       ],
                     ),
                   ),
