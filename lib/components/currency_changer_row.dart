@@ -137,8 +137,11 @@ class _CurrencyChangerRowState extends State<CurrencyChangerRow> {
 class CurrencyPickerSheet extends StatefulWidget {
   final List<Currency> currencies;
   final String initialCurrency;
-  const CurrencyPickerSheet(
-      {super.key, required this.currencies, required this.initialCurrency});
+  const CurrencyPickerSheet({
+    super.key,
+    required this.currencies,
+    required this.initialCurrency,
+  });
 
   @override
   State<CurrencyPickerSheet> createState() => _CurrencyPickerSheetState();
@@ -240,7 +243,8 @@ class _CurrencyPickerSheetState extends State<CurrencyPickerSheet> {
                         var currency = widget.currencies[i];
                         return ListTile(
                           title: Text(
-                              '${currency.id.toUpperCase()} (${currency.symbol})'),
+                            '${currency.id.toUpperCase()} (${currency.symbol})',
+                          ),
                           selected: currency.id == widget.initialCurrency,
                           onTap: () => Navigator.of(context).pop(currency.id),
                         );

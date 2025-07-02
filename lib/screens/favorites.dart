@@ -75,7 +75,8 @@ class FavoritesScreen extends StatelessWidget {
                 child: ListTile(
                   title: Text('$inputFrom ➜ $inputTo'),
                   subtitle: Text(
-                      '${fromCurrency.id.toUpperCase()} ➜ ${toCurrency.id.toUpperCase()}'),
+                    '${fromCurrency.id.toUpperCase()} ➜ ${toCurrency.id.toUpperCase()}',
+                  ),
                   onTap: () {
                     paren.fromCurrency.value = favorite.fromCurrency;
                     paren.toCurrency.value = favorite.toCurrency;

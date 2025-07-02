@@ -91,7 +91,8 @@ class _ExChartState extends State<ExChart> {
             var dateKey = DateTime.parse(key);
             var value = e.value.toString();
             var dataValue = double.tryParse(
-                    value.toString().substring(5, value.length - 1).trim()) ??
+                  value.toString().substring(5, value.length - 1).trim(),
+                ) ??
                 0.0;
             return (
               x: dateKey.millisecondsSinceEpoch.toDouble(),

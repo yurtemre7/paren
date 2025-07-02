@@ -81,8 +81,12 @@ void logMessage(String msg, {String tag = 'Paren'}) {
   );
 }
 
-void logError(String msg,
-    {String tag = 'Paren', Object? error, StackTrace? stackTrace}) {
+void logError(
+  String msg, {
+  String tag = 'Paren',
+  Object? error,
+  StackTrace? stackTrace,
+}) {
   log(
     msg,
     name: tag,

@@ -123,7 +123,8 @@ class _HomeState extends State<Home> {
                 if (paren.currencies.isEmpty) {
                   return const Center(
                     child: Text(
-                        'Currencies is empty, an error must have occured.'),
+                      'Currencies is empty, an error must have occured.',
+                    ),
                   );
                 }
 
@@ -831,7 +832,9 @@ class _HomeState extends State<Home> {
                         borderRadius: BorderRadius.circular(8),
                         direction: Axis.vertical,
                         isSelected: List.generate(
-                            3, (i) => i == paren.appThemeMode.value.index),
+                          3,
+                          (i) => i == paren.appThemeMode.value.index,
+                        ),
                         onPressed: (int index) async {
                           if (paren.appThemeMode.value.index == index) return;
                           paren.appThemeMode.value = ThemeMode.values[index];
@@ -845,7 +848,9 @@ class _HomeState extends State<Home> {
                           ...themeOptions.map(
                             (option) => Container(
                               padding: const EdgeInsets.symmetric(
-                                  horizontal: 12, vertical: 6),
+                                horizontal: 12,
+                                vertical: 6,
+                              ),
                               child: Column(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
