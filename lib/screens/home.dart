@@ -195,14 +195,6 @@ class _HomeState extends State<Home> {
         children: [
           Obx(
             () {
-              if (currencyTextInput.value.isEmpty) {
-                currencyTextInput.value = '0';
-              }
-              if (currencyTextInput.value.contains(',')) {
-                currencyTextInput.value =
-                    currencyTextInput.value.replaceAll(',', '.');
-              }
-
               var fromCurrency = paren.currencies.firstWhere(
                 (element) => element.id == paren.fromCurrency.value,
               );
