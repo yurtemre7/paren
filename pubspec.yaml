@@ -22,6 +22,7 @@ dependencies:
   share_plus: ^11.0.0
   fl_chart: ^1.0.0
   home_widget: ^0.8.0
+  flutter_colorpicker: ^1.1.0
   # image_picker: ^1.1.2
 
 dev_dependencies:
