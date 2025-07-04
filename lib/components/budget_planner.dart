@@ -98,40 +98,44 @@ class _BudgetPlannerState extends State<BudgetPlanner> {
                           children: [
                             Row(
                               children: [
-                                ChoiceChip(
-                                  elevation: 1,
-                                  label: const Text('Total Budget'),
-                                  selected: !_isDailyMode.value,
-                                  labelStyle: TextStyle(
-                                    color: !_isDailyMode.value
-                                        ? context.theme.colorScheme
-                                            .onPrimaryContainer
-                                        : context
-                                            .theme.colorScheme.onSurfaceVariant,
+                                Expanded(
+                                  child: ChoiceChip(
+                                    elevation: 1,
+                                    label: const Text('Total Budget'),
+                                    selected: !_isDailyMode.value,
+                                    labelStyle: TextStyle(
+                                      color: !_isDailyMode.value
+                                          ? context.theme.colorScheme
+                                              .onPrimaryContainer
+                                          : context.theme.colorScheme
+                                              .onSurfaceVariant,
+                                    ),
+                                    onSelected: (selected) {
+                                      if (selected) {
+                                        _isDailyMode.value = false;
+                                      }
+                                    },
                                   ),
-                                  onSelected: (selected) {
-                                    if (selected) {
-                                      _isDailyMode.value = false;
-                                    }
-                                  },
                                 ),
                                 8.w,
-                                ChoiceChip(
-                                  elevation: 1,
-                                  label: const Text('Per-Day Budget'),
-                                  selected: _isDailyMode.value,
-                                  labelStyle: TextStyle(
-                                    color: _isDailyMode.value
-                                        ? context.theme.colorScheme
-                                            .onPrimaryContainer
-                                        : context
-                                            .theme.colorScheme.onSurfaceVariant,
+                                Expanded(
+                                  child: ChoiceChip(
+                                    elevation: 1,
+                                    label: const Text('Per-Day Budget'),
+                                    selected: _isDailyMode.value,
+                                    labelStyle: TextStyle(
+                                      color: _isDailyMode.value
+                                          ? context.theme.colorScheme
+                                              .onPrimaryContainer
+                                          : context.theme.colorScheme
+                                              .onSurfaceVariant,
+                                    ),
+                                    onSelected: (selected) {
+                                      if (selected) {
+                                        _isDailyMode.value = true;
+                                      }
+                                    },
                                   ),
-                                  onSelected: (selected) {
-                                    if (selected) {
-                                      _isDailyMode.value = true;
-                                    }
-                                  },
                                 ),
                               ],
                             ),
