@@ -21,6 +21,7 @@ class CalculatorKeyboard extends StatefulWidget {
 
 class _CalculatorKeyboardState extends State<CalculatorKeyboard> {
   final Paren paren = Get.find();
+  final focusNode = FocusNode();
 
   void _append(String value) {
     var text = widget.input.value;
@@ -34,6 +35,10 @@ class _CalculatorKeyboardState extends State<CalculatorKeyboard> {
     // If '.' is first, prepend '0'
     if (value == '.' && text.isEmpty) {
       widget.input.value = '0.';
+      return;
+    }
+
+    if (value == '0' && text == '0') {
       return;
     }
 
@@ -75,62 +80,99 @@ class _CalculatorKeyboardState extends State<CalculatorKeyboard> {
     widget.input.value = '0';
   }
 
+  // Handle keyboard input
+  void handleKeyEvent(KeyEvent event) {
+    if (event is KeyDownEvent || event is KeyRepeatEvent) {
+      var keyLabel = event.logicalKey.keyLabel;
+
+      // Handle number keys
+      if (RegExp(r'^\d$').hasMatch(keyLabel)) {
+        _append(keyLabel);
+      }
+      // Handle decimal point
+      else if (keyLabel == '.' || keyLabel == ',') {
+        _append('.');
+      }
+      // Handle backspace/delete
+      else if (event.logicalKey == LogicalKeyboardKey.backspace ||
+          event.logicalKey == LogicalKeyboardKey.delete) {
+        _delete();
+      }
+      // Handle escape to clear
+      else if (event.logicalKey == LogicalKeyboardKey.escape) {
+        _clear();
+      }
+    }
+  }
+
+  @override
+  void dispose() {
+    focusNode.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Obx(
-      () {
-        return Container(
-          constraints: BoxConstraints(
-            maxWidth: paren.calculatorInputHeight.value,
-            // maxWidth: context.width * 0.5,
-          ),
-          child: Column(
-            children: [
-              SelectableText(
-                widget.input.value,
-                style: TextStyle(
-                  fontSize: 28,
-                  color: context.theme.colorScheme.primary,
-                  fontWeight: FontWeight.bold,
-                  decoration: TextDecoration.underline,
-                  decorationColor:
-                      context.theme.colorScheme.primary.withValues(alpha: 0.25),
+      () => KeyboardListener(
+        focusNode: focusNode,
+        autofocus: true,
+        onKeyEvent: handleKeyEvent,
+        child: GestureDetector(
+          onTap: () => focusNode.requestFocus(),
+          child: Container(
+            constraints: BoxConstraints(
+              maxWidth: paren.calculatorInputHeight.value,
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                SelectableText(
+                  widget.input.value,
+                  style: TextStyle(
+                    fontSize: 28,
+                    color: context.theme.colorScheme.primary,
+                    fontWeight: FontWeight.bold,
+                    decoration: TextDecoration.underline,
+                    decorationColor: context.theme.colorScheme.primary
+                        .withValues(alpha: 0.25),
+                  ),
                 ),
-              ),
-              16.h,
-              GridView.count(
-                crossAxisCount: 3,
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                mainAxisSpacing: 8,
-                crossAxisSpacing: 8,
-                children: [
-                  for (var i = 1; i <= 9; i++)
+                16.h,
+                GridView.count(
+                  crossAxisCount: 3,
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  mainAxisSpacing: 8,
+                  crossAxisSpacing: 8,
+                  children: [
+                    for (var i = 1; i <= 9; i++)
+                      _CalcButton(
+                        label: '$i',
+                        onTap: () => _append('$i'),
+                      ),
                     _CalcButton(
-                      label: '$i',
-                      onTap: () => _append('$i'),
+                      label: '.',
+                      onTap: () => _append('.'),
                     ),
-                  _CalcButton(
-                    label: '.',
-                    onTap: () => _append('.'),
-                  ),
-                  _CalcButton(
-                    label: '0',
-                    onTap: () => _append('0'),
-                  ),
-                  _CalcButton(
-                    label: 'C',
-                    onTap: _delete,
-                    onLongPress: _clear,
-                    color: Theme.of(context).colorScheme.error,
-                  ),
-                ],
-              ),
-              8.h,
-            ],
+                    _CalcButton(
+                      label: '0',
+                      onTap: () => _append('0'),
+                    ),
+                    _CalcButton(
+                      label: 'C',
+                      onTap: _delete,
+                      onLongPress: _clear,
+                      color: Theme.of(context).colorScheme.error,
+                    ),
+                  ],
+                ),
+                8.h,
+              ],
+            ),
           ),
-        );
-      },
+        ),
+      ),
     );
   }
 }
