@@ -16,6 +16,7 @@ import 'package:paren/screens/favorites.dart';
 import 'package:paren/screens/quick_conversions.dart';
 import 'package:paren/screens/settings.dart';
 import 'package:paren/screens/home_header.dart';
+import 'package:paren/widgets/color_picker_dialog.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -772,101 +773,54 @@ class _HomeState extends State<Home> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              4.h,
-              Row(
+              8.h,
+              Column(
                 children: [
-                  Expanded(
-                    flex: 2,
-                    child: SizedBox(
-                      height: 160,
-                      child: GridView(
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          childAspectRatio: 2,
-                        ),
-                        shrinkWrap: true,
-                        children: [
-                          ...Colors.primaries.map((color) {
-                            return Container(
-                              margin: const EdgeInsets.only(right: 8, top: 8),
-                              child: ChoiceChip(
-                                label: Text(
-                                  'Color',
-                                  style: TextStyle(
-                                    color: color.computeLuminance() > 0.5
-                                        ? Colors.black
-                                        : Colors.white,
-                                    decoration:
-                                        color.getValue == paren.appColor.value
-                                            ? TextDecoration.underline
-                                            : null,
-                                    fontWeight:
-                                        color.getValue == paren.appColor.value
-                                            ? FontWeight.bold
-                                            : FontWeight.normal,
-                                  ),
-                                ),
-                                backgroundColor: color,
-                                selectedColor: color,
-                                // visualDensity: VisualDensity.compact,
-                                color: WidgetStatePropertyAll(color),
-                                selected:
-                                    color.getValue == paren.appColor.value,
-                                onSelected: (value) {
-                                  paren.appColor.value = color.getValue;
-                                  paren.setTheme();
-                                  paren.saveSettings();
-                                },
-                                showCheckmark: false,
-                              ),
-                            );
-                          }),
-                        ],
-                      ),
+                  Center(
+                    child: IconButton(
+                      icon: const Icon(Icons.color_lens),
+                      onPressed: () {
+                        showColorPickerDialog(context);
+                      },
                     ),
                   ),
-                  Expanded(
-                    child: Center(
-                      child: ToggleButtons(
-                        borderRadius: BorderRadius.circular(8),
-                        direction: Axis.vertical,
-                        isSelected: List.generate(
-                          3,
-                          (i) => i == paren.appThemeMode.value.index,
-                        ),
-                        onPressed: (int index) async {
-                          if (paren.appThemeMode.value.index == index) return;
-                          paren.appThemeMode.value = ThemeMode.values[index];
-                          paren.setTheme();
-                          paren.saveSettings();
-                        },
-                        selectedColor: context.theme.colorScheme.onPrimary,
-                        fillColor: context.theme.colorScheme.primary,
-                        color: context.theme.colorScheme.primary,
-                        children: [
-                          ...themeOptions.map(
-                            (option) => Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 12,
-                                vertical: 6,
-                              ),
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Icon(option['icon'] as IconData, size: 20),
-                                  4.h,
-                                  Text(
-                                    option['label'] as String,
-                                    style: const TextStyle(fontSize: 12),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
+                  12.h,
+                  ToggleButtons(
+                    borderRadius: BorderRadius.circular(8),
+                    isSelected: List.generate(
+                      3,
+                      (i) => i == paren.appThemeMode.value.index,
                     ),
+                    onPressed: (int index) async {
+                      if (paren.appThemeMode.value.index == index) return;
+                      paren.appThemeMode.value = ThemeMode.values[index];
+                      paren.setTheme();
+                      paren.saveSettings();
+                    },
+                    selectedColor: context.theme.colorScheme.onPrimary,
+                    fillColor: context.theme.colorScheme.primary,
+                    color: context.theme.colorScheme.primary,
+                    children: [
+                      ...themeOptions.map(
+                        (option) => Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 12,
+                            vertical: 6,
+                          ),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(option['icon'] as IconData, size: 20),
+                              4.h,
+                              Text(
+                                option['label'] as String,
+                                style: const TextStyle(fontSize: 12),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),
