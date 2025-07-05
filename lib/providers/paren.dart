@@ -36,6 +36,9 @@ class Paren extends GetxController {
 
   final favorites = <FavoriteConversion>[].obs;
 
+  final currencyTextInput = '1'.obs;
+  final currentPage = 0.obs;
+
   Paren();
 
   Future<void> init() async {
