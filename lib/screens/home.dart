@@ -130,7 +130,6 @@ class _HomeState extends State<Home> {
                 }
 
                 return PageView(
-                  physics: NeverScrollableScrollPhysics(),
                   controller: pageController,
                   children: [
                     Column(
@@ -793,6 +792,7 @@ class _HomeState extends State<Home> {
                   Center(
                     child: IconButton(
                       icon: const Icon(Icons.color_lens),
+                      color: context.theme.colorScheme.primary,
                       onPressed: () {
                         showColorPickerDialog(context);
                       },
