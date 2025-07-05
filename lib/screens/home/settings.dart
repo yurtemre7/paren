@@ -36,7 +36,7 @@ class _SettingsState extends State<Settings> {
           ListTile(
             title: const Text('Share the App'),
             subtitle: const Text(
-              'With your help the app can help more people on their vacations! I appreciate you.',
+              'With your help the app can help more people on their vacations! I appreciate your effort.',
             ),
             trailing: IconButton(
               onPressed: () {
