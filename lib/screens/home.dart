@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:paren/components/budget_planner.dart';
@@ -16,7 +17,6 @@ import 'package:paren/screens/favorites.dart';
 import 'package:paren/screens/quick_conversions.dart';
 import 'package:paren/screens/settings.dart';
 import 'package:paren/screens/home_header.dart';
-import 'package:paren/widgets/color_picker_dialog.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -752,6 +752,28 @@ class _HomeState extends State<Home> {
   }
 
   Widget buildAppThemeColorChanger() {
+    void showColorPickerDialog(BuildContext context) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Pick a color'),
+            content: Obx(
+              () => SingleChildScrollView(
+                child: ColorPicker(
+                  pickerColor: Color(paren.appColor.value),
+                  onColorChanged: (Color newColor) {
+                    paren.appColor.value = newColor.getValue;
+                  },
+                  pickerAreaHeightPercent: 0.75,
+                ),
+              ),
+            ),
+          );
+        },
+      );
+    }
+
     return Obx(
       () {
         return Container(
