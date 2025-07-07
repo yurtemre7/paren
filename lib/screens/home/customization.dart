@@ -187,26 +187,25 @@ class _CustomizationState extends State<Customization> {
   }
 
   Widget buildAppThemeColorChanger() {
-    void showColorPickerDialog(BuildContext context) {
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: const Text('Pick a color'),
-            content: Obx(
-              () => SingleChildScrollView(
-                child: ColorPicker(
-                  pickerColor: Color(paren.appColor.value),
-                  onColorChanged: (Color newColor) {
-                    paren.appColor.value = newColor.getValue;
-                  },
-                  pickerAreaHeightPercent: 0.75,
-                ),
+    Future<void> showColorPickerDialog() async {
+      await Get.dialog(
+        AlertDialog(
+          title: const Text('Pick a color'),
+          content: Obx(
+            () => SingleChildScrollView(
+              child: ColorPicker(
+                pickerColor: Color(paren.appColor.value),
+                onColorChanged: (Color newColor) {
+                  paren.appColor.value = newColor.getValue;
+                  paren.setTheme();
+                },
+                pickerAreaHeightPercent: 0.75,
               ),
             ),
-          );
-        },
+          ),
+        ),
       );
+      paren.saveSettings();
     }
 
     return Obx(
@@ -226,12 +225,43 @@ class _CustomizationState extends State<Customization> {
               Column(
                 children: [
                   Center(
-                    child: IconButton(
-                      icon: const Icon(Icons.color_lens),
-                      color: context.theme.colorScheme.primary,
-                      onPressed: () {
-                        showColorPickerDialog(context);
+                    child: InkWell(
+                      borderRadius: BorderRadius.circular(8),
+                      onTap: () {
+                        showColorPickerDialog();
                       },
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 8,
+                        ),
+                        decoration: BoxDecoration(
+                          // color: context.theme.colorScheme.surface,
+                          borderRadius: BorderRadius.circular(8),
+                          border: Border.all(
+                            color: context.theme.colorScheme.onSurface.withValues(
+                              alpha: 0.12,
+                            ),
+                          ),
+                        ),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(
+                              Icons.color_lens,
+                              color: context.theme.colorScheme.primary,
+                            ),
+                            4.h,
+                            Text(
+                              'App Color',
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: context.theme.colorScheme.onSurface,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
                   ),
                   12.h,
