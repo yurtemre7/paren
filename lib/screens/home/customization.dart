@@ -239,7 +239,8 @@ class _CustomizationState extends State<Customization> {
                           // color: context.theme.colorScheme.surface,
                           borderRadius: BorderRadius.circular(8),
                           border: Border.all(
-                            color: context.theme.colorScheme.onSurface.withValues(
+                            color:
+                                context.theme.colorScheme.onSurface.withValues(
                               alpha: 0.12,
                             ),
                           ),
