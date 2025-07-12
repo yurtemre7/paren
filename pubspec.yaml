@@ -18,7 +18,7 @@ dependencies:
   get: ^4.7.2
   dio: ^5.8.0+1
   shared_preferences: ^2.5.3
-  url_launcher: ^6.3.1
+  url_launcher: ^6.3.2
   share_plus: ^11.0.0
   fl_chart: ^1.0.0
   home_widget: ^0.8.0
