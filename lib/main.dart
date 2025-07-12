@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget {
     Paren paren = Get.find();
     return Obx(
       () => GetMaterialApp(
-        title: 'par-en',
+        title: 'paren',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(
