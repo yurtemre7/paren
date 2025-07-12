@@ -89,7 +89,6 @@ class Paren extends GetxController {
       });
 
       currencies.value = onlineCurrencies;
-      currencies.refresh();
       if (!currencieNamesMap.containsKey(fromCurrency.value.toUpperCase())) {
         fromCurrency.value =
             currencieNamesMap.entries.first.key.toString().toLowerCase();
@@ -175,7 +174,7 @@ class Paren extends GetxController {
           .toList();
     } catch (error, stackTrace) {
       logError(
-        'An Error happened. Rebuilding database',
+        'An Error happened.',
         error: error,
         stackTrace: stackTrace,
       );
