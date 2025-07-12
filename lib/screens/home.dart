@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:paren/providers/constants.dart';
+import 'package:paren/providers/extensions.dart';
 import 'package:paren/providers/paren.dart';
 import 'package:paren/screens/home/conversion.dart';
 import 'package:paren/screens/home/customization.dart';
@@ -51,7 +52,11 @@ class _HomeState extends State<Home> {
     loading.value = true;
     var stopwatch = Stopwatch()..start();
     try {
-      await paren.init();
+      await paren.init().timeout(5.seconds);
+    } on TimeoutException {
+      logMessage('Operation timed out');
+    } catch (e) {
+      logMessage('An error occurred');
     } finally {
       stopwatch.stop();
       logMessage('Loading time taken: ${stopwatch.elapsedMilliseconds}ms');
@@ -61,6 +66,7 @@ class _HomeState extends State<Home> {
 
   @override
   void dispose() {
+    pageController.removeListener(pageControllerListener);
     pageController.dispose();
     super.dispose();
   }
@@ -91,6 +97,9 @@ class _HomeState extends State<Home> {
                   Get.dialog(buildDataInfoSheet());
                 },
                 onNavigate: () async {
+                  if (paren.currencies.isEmpty) {
+                    return;
+                  }
                   await pageController.animateToPage(
                     paren.currentPage.value > 0 ? 0 : 1,
                     duration: 250.milliseconds,
@@ -104,16 +113,10 @@ class _HomeState extends State<Home> {
           body: SafeArea(
             child: Obx(
               () {
-                if (loading.value) {
-                  return const Center(
-                    child: CircularProgressIndicator.adaptive(),
-                  );
-                }
-
                 if (paren.currencies.isEmpty) {
                   return const Center(
                     child: Text(
-                      'Currencies is empty, an error must have occured.',
+                      'Currencies is empty, an error must have occurred.',
                     ),
                   );
                 }
@@ -127,6 +130,11 @@ class _HomeState extends State<Home> {
                 );
               },
             ),
+          ),
+          floatingActionButtonLocation:
+              FloatingActionButtonLocation.centerDocked,
+          floatingActionButton: Obx(
+            () => loading.value ? const LinearProgressIndicator() : 0.h,
           ),
         ),
       ),
