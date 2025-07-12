@@ -25,7 +25,7 @@ class _ConversionState extends State<Conversion> {
       mainAxisSize: MainAxisSize.min,
       children: [
         Expanded(
-          child: RefreshIndicator(
+          child: RefreshIndicator.adaptive(
             onRefresh: () async {
               paren.latestTimestamp.value = DateTime.now();
               await paren.fetchCurrencyDataOnline();
