@@ -73,6 +73,7 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+    var width = MediaQuery.of(context).size.width;
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).unfocus();
@@ -118,6 +119,20 @@ class _HomeState extends State<Home> {
                     child: Text(
                       'Currencies is empty, an error must have occurred.',
                     ),
+                  );
+                }
+
+                if (width >= 800) {
+                  return Row(
+                    children: [
+                      Expanded(flex: 3, child: Conversion()),
+                      // add border
+                      Container(
+                        width: 1,
+                        color: context.theme.colorScheme.outlineVariant,
+                      ),
+                      Expanded(child: Customization()),
+                    ],
                   );
                 }
 

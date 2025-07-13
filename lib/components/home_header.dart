@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:paren/providers/extensions.dart';
 
 class HomeHeader extends StatelessWidget implements PreferredSizeWidget {
   final VoidCallback onInfo;
@@ -14,6 +15,7 @@ class HomeHeader extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     var colorScheme = Theme.of(context).colorScheme;
+    var width = MediaQuery.of(context).size.width;
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
@@ -21,15 +23,21 @@ class HomeHeader extends StatelessWidget implements PreferredSizeWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              if (reverse)
-                buildNavigateIconButton(colorScheme)
-              else
+              if (width >= 800) ...[
                 buildInfoIconButton(colorScheme),
-              buildLogo(colorScheme),
-              if (reverse)
-                buildInfoIconButton(colorScheme)
-              else
-                buildNavigateIconButton(colorScheme),
+                buildLogo(colorScheme),
+                0.h,
+              ] else ...[
+                if (reverse)
+                  buildNavigateIconButton(colorScheme)
+                else
+                  buildInfoIconButton(colorScheme),
+                buildLogo(colorScheme),
+                if (reverse)
+                  buildInfoIconButton(colorScheme)
+                else
+                  buildNavigateIconButton(colorScheme),
+              ],
             ],
           ),
         ),
