@@ -160,7 +160,7 @@ class _CalculatorKeyboardState extends State<CalculatorKeyboard> {
                       onTap: () => _append('0'),
                     ),
                     _CalcButton(
-                      label: 'C',
+                      label: 'c',
                       onTap: _delete,
                       onLongPress: _clear,
                       color: Theme.of(context).colorScheme.error,
