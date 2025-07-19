@@ -41,6 +41,8 @@ class _ExChartState extends State<ExChart> {
   final localIdxTo = 0.obs;
   final localDuration = 7.days.obs;
 
+  final hasNotShownDoubleValue = false.obs;
+
   final localDurations = [
     7.days,
     14.days,
@@ -72,6 +74,7 @@ class _ExChartState extends State<ExChart> {
   Future<void> fetchChartData(String from, String to) async {
     isLoading.value = true;
     hasError.value = false;
+    hasNotShownDoubleValue.value = false;
     try {
       var beginDate = DateTime.now().subtract(localDuration.value);
       var year = beginDate.year;
@@ -160,6 +163,8 @@ class _ExChartState extends State<ExChart> {
       prediction.add((x: newX, y: newY));
       currentY = newY;
     }
+    // add the last historical point to the prediction
+    prediction.insert(0, historicalData.last);
     return prediction;
   }
 
@@ -428,7 +433,10 @@ class _ExChartState extends State<ExChart> {
           getTooltipItems: (touchedSpots) {
             return touchedSpots.map(
               (e) {
-                var isPrediction = predictionPoints.any((p) => p.x == e.x);
+                var inPredictionPoints = predictionPoints.any((p) => p.x == e.x);
+                var inDataPoints = currencyDataList.any((p) => p.x == e.x);
+                var isPrediction = inPredictionPoints && !inDataPoints;
+                var isDouble = inPredictionPoints && inDataPoints;
 
                 NumberFormat numberFormatTo = NumberFormat.simpleCurrency(
                   name: paren.currencies[localIdxTo.value].id.toUpperCase(),
@@ -450,6 +458,11 @@ class _ExChartState extends State<ExChart> {
                     TextSpan(
                       text: timestampToStringNoTime(
                         DateTime.fromMillisecondsSinceEpoch(e.x.toInt()),
+                      ),
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                        color: context.theme.colorScheme.primary,
                       ),
                     ),
                   ],
