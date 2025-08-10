@@ -183,10 +183,10 @@ class _BudgetPlannerState extends State<BudgetPlanner> {
                         ] else ...[
                           // Calculate from daily input
                           Text(
-                            'Daily: ${currencyFromFormatter.format(double.tryParse(_dailyBudgetController.text) ?? 0)} (${currencyToFormatter.format((double.tryParse(_dailyBudgetController.text) ?? 0) * toRate / fromRate)})',
+                            'Daily: ${currencyToFormatter.format((double.tryParse(_dailyBudgetController.text) ?? 0) * toRate / fromRate)} (${currencyFromFormatter.format(double.tryParse(_dailyBudgetController.text) ?? 0)})',
                           ),
                           Text(
-                            'Total: ${currencyToFormatter.format((double.tryParse(_dailyBudgetController.text) ?? 0) * effectiveDays)} (${currencyFromFormatter.format((double.tryParse(_dailyBudgetController.text) ?? 0) * effectiveDays)})',
+                            'Total: ${currencyToFormatter.format(((double.tryParse(_dailyBudgetController.text) ?? 0) * effectiveDays) * toRate / fromRate)} (${currencyFromFormatter.format((double.tryParse(_dailyBudgetController.text) ?? 0) * effectiveDays)})',
                           ),
                         ],
                       ],
