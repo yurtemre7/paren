@@ -14,7 +14,7 @@ class FavoriteConversion {
   }) : timestamp = timestamp ?? DateTime.now();
 
   Map<String, dynamic> toJson() => {
-        'id': timestamp.millisecondsSinceEpoch.toString(),
+        'id': id,
         'fromCurrency': fromCurrency,
         'toCurrency': toCurrency,
         'amount': amount,
@@ -26,7 +26,7 @@ class FavoriteConversion {
         id: json['id'],
         fromCurrency: json['fromCurrency'],
         toCurrency: json['toCurrency'],
-        amount: json['amount'],
+        amount: (json['amount'] as num).toDouble(),
         timestamp: DateTime.parse(json['timestamp']),
       );
 }
