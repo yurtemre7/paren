@@ -166,7 +166,8 @@ class _CurrencyPickerSheetState extends State<CurrencyPickerSheet> {
         .where(
           (i) =>
               widget.currencies[i].id.toLowerCase().contains(query) ||
-              widget.currencies[i].symbol.toLowerCase().contains(query),
+              widget.currencies[i].symbol.toLowerCase().contains(query) || 
+              widget.currencies[i].name.toLowerCase().contains(query),
         )
         .toList();
   }
