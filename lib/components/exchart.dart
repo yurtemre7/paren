@@ -436,7 +436,7 @@ class _ExChartState extends State<ExChart> {
                 var inPredictionPoints = predictionPoints.any((p) => p.x == e.x);
                 var inDataPoints = currencyDataList.any((p) => p.x == e.x);
                 var isPrediction = inPredictionPoints && !inDataPoints;
-                var isDouble = inPredictionPoints && inDataPoints;
+                // var isDouble = inPredictionPoints && inDataPoints;
 
                 NumberFormat numberFormatTo = NumberFormat.simpleCurrency(
                   name: paren.currencies[localIdxTo.value].id.toUpperCase(),
