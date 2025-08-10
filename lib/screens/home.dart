@@ -25,8 +25,6 @@ class _HomeState extends State<Home> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final PageController pageController = PageController();
 
-  final loading = true.obs;
-
   @override
   void initState() {
     super.initState();
@@ -49,7 +47,7 @@ class _HomeState extends State<Home> {
   }
 
   Future<void> initParen() async {
-    loading.value = true;
+    paren.loading.value = true;
     var stopwatch = Stopwatch()..start();
     try {
       await paren.init().timeout(5.seconds);
@@ -60,7 +58,7 @@ class _HomeState extends State<Home> {
     } finally {
       stopwatch.stop();
       logMessage('Loading time taken: ${stopwatch.elapsedMilliseconds}ms');
-      loading.value = false;
+      paren.loading.value = false;
     }
   }
 
@@ -149,7 +147,7 @@ class _HomeState extends State<Home> {
           floatingActionButtonLocation:
               FloatingActionButtonLocation.centerDocked,
           floatingActionButton: Obx(
-            () => loading.value ? const LinearProgressIndicator() : 0.h,
+            () => paren.loading.value ? const LinearProgressIndicator() : 0.h,
           ),
         ),
       ),

@@ -38,6 +38,7 @@ class Paren extends GetxController {
 
   final currencyTextInput = '1'.obs;
   final currentPage = 0.obs;
+  final loading = true.obs;
 
   Paren();
 
@@ -64,6 +65,7 @@ class Paren extends GetxController {
 
   Future<void> fetchCurrencyDataOnline() async {
     try {
+      loading.value = true;
       logMessage('Fetching currency data online');
       var responds = await Future.wait(
         [
@@ -106,6 +108,8 @@ class Paren extends GetxController {
         error: error,
         stackTrace: stackTrace,
       );
+    } finally {
+      loading.value = false;
     }
   }
 
@@ -331,6 +335,15 @@ class Paren extends GetxController {
 
   Future<void> removeFavorite(String id) async {
     favorites.removeWhere((fav) => fav.id == id);
+    await _saveFavorites();
+  }
+
+  Future<void> reorderFavorites(int oldIndex, int newIndex) async {
+    if (oldIndex < 0 || oldIndex >= favorites.length) return;
+    if (newIndex < 0 || newIndex > favorites.length) return;
+    if (oldIndex < newIndex) newIndex -= 1;
+    var item = favorites.removeAt(oldIndex);
+    favorites.insert(newIndex, item);
     await _saveFavorites();
   }
 }

@@ -86,11 +86,7 @@ class FavoritesScreen extends StatelessWidget {
               );
             },
             onReorder: (oldIndex, newIndex) {
-              if (oldIndex < newIndex) {
-                newIndex -= 1;
-              }
-              var item = paren.favorites.removeAt(oldIndex);
-              paren.favorites.insert(newIndex, item);
+              paren.reorderFavorites(oldIndex, newIndex);
             },
             proxyDecorator: (child, index, animation) {
               return AnimatedBuilder(
