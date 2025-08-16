@@ -54,7 +54,7 @@ class _HomeState extends State<Home> {
     } on TimeoutException {
       logMessage('Operation timed out');
     } catch (e) {
-      logMessage('An error occurred');
+      logMessage('An error has occurred');
     } finally {
       stopwatch.stop();
       logMessage('Loading time taken: ${stopwatch.elapsedMilliseconds}ms');

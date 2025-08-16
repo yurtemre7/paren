@@ -178,7 +178,7 @@ class Paren extends GetxController {
           .toList();
     } catch (error, stackTrace) {
       logError(
-        'An Error happened.',
+        'An error happened.',
         error: error,
         stackTrace: stackTrace,
       );
