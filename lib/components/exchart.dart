@@ -109,13 +109,13 @@ class _ExChartState extends State<ExChart> {
           var predictionData = calculatePrediction(ratesList);
           predictionPoints = predictionData;
         }
-        currencyDataList.refresh();
+        // currencyDataList.refresh();
         // logMessage('Listenlänge: ${currencyDataList.length}');
         // logMessage('Fetched data: ${ratesList.toString()}');
       }
     } catch (error, stackTrace) {
       logError(
-        'An error has occured',
+        'An error has occurred',
         error: error,
         stackTrace: stackTrace,
       );
@@ -143,6 +143,7 @@ class _ExChartState extends State<ExChart> {
     double avgDailyChange = totalChange / n;
     double variance =
         (totalChangeSquared / n) - (avgDailyChange * avgDailyChange);
+    variance = max(variance, 0);
     double stdDev = sqrt(variance).toDouble();
 
     var lastX = historicalData.last.x;
@@ -229,7 +230,7 @@ class _ExChartState extends State<ExChart> {
                 child: Container(
                   padding: const EdgeInsets.all(8),
                   child: const Text(
-                    'An error has occured, please try later or contact me about this.',
+                    'An error has occurred, please try later or contact me about this.',
                     textAlign: TextAlign.center,
                   ),
                 ),
@@ -274,7 +275,7 @@ class _ExChartState extends State<ExChart> {
                           showPrediction.value = value;
                           fetchChartData(localIdFrom.value, localIdTo.value);
                         },
-                        activeColor: context.theme.colorScheme.primary,
+                        activeThumbColor: context.theme.colorScheme.primary,
                       ),
                       8.h,
                       OutlinedButton.icon(
