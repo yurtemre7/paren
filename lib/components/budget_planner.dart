@@ -85,113 +85,122 @@ class _BudgetPlannerState extends State<BudgetPlanner> {
             body: ListView(
               padding: const EdgeInsets.all(16),
               children: [
-                Card(
-                  color: context.theme.colorScheme.secondaryContainer,
-                  elevation: 2,
-                  child: Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Column(
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                        Row(
                           children: [
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: ChoiceChip(
-                                    elevation: 1,
-                                    label: const Text('Total Budget'),
-                                    selected: !_isDailyMode.value,
-                                    labelStyle: TextStyle(
-                                      color: !_isDailyMode.value
-                                          ? context.theme.colorScheme
-                                              .onPrimaryContainer
-                                          : context.theme.colorScheme
-                                              .onSurfaceVariant,
-                                    ),
-                                    onSelected: (selected) {
-                                      if (selected) {
-                                        _isDailyMode.value = false;
-                                      }
-                                    },
-                                  ),
+                            Expanded(
+                              child: ChoiceChip(
+                                elevation: 1,
+                                label: const Text('Total Budget'),
+                                selected: !_isDailyMode.value,
+                                labelStyle: TextStyle(
+                                  color: !_isDailyMode.value
+                                      ? context.theme.colorScheme
+                                          .onPrimaryContainer
+                                      : context
+                                          .theme.colorScheme.onSurfaceVariant,
                                 ),
-                                8.w,
-                                Expanded(
-                                  child: ChoiceChip(
-                                    elevation: 1,
-                                    label: const Text('Per-Day Budget'),
-                                    selected: _isDailyMode.value,
-                                    labelStyle: TextStyle(
-                                      color: _isDailyMode.value
-                                          ? context.theme.colorScheme
-                                              .onPrimaryContainer
-                                          : context.theme.colorScheme
-                                              .onSurfaceVariant,
-                                    ),
-                                    onSelected: (selected) {
-                                      if (selected) {
-                                        _isDailyMode.value = true;
-                                      }
-                                    },
-                                  ),
-                                ),
-                              ],
-                            ),
-                            16.h,
-                            TextField(
-                              controller: _isDailyMode.value
-                                  ? _dailyBudgetController
-                                  : _budgetController,
-                              keyboardType: TextInputType.number,
-                              decoration: InputDecoration(
-                                labelText: _isDailyMode.value
-                                    ? 'Daily Budget (${paren.fromCurrency.value.toUpperCase()})'
-                                    : 'Total Budget (${paren.fromCurrency.value.toUpperCase()})',
-                                border: const OutlineInputBorder(),
+                                onSelected: (selected) {
+                                  if (selected) {
+                                    _isDailyMode.value = false;
+                                  }
+                                },
                               ),
-                              onChanged: (_) => setState(() {}),
+                            ),
+                            8.w,
+                            Expanded(
+                              child: ChoiceChip(
+                                elevation: 1,
+                                label: const Text('Per-Day Budget'),
+                                selected: _isDailyMode.value,
+                                labelStyle: TextStyle(
+                                  color: _isDailyMode.value
+                                      ? context.theme.colorScheme
+                                          .onPrimaryContainer
+                                      : context
+                                          .theme.colorScheme.onSurfaceVariant,
+                                ),
+                                onSelected: (selected) {
+                                  if (selected) {
+                                    _isDailyMode.value = true;
+                                  }
+                                },
+                              ),
                             ),
                           ],
                         ),
-                        8.h,
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            ElevatedButton.icon(
-                              icon: const Icon(Icons.date_range),
-                              label: const Text('Select Trip Dates'),
-                              onPressed: _pickTripDates,
-                            ),
-                            4.h,
-                            if (_tripDates.value != null)
-                              Text(
-                                '${DateFormat.yMd().format(_tripDates.value!.start)} - ${DateFormat.yMd().format(_tripDates.value!.end)} (${_tripDates.value!.duration.inDays} days)',
-                              ),
-                          ],
+                        24.h,
+                        TextField(
+                          controller: _isDailyMode.value
+                              ? _dailyBudgetController
+                              : _budgetController,
+                          keyboardType: TextInputType.number,
+                          decoration: InputDecoration(
+                            labelText: _isDailyMode.value
+                                ? 'Daily Budget (${paren.fromCurrency.value.toUpperCase()})'
+                                : 'Total Budget (${paren.fromCurrency.value.toUpperCase()})',
+                            border: const OutlineInputBorder(),
+                          ),
+                          onChanged: (_) => setState(() {}),
                         ),
-                        8.h,
-                        8.h,
-                        if (!_isDailyMode.value) ...[
-                          Text(
-                            'Total: ${currencyToFormatter.format(localBudget)} (${currencyFromFormatter.format(budget)})',
-                          ),
-                          Text(
-                            'Per day: ${currencyToFormatter.format(perDay)} (${currencyFromFormatter.format(perDayFrom)})',
-                          ),
-                        ] else ...[
-                          // Calculate from daily input
-                          Text(
-                            'Daily: ${currencyToFormatter.format((double.tryParse(_dailyBudgetController.text) ?? 0) * toRate / fromRate)} (${currencyFromFormatter.format(double.tryParse(_dailyBudgetController.text) ?? 0)})',
-                          ),
-                          Text(
-                            'Total: ${currencyToFormatter.format(((double.tryParse(_dailyBudgetController.text) ?? 0) * effectiveDays) * toRate / fromRate)} (${currencyFromFormatter.format((double.tryParse(_dailyBudgetController.text) ?? 0) * effectiveDays)})',
-                          ),
-                        ],
                       ],
                     ),
-                  ),
+                    8.h,
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Center(
+                          child: ElevatedButton.icon(
+                            icon: const Icon(Icons.date_range),
+                            label: const Text('Select Trip Dates'),
+                            onPressed: _pickTripDates,
+                          ),
+                        ),
+                        8.h,
+                        if (_tripDates.value != null)
+                          Center(
+                            child: Text(
+                              '${DateFormat.yMd().format(_tripDates.value!.start)} - ${DateFormat.yMd().format(_tripDates.value!.end)} (${_tripDates.value!.duration.inDays} days)',
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                      ],
+                    ),
+                    16.h,
+                    if (!_isDailyMode.value) ...[
+                      Center(
+                        child: Text(
+                          'Total: ${currencyToFormatter.format(localBudget)} (${currencyFromFormatter.format(budget)})',
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                      Center(
+                        child: Text(
+                          'Per day: ${currencyToFormatter.format(perDay)} (${currencyFromFormatter.format(perDayFrom)})',
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ] else ...[
+                      // Calculate from daily input
+                      Center(
+                        child: Text(
+                          'Daily: ${currencyToFormatter.format((double.tryParse(_dailyBudgetController.text) ?? 0) * toRate / fromRate)} (${currencyFromFormatter.format(double.tryParse(_dailyBudgetController.text) ?? 0)})',
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                      Center(
+                        child: Text(
+                          'Total: ${currencyToFormatter.format(((double.tryParse(_dailyBudgetController.text) ?? 0) * effectiveDays) * toRate / fromRate)} (${currencyFromFormatter.format((double.tryParse(_dailyBudgetController.text) ?? 0) * effectiveDays)})',
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ],
+                  ],
                 ),
               ],
             ),
