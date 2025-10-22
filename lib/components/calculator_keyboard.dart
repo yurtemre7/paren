@@ -133,9 +133,6 @@ class _CalculatorKeyboardState extends State<CalculatorKeyboard> {
                     fontSize: 28,
                     color: context.theme.colorScheme.primary,
                     fontWeight: FontWeight.bold,
-                    decoration: TextDecoration.underline,
-                    decorationColor: context.theme.colorScheme.primary
-                        .withValues(alpha: 0.25),
                   ),
                 ),
                 16.h,
@@ -244,6 +241,7 @@ class _CalcButtonState extends State<_CalcButton>
         );
       },
       child: Material(
+        elevation: 1,
         color: context.theme.colorScheme.primaryContainer.withValues(
           alpha: context.theme.brightness == Brightness.light ? 1 : 0.5,
         ),
