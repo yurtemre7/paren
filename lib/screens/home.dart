@@ -83,6 +83,13 @@ class _HomeState extends State<Home> {
             if (scaffoldKey.currentState?.isEndDrawerOpen ?? false) {
               scaffoldKey.currentState?.closeEndDrawer();
             }
+            if (paren.currentPage.value != 0) {
+              await pageController.animateToPage(
+                0,
+                duration: 250.milliseconds,
+                curve: Curves.ease,
+              );
+            }
           }
         },
         child: Scaffold(
@@ -102,7 +109,7 @@ class _HomeState extends State<Home> {
                   await pageController.animateToPage(
                     paren.currentPage.value > 0 ? 0 : 1,
                     duration: 250.milliseconds,
-                    curve: Curves.decelerate,
+                    curve: Curves.ease,
                   );
                 },
                 reverse: paren.currentPage.value == 1,
