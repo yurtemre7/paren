@@ -95,6 +95,7 @@ class _HomeState extends State<Home> {
         child: Scaffold(
           key: scaffoldKey,
           backgroundColor: context.theme.colorScheme.surface,
+          resizeToAvoidBottomInset: false,
           appBar: PreferredSize(
             preferredSize: const Size.fromHeight(80),
             child: Obx(
