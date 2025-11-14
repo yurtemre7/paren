@@ -3,7 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:paren/classes/currency.dart';
 
-const baseUrl = 'https://api.frankfurter.app';
+const baseUrl = 'https://api.frankfurter.dev/v1';
 const latest = '/latest';
 const currencieNames = '/currencies';
 
