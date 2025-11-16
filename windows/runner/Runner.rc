@@ -93,7 +93,7 @@ BEGIN
             VALUE "FileDescription", "paren" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
             VALUE "InternalName", "paren" "\0"
-            VALUE "LegalCopyright", "Copyright (C) 2024 de.emredev. All rights reserved." "\0"
+            VALUE "LegalCopyright", "Copyright (C) 2025 de.emredev. All rights reserved." "\0"
             VALUE "OriginalFilename", "paren.exe" "\0"
             VALUE "ProductName", "paren" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
