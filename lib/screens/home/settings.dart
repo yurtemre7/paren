@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:paren/providers/extensions.dart';
 import 'package:paren/providers/paren.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:stupid_simple_sheet/stupid_simple_sheet.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class Settings extends StatefulWidget {
@@ -50,6 +51,29 @@ class _SettingsState extends State<Settings> {
             subtitle: Text(
               'Feel free to reach out to me, as I take any request seriously and see it as an opportunity to improve my app.',
             ),
+          ),
+          ListTile(
+            title: Text('Licenses'),
+            subtitle: Text(
+              'This app uses the following open source libraries.',
+            ),
+            trailing: Icon(Icons.open_in_new),
+            onTap: () async {
+              await Navigator.of(context).push(
+                StupidSimpleCupertinoSheetRoute(
+                  child: LicensePage(
+                    applicationName: 'Par円',
+                    applicationIcon: Padding(
+                      padding: const EdgeInsets.only(top: 8.0),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(12),
+                        child: Image.asset('assets/icon/icon.png', height: 64),
+                      ),
+                    ),
+                  ),
+                ),
+              );
+            },
           ),
           Container(
             padding: const EdgeInsets.only(right: 8),

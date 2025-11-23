@@ -9,6 +9,7 @@ import 'package:paren/components/exchart.dart';
 import 'package:paren/components/favorites.dart';
 import 'package:paren/components/quick_conversions.dart';
 import 'package:paren/screens/home/settings.dart';
+import 'package:stupid_simple_sheet/stupid_simple_sheet.dart';
 
 class Customization extends StatefulWidget {
   const Customization({super.key});
@@ -51,28 +52,22 @@ class _CustomizationState extends State<Customization> {
           Icons.line_axis_outlined,
           color: context.theme.colorScheme.primary,
         ),
-        onTap: () {
+        onTap: () async {
           Get.back();
-          Get.bottomSheet(
-            Container(
-              constraints: BoxConstraints(maxHeight: context.height * 0.80),
-              child: ClipRRect(
-                borderRadius: const BorderRadius.vertical(
-                  top: Radius.circular(20),
+          await Navigator.of(context).push(
+            StupidSimpleCupertinoSheetRoute(
+              snappingConfig: SheetSnappingConfig.relative([0.75]),
+              child: ExChart(
+                idFrom: paren.fromCurrency.value,
+                idxFrom: paren.currencies.indexWhere(
+                  (element) => element.id == paren.fromCurrency.value,
                 ),
-                child: ExChart(
-                  idFrom: paren.fromCurrency.value,
-                  idxFrom: paren.currencies.indexWhere(
-                    (element) => element.id == paren.fromCurrency.value,
-                  ),
-                  idTo: paren.toCurrency.value,
-                  idxTo: paren.currencies.indexWhere(
-                    (element) => element.id == paren.toCurrency.value,
-                  ),
+                idTo: paren.toCurrency.value,
+                idxTo: paren.currencies.indexWhere(
+                  (element) => element.id == paren.toCurrency.value,
                 ),
               ),
             ),
-            isScrollControlled: !(GetPlatform.isIOS || GetPlatform.isAndroid),
           );
         },
       ),
@@ -88,7 +83,9 @@ class _CustomizationState extends State<Customization> {
             title: const Text('Quick Conversions'),
             onTap: () async {
               Get.back();
-              var result = await Get.bottomSheet(buildQuickConversions());
+              var result = await Navigator.of(context).push(
+                StupidSimpleCupertinoSheetRoute(child: buildQuickConversions()),
+              );
               if (result != null) {
                 paren.currencyTextInput.value = result.toString();
               }
@@ -102,19 +99,10 @@ class _CustomizationState extends State<Customization> {
   }
 
   Widget buildQuickConversions() {
-    return Card(
-      margin: EdgeInsets.zero,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-      ),
-      child: ClipRRect(
-        borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
-        child: QuickConversions(
-          currencies: paren.currencies,
-          fromCurr: paren.fromCurrency.value,
-          toCurr: paren.toCurrency.value,
-        ),
-      ),
+    return QuickConversions(
+      currencies: paren.currencies,
+      fromCurr: paren.fromCurrency.value,
+      toCurr: paren.toCurrency.value,
     );
   }
 
@@ -129,23 +117,19 @@ class _CustomizationState extends State<Customization> {
         ),
         onTap: () async {
           Get.back();
-          await Get.bottomSheet(buildFavoriteSheet());
+          await Navigator.of(context).push(
+            StupidSimpleCupertinoSheetRoute(
+              snappingConfig: SheetSnappingConfig.relative([0.5]),
+              child: buildFavoriteSheet(),
+            ),
+          );
         },
       ),
     );
   }
 
   Widget buildFavoriteSheet() {
-    return Card(
-      margin: EdgeInsets.zero,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-      ),
-      child: ClipRRect(
-        borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
-        child: const FavoritesScreen(),
-      ),
-    );
+    return const FavoritesScreen();
   }
 
   Widget buildBudgetPlanner() {
@@ -157,20 +141,12 @@ class _CustomizationState extends State<Customization> {
           Icons.monetization_on_outlined,
           color: context.theme.colorScheme.primary,
         ),
-        onTap: () {
+        onTap: () async {
           Get.back();
-          Get.bottomSheet(
-            Card(
-              margin: EdgeInsets.zero,
-              shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-              ),
-              child: ClipRRect(
-                borderRadius: const BorderRadius.vertical(
-                  top: Radius.circular(20),
-                ),
-                child: BudgetPlanner(),
-              ),
+          await Navigator.of(context).push(
+            StupidSimpleCupertinoSheetRoute(
+              snappingConfig: SheetSnappingConfig.relative([0.5]),
+              child: const BudgetPlanner(),
             ),
           );
         },

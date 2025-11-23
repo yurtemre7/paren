@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:paren/classes/currency.dart';
 import 'package:paren/providers/extensions.dart';
 import 'package:paren/providers/paren.dart';
+import 'package:stupid_simple_sheet/stupid_simple_sheet.dart';
 
 class CurrencyChangerRow extends StatefulWidget {
   const CurrencyChangerRow({super.key});
@@ -36,25 +37,15 @@ class _CurrencyChangerRowState extends State<CurrencyChangerRow> {
   }
 
   Future<void> _showCurrencyPicker(bool isFrom) async {
-    String? selected = await Get.bottomSheet(
-      Card(
-        margin: EdgeInsets.zero,
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+    String? selected = await Navigator.of(context).push(
+      StupidSimpleCupertinoSheetRoute(
+        originateAboveBottomViewInset: true,
+        child: CurrencyPickerSheet(
+          currencies: paren.currencies,
+          initialCurrency: isFrom
+              ? paren.fromCurrency.value
+              : paren.toCurrency.value,
         ),
-        child: ClipRRect(
-          borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
-          child: CurrencyPickerSheet(
-            currencies: paren.currencies,
-            initialCurrency: isFrom
-                ? paren.fromCurrency.value
-                : paren.toCurrency.value,
-          ),
-        ),
-      ),
-      backgroundColor: context.theme.colorScheme.surface,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
     );
     if (selected == null) return;
@@ -221,7 +212,6 @@ class _CurrencyPickerSheetState extends State<CurrencyPickerSheet> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         leading: IconButton(
           onPressed: () => Get.back(),
@@ -270,7 +260,6 @@ class _CurrencyPickerSheetState extends State<CurrencyPickerSheet> {
 
                 return Expanded(
                   child: ListView.builder(
-                    shrinkWrap: true,
                     itemCount: _filteredIndices.length,
                     itemBuilder: (context, idx) {
                       var i = _filteredIndices[idx];

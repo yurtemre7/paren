@@ -7,6 +7,7 @@ import 'package:paren/components/currency_changer_row.dart';
 import 'package:paren/providers/extensions.dart';
 import 'package:paren/providers/paren.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:stupid_simple_sheet/stupid_simple_sheet.dart';
 
 class Conversion extends StatefulWidget {
   const Conversion({super.key});
@@ -255,7 +256,12 @@ class _ConversionState extends State<Conversion> {
         ),
         IconButton(
           onPressed: () async {
-            await Get.bottomSheet(buildTextSizeAdjustSheet());
+            await Navigator.of(context).push(
+              StupidSimpleCupertinoSheetRoute(
+                snappingConfig: SheetSnappingConfig.relative([0.5]),
+                child: buildTextSizeAdjustSheet(),
+              ),
+            );
             paren.saveSettings();
           },
           tooltip: 'Adjust Sizes',

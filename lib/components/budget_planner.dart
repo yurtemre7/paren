@@ -30,7 +30,7 @@ class _BudgetPlannerState extends State<BudgetPlanner> {
     var picked = await showDateRangePicker(
       context: context,
       firstDate: now,
-      lastDate: now.add(const Duration(days: 365)),
+      lastDate: DateTime(now.year + 5),
       initialDateRange: _tripDates.value,
     );
     if (picked != null) {

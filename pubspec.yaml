@@ -24,6 +24,7 @@ dependencies:
   fl_chart: 1.1.1
   home_widget: 0.8.1
   flutter_colorpicker: 1.1.0
+  stupid_simple_sheet: ^0.6.2+3
   # image_picker: 1.1.2
 
 dev_dependencies:

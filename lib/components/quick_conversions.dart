@@ -37,7 +37,6 @@ class QuickConversions extends StatelessWidget {
           margin: EdgeInsets.symmetric(horizontal: 12),
           child: GridView.extent(
             maxCrossAxisExtent: 130,
-            shrinkWrap: true,
             mainAxisSpacing: 12,
             crossAxisSpacing: 8,
             children: [

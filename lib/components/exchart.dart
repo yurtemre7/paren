@@ -7,6 +7,7 @@ import 'package:intl/intl.dart';
 import 'package:paren/providers/constants.dart';
 import 'package:paren/providers/extensions.dart';
 import 'package:paren/providers/paren.dart';
+import 'package:stupid_simple_sheet/stupid_simple_sheet.dart';
 
 class ExChart extends StatefulWidget {
   final String idFrom;
@@ -180,26 +181,58 @@ class _ExChartState extends State<ExChart> {
           actions: [
             Container(
               padding: const EdgeInsets.only(right: 8),
-              child: DropdownButton<Duration>(
-                items: localDurations.map((localDur) {
-                  return DropdownMenuItem<Duration>(
-                    value: localDur,
-                    child: Text(
-                      '${localDur.inDays.toInt()} days',
-                      style: TextStyle(
-                        color: context.theme.colorScheme.primary,
+              child: TextButton.icon(
+                onPressed: () {
+                  Navigator.of(context).push(
+                    StupidSimpleCupertinoSheetRoute(
+                      snappingConfig: SheetSnappingConfig.relative([0.75]),
+                      child: Scaffold(
+                        appBar: AppBar(
+                          title: Text(
+                            'Select duration',
+                            style: TextStyle(
+                              color: context.theme.colorScheme.primary,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                            ),
+                          ),
+                          leading: IconButton(
+                            onPressed: () => Navigator.of(context).pop(),
+                            icon: const Icon(Icons.close),
+                            color: context.theme.colorScheme.primary,
+                          ),
+                        ),
+                        body: Column(
+                          mainAxisSize: .min,
+                          children: [
+                            ...localDurations.map((localDur) {
+                              return ListTile(
+                                title: Text(
+                                  '${localDur.inDays.toInt()} days',
+                                  style: TextStyle(
+                                    color: localDuration.value == localDur
+                                        ? context.theme.colorScheme.primary
+                                        : context.theme.colorScheme.onSurface,
+                                  ),
+                                ),
+                                onTap: () {
+                                  localDuration.value = localDur;
+                                  fetchChartData(
+                                    localIdFrom.value,
+                                    localIdTo.value,
+                                  );
+                                  Navigator.of(context).pop();
+                                },
+                              );
+                            }),
+                          ],
+                        ),
                       ),
                     ),
                   );
-                }).toList(),
-                onChanged: (v) {
-                  if (v == null || isLoading.value) return;
-                  localDuration.value = v;
-                  fetchChartData(localIdFrom.value, localIdTo.value);
                 },
-                underline: 0.h,
-                value: localDuration.value,
-                iconEnabledColor: context.theme.colorScheme.primary,
+                label: Text('${localDuration.value.inDays} days'),
+                icon: const Icon(Icons.calendar_today),
               ),
             ),
           ],
