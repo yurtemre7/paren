@@ -279,6 +279,7 @@ class _CurrencyPickerSheetState extends State<CurrencyPickerSheet> {
                         title: Text(
                           '${currency.id.toUpperCase()} (${currency.symbol})',
                         ),
+                        subtitle: Text(currency.name),
                         selected: currency.id == widget.initialCurrency,
                         onTap: () => Navigator.of(context).pop(currency.id),
                       );
