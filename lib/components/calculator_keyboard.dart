@@ -131,7 +131,7 @@ class _CalculatorKeyboardState extends State<CalculatorKeyboard> {
                   widget.input.value,
                   style: TextStyle(
                     fontSize: 28,
-                    color: context.theme.colorScheme.primary,
+                    color: context.theme.colorScheme.onSurface,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -157,7 +157,7 @@ class _CalculatorKeyboardState extends State<CalculatorKeyboard> {
                       onTap: () => _append('0'),
                     ),
                     _CalcButton(
-                      label: 'c',
+                      label: '⌫',
                       onTap: _delete,
                       onLongPress: _clear,
                       color: Theme.of(context).colorScheme.error,
@@ -242,9 +242,7 @@ class _CalcButtonState extends State<_CalcButton>
       },
       child: Material(
         elevation: 1,
-        color: context.theme.colorScheme.primaryContainer.withValues(
-          alpha: context.theme.brightness == Brightness.light ? 1 : 0.5,
-        ),
+        color: context.theme.colorScheme.secondaryContainer,
         borderRadius: BorderRadius.circular(12),
         child: InkWell(
           borderRadius: BorderRadius.circular(12),
@@ -255,7 +253,7 @@ class _CalcButtonState extends State<_CalcButton>
               widget.label,
               style: TextStyle(
                 fontSize: 18,
-                color: widget.color ?? context.theme.colorScheme.primary,
+                color: widget.color ?? context.theme.colorScheme.onSecondaryContainer,
                 fontWeight: FontWeight.bold,
               ),
             ),
