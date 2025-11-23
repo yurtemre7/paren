@@ -1,7 +1,7 @@
 name: paren
 description: "A new Flutter project."
 publish_to: "none"
-version: 1.9.19+1
+version: 1.9.20+1
 
 environment:
   sdk: ">=3.10.0 <4.0.0"
