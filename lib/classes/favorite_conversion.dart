@@ -14,12 +14,12 @@ class FavoriteConversion {
   }) : timestamp = timestamp ?? DateTime.now();
 
   Map<String, dynamic> toJson() => {
-        'id': id,
-        'fromCurrency': fromCurrency,
-        'toCurrency': toCurrency,
-        'amount': amount,
-        'timestamp': timestamp.toIso8601String(),
-      };
+    'id': id,
+    'fromCurrency': fromCurrency,
+    'toCurrency': toCurrency,
+    'amount': amount,
+    'timestamp': timestamp.toIso8601String(),
+  };
 
   factory FavoriteConversion.fromJson(Map<String, dynamic> json) =>
       FavoriteConversion(

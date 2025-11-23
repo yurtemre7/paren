@@ -53,9 +53,9 @@ class _ExChartState extends State<ExChart> {
   ];
 
   List<Color> get gradientColors => [
-        context.theme.colorScheme.primary,
-        context.theme.colorScheme.secondary,
-      ];
+    context.theme.colorScheme.primary,
+    context.theme.colorScheme.secondary,
+  ];
 
   @override
   void initState() {
@@ -81,28 +81,22 @@ class _ExChartState extends State<ExChart> {
       var month = beginDate.month.toString().padLeft(2, '0');
       var day = beginDate.day.toString().padLeft(2, '0');
       var beginDateString = '$year-$month-$day';
-      var resp = await paren.dio.get(
-        '/$beginDateString..?from=$from&to=$to',
-      );
+      var resp = await paren.dio.get('/$beginDateString..?from=$from&to=$to');
 
       if (resp.statusCode == 200) {
         var body = resp.data;
         Map rates = body['rates'];
-        var ratesList = rates.entries.map(
-          (e) {
-            var key = e.key.toString();
-            var dateKey = DateTime.parse(key);
-            var value = e.value.toString();
-            var dataValue = double.tryParse(
-                  value.toString().substring(5, value.length - 1).trim(),
-                ) ??
-                0.0;
-            return (
-              x: dateKey.millisecondsSinceEpoch.toDouble(),
-              y: dataValue,
-            );
-          },
-        ).toList();
+        var ratesList = rates.entries.map((e) {
+          var key = e.key.toString();
+          var dateKey = DateTime.parse(key);
+          var value = e.value.toString();
+          var dataValue =
+              double.tryParse(
+                value.toString().substring(5, value.length - 1).trim(),
+              ) ??
+              0.0;
+          return (x: dateKey.millisecondsSinceEpoch.toDouble(), y: dataValue);
+        }).toList();
         currencyDataList.value = ratesList;
         // Generate prediction if enabled
         if (showPrediction.value && ratesList.isNotEmpty) {
@@ -114,11 +108,7 @@ class _ExChartState extends State<ExChart> {
         // logMessage('Fetched data: ${ratesList.toString()}');
       }
     } catch (error, stackTrace) {
-      logError(
-        'An error has occurred',
-        error: error,
-        stackTrace: stackTrace,
-      );
+      logError('An error has occurred', error: error, stackTrace: stackTrace);
       hasError.value = true;
     }
     isLoading.value = false;
@@ -157,7 +147,8 @@ class _ExChartState extends State<ExChart> {
     double currentY = lastY;
     for (int i = 0; i < predictionDuration.value.inDays; i++) {
       double newX = lastX + (i + 1) * step;
-      double noise = (random.nextDouble() * 2 - 1) *
+      double noise =
+          (random.nextDouble() * 2 - 1) *
           stdDev *
           0.5; // Noise scaled by 50% of volatility
       double newY = currentY + avgDailyChange + noise;
@@ -176,9 +167,7 @@ class _ExChartState extends State<ExChart> {
         appBar: AppBar(
           leading: IconButton(
             onPressed: () => Get.back(),
-            icon: const Icon(
-              Icons.close,
-            ),
+            icon: const Icon(Icons.close),
             color: context.theme.colorScheme.primary,
           ),
           title: Text(
@@ -192,19 +181,17 @@ class _ExChartState extends State<ExChart> {
             Container(
               padding: const EdgeInsets.only(right: 8),
               child: DropdownButton<Duration>(
-                items: localDurations.map(
-                  (localDur) {
-                    return DropdownMenuItem<Duration>(
-                      value: localDur,
-                      child: Text(
-                        '${localDur.inDays.toInt()} days',
-                        style: TextStyle(
-                          color: context.theme.colorScheme.primary,
-                        ),
+                items: localDurations.map((localDur) {
+                  return DropdownMenuItem<Duration>(
+                    value: localDur,
+                    child: Text(
+                      '${localDur.inDays.toInt()} days',
+                      style: TextStyle(
+                        color: context.theme.colorScheme.primary,
                       ),
-                    );
-                  },
-                ).toList(),
+                    ),
+                  );
+                }).toList(),
                 onChanged: (v) {
                   if (v == null || isLoading.value) return;
                   localDuration.value = v;
@@ -217,93 +204,81 @@ class _ExChartState extends State<ExChart> {
             ),
           ],
         ),
-        body: Obx(
-          () {
-            if (isLoading.value) {
-              return const Center(
-                child: CircularProgressIndicator.adaptive(),
-              );
-            }
+        body: Obx(() {
+          if (isLoading.value) {
+            return const Center(child: CircularProgressIndicator.adaptive());
+          }
 
-            if (hasError.value) {
-              return Center(
-                child: Container(
-                  padding: const EdgeInsets.all(8),
-                  child: const Text(
-                    'An error has occurred, please try later or contact me about this.',
-                    textAlign: TextAlign.center,
-                  ),
+          if (hasError.value) {
+            return Center(
+              child: Container(
+                padding: const EdgeInsets.all(8),
+                child: const Text(
+                  'An error has occurred, please try later or contact me about this.',
+                  textAlign: TextAlign.center,
                 ),
-              );
-            }
-
-            return ListView(
-              padding: EdgeInsets.zero,
-              children: [
-                24.h,
-                Container(
-                  margin: const EdgeInsets.only(
-                    right: 32,
-                  ),
-                  child: AspectRatio(
-                    aspectRatio: 16 / 9,
-                    child: LineChart(
-                      mainData(),
-                      duration: 500.milliseconds,
-                    ),
-                  ),
-                ),
-                24.h,
-                Center(
-                  child: Column(
-                    children: [
-                      SwitchListTile(
-                        secondary: IconButton(
-                          onPressed: () {
-                            Get.dialog(
-                              buildPredictionInfoDialog(),
-                            );
-                          },
-                          icon: Icon(Icons.info_outline),
-                          color: context.theme.colorScheme.primary,
-                        ),
-                        title: Text('Show simple prediction'),
-                        subtitle:
-                            Text('This is just for fun, no financial advice.'),
-                        value: showPrediction.value,
-                        onChanged: (value) {
-                          showPrediction.value = value;
-                          fetchChartData(localIdFrom.value, localIdTo.value);
-                        },
-                        activeThumbColor: context.theme.colorScheme.primary,
-                      ),
-                      8.h,
-                      OutlinedButton.icon(
-                        onPressed: () {
-                          if (isLoading.value) return;
-                          var temp = localIdFrom.value;
-                          localIdFrom.value = localIdTo.value;
-                          localIdTo.value = temp;
-
-                          var tempIdx = localIdxFrom.value;
-                          localIdxFrom.value = localIdxTo.value;
-                          localIdxTo.value = tempIdx;
-
-                          fetchChartData(localIdFrom.value, localIdTo.value);
-                        },
-                        label: const Text('Swap'),
-                        icon: const Icon(
-                          Icons.swap_horiz_outlined,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                24.h,
-              ],
+              ),
             );
-          },
-        ),
+          }
+
+          return ListView(
+            padding: EdgeInsets.zero,
+            children: [
+              24.h,
+              Container(
+                margin: const EdgeInsets.only(right: 32),
+                child: AspectRatio(
+                  aspectRatio: 16 / 9,
+                  child: LineChart(mainData(), duration: 500.milliseconds),
+                ),
+              ),
+              24.h,
+              Center(
+                child: Column(
+                  children: [
+                    SwitchListTile(
+                      secondary: IconButton(
+                        onPressed: () {
+                          Get.dialog(buildPredictionInfoDialog());
+                        },
+                        icon: Icon(Icons.info_outline),
+                        color: context.theme.colorScheme.primary,
+                      ),
+                      title: Text('Show simple prediction'),
+                      subtitle: Text(
+                        'This is just for fun, no financial advice.',
+                      ),
+                      value: showPrediction.value,
+                      onChanged: (value) {
+                        showPrediction.value = value;
+                        fetchChartData(localIdFrom.value, localIdTo.value);
+                      },
+                      activeThumbColor: context.theme.colorScheme.primary,
+                    ),
+                    8.h,
+                    OutlinedButton.icon(
+                      onPressed: () {
+                        if (isLoading.value) return;
+                        var temp = localIdFrom.value;
+                        localIdFrom.value = localIdTo.value;
+                        localIdTo.value = temp;
+
+                        var tempIdx = localIdxFrom.value;
+                        localIdxFrom.value = localIdxTo.value;
+                        localIdxTo.value = tempIdx;
+
+                        fetchChartData(localIdFrom.value, localIdTo.value);
+                      },
+                      label: const Text('Swap'),
+                      icon: const Icon(Icons.swap_horiz_outlined),
+                    ),
+                  ],
+                ),
+              ),
+              24.h,
+            ],
+          );
+        }),
       ),
     );
   }
@@ -322,20 +297,12 @@ class _ExChartState extends State<ExChart> {
           style: TextStyle(fontSize: 14),
         ),
       ),
-      actions: [
-        TextButton(
-          onPressed: Get.back,
-          child: Text('OK'),
-        ),
-      ],
+      actions: [TextButton(onPressed: Get.back, child: Text('OK'))],
     );
   }
 
   Widget bottomTitleWidgets(double value, TitleMeta meta) {
-    const style = TextStyle(
-      fontWeight: FontWeight.bold,
-      fontSize: 15,
-    );
+    const style = TextStyle(fontWeight: FontWeight.bold, fontSize: 15);
     Widget text;
     var date = DateTime.fromMillisecondsSinceEpoch(value.toInt());
 
@@ -376,25 +343,14 @@ class _ExChartState extends State<ExChart> {
           text = Text(weekdayFromInt(date.weekday), style: style);
       }
     } else {
-      text = const Text(
-        '',
-        style: style,
-      );
+      text = const Text('', style: style);
     }
 
-    return SideTitleWidget(
-      meta: meta,
-      angle: pi / 6,
-      space: 12,
-      child: text,
-    );
+    return SideTitleWidget(meta: meta, angle: pi / 6, space: 12, child: text);
   }
 
   Widget leftTitleWidgets(double value, TitleMeta meta) {
-    const style = TextStyle(
-      fontWeight: FontWeight.bold,
-      fontSize: 14,
-    );
+    const style = TextStyle(fontWeight: FontWeight.bold, fontSize: 14);
     NumberFormat numberFormatTo = NumberFormat.simpleCurrency(
       name: paren.currencies[localIdxTo.value].id.toUpperCase(),
       decimalDigits: 5,
@@ -432,44 +388,42 @@ class _ExChartState extends State<ExChart> {
           },
           tooltipBorder: const BorderSide(),
           getTooltipItems: (touchedSpots) {
-            return touchedSpots.map(
-              (e) {
-                var inPredictionPoints = predictionPoints.any((p) => p.x == e.x);
-                var inDataPoints = currencyDataList.any((p) => p.x == e.x);
-                var isPrediction = inPredictionPoints && !inDataPoints;
-                // var isDouble = inPredictionPoints && inDataPoints;
+            return touchedSpots.map((e) {
+              var inPredictionPoints = predictionPoints.any((p) => p.x == e.x);
+              var inDataPoints = currencyDataList.any((p) => p.x == e.x);
+              var isPrediction = inPredictionPoints && !inDataPoints;
+              // var isDouble = inPredictionPoints && inDataPoints;
 
-                NumberFormat numberFormatTo = NumberFormat.simpleCurrency(
-                  name: paren.currencies[localIdxTo.value].id.toUpperCase(),
-                  decimalDigits: 5,
-                );
+              NumberFormat numberFormatTo = NumberFormat.simpleCurrency(
+                name: paren.currencies[localIdxTo.value].id.toUpperCase(),
+                decimalDigits: 5,
+              );
 
-                var text = numberFormatTo.format(e.y);
-                // remove trailing zeros
-                text = text.replaceAll(RegExp(r'(\.0+|(?<=\.\d)0+)$'), '');
+              var text = numberFormatTo.format(e.y);
+              // remove trailing zeros
+              text = text.replaceAll(RegExp(r'(\.0+|(?<=\.\d)0+)$'), '');
 
-                return LineTooltipItem(
-                  '$text'
-                  '${isPrediction ? '\n(Prediction)\n' : '\n'}',
-                  TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: context.theme.colorScheme.primary,
-                  ),
-                  children: [
-                    TextSpan(
-                      text: timestampToStringNoTime(
-                        DateTime.fromMillisecondsSinceEpoch(e.x.toInt()),
-                      ),
-                      style: TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.bold,
-                        color: context.theme.colorScheme.primary,
-                      ),
+              return LineTooltipItem(
+                '$text'
+                '${isPrediction ? '\n(Prediction)\n' : '\n'}',
+                TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: context.theme.colorScheme.primary,
+                ),
+                children: [
+                  TextSpan(
+                    text: timestampToStringNoTime(
+                      DateTime.fromMillisecondsSinceEpoch(e.x.toInt()),
                     ),
-                  ],
-                );
-              },
-            ).toList();
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                      color: context.theme.colorScheme.primary,
+                    ),
+                  ),
+                ],
+              );
+            }).toList();
           },
           fitInsideHorizontally: true,
           fitInsideVertically: true,
@@ -507,14 +461,10 @@ class _ExChartState extends State<ExChart> {
               return FlSpot(position.x, position.y);
             }),
           ],
-          gradient: LinearGradient(
-            colors: gradientColors,
-          ),
+          gradient: LinearGradient(colors: gradientColors),
           barWidth: 3,
           isStrokeCapRound: true,
-          dotData: const FlDotData(
-            show: false,
-          ),
+          dotData: const FlDotData(show: false),
           belowBarData: BarAreaData(
             show: true,
             gradient: LinearGradient(

@@ -21,9 +21,7 @@ class QuickConversions extends StatelessWidget {
       appBar: AppBar(
         leading: IconButton(
           onPressed: () => Get.back(),
-          icon: const Icon(
-            Icons.close,
-          ),
+          icon: const Icon(Icons.close),
           color: context.theme.colorScheme.primary,
         ),
         title: Text(

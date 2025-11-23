@@ -33,18 +33,13 @@ class _ConversionState extends State<Conversion> {
             child: SingleChildScrollView(
               physics: const AlwaysScrollableScrollPhysics(),
               child: Column(
-                children: [
-                  buildConvertTextField(),
-                  CurrencyChangerRow(),
-                ],
+                children: [buildConvertTextField(), CurrencyChangerRow()],
               ),
             ),
           ),
         ),
         8.h,
-        CalculatorKeyboard(
-          input: paren.currencyTextInput,
-        ),
+        CalculatorKeyboard(input: paren.currencyTextInput),
       ],
     );
   }
@@ -54,129 +49,126 @@ class _ConversionState extends State<Conversion> {
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Column(
         children: [
-          Obx(
-            () {
-              var fromCurrency = paren.currencies.firstWhere(
-                (element) => element.id == paren.fromCurrency.value,
-              );
-              var toCurrency = paren.currencies.firstWhere(
-                (element) => element.id == paren.toCurrency.value,
-              );
+          Obx(() {
+            var fromCurrency = paren.currencies.firstWhere(
+              (element) => element.id == paren.fromCurrency.value,
+            );
+            var toCurrency = paren.currencies.firstWhere(
+              (element) => element.id == paren.toCurrency.value,
+            );
 
-              var fromRate = fromCurrency.rate;
-              var toRate = toCurrency.rate;
+            var fromRate = fromCurrency.rate;
+            var toRate = toCurrency.rate;
 
-              var inputConverted =
-                  (double.tryParse(paren.currencyTextInput.value) ?? 0);
-              var convertedAmount =
-                  (double.tryParse(paren.currencyTextInput.value) ?? 0) *
-                      toRate /
-                      fromRate;
-              var reConvertedAmount =
-                  (double.tryParse(paren.currencyTextInput.value) ?? 0) *
-                      fromRate /
-                      toRate;
+            var inputConverted =
+                (double.tryParse(paren.currencyTextInput.value) ?? 0);
+            var convertedAmount =
+                (double.tryParse(paren.currencyTextInput.value) ?? 0) *
+                toRate /
+                fromRate;
+            var reConvertedAmount =
+                (double.tryParse(paren.currencyTextInput.value) ?? 0) *
+                fromRate /
+                toRate;
 
-              NumberFormat numberFormatFrom = NumberFormat.simpleCurrency(
-                name: fromCurrency.id.toUpperCase(),
-              );
-              NumberFormat numberFormatRe = NumberFormat.simpleCurrency(
-                name: fromCurrency.id.toUpperCase(),
-              );
-              NumberFormat numberFormatTo = NumberFormat.simpleCurrency(
-                name: toCurrency.id.toUpperCase(),
-              );
+            NumberFormat numberFormatFrom = NumberFormat.simpleCurrency(
+              name: fromCurrency.id.toUpperCase(),
+            );
+            NumberFormat numberFormatRe = NumberFormat.simpleCurrency(
+              name: fromCurrency.id.toUpperCase(),
+            );
+            NumberFormat numberFormatTo = NumberFormat.simpleCurrency(
+              name: toCurrency.id.toUpperCase(),
+            );
 
-              String amountStr = numberFormatTo.format(convertedAmount);
-              String reAmountStr = numberFormatRe.format(reConvertedAmount);
-              String inputStr = numberFormatFrom.format(inputConverted);
-              String inputStrRe = numberFormatTo.format(inputConverted);
+            String amountStr = numberFormatTo.format(convertedAmount);
+            String reAmountStr = numberFormatRe.format(reConvertedAmount);
+            String inputStr = numberFormatFrom.format(inputConverted);
+            String inputStrRe = numberFormatTo.format(inputConverted);
 
-              return SelectionArea(
-                child: Column(
-                  children: [
-                    Wrap(
-                      spacing: 12,
-                      alignment: WrapAlignment.center,
-                      crossAxisAlignment: WrapCrossAlignment.center,
-                      children: [
-                        Text(
-                          inputStr,
-                          style: TextStyle(
-                            fontSize: paren.conv1Size.value,
-                            fontWeight: FontWeight.bold,
-                            color: context.theme.colorScheme.primary,
-                          ),
-                          textAlign: TextAlign.center,
+            return SelectionArea(
+              child: Column(
+                children: [
+                  Wrap(
+                    spacing: 12,
+                    alignment: WrapAlignment.center,
+                    crossAxisAlignment: WrapCrossAlignment.center,
+                    children: [
+                      Text(
+                        inputStr,
+                        style: TextStyle(
+                          fontSize: paren.conv1Size.value,
+                          fontWeight: FontWeight.bold,
+                          color: context.theme.colorScheme.primary,
                         ),
-                        Text(
-                          '➜',
-                          style: TextStyle(
-                            fontSize: paren.conv1Size.value,
-                            fontWeight: FontWeight.bold,
-                            color: context.theme.colorScheme.primary,
-                          ),
-                          textAlign: TextAlign.center,
+                        textAlign: TextAlign.center,
+                      ),
+                      Text(
+                        '➜',
+                        style: TextStyle(
+                          fontSize: paren.conv1Size.value,
+                          fontWeight: FontWeight.bold,
+                          color: context.theme.colorScheme.primary,
                         ),
-                        Text(
-                          amountStr,
-                          style: TextStyle(
-                            fontSize: paren.conv1Size.value,
-                            fontWeight: FontWeight.bold,
-                            color: context.theme.colorScheme.primary,
-                          ),
-                          textAlign: TextAlign.center,
+                        textAlign: TextAlign.center,
+                      ),
+                      Text(
+                        amountStr,
+                        style: TextStyle(
+                          fontSize: paren.conv1Size.value,
+                          fontWeight: FontWeight.bold,
+                          color: context.theme.colorScheme.primary,
                         ),
-                      ],
-                    ),
-                    Wrap(
-                      spacing: 12,
-                      alignment: WrapAlignment.center,
-                      crossAxisAlignment: WrapCrossAlignment.center,
-                      children: [
-                        Text(
-                          inputStrRe,
-                          style: TextStyle(
-                            fontSize: paren.conv2Size.value,
-                            fontWeight: FontWeight.bold,
-                            color: context.theme.colorScheme.primary
-                                .withValues(alpha: 0.75),
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
+                  ),
+                  Wrap(
+                    spacing: 12,
+                    alignment: WrapAlignment.center,
+                    crossAxisAlignment: WrapCrossAlignment.center,
+                    children: [
+                      Text(
+                        inputStrRe,
+                        style: TextStyle(
+                          fontSize: paren.conv2Size.value,
+                          fontWeight: FontWeight.bold,
+                          color: context.theme.colorScheme.primary.withValues(
+                            alpha: 0.75,
                           ),
-                          textAlign: TextAlign.center,
                         ),
-                        Text(
-                          '➜',
-                          style: TextStyle(
-                            fontSize: paren.conv2Size.value,
-                            fontWeight: FontWeight.bold,
-                            color: context.theme.colorScheme.primary
-                                .withValues(alpha: 0.75),
+                        textAlign: TextAlign.center,
+                      ),
+                      Text(
+                        '➜',
+                        style: TextStyle(
+                          fontSize: paren.conv2Size.value,
+                          fontWeight: FontWeight.bold,
+                          color: context.theme.colorScheme.primary.withValues(
+                            alpha: 0.75,
                           ),
-                          textAlign: TextAlign.center,
                         ),
-                        Text(
-                          reAmountStr,
-                          style: TextStyle(
-                            fontSize: paren.conv2Size.value,
-                            fontWeight: FontWeight.bold,
-                            color: context.theme.colorScheme.primary
-                                .withValues(alpha: 0.75),
+                        textAlign: TextAlign.center,
+                      ),
+                      Text(
+                        reAmountStr,
+                        style: TextStyle(
+                          fontSize: paren.conv2Size.value,
+                          fontWeight: FontWeight.bold,
+                          color: context.theme.colorScheme.primary.withValues(
+                            alpha: 0.75,
                           ),
-                          textAlign: TextAlign.center,
                         ),
-                      ],
-                    ),
-                    12.h,
-                    buildConversionActions(
-                      inputConverted,
-                      inputStr,
-                      amountStr,
-                    ),
-                  ],
-                ),
-              );
-            },
-          ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
+                  ),
+                  12.h,
+                  buildConversionActions(inputConverted, inputStr, amountStr),
+                ],
+              ),
+            );
+          }),
           12.h,
         ],
       ),
@@ -195,23 +187,19 @@ class _ConversionState extends State<Conversion> {
           child: Wrap(
             children: [
               IconButton(
-                icon: Obx(
-                  () {
-                    return Icon(
-                      paren.favorites.any(
-                        (fav) {
+                icon: Obx(() {
+                  return Icon(
+                    paren.favorites.any((fav) {
                           return fav.fromCurrency == paren.fromCurrency.value &&
                               fav.toCurrency == paren.toCurrency.value &&
                               fav.amount.toStringAsFixed(2) ==
                                   inputConverted.toStringAsFixed(2);
-                        },
-                      )
-                          ? Icons.favorite_outlined
-                          : Icons.favorite_border_outlined,
-                      color: context.theme.colorScheme.primary,
-                    );
-                  },
-                ),
+                        })
+                        ? Icons.favorite_outlined
+                        : Icons.favorite_border_outlined,
+                    color: context.theme.colorScheme.primary,
+                  );
+                }),
                 onPressed: () {
                   var amount = inputConverted;
                   if (amount > 0) {
@@ -231,9 +219,7 @@ class _ConversionState extends State<Conversion> {
                 ),
                 onPressed: () {
                   SharePlus.instance.share(
-                    ShareParams(
-                      text: '$inputStr ➜ $amountStr',
-                    ),
+                    ShareParams(text: '$inputStr ➜ $amountStr'),
                   );
                 },
                 tooltip: 'Share',
@@ -245,19 +231,21 @@ class _ConversionState extends State<Conversion> {
                 ),
                 onPressed: () {
                   Clipboard.setData(
-                    ClipboardData(
-                      text: '$inputStr ➜ $amountStr',
-                    ),
+                    ClipboardData(text: '$inputStr ➜ $amountStr'),
                   );
-                  Get.snackbar(
-                    'Copied to clipboard',
-                    '$inputStr ➜ $amountStr',
-                    duration: const Duration(
-                      seconds: 1,
+                  if (!mounted) return;
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(
+                        '$inputStr ➜ $amountStr was copied to the clipboard',
+                        style: TextStyle(
+                          color: context.theme.colorScheme.primary,
+                        ),
+                      ),
+                      duration: const Duration(seconds: 1),
+                      backgroundColor:
+                          context.theme.colorScheme.primaryContainer,
                     ),
-                    snackPosition: SnackPosition.BOTTOM,
-                    backgroundColor: context.theme.colorScheme.primaryContainer,
-                    colorText: context.theme.colorScheme.primary,
                   );
                 },
                 tooltip: 'Copy',
@@ -267,9 +255,7 @@ class _ConversionState extends State<Conversion> {
         ),
         IconButton(
           onPressed: () async {
-            await Get.bottomSheet(
-              buildTextSizeAdjustSheet(),
-            );
+            await Get.bottomSheet(buildTextSizeAdjustSheet());
             paren.saveSettings();
           },
           tooltip: 'Adjust Sizes',
@@ -286,9 +272,7 @@ class _ConversionState extends State<Conversion> {
     return Card(
       margin: EdgeInsets.zero,
       shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(
-          top: Radius.circular(20),
-        ),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
       child: ClipRRect(
         borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
@@ -296,9 +280,7 @@ class _ConversionState extends State<Conversion> {
           appBar: AppBar(
             leading: IconButton(
               onPressed: () => Get.back(),
-              icon: const Icon(
-                Icons.close,
-              ),
+              icon: const Icon(Icons.close),
               color: context.theme.colorScheme.primary,
             ),
             title: Text(
@@ -318,9 +300,7 @@ class _ConversionState extends State<Conversion> {
                   children: [
                     const Text(
                       'Primary Conversion',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                      ),
+                      style: TextStyle(fontWeight: FontWeight.bold),
                     ),
                     Slider(
                       value: paren.conv1Size.value,
@@ -335,9 +315,7 @@ class _ConversionState extends State<Conversion> {
                     const Divider(),
                     const Text(
                       'Secondary Conversion',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                      ),
+                      style: TextStyle(fontWeight: FontWeight.bold),
                     ),
                     Slider(
                       value: paren.conv2Size.value,
@@ -352,9 +330,7 @@ class _ConversionState extends State<Conversion> {
                     const Divider(),
                     const Text(
                       'Calculator Input Height',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                      ),
+                      style: TextStyle(fontWeight: FontWeight.bold),
                     ),
                     Slider(
                       value: paren.calculatorInputHeight.value,

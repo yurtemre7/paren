@@ -10,10 +10,7 @@ import 'package:paren/providers/paren.dart';
 class CalculatorKeyboard extends StatefulWidget {
   final RxString input;
 
-  const CalculatorKeyboard({
-    super.key,
-    required this.input,
-  });
+  const CalculatorKeyboard({super.key, required this.input});
 
   @override
   State<CalculatorKeyboard> createState() => _CalculatorKeyboardState();
@@ -144,18 +141,9 @@ class _CalculatorKeyboardState extends State<CalculatorKeyboard> {
                   crossAxisSpacing: 8,
                   children: [
                     for (var i = 1; i <= 9; i++)
-                      _CalcButton(
-                        label: '$i',
-                        onTap: () => _append('$i'),
-                      ),
-                    _CalcButton(
-                      label: '.',
-                      onTap: () => _append('.'),
-                    ),
-                    _CalcButton(
-                      label: '0',
-                      onTap: () => _append('0'),
-                    ),
+                      _CalcButton(label: '$i', onTap: () => _append('$i')),
+                    _CalcButton(label: '.', onTap: () => _append('.')),
+                    _CalcButton(label: '0', onTap: () => _append('0')),
                     _CalcButton(
                       label: '⌫',
                       onTap: _delete,
@@ -232,13 +220,11 @@ class _CalcButtonState extends State<_CalcButton>
         // Shake amplitude in pixels
         const double shakeAmount = 1.0;
         // Sine wave for shake effect
-        double offsetX = math.sin(_offsetAnimation.value * math.pi * 4) *
+        double offsetX =
+            math.sin(_offsetAnimation.value * math.pi * 4) *
             (1 - _offsetAnimation.value) *
             shakeAmount;
-        return Transform.translate(
-          offset: Offset(offsetX, 0),
-          child: child,
-        );
+        return Transform.translate(offset: Offset(offsetX, 0), child: child);
       },
       child: Material(
         elevation: 1,
@@ -253,7 +239,9 @@ class _CalcButtonState extends State<_CalcButton>
               widget.label,
               style: TextStyle(
                 fontSize: 18,
-                color: widget.color ?? context.theme.colorScheme.onSecondaryContainer,
+                color:
+                    widget.color ??
+                    context.theme.colorScheme.onSecondaryContainer,
                 fontWeight: FontWeight.bold,
               ),
             ),

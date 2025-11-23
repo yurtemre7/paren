@@ -18,13 +18,7 @@ class _SettingsState extends State<Settings> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Column(
-        children: [
-          buildAppInfo(),
-          buildFeedback(),
-          Divider(),
-        ],
-      ),
+      child: Column(children: [buildAppInfo(), buildFeedback(), Divider()]),
     );
   }
 
@@ -47,9 +41,7 @@ class _SettingsState extends State<Settings> {
                   ),
                 );
               },
-              icon: const Icon(
-                Icons.share_outlined,
-              ),
+              icon: const Icon(Icons.share_outlined),
               color: context.theme.colorScheme.primary,
             ),
           ),
@@ -68,18 +60,14 @@ class _SettingsState extends State<Settings> {
                 ActionChip.elevated(
                   label: const Text('GitHub'),
                   onPressed: () {
-                    launchUrl(
-                      Uri.parse('https://github.com/yurtemre7/paren'),
-                    );
+                    launchUrl(Uri.parse('https://github.com/yurtemre7/paren'));
                   },
                 ),
                 4.w,
                 ActionChip.elevated(
                   label: const Text('E-Mail'),
                   onPressed: () {
-                    launchUrl(
-                      Uri.parse('mailto:yurtemre7@icloud.com'),
-                    );
+                    launchUrl(Uri.parse('mailto:yurtemre7@icloud.com'));
                   },
                 ),
               ],
@@ -94,14 +82,10 @@ class _SettingsState extends State<Settings> {
     return ListTile(
       trailing: ClipRRect(
         borderRadius: BorderRadius.circular(12),
-        child: Image.asset(
-          'assets/icon/icon.png',
-        ),
+        child: Image.asset('assets/icon/icon.png'),
       ),
       title: const Text('App Info'),
-      subtitle: const Text(
-        'Thank you for being here.',
-      ),
+      subtitle: const Text('Thank you for being here.'),
       onLongPress: () {
         Get.dialog(
           AlertDialog(

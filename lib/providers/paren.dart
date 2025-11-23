@@ -13,11 +13,7 @@ import 'package:paren/providers/extensions.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Paren extends GetxController {
-  final dio = Dio(
-    BaseOptions(
-      baseUrl: baseUrl,
-    ),
-  );
+  final dio = Dio(BaseOptions(baseUrl: baseUrl));
   final SharedPreferencesAsync sp = SharedPreferencesAsync();
 
   final currencies = <Currency>[].obs;
@@ -43,10 +39,7 @@ class Paren extends GetxController {
   Paren();
 
   Future<void> init() async {
-    await Future.wait([
-      initCurrencies(),
-      initFavorites(),
-    ]);
+    await Future.wait([initCurrencies(), initFavorites()]);
 
     updateWidgetData();
   }
@@ -67,12 +60,10 @@ class Paren extends GetxController {
     try {
       loading.value = true;
       logMessage('Fetching currency data online');
-      var responds = await Future.wait(
-        [
-          dio.get(latest),
-          dio.get(currencieNames),
-        ],
-      );
+      var responds = await Future.wait([
+        dio.get(latest),
+        dio.get(currencieNames),
+      ]);
       Map rates = responds[0].data['rates'];
       Map currencieNamesMap = responds[1].data;
       var onlineCurrencies = <Currency>[
@@ -92,12 +83,14 @@ class Paren extends GetxController {
 
       currencies.value = onlineCurrencies;
       if (!currencieNamesMap.containsKey(fromCurrency.value.toUpperCase())) {
-        fromCurrency.value =
-            currencieNamesMap.entries.first.key.toString().toLowerCase();
+        fromCurrency.value = currencieNamesMap.entries.first.key
+            .toString()
+            .toLowerCase();
       }
       if (!currencieNamesMap.containsKey(toCurrency.value.toUpperCase())) {
-        toCurrency.value =
-            currencieNamesMap.entries.first.key.toString().toLowerCase();
+        toCurrency.value = currencieNamesMap.entries.first.key
+            .toString()
+            .toLowerCase();
       }
       updateCurrencies();
       updateDefaultConversion();
@@ -153,8 +146,9 @@ class Paren extends GetxController {
     var conv2Value = await sp.getDouble('conv2Size');
     conv2Size.value = conv2Value ?? 16.0;
 
-    var calculatorInputHeightValue =
-        await sp.getDouble('calculatorInputHeight');
+    var calculatorInputHeightValue = await sp.getDouble(
+      'calculatorInputHeight',
+    );
     calculatorInputHeight.value = calculatorInputHeightValue ?? 250.0;
     if (calculatorInputHeight.value > calculatorInputHeightRange.max) {
       calculatorInputHeight.value = calculatorInputHeightRange.max;
@@ -171,17 +165,11 @@ class Paren extends GetxController {
     try {
       currencies.value = currencyList
           .map(
-            (e) => Currency.fromJson(
-              Map<String, dynamic>.from(json.decode(e)),
-            ),
+            (e) => Currency.fromJson(Map<String, dynamic>.from(json.decode(e))),
           )
           .toList();
     } catch (error, stackTrace) {
-      logError(
-        'An error happened.',
-        error: error,
-        stackTrace: stackTrace,
-      );
+      logError('An error happened.', error: error, stackTrace: stackTrace);
     }
 
     if (currencies.isEmpty) {
@@ -258,23 +246,15 @@ class Paren extends GetxController {
     var priceReString = '$inputStrRe ➜ $reAmountStr';
 
     await Future.wait([
-      HomeWidget.saveWidgetData(
-        'price_string',
-        priceString,
-      ),
-      HomeWidget.saveWidgetData(
-        'price_restring',
-        priceReString,
-      ),
+      HomeWidget.saveWidgetData('price_string', priceString),
+      HomeWidget.saveWidgetData('price_restring', priceReString),
       HomeWidget.saveWidgetData(
         'price_datum',
         timestampToString(latestTimestamp.value),
       ),
     ]);
     if (GetPlatform.isIOS) {
-      var iosRes = await HomeWidget.updateWidget(
-        iOSName: 'ParenW',
-      );
+      var iosRes = await HomeWidget.updateWidget(iOSName: 'ParenW');
       logMessage('iOS Widgets Updated: $iosRes');
     } else if (GetPlatform.isAndroid) {
       var androidRes = await HomeWidget.updateWidget(
@@ -287,9 +267,7 @@ class Paren extends GetxController {
   void setTheme() {
     Get.changeTheme(
       ThemeData(
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: Color(appColor.value),
-        ),
+        colorScheme: ColorScheme.fromSeed(seedColor: Color(appColor.value)),
         useMaterial3: true,
       ),
     );
@@ -303,8 +281,9 @@ class Paren extends GetxController {
   }
 
   Future<void> _saveFavorites() async {
-    var favoritesJson =
-        favorites.map((fav) => jsonEncode(fav.toJson())).toList();
+    var favoritesJson = favorites
+        .map((fav) => jsonEncode(fav.toJson()))
+        .toList();
     await sp.setStringList('favorites', favoritesJson);
   }
 

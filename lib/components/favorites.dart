@@ -16,9 +16,7 @@ class FavoritesScreen extends StatelessWidget {
       appBar: AppBar(
         leading: IconButton(
           onPressed: () => Get.back(),
-          icon: const Icon(
-            Icons.close,
-          ),
+          icon: const Icon(Icons.close),
           color: context.theme.colorScheme.primary,
         ),
         title: Text(
@@ -29,84 +27,79 @@ class FavoritesScreen extends StatelessWidget {
           ),
         ),
       ),
-      body: Obx(
-        () {
-          var favorites = paren.favorites;
-          var currencies = paren.currencies;
-          if (favorites.isEmpty) {
-            return Center(
-              child: Text('No conversions saved yet.'),
+      body: Obx(() {
+        var favorites = paren.favorites;
+        var currencies = paren.currencies;
+        if (favorites.isEmpty) {
+          return Center(child: Text('No conversions saved yet.'));
+        }
+
+        return ReorderableListView.builder(
+          itemCount: favorites.length,
+          itemBuilder: (context, index) {
+            var favorite = favorites[index];
+            var fromCurrency = currencies.firstWhereOrNull(
+              (c) => c.id == favorite.fromCurrency,
             );
-          }
+            var toCurrency = currencies.firstWhereOrNull(
+              (c) => c.id == favorite.toCurrency,
+            );
 
-          return ReorderableListView.builder(
-            itemCount: favorites.length,
-            itemBuilder: (context, index) {
-              var favorite = favorites[index];
-              var fromCurrency = currencies.firstWhereOrNull(
-                (c) => c.id == favorite.fromCurrency,
-              );
-              var toCurrency = currencies.firstWhereOrNull(
-                (c) => c.id == favorite.toCurrency,
-              );
+            if (fromCurrency == null || toCurrency == null) {
+              return const ListTile(title: Text('Invalid currency'));
+            }
 
-              if (fromCurrency == null || toCurrency == null) {
-                return const ListTile(title: Text('Invalid currency'));
-              }
+            NumberFormat numberFormatFrom = NumberFormat.simpleCurrency(
+              name: fromCurrency.id.toUpperCase(),
+            );
+            NumberFormat numberFormatTo = NumberFormat.simpleCurrency(
+              name: toCurrency.id.toUpperCase(),
+            );
 
-              NumberFormat numberFormatFrom = NumberFormat.simpleCurrency(
-                name: fromCurrency.id.toUpperCase(),
-              );
-              NumberFormat numberFormatTo = NumberFormat.simpleCurrency(
-                name: toCurrency.id.toUpperCase(),
-              );
+            var convertedAmount =
+                favorite.amount * toCurrency.rate / fromCurrency.rate;
 
-              var convertedAmount =
-                  favorite.amount * toCurrency.rate / fromCurrency.rate;
+            String inputFrom = numberFormatFrom.format(favorite.amount);
+            String inputTo = numberFormatTo.format(convertedAmount);
 
-              String inputFrom = numberFormatFrom.format(favorite.amount);
-              String inputTo = numberFormatTo.format(convertedAmount);
-
-              return Dismissible(
-                key: Key(favorite.id),
-                background: Container(color: Colors.red),
-                onDismissed: (_) => paren.removeFavorite(favorite.id),
-                direction: DismissDirection.endToStart,
-                child: ListTile(
-                  title: Text('$inputFrom ➜ $inputTo'),
-                  subtitle: Text(
-                    '${fromCurrency.id.toUpperCase()} ➜ ${toCurrency.id.toUpperCase()}',
-                  ),
-                  onTap: () {
-                    paren.fromCurrency.value = favorite.fromCurrency;
-                    paren.toCurrency.value = favorite.toCurrency;
-                    Get.back();
-                  },
+            return Dismissible(
+              key: Key(favorite.id),
+              background: Container(color: Colors.red),
+              onDismissed: (_) => paren.removeFavorite(favorite.id),
+              direction: DismissDirection.endToStart,
+              child: ListTile(
+                title: Text('$inputFrom ➜ $inputTo'),
+                subtitle: Text(
+                  '${fromCurrency.id.toUpperCase()} ➜ ${toCurrency.id.toUpperCase()}',
                 ),
-              );
-            },
-            onReorder: (oldIndex, newIndex) {
-              paren.reorderFavorites(oldIndex, newIndex);
-            },
-            proxyDecorator: (child, index, animation) {
-              return AnimatedBuilder(
-                animation: animation,
-                builder: (BuildContext context, Widget? child) {
-                  double animValue =
-                      Curves.easeInOut.transform(animation.value);
-                  double elevation = lerpDouble(0, 6, animValue)!;
-                  return Material(
-                    elevation: elevation,
-                    color: context.theme.colorScheme.onSecondary,
-                    child: child,
-                  );
+                onTap: () {
+                  paren.fromCurrency.value = favorite.fromCurrency;
+                  paren.toCurrency.value = favorite.toCurrency;
+                  Get.back();
                 },
-                child: child,
-              );
-            },
-          );
-        },
-      ),
+              ),
+            );
+          },
+          onReorder: (oldIndex, newIndex) {
+            paren.reorderFavorites(oldIndex, newIndex);
+          },
+          proxyDecorator: (child, index, animation) {
+            return AnimatedBuilder(
+              animation: animation,
+              builder: (BuildContext context, Widget? child) {
+                double animValue = Curves.easeInOut.transform(animation.value);
+                double elevation = lerpDouble(0, 6, animValue)!;
+                return Material(
+                  elevation: elevation,
+                  color: context.theme.colorScheme.onSecondary,
+                  child: child,
+                );
+              },
+              child: child,
+            );
+          },
+        );
+      }),
     );
   }
 }

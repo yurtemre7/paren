@@ -21,9 +21,9 @@ class Currency {
   }
 
   Map<String, dynamic> toJson() => {
-        'id': id,
-        'name': name,
-        'symbol': symbol,
-        'rate': rate,
-      };
+    'id': id,
+    'name': name,
+    'symbol': symbol,
+    'rate': rate,
+  };
 }

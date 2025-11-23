@@ -34,9 +34,7 @@ class _CustomizationState extends State<Customization> {
         Divider(),
         Settings(),
         12.h,
-        const Center(
-          child: Text('Made in 🇩🇪 by Emre'),
-        ),
+        const Center(child: Text('Made in 🇩🇪 by Emre')),
         12.h,
       ],
     );
@@ -59,8 +57,9 @@ class _CustomizationState extends State<Customization> {
             Container(
               constraints: BoxConstraints(maxHeight: context.height * 0.80),
               child: ClipRRect(
-                borderRadius:
-                    const BorderRadius.vertical(top: Radius.circular(20)),
+                borderRadius: const BorderRadius.vertical(
+                  top: Radius.circular(20),
+                ),
                 child: ExChart(
                   idFrom: paren.fromCurrency.value,
                   idxFrom: paren.currencies.indexWhere(
@@ -89,9 +88,7 @@ class _CustomizationState extends State<Customization> {
             title: const Text('Quick Conversions'),
             onTap: () async {
               Get.back();
-              var result = await Get.bottomSheet(
-                buildQuickConversions(),
-              );
+              var result = await Get.bottomSheet(buildQuickConversions());
               if (result != null) {
                 paren.currencyTextInput.value = result.toString();
               }
@@ -108,9 +105,7 @@ class _CustomizationState extends State<Customization> {
     return Card(
       margin: EdgeInsets.zero,
       shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(
-          top: Radius.circular(20),
-        ),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
       child: ClipRRect(
         borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
@@ -144,9 +139,7 @@ class _CustomizationState extends State<Customization> {
     return Card(
       margin: EdgeInsets.zero,
       shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(
-          top: Radius.circular(20),
-        ),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
       child: ClipRRect(
         borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
@@ -170,13 +163,12 @@ class _CustomizationState extends State<Customization> {
             Card(
               margin: EdgeInsets.zero,
               shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.vertical(
-                  top: Radius.circular(20),
-                ),
+                borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
               ),
               child: ClipRRect(
-                borderRadius:
-                    const BorderRadius.vertical(top: Radius.circular(20)),
+                borderRadius: const BorderRadius.vertical(
+                  top: Radius.circular(20),
+                ),
                 child: BudgetPlanner(),
               ),
             ),
@@ -208,107 +200,101 @@ class _CustomizationState extends State<Customization> {
       paren.saveSettings();
     }
 
-    return Obx(
-      () {
-        return Container(
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-          child: Column(
-            children: [
-              const Text(
-                'App Color & Theme',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              8.h,
-              Column(
-                children: [
-                  Center(
-                    child: InkWell(
-                      borderRadius: BorderRadius.circular(8),
-                      onTap: () {
-                        showColorPickerDialog();
-                      },
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 8,
+    return Obx(() {
+      return Container(
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+        child: Column(
+          children: [
+            const Text(
+              'App Color & Theme',
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            ),
+            8.h,
+            Column(
+              children: [
+                Center(
+                  child: InkWell(
+                    borderRadius: BorderRadius.circular(8),
+                    onTap: () {
+                      showColorPickerDialog();
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 8,
+                      ),
+                      decoration: BoxDecoration(
+                        // color: context.theme.colorScheme.surface,
+                        borderRadius: BorderRadius.circular(8),
+                        border: Border.all(
+                          color: context.theme.colorScheme.onSurface.withValues(
+                            alpha: 0.12,
+                          ),
                         ),
-                        decoration: BoxDecoration(
-                          // color: context.theme.colorScheme.surface,
-                          borderRadius: BorderRadius.circular(8),
-                          border: Border.all(
-                            color:
-                                context.theme.colorScheme.onSurface.withValues(
-                              alpha: 0.12,
+                      ),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            Icons.color_lens,
+                            color: context.theme.colorScheme.primary,
+                          ),
+                          4.h,
+                          Text(
+                            'App Color',
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: context.theme.colorScheme.onSurface,
                             ),
                           ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                12.h,
+                ToggleButtons(
+                  borderRadius: BorderRadius.circular(8),
+                  isSelected: List.generate(
+                    3,
+                    (i) => i == paren.appThemeMode.value.index,
+                  ),
+                  onPressed: (int index) async {
+                    if (paren.appThemeMode.value.index == index) return;
+                    paren.appThemeMode.value = ThemeMode.values[index];
+                    paren.setTheme();
+                    paren.saveSettings();
+                  },
+                  selectedColor: context.theme.colorScheme.onPrimary,
+                  fillColor: context.theme.colorScheme.primary,
+                  color: context.theme.colorScheme.primary,
+                  children: [
+                    ...themeOptions.map(
+                      (option) => Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 6,
                         ),
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            Icon(
-                              Icons.color_lens,
-                              color: context.theme.colorScheme.primary,
-                            ),
+                            Icon(option['icon'] as IconData, size: 20),
                             4.h,
                             Text(
-                              'App Color',
-                              style: TextStyle(
-                                fontSize: 12,
-                                color: context.theme.colorScheme.onSurface,
-                              ),
+                              option['label'] as String,
+                              style: const TextStyle(fontSize: 12),
                             ),
                           ],
                         ),
                       ),
                     ),
-                  ),
-                  12.h,
-                  ToggleButtons(
-                    borderRadius: BorderRadius.circular(8),
-                    isSelected: List.generate(
-                      3,
-                      (i) => i == paren.appThemeMode.value.index,
-                    ),
-                    onPressed: (int index) async {
-                      if (paren.appThemeMode.value.index == index) return;
-                      paren.appThemeMode.value = ThemeMode.values[index];
-                      paren.setTheme();
-                      paren.saveSettings();
-                    },
-                    selectedColor: context.theme.colorScheme.onPrimary,
-                    fillColor: context.theme.colorScheme.primary,
-                    color: context.theme.colorScheme.primary,
-                    children: [
-                      ...themeOptions.map(
-                        (option) => Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 12,
-                            vertical: 6,
-                          ),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Icon(option['icon'] as IconData, size: 20),
-                              4.h,
-                              Text(
-                                option['label'] as String,
-                                style: const TextStyle(fontSize: 12),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ],
-          ),
-        );
-      },
-    );
+                  ],
+                ),
+              ],
+            ),
+          ],
+        ),
+      );
+    });
   }
 }

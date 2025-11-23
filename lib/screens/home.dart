@@ -118,39 +118,34 @@ class _HomeState extends State<Home> {
             ),
           ),
           body: SafeArea(
-            child: Obx(
-              () {
-                if (paren.currencies.isEmpty) {
-                  return const Center(
-                    child: Text(
-                      'Currencies is empty, an error must have occurred.',
-                    ),
-                  );
-                }
+            child: Obx(() {
+              if (paren.currencies.isEmpty) {
+                return const Center(
+                  child: Text(
+                    'Currencies is empty, an error must have occurred.',
+                  ),
+                );
+              }
 
-                if (width >= 800) {
-                  return Row(
-                    children: [
-                      Expanded(flex: 3, child: Conversion()),
-                      // add border
-                      Container(
-                        width: 1,
-                        color: context.theme.colorScheme.outlineVariant,
-                      ),
-                      Expanded(child: Customization()),
-                    ],
-                  );
-                }
-
-                return PageView(
-                  controller: pageController,
+              if (width >= 800) {
+                return Row(
                   children: [
-                    Conversion(),
-                    Customization(),
+                    Expanded(flex: 3, child: Conversion()),
+                    // add border
+                    Container(
+                      width: 1,
+                      color: context.theme.colorScheme.outlineVariant,
+                    ),
+                    Expanded(child: Customization()),
                   ],
                 );
-              },
-            ),
+              }
+
+              return PageView(
+                controller: pageController,
+                children: [Conversion(), Customization()],
+              );
+            }),
           ),
           floatingActionButtonLocation:
               FloatingActionButtonLocation.centerDocked,
@@ -164,9 +159,7 @@ class _HomeState extends State<Home> {
 
   Widget buildDataInfoSheet() {
     return AlertDialog(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       title: Text(
         'From where do we fetch the data?',
         style: TextStyle(
@@ -220,8 +213,9 @@ class _HomeState extends State<Home> {
                   TextSpan(
                     text:
                         '\n\nCurrencies last updated:\n${timestampToString(paren.latestTimestamp.value)}',
-                    style:
-                        TextStyle(color: context.theme.colorScheme.secondary),
+                    style: TextStyle(
+                      color: context.theme.colorScheme.secondary,
+                    ),
                   ),
                 ],
               ),

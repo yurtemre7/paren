@@ -7,33 +7,13 @@ const baseUrl = 'https://api.frankfurter.dev/v1';
 const latest = '/latest';
 const currencieNames = '/currencies';
 
-var EUR = Currency(
-  id: 'eur',
-  name: 'Euro',
-  symbol: '€',
-  rate: 1.0,
-);
+var EUR = Currency(id: 'eur', name: 'Euro', symbol: '€', rate: 1.0);
 
-var USD = Currency(
-  id: 'usd',
-  name: 'US Dollar',
-  symbol: '\$',
-  rate: 1.09,
-);
+var USD = Currency(id: 'usd', name: 'US Dollar', symbol: '\$', rate: 1.09);
 
-var YEN = Currency(
-  id: 'jpy',
-  name: 'Japanese Yen',
-  symbol: '¥',
-  rate: 170.0,
-);
+var YEN = Currency(id: 'jpy', name: 'Japanese Yen', symbol: '¥', rate: 170.0);
 
-var TRY = Currency(
-  id: 'try',
-  name: 'Turkish Lira',
-  symbol: '₺',
-  rate: 35.1,
-);
+var TRY = Currency(id: 'try', name: 'Turkish Lira', symbol: '₺', rate: 35.1);
 
 var themeOptions = [
   {'icon': Icons.phone_android, 'label': 'System'},
@@ -74,11 +54,7 @@ String weekdayFromInt(int weekday) {
 }
 
 void logMessage(String msg, {String tag = 'Paren'}) {
-  log(
-    msg,
-    name: tag,
-    time: DateTime.now(),
-  );
+  log(msg, name: tag, time: DateTime.now());
 }
 
 void logError(
