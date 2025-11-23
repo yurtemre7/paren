@@ -40,16 +40,15 @@ class _CurrencyChangerRowState extends State<CurrencyChangerRow> {
       Card(
         margin: EdgeInsets.zero,
         shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(
-            top: Radius.circular(20),
-          ),
+          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
         ),
         child: ClipRRect(
           borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
           child: CurrencyPickerSheet(
             currencies: paren.currencies,
-            initialCurrency:
-                isFrom ? paren.fromCurrency.value : paren.toCurrency.value,
+            initialCurrency: isFrom
+                ? paren.fromCurrency.value
+                : paren.toCurrency.value,
           ),
         ),
       ),
@@ -70,67 +69,108 @@ class _CurrencyChangerRowState extends State<CurrencyChangerRow> {
 
   @override
   Widget build(BuildContext context) {
-    return Obx(
-      () {
-        var fromId = paren.fromCurrency.value;
-        var toId = paren.toCurrency.value;
-        var from = paren.currencies.firstWhere(
-          (currency) => currency.id == fromId,
-        );
-        var to = paren.currencies.firstWhere(
-          (currency) => currency.id == toId,
-        );
-        return Container(
-          padding: const EdgeInsets.symmetric(horizontal: 24),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Expanded(
-                child: TextButton(
-                  onPressed: () => _showCurrencyPicker(true),
-                  // color: context.theme.colorScheme.secondaryContainer,
-                  // margin: EdgeInsets.zero,
-                  child: Text(
-                    '${fromId.toUpperCase()} (${from.symbol})',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18,
-                      color: context.theme.colorScheme.primary,
-                    ),
-                    textAlign: TextAlign.center,
+    return Obx(() {
+      var fromId = paren.fromCurrency.value;
+      var toId = paren.toCurrency.value;
+      var from = paren.currencies.firstWhere(
+        (currency) => currency.id == fromId,
+      );
+      var to = paren.currencies.firstWhere((currency) => currency.id == toId);
+      return Container(
+        padding: const EdgeInsets.symmetric(horizontal: 24),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Expanded(
+              child: GestureDetector(
+                onTap: () => _showCurrencyPicker(true),
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 12,
+                    horizontal: 16,
+                  ),
+                  decoration: BoxDecoration(
+                    color: context.theme.colorScheme.secondaryContainer,
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: Column(
+                    children: [
+                      Text(
+                        '${fromId.toUpperCase()} (${from.symbol})',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20,
+                          color: context.theme.colorScheme.onSecondaryContainer,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                      Text(
+                        from.name,
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: context.theme.colorScheme.onSecondaryContainer,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        maxLines: 1,
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
                   ),
                 ),
               ),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8),
-                child: IconButton(
-                  icon: const Icon(Icons.compare_arrows_outlined),
-                  iconSize: 28,
-                  color: context.theme.colorScheme.primary,
-                  onPressed: () {
-                    _onSwap();
-                  },
-                ),
+            ),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              child: IconButton.filledTonal(
+                icon: const Icon(Icons.swap_horiz_rounded),
+                iconSize: 24,
+                onPressed: () {
+                  _onSwap();
+                },
               ),
-              Expanded(
-                child: TextButton(
-                  onPressed: () => _showCurrencyPicker(false),
-                  child: Text(
-                    '${toId.toUpperCase()} (${to.symbol})',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18,
-                      color: context.theme.colorScheme.primary,
-                    ),
-                    textAlign: TextAlign.center,
+            ),
+            Expanded(
+              child: GestureDetector(
+                onTap: () => _showCurrencyPicker(false),
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 12,
+                    horizontal: 16,
+                  ),
+                  decoration: BoxDecoration(
+                    color: context.theme.colorScheme.secondaryContainer,
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: Column(
+                    children: [
+                      Text(
+                        '${toId.toUpperCase()} (${to.symbol})',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20,
+                          color: context.theme.colorScheme.onSecondaryContainer,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                      Text(
+                        to.name,
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: context.theme.colorScheme.onSecondaryContainer,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        maxLines: 1,
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
                   ),
                 ),
               ),
-            ],
-          ),
-        );
-      },
-    );
+            ),
+          ],
+        ),
+      );
+    });
   }
 }
 
@@ -166,7 +206,7 @@ class _CurrencyPickerSheetState extends State<CurrencyPickerSheet> {
         .where(
           (i) =>
               widget.currencies[i].id.toLowerCase().contains(query) ||
-              widget.currencies[i].symbol.toLowerCase().contains(query) || 
+              widget.currencies[i].symbol.toLowerCase().contains(query) ||
               widget.currencies[i].name.toLowerCase().contains(query),
         )
         .toList();
@@ -185,9 +225,7 @@ class _CurrencyPickerSheetState extends State<CurrencyPickerSheet> {
       appBar: AppBar(
         leading: IconButton(
           onPressed: () => Get.back(),
-          icon: const Icon(
-            Icons.close,
-          ),
+          icon: const Icon(Icons.close),
           color: context.theme.colorScheme.primary,
         ),
         title: Text(
@@ -200,11 +238,7 @@ class _CurrencyPickerSheetState extends State<CurrencyPickerSheet> {
       ),
       body: SafeArea(
         child: Container(
-          padding: EdgeInsets.only(
-            top: 8,
-            left: 16,
-            right: 16,
-          ),
+          padding: EdgeInsets.only(top: 8, left: 16, right: 16),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -219,41 +253,39 @@ class _CurrencyPickerSheetState extends State<CurrencyPickerSheet> {
                 ),
               ),
               8.h,
-              Obx(
-                () {
-                  if (_filteredIndices.isEmpty) {
-                    return Expanded(
-                      child: Center(
-                        child: Text(
-                          'No results found',
-                          style: TextStyle(
-                            color: context.theme.colorScheme.primary,
-                            fontSize: 16,
-                          ),
+              Obx(() {
+                if (_filteredIndices.isEmpty) {
+                  return Expanded(
+                    child: Center(
+                      child: Text(
+                        'No results found',
+                        style: TextStyle(
+                          color: context.theme.colorScheme.primary,
+                          fontSize: 16,
                         ),
                       ),
-                    );
-                  }
-
-                  return Expanded(
-                    child: ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: _filteredIndices.length,
-                      itemBuilder: (context, idx) {
-                        var i = _filteredIndices[idx];
-                        var currency = widget.currencies[i];
-                        return ListTile(
-                          title: Text(
-                            '${currency.id.toUpperCase()} (${currency.symbol})',
-                          ),
-                          selected: currency.id == widget.initialCurrency,
-                          onTap: () => Navigator.of(context).pop(currency.id),
-                        );
-                      },
                     ),
                   );
-                },
-              ),
+                }
+
+                return Expanded(
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: _filteredIndices.length,
+                    itemBuilder: (context, idx) {
+                      var i = _filteredIndices[idx];
+                      var currency = widget.currencies[i];
+                      return ListTile(
+                        title: Text(
+                          '${currency.id.toUpperCase()} (${currency.symbol})',
+                        ),
+                        selected: currency.id == widget.initialCurrency,
+                        onTap: () => Navigator.of(context).pop(currency.id),
+                      );
+                    },
+                  ),
+                );
+              }),
             ],
           ),
         ),
