@@ -218,7 +218,7 @@ class _CalcButtonState extends State<_CalcButton>
       animation: _offsetAnimation,
       builder: (context, child) {
         // Shake amplitude in pixels
-        const double shakeAmount = 1.0;
+        const shakeAmount = 1.0;
         // Sine wave for shake effect
         double offsetX =
             math.sin(_offsetAnimation.value * math.pi * 4) *

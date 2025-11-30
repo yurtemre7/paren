@@ -13,8 +13,8 @@ class BudgetPlanner extends StatefulWidget {
 
 class _BudgetPlannerState extends State<BudgetPlanner> {
   final Paren paren = Get.find();
-  final TextEditingController _budgetController = TextEditingController();
-  final TextEditingController _dailyBudgetController = TextEditingController();
+  final _budgetController = TextEditingController();
+  final _dailyBudgetController = TextEditingController();
   final _tripDates = Rxn<DateTimeRange>();
   final _isDailyMode = false.obs;
 

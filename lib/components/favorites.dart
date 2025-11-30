@@ -49,10 +49,10 @@ class FavoritesScreen extends StatelessWidget {
               return const ListTile(title: Text('Invalid currency'));
             }
 
-            NumberFormat numberFormatFrom = NumberFormat.simpleCurrency(
+            var numberFormatFrom = NumberFormat.simpleCurrency(
               name: fromCurrency.id.toUpperCase(),
             );
-            NumberFormat numberFormatTo = NumberFormat.simpleCurrency(
+            var numberFormatTo = NumberFormat.simpleCurrency(
               name: toCurrency.id.toUpperCase(),
             );
 

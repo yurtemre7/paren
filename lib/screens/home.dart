@@ -23,7 +23,7 @@ class _HomeState extends State<Home> {
   final Paren paren = Get.find();
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
-  final PageController pageController = PageController();
+  final pageController = PageController();
 
   @override
   void initState() {

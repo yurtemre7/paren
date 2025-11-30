@@ -125,7 +125,7 @@ class _ExChartState extends State<ExChart> {
     // Calculate average daily change (drift) and volatility (stdDev)
     double totalChange = 0;
     double totalChangeSquared = 0;
-    for (int i = 1; i < historicalData.length; i++) {
+    for (var i = 1; i < historicalData.length; i++) {
       double change = historicalData[i].y - historicalData[i - 1].y;
       totalChange += change;
       totalChangeSquared += change * change;
@@ -142,11 +142,11 @@ class _ExChartState extends State<ExChart> {
     var step = Duration.millisecondsPerDay.toDouble();
 
     // Generate predictions with random noise
-    Random random =
+    var random =
         Random(); // Seed with a fixed value for consistency if needed
     List<({double x, double y})> prediction = [];
-    double currentY = lastY;
-    for (int i = 0; i < predictionDuration.value.inDays; i++) {
+    var currentY = lastY;
+    for (var i = 0; i < predictionDuration.value.inDays; i++) {
       double newX = lastX + (i + 1) * step;
       double noise =
           (random.nextDouble() * 2 - 1) *
@@ -384,7 +384,7 @@ class _ExChartState extends State<ExChart> {
 
   Widget leftTitleWidgets(double value, TitleMeta meta) {
     const style = TextStyle(fontWeight: FontWeight.bold, fontSize: 14);
-    NumberFormat numberFormatTo = NumberFormat.simpleCurrency(
+    var numberFormatTo = NumberFormat.simpleCurrency(
       name: paren.currencies[localIdxTo.value].id.toUpperCase(),
       decimalDigits: 5,
     );
@@ -427,7 +427,7 @@ class _ExChartState extends State<ExChart> {
               var isPrediction = inPredictionPoints && !inDataPoints;
               // var isDouble = inPredictionPoints && inDataPoints;
 
-              NumberFormat numberFormatTo = NumberFormat.simpleCurrency(
+              var numberFormatTo = NumberFormat.simpleCurrency(
                 name: paren.currencies[localIdxTo.value].id.toUpperCase(),
                 decimalDigits: 5,
               );
@@ -490,7 +490,7 @@ class _ExChartState extends State<ExChart> {
         LineChartBarData(
           spots: [
             ...currencyDataList.map((e) {
-              ({double x, double y}) position = e;
+              var position = e;
               return FlSpot(position.x, position.y);
             }),
           ],

@@ -69,10 +69,10 @@ class QuickConversions extends StatelessWidget {
 
                 var convertedAmount = currentValue * toRate / fromRate;
 
-                NumberFormat numberFormatFrom = NumberFormat.simpleCurrency(
+                var numberFormatFrom = NumberFormat.simpleCurrency(
                   name: fromCurrency.id.toUpperCase(),
                 );
-                NumberFormat numberFormatTo = NumberFormat.simpleCurrency(
+                var numberFormatTo = NumberFormat.simpleCurrency(
                   name: toCurrency.id.toUpperCase(),
                 );
 

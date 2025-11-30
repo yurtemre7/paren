@@ -14,7 +14,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class Paren extends GetxController {
   final dio = Dio(BaseOptions(baseUrl: baseUrl));
-  final SharedPreferencesAsync sp = SharedPreferencesAsync();
+  final sp = SharedPreferencesAsync();
 
   final currencies = <Currency>[].obs;
   final latestTimestamp = DateTime.now().obs;
@@ -227,13 +227,13 @@ class Paren extends GetxController {
     var convertedAmount = 1.0 * toRate / fromRate;
     var reConvertedAmount = 1.0 * fromRate / toRate;
 
-    NumberFormat numberFormatFrom = NumberFormat.simpleCurrency(
+    var numberFormatFrom = NumberFormat.simpleCurrency(
       name: fromCurrency.id.toUpperCase(),
     );
-    NumberFormat numberFormatRe = NumberFormat.simpleCurrency(
+    var numberFormatRe = NumberFormat.simpleCurrency(
       name: fromCurrency.id.toUpperCase(),
     );
-    NumberFormat numberFormatTo = NumberFormat.simpleCurrency(
+    var numberFormatTo = NumberFormat.simpleCurrency(
       name: toCurrency.id.toUpperCase(),
     );
 
