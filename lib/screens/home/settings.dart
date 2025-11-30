@@ -6,24 +6,19 @@ import 'package:share_plus/share_plus.dart';
 import 'package:stupid_simple_sheet/stupid_simple_sheet.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class Settings extends StatefulWidget {
+class Settings extends StatelessWidget {
   const Settings({super.key});
-
-  @override
-  State<Settings> createState() => _SettingsState();
-}
-
-class _SettingsState extends State<Settings> {
-  final Paren paren = Get.find();
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Column(children: [buildAppInfo(), buildFeedback(), Divider()]),
+      child: Column(
+        children: [buildAppInfo(), buildFeedback(context), Divider()],
+      ),
     );
   }
 
-  Widget buildFeedback() {
+  Widget buildFeedback(BuildContext context) {
     return Container(
       padding: const EdgeInsets.only(right: 8),
       child: Column(
@@ -124,6 +119,7 @@ class _SettingsState extends State<Settings> {
               ),
               OutlinedButton(
                 onPressed: () async {
+                  Paren paren = Get.find();
                   await paren.reset();
                   await paren.fetchCurrencyDataOnline();
                   Get.back();
