@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/widget_previews.dart';
 import 'package:get/get.dart';
 import 'package:paren/providers/constants.dart';
 import 'package:paren/providers/extensions.dart';
@@ -11,6 +12,13 @@ import 'package:paren/screens/home/conversion.dart';
 import 'package:paren/screens/home/customization.dart';
 import 'package:paren/components/home_header.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+@Preview()
+Widget HomePreview() {
+  Get.put(Paren()).initSettings();
+  
+  return Home();
+}
 
 class Home extends StatefulWidget {
   const Home({super.key});

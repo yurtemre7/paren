@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/widget_previews.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:paren/components/calculator_keyboard.dart';
@@ -8,6 +9,13 @@ import 'package:paren/providers/extensions.dart';
 import 'package:paren/providers/paren.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:stupid_simple_sheet/stupid_simple_sheet.dart';
+
+@Preview()
+Widget HomePreview() {
+  Get.put(Paren()).initSettings();
+  
+  return Conversion();
+}
 
 class Conversion extends StatefulWidget {
   const Conversion({super.key});

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widget_previews.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:get/get.dart';
 import 'package:paren/components/budget_planner.dart';
@@ -10,6 +11,14 @@ import 'package:paren/components/favorites.dart';
 import 'package:paren/components/quick_conversions.dart';
 import 'package:paren/screens/home/settings.dart';
 import 'package:stupid_simple_sheet/stupid_simple_sheet.dart';
+
+@Preview()
+Widget HomePreview() {
+  Get.put(Paren()).initSettings();
+  
+  return Customization();
+}
+
 
 class Customization extends StatefulWidget {
   const Customization({super.key});
