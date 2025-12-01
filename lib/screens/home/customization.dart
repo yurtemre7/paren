@@ -34,9 +34,9 @@ class _CustomizationState extends State<Customization> {
         // buildAppColorChanger(),
         Divider(),
         Settings(),
-        12.h,
+        16.h,
         const Center(child: Text('Made in 🇩🇪 by Emre')),
-        12.h,
+        16.h,
       ],
     );
   }

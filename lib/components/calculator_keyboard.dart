@@ -152,7 +152,7 @@ class _CalculatorKeyboardState extends State<CalculatorKeyboard> {
                     ),
                   ],
                 ),
-                8.h,
+                16.h,
               ],
             ),
           ),

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:paren/classes/currency.dart';
-import 'package:paren/providers/extensions.dart';
 import 'package:paren/providers/paren.dart';
 import 'package:stupid_simple_sheet/stupid_simple_sheet.dart';
 
@@ -68,7 +67,7 @@ class _CurrencyChangerRowState extends State<CurrencyChangerRow> {
       );
       var to = paren.currencies.firstWhere((currency) => currency.id == toId);
       return Container(
-        padding: const EdgeInsets.symmetric(horizontal: 24),
+        padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -228,8 +227,9 @@ class _CurrencyPickerSheetState extends State<CurrencyPickerSheet> {
       ),
       body: SafeArea(
         child: Container(
-          padding: EdgeInsets.only(top: 8, left: 16, right: 16),
+          padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
           child: Column(
+            spacing: 8,
             mainAxisSize: MainAxisSize.min,
             children: [
               TextField(
@@ -242,7 +242,6 @@ class _CurrencyPickerSheetState extends State<CurrencyPickerSheet> {
                   ),
                 ),
               ),
-              8.h,
               Obx(() {
                 if (_filteredIndices.isEmpty) {
                   return Expanded(

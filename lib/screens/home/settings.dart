@@ -20,7 +20,7 @@ class Settings extends StatelessWidget {
 
   Widget buildFeedback(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.only(right: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Column(
         children: [
           ListTile(
@@ -71,7 +71,7 @@ class Settings extends StatelessWidget {
             },
           ),
           Container(
-            padding: const EdgeInsets.only(right: 8),
+            padding: EdgeInsets.only(top: 8),
             child: OverflowBar(
               alignment: MainAxisAlignment.end,
               spacing: 8,
@@ -98,39 +98,42 @@ class Settings extends StatelessWidget {
   }
 
   Widget buildAppInfo() {
-    return ListTile(
-      trailing: ClipRRect(
-        borderRadius: BorderRadius.circular(12),
-        child: Image.asset('assets/icon/icon.png'),
-      ),
-      title: const Text('App Info'),
-      subtitle: const Text('Thank you for being here.'),
-      onLongPress: () {
-        Get.dialog(
-          AlertDialog(
-            title: const Text('Delete App Data'),
-            content: const Text(
-              'Are you sure, you want to delete all the app data?\n\nThis contains the data of the offline currency values, your default currency selection and the autofocus status.',
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: ListTile(
+        trailing: ClipRRect(
+          borderRadius: BorderRadius.circular(12),
+          child: Image.asset('assets/icon/icon.png'),
+        ),
+        title: const Text('App Info'),
+        subtitle: const Text('Thank you for being here.'),
+        onLongPress: () {
+          Get.dialog(
+            AlertDialog(
+              title: const Text('Delete App Data'),
+              content: const Text(
+                'Are you sure, you want to delete all the app data?\n\nThis contains the data of the offline currency values, your default currency selection and the autofocus status.',
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () => Get.back(),
+                  child: const Text('Abort'),
+                ),
+                OutlinedButton(
+                  onPressed: () async {
+                    Paren paren = Get.find();
+                    await paren.reset();
+                    await paren.fetchCurrencyDataOnline();
+                    Get.back();
+                    Get.back();
+                  },
+                  child: const Text('Delete'),
+                ),
+              ],
             ),
-            actions: [
-              TextButton(
-                onPressed: () => Get.back(),
-                child: const Text('Abort'),
-              ),
-              OutlinedButton(
-                onPressed: () async {
-                  Paren paren = Get.find();
-                  await paren.reset();
-                  await paren.fetchCurrencyDataOnline();
-                  Get.back();
-                  Get.back();
-                },
-                child: const Text('Delete'),
-              ),
-            ],
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
   }
 }
