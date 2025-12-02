@@ -313,10 +313,10 @@ packages:
     dependency: transitive
     description:
       name: motor
-      sha256: d6fd00496a2b934f8f54e660acc0d039d0e4bf8e667b6977b0480be97385779e
+      sha256: cbd49f21b00e568c2b1a55f134ed803614a107782f4fea7769693bca32940c58
       url: "https://pub.dev"
     source: hosted
-    version: "1.0.1"
+    version: "1.1.0"
   path:
     dependency: transitive
     description:
@@ -441,10 +441,10 @@ packages:
     dependency: transitive
     description:
       name: shared_preferences_android
-      sha256: "46a46fd64659eff15f4638bbe19de43f9483f0e0bf024a9fb6b3582064bacc7b"
+      sha256: "83af5c682796c0f7719c2bbf74792d113e40ae97981b8f266fa84574573556bc"
       url: "https://pub.dev"
     source: hosted
-    version: "2.4.17"
+    version: "2.4.18"
   shared_preferences_foundation:
     dependency: transitive
     description:
@@ -526,10 +526,10 @@ packages:
     dependency: "direct main"
     description:
       name: stupid_simple_sheet
-      sha256: "74ee2b8b0250a1ea65c14d65769d6165dfd82cb01dd2a6e3248f73adb49c5acd"
+      sha256: ddbf4504d3ee9978d67d58d092f787c1d8cdbd3b00855b22fa92070a4d4a800d
       url: "https://pub.dev"
     source: hosted
-    version: "0.6.2+3"
+    version: "0.6.3"
   term_glyph:
     dependency: transitive
     description:
