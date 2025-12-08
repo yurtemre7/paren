@@ -2,26 +2,20 @@ PODS:
   - Flutter (1.0.0)
   - home_widget (0.0.1):
     - Flutter
-  - objective_c (0.0.1):
-    - Flutter
 
 DEPENDENCIES:
   - Flutter (from `Flutter`)
   - home_widget (from `.symlinks/plugins/home_widget/ios`)
-  - objective_c (from `.symlinks/plugins/objective_c/ios`)
 
 EXTERNAL SOURCES:
   Flutter:
     :path: Flutter
   home_widget:
     :path: ".symlinks/plugins/home_widget/ios"
-  objective_c:
-    :path: ".symlinks/plugins/objective_c/ios"
 
 SPEC CHECKSUMS:
   Flutter: cabc95a1d2626b1b06e7179b784ebcf0c0cde467
   home_widget: 0434835a4c9a75704264feff6be17ea40e0f0d57
-  objective_c: 77e887b5ba1827970907e10e832eec1683f3431d
 
 PODFILE CHECKSUM: 9c46fd01abff66081b39f5fa5767b3f1d0b11d76
 
