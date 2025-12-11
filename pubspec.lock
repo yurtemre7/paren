@@ -225,10 +225,10 @@ packages:
     dependency: transitive
     description:
       name: image
-      sha256: "4e973fcf4caae1a4be2fa0a13157aa38a8f9cb049db6529aa00b4d71abc4d928"
+      sha256: "51555e36056541237b15b57afc31a0f53d4f9aefd9bd00873a6dc0090e54e332"
       url: "https://pub.dev"
     source: hosted
-    version: "4.5.4"
+    version: "4.6.0"
   intl:
     dependency: "direct main"
     description:
@@ -526,10 +526,10 @@ packages:
     dependency: "direct main"
     description:
       name: stupid_simple_sheet
-      sha256: ddbf4504d3ee9978d67d58d092f787c1d8cdbd3b00855b22fa92070a4d4a800d
+      sha256: "5fbe6fb585f1547426a1698d7e9e668da1de67c979c7d3d5ad64e84b300b3042"
       url: "https://pub.dev"
     source: hosted
-    version: "0.6.3"
+    version: "0.7.0"
   term_glyph:
     dependency: transitive
     description:
