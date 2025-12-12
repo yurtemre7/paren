@@ -1,7 +1,10 @@
+import 'package:json_annotation/json_annotation.dart';
+
+part 'favorite_conversion.g.dart';
+
+@JsonSerializable()
 class FavoriteConversion {
-  final String id;
-  final String fromCurrency;
-  final String toCurrency;
+  final String id, fromCurrency, toCurrency;
   final double amount;
   final DateTime timestamp;
 
@@ -13,20 +16,8 @@ class FavoriteConversion {
     DateTime? timestamp,
   }) : timestamp = timestamp ?? DateTime.now();
 
-  Map<String, dynamic> toJson() => {
-    'id': id,
-    'fromCurrency': fromCurrency,
-    'toCurrency': toCurrency,
-    'amount': amount,
-    'timestamp': timestamp.toIso8601String(),
-  };
-
   factory FavoriteConversion.fromJson(Map<String, dynamic> json) =>
-      FavoriteConversion(
-        id: json['id'],
-        fromCurrency: json['fromCurrency'],
-        toCurrency: json['toCurrency'],
-        amount: (json['amount'] as num).toDouble(),
-        timestamp: DateTime.parse(json['timestamp']),
-      );
+      _$FavoriteConversionFromJson(json);
+
+  Map<String, dynamic> toJson() => _$FavoriteConversionToJson(this);
 }
