@@ -13,7 +13,6 @@ import 'package:stupid_simple_sheet/stupid_simple_sheet.dart';
 @Preview()
 Widget HomePreview() {
   Get.put(Paren()).initSettings();
-  
   return Conversion();
 }
 

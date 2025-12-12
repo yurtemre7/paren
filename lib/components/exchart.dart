@@ -142,8 +142,7 @@ class _ExChartState extends State<ExChart> {
     var step = Duration.millisecondsPerDay.toDouble();
 
     // Generate predictions with random noise
-    var random =
-        Random(); // Seed with a fixed value for consistency if needed
+    var random = Random(); // Seed with a fixed value for consistency if needed
     List<({double x, double y})> prediction = [];
     var currentY = lastY;
     for (var i = 0; i < predictionDuration.value.inDays; i++) {
@@ -185,7 +184,7 @@ class _ExChartState extends State<ExChart> {
                 onPressed: () {
                   Navigator.of(context).push(
                     StupidSimpleCupertinoSheetRoute(
-                      snappingConfig: SheetSnappingConfig.relative([0.75]),
+                      snappingConfig: SheetSnappingConfig.relative([0.5]),
                       child: Scaffold(
                         appBar: AppBar(
                           title: Text(

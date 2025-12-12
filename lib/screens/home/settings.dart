@@ -10,10 +10,8 @@ import 'package:url_launcher/url_launcher.dart';
 @Preview()
 Widget HomePreview() {
   Get.put(Paren()).initSettings();
-  
   return Settings();
 }
-
 
 class Settings extends StatelessWidget {
   const Settings({super.key});
@@ -65,6 +63,7 @@ class Settings extends StatelessWidget {
             onTap: () async {
               await Navigator.of(context).push(
                 StupidSimpleCupertinoSheetRoute(
+                  snappingConfig: SheetSnappingConfig.relative([0.5]),
                   child: LicensePage(
                     applicationName: 'Par円',
                     applicationIcon: Padding(

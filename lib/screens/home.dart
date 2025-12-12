@@ -16,7 +16,6 @@ import 'package:url_launcher/url_launcher.dart';
 @Preview()
 Widget HomePreview() {
   Get.put(Paren()).initSettings();
-  
   return Home();
 }
 
@@ -79,7 +78,7 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    var width = MediaQuery.of(context).size.width;
+    var width = MediaQuery.sizeOf(context).width;
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).unfocus();
@@ -138,13 +137,16 @@ class _HomeState extends State<Home> {
               if (width >= 800) {
                 return Row(
                   children: [
-                    Expanded(flex: 3, child: Conversion()),
+                    Expanded(child: Conversion()),
                     // add border
                     Container(
                       width: 1,
                       color: context.theme.colorScheme.outlineVariant,
                     ),
-                    Expanded(child: Customization()),
+                    Container(
+                      constraints: BoxConstraints.expand(width: 400),
+                      child: Customization(),
+                    ),
                   ],
                 );
               }

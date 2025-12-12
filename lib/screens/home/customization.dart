@@ -15,10 +15,8 @@ import 'package:stupid_simple_sheet/stupid_simple_sheet.dart';
 @Preview()
 Widget HomePreview() {
   Get.put(Paren()).initSettings();
-  
   return Customization();
 }
-
 
 class Customization extends StatefulWidget {
   const Customization({super.key});
@@ -65,7 +63,7 @@ class _CustomizationState extends State<Customization> {
           Get.back();
           await Navigator.of(context).push(
             StupidSimpleCupertinoSheetRoute(
-              snappingConfig: SheetSnappingConfig.relative([0.75]),
+              snappingConfig: SheetSnappingConfig.relative([0.5]),
               child: ExChart(
                 idFrom: paren.fromCurrency.value,
                 idxFrom: paren.currencies.indexWhere(
@@ -93,7 +91,10 @@ class _CustomizationState extends State<Customization> {
             onTap: () async {
               Get.back();
               var result = await Navigator.of(context).push(
-                StupidSimpleCupertinoSheetRoute(child: buildQuickConversions()),
+                StupidSimpleCupertinoSheetRoute(
+                  child: buildQuickConversions(),
+                  snappingConfig: SheetSnappingConfig.relative([0.5]),
+                ),
               );
               if (result != null) {
                 paren.currencyTextInput.value = result.toString();
@@ -176,7 +177,7 @@ class _CustomizationState extends State<Customization> {
                   paren.appColor.value = newColor.getValue;
                   paren.setTheme();
                 },
-                pickerAreaHeightPercent: 0.75,
+                pickerAreaHeightPercent: 0.5,
               ),
             ),
           ),
