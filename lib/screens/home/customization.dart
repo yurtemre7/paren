@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widget_previews.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:paren/components/budget_planner.dart';
 import 'package:paren/providers/constants.dart';
@@ -55,8 +56,8 @@ class _CustomizationState extends State<Customization> {
         title: Text(
           '${paren.fromCurrency.toUpperCase()} - ${paren.toCurrency.toUpperCase()} exchange chart',
         ),
-        trailing: Icon(
-          Icons.line_axis_outlined,
+        trailing: FaIcon(
+          FontAwesomeIcons.chartLine,
           color: context.theme.colorScheme.primary,
         ),
         onTap: () async {
@@ -100,7 +101,7 @@ class _CustomizationState extends State<Customization> {
                 paren.currencyTextInput.value = result.toString();
               }
             },
-            trailing: Icon(Icons.table_chart_outlined),
+            trailing: FaIcon(FontAwesomeIcons.moneyBillTransfer),
             iconColor: context.theme.colorScheme.primary,
           ),
         ],
@@ -121,8 +122,8 @@ class _CustomizationState extends State<Customization> {
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: ListTile(
         title: const Text('Saved Conversions'),
-        trailing: Icon(
-          Icons.favorite,
+        trailing: FaIcon(
+          FontAwesomeIcons.solidHeart,
           color: context.theme.colorScheme.primary,
         ),
         onTap: () async {
@@ -147,8 +148,8 @@ class _CustomizationState extends State<Customization> {
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: ListTile(
         title: const Text('Budget Planner'),
-        trailing: Icon(
-          Icons.monetization_on_outlined,
+        trailing: FaIcon(
+          FontAwesomeIcons.moneyBill1,
           color: context.theme.colorScheme.primary,
         ),
         onTap: () async {
@@ -221,8 +222,8 @@ class _CustomizationState extends State<Customization> {
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Icon(
-                            Icons.color_lens,
+                          FaIcon(
+                            FontAwesomeIcons.palette,
                             color: context.theme.colorScheme.primary,
                           ),
                           4.h,
@@ -264,7 +265,7 @@ class _CustomizationState extends State<Customization> {
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            Icon(option['icon'] as IconData, size: 20),
+                            FaIcon(option['icon'] as IconData, size: 20),
                             4.h,
                             Text(
                               option['label'] as String,

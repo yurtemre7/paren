@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widget_previews.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:paren/providers/extensions.dart';
 import 'package:paren/providers/paren.dart';
@@ -35,18 +36,18 @@ class Settings extends StatelessWidget {
             subtitle: const Text(
               'With your help the app can help more people on their vacations! I appreciate your effort.',
             ),
-            trailing: IconButton(
-              onPressed: () {
-                SharePlus.instance.share(
-                  ShareParams(
-                    text:
-                        'With Par円 you can convert money in your travels faster than ever!\nDownload here: https://apps.apple.com/us/app/paren/id6578395712',
-                  ),
-                );
-              },
-              icon: const Icon(Icons.share_outlined),
+            trailing: FaIcon(
+              FontAwesomeIcons.shareFromSquare,
               color: context.theme.colorScheme.primary,
             ),
+            onTap: () {
+              SharePlus.instance.share(
+                ShareParams(
+                  text:
+                      'With Par円 you can convert money in your travels faster than ever!\nDownload here: https://apps.apple.com/us/app/paren/id6578395712',
+                ),
+              );
+            },
           ),
           const ListTile(
             title: Text('Contact / Feedback'),
@@ -59,7 +60,11 @@ class Settings extends StatelessWidget {
             subtitle: Text(
               'This app uses the following open source libraries.',
             ),
-            trailing: Icon(Icons.open_in_new),
+            // trailing: Icon(Icons.open_in_new),
+            trailing: FaIcon(
+              FontAwesomeIcons.copyright,
+              color: context.theme.colorScheme.primary,
+            ),
             onTap: () async {
               await Navigator.of(context).push(
                 StupidSimpleCupertinoSheetRoute(

@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:paren/providers/constants.dart';
@@ -167,7 +168,7 @@ class _ExChartState extends State<ExChart> {
         appBar: AppBar(
           leading: IconButton(
             onPressed: () => Get.back(),
-            icon: const Icon(Icons.close),
+            icon: FaIcon(FontAwesomeIcons.xmark),
             color: context.theme.colorScheme.primary,
           ),
           title: Text(
@@ -197,7 +198,7 @@ class _ExChartState extends State<ExChart> {
                           ),
                           leading: IconButton(
                             onPressed: () => Navigator.of(context).pop(),
-                            icon: const Icon(Icons.close),
+                            icon: FaIcon(FontAwesomeIcons.xmark),
                             color: context.theme.colorScheme.primary,
                           ),
                         ),
@@ -231,7 +232,7 @@ class _ExChartState extends State<ExChart> {
                   );
                 },
                 label: Text('${localDuration.value.inDays} days'),
-                icon: const Icon(Icons.calendar_today),
+                icon: FaIcon(FontAwesomeIcons.calendar),
               ),
             ),
           ],
@@ -273,7 +274,7 @@ class _ExChartState extends State<ExChart> {
                         onPressed: () {
                           Get.dialog(buildPredictionInfoDialog());
                         },
-                        icon: Icon(Icons.info_outline),
+                        icon: FaIcon(FontAwesomeIcons.circleQuestion),
                         color: context.theme.colorScheme.primary,
                       ),
                       title: Text('Show simple prediction'),
@@ -302,7 +303,7 @@ class _ExChartState extends State<ExChart> {
                         fetchChartData(localIdFrom.value, localIdTo.value);
                       },
                       label: const Text('Swap'),
-                      icon: const Icon(Icons.swap_horiz_outlined),
+                      icon: FaIcon(FontAwesomeIcons.arrowRightArrowLeft),
                     ),
                   ],
                 ),

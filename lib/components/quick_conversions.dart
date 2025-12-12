@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:paren/classes/currency.dart';
@@ -21,7 +22,7 @@ class QuickConversions extends StatelessWidget {
       appBar: AppBar(
         leading: IconButton(
           onPressed: () => Get.back(),
-          icon: const Icon(Icons.close),
+          icon: FaIcon(FontAwesomeIcons.xmark),
           color: context.theme.colorScheme.primary,
         ),
         title: Text(

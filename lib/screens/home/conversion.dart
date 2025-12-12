@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widget_previews.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:paren/components/calculator_keyboard.dart';
@@ -196,15 +197,15 @@ class _ConversionState extends State<Conversion> {
             children: [
               IconButton(
                 icon: Obx(() {
-                  return Icon(
+                  return FaIcon(
                     paren.favorites.any((fav) {
                           return fav.fromCurrency == paren.fromCurrency.value &&
                               fav.toCurrency == paren.toCurrency.value &&
                               fav.amount.toStringAsFixed(2) ==
                                   inputConverted.toStringAsFixed(2);
                         })
-                        ? Icons.favorite_outlined
-                        : Icons.favorite_border_outlined,
+                        ? FontAwesomeIcons.solidHeart
+                        : FontAwesomeIcons.heart,
                     color: context.theme.colorScheme.primary,
                   );
                 }),
@@ -221,8 +222,8 @@ class _ConversionState extends State<Conversion> {
                 tooltip: 'Favorite',
               ),
               IconButton(
-                icon: Icon(
-                  Icons.share_outlined,
+                icon: FaIcon(
+                  FontAwesomeIcons.shareFromSquare,
                   color: context.theme.colorScheme.primary,
                 ),
                 onPressed: () {
@@ -233,8 +234,8 @@ class _ConversionState extends State<Conversion> {
                 tooltip: 'Share',
               ),
               IconButton(
-                icon: Icon(
-                  Icons.content_copy,
+                icon: FaIcon(
+                  FontAwesomeIcons.copy,
                   color: context.theme.colorScheme.primary,
                 ),
                 onPressed: () {
@@ -272,8 +273,8 @@ class _ConversionState extends State<Conversion> {
             paren.saveSettings();
           },
           tooltip: 'Adjust Sizes',
-          icon: Icon(
-            Icons.text_increase_rounded,
+          icon: FaIcon(
+            FontAwesomeIcons.wrench,
             color: context.theme.colorScheme.primary,
           ),
         ),
@@ -293,7 +294,7 @@ class _ConversionState extends State<Conversion> {
           appBar: AppBar(
             leading: IconButton(
               onPressed: () => Get.back(),
-              icon: const Icon(Icons.close),
+              icon: FaIcon(FontAwesomeIcons.xmark),
               color: context.theme.colorScheme.primary,
             ),
             title: Text(

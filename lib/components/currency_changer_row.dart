@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:paren/classes/currency.dart';
 import 'package:paren/providers/paren.dart';
@@ -113,8 +114,7 @@ class _CurrencyChangerRowState extends State<CurrencyChangerRow> {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 12),
               child: IconButton.filledTonal(
-                icon: const Icon(Icons.swap_horiz_rounded),
-                iconSize: 24,
+                icon: FaIcon(FontAwesomeIcons.arrowRightArrowLeft),
                 onPressed: () {
                   _onSwap();
                 },
@@ -215,7 +215,7 @@ class _CurrencyPickerSheetState extends State<CurrencyPickerSheet> {
       appBar: AppBar(
         leading: IconButton(
           onPressed: () => Get.back(),
-          icon: const Icon(Icons.close),
+          icon: FaIcon(FontAwesomeIcons.xmark),
           color: context.theme.colorScheme.primary,
         ),
         title: Text(
