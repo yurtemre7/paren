@@ -274,7 +274,7 @@ class _ConversionState extends State<Conversion> {
           },
           tooltip: 'Adjust Sizes',
           icon: FaIcon(
-            FontAwesomeIcons.wrench,
+            FontAwesomeIcons.textHeight,
             color: context.theme.colorScheme.primary,
           ),
         ),
