@@ -34,10 +34,19 @@ dev_dependencies:
     sdk: flutter
 
   flutter_lints: 6.0.0
-  # flutter pub run flutter_launcher_icons:main
+  # `flutter pub run flutter_launcher_icons:main`
   flutter_launcher_icons: 0.14.4
   json_serializable: 6.11.3
   build_runner: 2.10.4
+  # `dart run msix:create`
+  msix: ^3.16.12
+
+msix_config:
+  display_name: Paren
+  publisher_display_name: emredev
+  identity_name: de.emredev.paren
+  logo_path: "assets/icon/icon.png"
+  capabilities: internetClient
 
 flutter_launcher_icons:
   android: true
