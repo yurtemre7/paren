@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:paren/classes/sheet.dart';
+import 'package:paren/components/sheet_form_bottom_sheet.dart';
 import 'package:paren/providers/paren.dart';
 import 'package:paren/screens/home/details/sheet_detail.dart';
+import 'package:stupid_simple_sheet/stupid_simple_sheet.dart';
 
 class Sheets extends StatefulWidget {
   const Sheets({super.key});
@@ -27,23 +29,38 @@ class _SheetsState extends State<Sheets> {
 
       if (filteredSheets.isEmpty) {
         return Scaffold(
-          body: Center(
-            child: Text('No sheets found.'),
-          ),
+          body: Center(child: Text('No sheets found.')),
           floatingActionButton: FloatingActionButton(
-            onPressed: () {
-              var now = DateTime.now();
-              // Action to add a new sheet
-              var newSheet = Sheet(
-                id: now.millisecondsSinceEpoch.toString(),
-                name: 'New Sheet',
-                fromCurrency: paren.fromCurrency.value,
-                toCurrency: paren.toCurrency.value,
-                createdAt: now,
-                updatedAt: now,
-                entries: [],
+            onPressed: () async {
+              var res = await Navigator.of(context).push<Sheet>(
+                StupidSimpleSheetRoute(
+                  originateAboveBottomViewInset: true,
+                  shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.vertical(
+                      top: Radius.circular(20),
+                    ),
+                  ),
+                  child: Material(child: const SheetFormBottomSheet()),
+                ),
               );
-              paren.addSheet(newSheet);
+              if (!context.mounted) {
+                return;
+              }
+              if (res != null) {
+                // Show success message
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                      'Created "${res.name}"',
+                      style: TextStyle(
+                        color: context.theme.colorScheme.primary,
+                      ),
+                    ),
+                    duration: const Duration(seconds: 1),
+                    backgroundColor: context.theme.colorScheme.primaryContainer,
+                  ),
+                );
+              }
             },
             child: FaIcon(FontAwesomeIcons.plus),
           ),
@@ -56,23 +73,22 @@ class _SheetsState extends State<Sheets> {
           mainAxisSize: MainAxisSize.min,
           children: [
             // Search
-            
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: TextField(
-                  controller: searchController,
-                  decoration: InputDecoration(
-                    labelText: 'Search Sheets',
-                    prefixIcon: Icon(Icons.search),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8.0),
-                    ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: TextField(
+                controller: searchController,
+                decoration: InputDecoration(
+                  labelText: 'Search Sheets',
+                  prefixIcon: Icon(Icons.search),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8.0),
                   ),
-                  onChanged: (value) {
-                    setState(() {});
-                  },
                 ),
+                onChanged: (value) {
+                  setState(() {});
+                },
               ),
+            ),
 
             // List of sheets
             Expanded(
@@ -91,6 +107,20 @@ class _SheetsState extends State<Sheets> {
                     ),
                     onDismissed: (_) {
                       paren.removeSheet(sheet.id);
+
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(
+                            'Deleted "${sheet.name}"',
+                            style: TextStyle(
+                              color: context.theme.colorScheme.primary,
+                            ),
+                          ),
+                          duration: const Duration(seconds: 1),
+                          backgroundColor:
+                              context.theme.colorScheme.primaryContainer,
+                        ),
+                      );
                     },
                     child: ListTile(
                       title: Text(sheet.name),
@@ -108,19 +138,32 @@ class _SheetsState extends State<Sheets> {
           ],
         ),
         floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            var now = DateTime.now();
-            // Action to add a new sheet
-            var newSheet = Sheet(
-              id: now.millisecondsSinceEpoch.toString(),
-              name: 'New Sheet',
-              fromCurrency: paren.fromCurrency.value,
-              toCurrency: paren.toCurrency.value,
-              createdAt: now,
-              updatedAt: now,
-              entries: [],
+          onPressed: () async {
+            var res = await Navigator.of(context).push<Sheet>(
+              StupidSimpleSheetRoute(
+                originateAboveBottomViewInset: true,
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+                ),
+                child: Material(child: const SheetFormBottomSheet()),
+              ),
             );
-            paren.addSheet(newSheet);
+            if (!context.mounted) {
+              return;
+            }
+            if (res != null) {
+              // Show success message
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(
+                    'Created "${res.name}"',
+                    style: TextStyle(color: context.theme.colorScheme.primary),
+                  ),
+                  duration: const Duration(seconds: 1),
+                  backgroundColor: context.theme.colorScheme.primaryContainer,
+                ),
+              );
+            }
           },
           child: FaIcon(FontAwesomeIcons.plus),
         ),
