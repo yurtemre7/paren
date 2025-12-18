@@ -8,6 +8,8 @@ import 'package:home_widget/home_widget.dart';
 import 'package:intl/intl.dart';
 import 'package:paren/classes/currency.dart';
 import 'package:paren/classes/favorite_conversion.dart';
+import 'package:paren/classes/sheet.dart';
+import 'package:paren/classes/sheet_entry.dart';
 import 'package:paren/providers/constants.dart';
 import 'package:paren/providers/extensions.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -31,15 +33,16 @@ class Paren extends GetxController {
   final calculatorInputHeightRange = (min: 100.0, max: 350.0);
 
   final favorites = <FavoriteConversion>[].obs;
+  final sheets = <Sheet>[].obs;
 
   final currencyTextInput = '1'.obs;
-  final currentPage = 0.obs;
+  final currentPage = 1.obs;
   final loading = true.obs;
 
   Paren();
 
   Future<void> init() async {
-    await Future.wait([initCurrencies(), initFavorites()]);
+    await Future.wait([initCurrencies(), initFavorites(), initSheets()]);
 
     updateWidgetData();
   }
@@ -324,5 +327,164 @@ class Paren extends GetxController {
     var item = favorites.removeAt(oldIndex);
     favorites.insert(newIndex, item);
     await _saveFavorites();
+  }
+
+  Future<void> initSheets() async {
+    var sheetsJson = await sp.getStringList('sheets') ?? [];
+    sheets.value = sheetsJson
+        .map((json) => Sheet.fromJson(jsonDecode(json)))
+        .toList();
+  }
+
+  Future<void> _saveSheets() async {
+    var sheetsJson = sheets.map((sheet) => jsonEncode(sheet.toJson())).toList();
+    await sp.setStringList('sheets', sheetsJson);
+  }
+
+  Future<void> addSheet(Sheet sheet) async {
+    sheets.add(sheet);
+    await _saveSheets();
+  }
+
+  Future<void> removeSheet(String id) async {
+    sheets.removeWhere((sheet) => sheet.id == id);
+    await _saveSheets();
+  }
+
+  Future<void> updateSheet(Sheet updatedSheet) async {
+    var index = sheets.indexWhere((sheet) => sheet.id == updatedSheet.id);
+    if (index != -1) {
+      sheets[index] = updatedSheet;
+      await _saveSheets();
+    }
+  }
+
+  Future<void> reorderSheets(int oldIndex, int newIndex) async {
+    if (oldIndex < 0 || oldIndex >= sheets.length) return;
+    if (newIndex < 0 || newIndex > sheets.length) return;
+    if (oldIndex < newIndex) newIndex -= 1;
+    var item = sheets.removeAt(oldIndex);
+    sheets.insert(newIndex, item);
+    await _saveSheets();
+  }
+
+  Future<void> clearSheets() async {
+    sheets.clear();
+    await _saveSheets();
+  }
+
+  Future<void> addSheetEntry(String sheetId, SheetEntry entry) async {
+    var sheetIndex = sheets.indexWhere((sheet) => sheet.id == sheetId);
+    if (sheetIndex != -1) {
+      var sheet = sheets[sheetIndex];
+      var updatedEntries = List<SheetEntry>.from(sheet.entries)..add(entry);
+      var updatedSheet = Sheet(
+        id: sheet.id,
+        name: sheet.name,
+        fromCurrency: sheet.fromCurrency,
+        toCurrency: sheet.toCurrency,
+        createdAt: sheet.createdAt,
+        updatedAt: DateTime.now(),
+        entries: updatedEntries,
+      );
+      sheets[sheetIndex] = updatedSheet;
+      await _saveSheets();
+    }
+  }
+
+  Future<void> removeSheetEntry(String sheetId, String entryId) async {
+    var sheetIndex = sheets.indexWhere((sheet) => sheet.id == sheetId);
+    if (sheetIndex != -1) {
+      var sheet = sheets[sheetIndex];
+      var updatedEntries = sheet.entries
+          .where((entry) => entry.id != entryId)
+          .toList();
+      var updatedSheet = Sheet(
+        id: sheet.id,
+        name: sheet.name,
+        fromCurrency: sheet.fromCurrency,
+        toCurrency: sheet.toCurrency,
+        createdAt: sheet.createdAt,
+        updatedAt: DateTime.now(),
+        entries: updatedEntries,
+      );
+      sheets[sheetIndex] = updatedSheet;
+      await _saveSheets();
+    }
+  }
+
+  Future<void> updateSheetEntry(String sheetId, SheetEntry updatedEntry) async {
+    var sheetIndex = sheets.indexWhere((sheet) => sheet.id == sheetId);
+    if (sheetIndex != -1) {
+      var sheet = sheets[sheetIndex];
+      var entryIndex = sheet.entries.indexWhere(
+        (entry) => entry.id == updatedEntry.id,
+      );
+      if (entryIndex != -1) {
+        var updatedEntries = List<SheetEntry>.from(sheet.entries);
+        updatedEntries[entryIndex] = updatedEntry;
+        var updatedSheet = Sheet(
+          id: sheet.id,
+          name: sheet.name,
+          fromCurrency: sheet.fromCurrency,
+          toCurrency: sheet.toCurrency,
+          createdAt: sheet.createdAt,
+          updatedAt: DateTime.now(),
+          entries: updatedEntries,
+        );
+        sheets[sheetIndex] = updatedSheet;
+        await _saveSheets();
+      }
+    }
+  }
+
+  Future<void> reorderSheetEntries(
+    String sheetId,
+    int oldIndex,
+    int newIndex,
+  ) async {
+    var sheetIndex = sheets.indexWhere((sheet) => sheet.id == sheetId);
+    if (sheetIndex != -1) {
+      var sheet = sheets[sheetIndex];
+      if (oldIndex < 0 ||
+          oldIndex >= sheet.entries.length ||
+          newIndex < 0 ||
+          newIndex > sheet.entries.length) {
+        return;
+      }
+      if (oldIndex < newIndex) newIndex -= 1;
+      var updatedEntries = List<SheetEntry>.from(sheet.entries);
+      var item = updatedEntries.removeAt(oldIndex);
+      updatedEntries.insert(newIndex, item);
+      var updatedSheet = Sheet(
+        id: sheet.id,
+        name: sheet.name,
+        fromCurrency: sheet.fromCurrency,
+        toCurrency: sheet.toCurrency,
+        createdAt: sheet.createdAt,
+        updatedAt: DateTime.now(),
+        entries: updatedEntries,
+      );
+      sheets[sheetIndex] = updatedSheet;
+      await _saveSheets();
+    }
+  }
+
+  Future<void> clearSheetEntries(String sheetId) async {
+    var sheetIndex = sheets.indexWhere((sheet) => sheet.id == sheetId);
+    if (sheetIndex != -1) {
+      var sheet = sheets[sheetIndex];
+      var updatedSheet = Sheet(
+        id: sheet.id,
+        name: sheet.name,
+        fromCurrency: sheet.fromCurrency,
+        toCurrency: sheet.toCurrency,
+        createdAt: sheet.createdAt,
+        updatedAt: DateTime.now(),
+        entries: [],
+      );
+      sheets[sheetIndex] = updatedSheet;
+      await _saveSheets();
+    }
   }
 }
