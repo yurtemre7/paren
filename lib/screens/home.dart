@@ -11,6 +11,7 @@ import 'package:paren/providers/paren.dart';
 import 'package:paren/screens/home/conversion.dart';
 import 'package:paren/screens/home/customization.dart';
 import 'package:paren/components/home_header.dart';
+import 'package:paren/screens/home/sheets.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 @Preview()
@@ -30,7 +31,7 @@ class _HomeState extends State<Home> {
   final Paren paren = Get.find();
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
-  final pageController = PageController();
+  final pageController = PageController(initialPage: 1);
 
   @override
   void initState() {
@@ -50,7 +51,7 @@ class _HomeState extends State<Home> {
     if (!currentController.hasClients) {
       return; // no clients yet
     }
-    paren.currentPage.value = pageController.page?.round() ?? 0;
+    paren.currentPage.value = pageController.page?.round() ?? 1;
   }
 
   Future<void> initParen() async {
@@ -107,20 +108,28 @@ class _HomeState extends State<Home> {
             preferredSize: const Size.fromHeight(80),
             child: Obx(
               () => HomeHeader(
+                index: paren.currentPage.value,
                 onInfo: () {
                   Get.dialog(buildDataInfoSheet());
                 },
-                onNavigate: () async {
+                onForward: () async {
                   if (paren.currencies.isEmpty) {
                     return;
                   }
-                  await pageController.animateToPage(
-                    paren.currentPage.value > 0 ? 0 : 1,
+                  await pageController.nextPage(
                     duration: 250.milliseconds,
                     curve: Curves.ease,
                   );
                 },
-                reverse: paren.currentPage.value == 1,
+                onBackward: () async {
+                  if (paren.currencies.isEmpty) {
+                    return;
+                  }
+                  await pageController.previousPage(
+                    duration: 250.milliseconds,
+                    curve: Curves.ease,
+                  );
+                },
               ),
             ),
           ),
@@ -153,7 +162,7 @@ class _HomeState extends State<Home> {
 
               return PageView(
                 controller: pageController,
-                children: [Conversion(), Customization()],
+                children: [Sheets(), Conversion(), Customization()],
               );
             }),
           ),
