@@ -4,13 +4,15 @@ import 'package:paren/providers/extensions.dart';
 
 class HomeHeader extends StatelessWidget implements PreferredSizeWidget {
   final VoidCallback onInfo;
-  final VoidCallback onNavigate;
-  final bool reverse;
+  final VoidCallback onForward;
+  final VoidCallback onBackward;
+  final int index;
   const HomeHeader({
     super.key,
     required this.onInfo,
-    required this.onNavigate,
-    this.reverse = false,
+    required this.onForward,
+    required this.onBackward,
+    this.index = 1,
   });
 
   @override
@@ -27,17 +29,17 @@ class HomeHeader extends StatelessWidget implements PreferredSizeWidget {
               if (width >= 800) ...[
                 buildInfoIconButton(colorScheme),
                 buildLogo(colorScheme),
-                0.h,
+                40.w,
               ] else ...[
-                if (reverse)
-                  buildNavigateIconButton(colorScheme)
+                if (index != 0)
+                  buildNavigateIconButtonBackward(colorScheme)
+                else
+                  40.w,
+                buildLogo(colorScheme),
+                if (index != 2)
+                  buildNavigateIconButtonForward(colorScheme)
                 else
                   buildInfoIconButton(colorScheme),
-                buildLogo(colorScheme),
-                if (reverse)
-                  buildInfoIconButton(colorScheme)
-                else
-                  buildNavigateIconButton(colorScheme),
               ],
             ],
           ),
@@ -122,14 +124,23 @@ class HomeHeader extends StatelessWidget implements PreferredSizeWidget {
     );
   }
 
-  IconButton buildNavigateIconButton(ColorScheme colorScheme) {
+  IconButton buildNavigateIconButtonForward(ColorScheme colorScheme) {
     return IconButton(
-      icon: FaIcon(
-        reverse ? FontAwesomeIcons.angleLeft : FontAwesomeIcons.angleRight,
-      ),
+      icon: FaIcon(FontAwesomeIcons.angleRight),
       color: colorScheme.primary,
-      tooltip: reverse ? 'Home' : 'Settings',
-      onPressed: onNavigate,
+      onPressed: onForward,
+      style: IconButton.styleFrom(
+        shape: const CircleBorder(),
+        backgroundColor: colorScheme.primaryContainer.withValues(alpha: 0.15),
+      ),
+    );
+  }
+
+  IconButton buildNavigateIconButtonBackward(ColorScheme colorScheme) {
+    return IconButton(
+      icon: FaIcon(FontAwesomeIcons.angleLeft),
+      color: colorScheme.primary,
+      onPressed: onBackward,
       style: IconButton.styleFrom(
         shape: const CircleBorder(),
         backgroundColor: colorScheme.primaryContainer.withValues(alpha: 0.15),
