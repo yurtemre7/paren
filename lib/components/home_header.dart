@@ -26,7 +26,7 @@ class HomeHeader extends StatelessWidget implements PreferredSizeWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              if (width >= 800) ...[
+              if (width >= 1000) ...[
                 buildInfoIconButton(colorScheme),
                 buildLogo(colorScheme),
                 40.w,

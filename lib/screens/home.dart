@@ -47,6 +47,7 @@ class _HomeState extends State<Home> {
   }
 
   Future<void> pageControllerListener() async {
+    // TODO fix issue, when on page 0 or 2, that on resize desktop and resize back to mobile, the index stays on the one before the resize but the page is the page id = 1
     var currentController = pageController;
     if (!currentController.hasClients) {
       return; // no clients yet
@@ -91,9 +92,9 @@ class _HomeState extends State<Home> {
             if (scaffoldKey.currentState?.isEndDrawerOpen ?? false) {
               scaffoldKey.currentState?.closeEndDrawer();
             }
-            if (paren.currentPage.value != 0) {
+            if (paren.currentPage.value != 1) {
               await pageController.animateToPage(
-                0,
+                1,
                 duration: 250.milliseconds,
                 curve: Curves.ease,
               );
@@ -143,9 +144,18 @@ class _HomeState extends State<Home> {
                 );
               }
 
-              if (width >= 800) {
+              if (width >= 1000) {
                 return Row(
                   children: [
+                    Container(
+                      constraints: BoxConstraints(maxWidth: 300),
+                      padding: EdgeInsets.symmetric(horizontal: 16),
+                      child: Sheets(),
+                    ),
+                    Container(
+                      width: 1,
+                      color: context.theme.colorScheme.outlineVariant,
+                    ),
                     Expanded(child: Conversion()),
                     // add border
                     Container(
@@ -153,7 +163,7 @@ class _HomeState extends State<Home> {
                       color: context.theme.colorScheme.outlineVariant,
                     ),
                     Container(
-                      constraints: BoxConstraints.expand(width: 400),
+                      constraints: BoxConstraints.expand(width: 300),
                       child: Customization(),
                     ),
                   ],
