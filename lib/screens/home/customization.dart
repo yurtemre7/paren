@@ -63,8 +63,7 @@ class _CustomizationState extends State<Customization> {
         onTap: () async {
           Get.back();
           await Navigator.of(context).push(
-            StupidSimpleCupertinoSheetRoute(
-              snappingConfig: SheetSnappingConfig.relative([0.5]),
+            StupidSimpleSheetRoute(
               child: ExChart(
                 idFrom: paren.fromCurrency.value,
                 idxFrom: paren.currencies.indexWhere(
@@ -92,9 +91,8 @@ class _CustomizationState extends State<Customization> {
             onTap: () async {
               Get.back();
               var result = await Navigator.of(context).push(
-                StupidSimpleCupertinoSheetRoute(
+                StupidSimpleSheetRoute(
                   child: buildQuickConversions(),
-                  snappingConfig: SheetSnappingConfig.relative([0.5]),
                 ),
               );
               if (result != null) {
@@ -129,8 +127,7 @@ class _CustomizationState extends State<Customization> {
         onTap: () async {
           Get.back();
           await Navigator.of(context).push(
-            StupidSimpleCupertinoSheetRoute(
-              snappingConfig: SheetSnappingConfig.relative([0.5]),
+            StupidSimpleSheetRoute(
               child: buildFavoriteSheet(),
             ),
           );
@@ -155,8 +152,7 @@ class _CustomizationState extends State<Customization> {
         onTap: () async {
           Get.back();
           await Navigator.of(context).push(
-            StupidSimpleCupertinoSheetRoute(
-              snappingConfig: SheetSnappingConfig.relative([0.5]),
+            StupidSimpleSheetRoute(
               child: const BudgetPlanner(),
             ),
           );

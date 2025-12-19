@@ -264,12 +264,9 @@ class _ConversionState extends State<Conversion> {
         ),
         IconButton(
           onPressed: () async {
-            await Navigator.of(context).push(
-              StupidSimpleCupertinoSheetRoute(
-                snappingConfig: SheetSnappingConfig.relative([0.5]),
-                child: buildTextSizeAdjustSheet(),
-              ),
-            );
+            await Navigator.of(
+              context,
+            ).push(StupidSimpleSheetRoute(child: buildTextSizeAdjustSheet()));
             paren.saveSettings();
           },
           tooltip: 'Adjust Sizes',
@@ -283,85 +280,97 @@ class _ConversionState extends State<Conversion> {
   }
 
   Widget buildTextSizeAdjustSheet() {
-    return Card(
-      margin: EdgeInsets.zero,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-      ),
-      child: ClipRRect(
-        borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
-        child: Scaffold(
-          appBar: AppBar(
-            leading: IconButton(
-              onPressed: () => Get.back(),
-              icon: FaIcon(FontAwesomeIcons.xmark),
-              color: context.theme.colorScheme.primary,
-            ),
-            title: Text(
-              'Adjust Sizes',
-              style: TextStyle(
-                color: context.theme.colorScheme.primary,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-          body: SafeArea(
-            child: Container(
-              padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 32),
-              child: Obx(() {
-                return Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const Text(
-                      'Primary Conversion',
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    Slider(
-                      value: paren.conv1Size.value,
-                      onChanged: (value) {
-                        paren.conv1Size.value = value;
-                      },
-                      min: paren.convSizeRanges.min,
-                      max: paren.convSizeRanges.max,
-                      divisions: 20,
-                      label: '${paren.conv1Size.value}',
-                    ),
-                    const Divider(),
-                    const Text(
-                      'Secondary Conversion',
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    Slider(
-                      value: paren.conv2Size.value,
-                      onChanged: (value) {
-                        paren.conv2Size.value = value;
-                      },
-                      min: paren.convSizeRanges.min,
-                      max: paren.convSizeRanges.max,
-                      divisions: 20,
-                      label: '${paren.conv2Size.value}',
-                    ),
-                    const Divider(),
-                    const Text(
-                      'Calculator Input Height',
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    Slider(
-                      value: paren.calculatorInputHeight.value,
-                      onChanged: (value) {
-                        paren.calculatorInputHeight.value = value;
-                      },
-                      min: paren.calculatorInputHeightRange.min,
-                      max: paren.calculatorInputHeightRange.max,
-                      divisions: 20,
-                      label: '${paren.calculatorInputHeight.value}',
-                    ),
-                  ],
-                );
-              }),
-            ),
-          ),
+    return Material(
+      child: Container(
+        padding: const EdgeInsets.all(16.0),
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.surface,
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
         ),
+        child: Obx(() {
+          return Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Adjust Sizes',
+                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              16.h,
+              Row(
+                mainAxisAlignment: .spaceBetween,
+                children: [
+                  const Text(
+                    'Primary Conversion',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  Text(paren.conv1Size.value.toStringAsFixed(0)),
+                ],
+              ),
+              4.h,
+              Slider(
+                padding: .zero,
+                value: paren.conv1Size.value,
+                onChanged: (value) {
+                  paren.conv1Size.value = value;
+                },
+                min: paren.convSizeRanges.min,
+                max: paren.convSizeRanges.max,
+                divisions: 20,
+                label: '${paren.conv1Size.value}',
+              ),
+              12.h,
+              Row(
+                mainAxisAlignment: .spaceBetween,
+                children: [
+                  const Text(
+                    'Secondary Conversion',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  Text(paren.conv2Size.value.toStringAsFixed(0)),
+                ],
+              ),
+              4.h,
+              Slider(
+                padding: .zero,
+                value: paren.conv2Size.value,
+                onChanged: (value) {
+                  paren.conv2Size.value = value;
+                },
+                min: paren.convSizeRanges.min,
+                max: paren.convSizeRanges.max,
+                divisions: 20,
+                label: '${paren.conv2Size.value}',
+              ),
+              12.h,
+              Row(
+                mainAxisAlignment: .spaceBetween,
+                children: [
+                  const Text(
+                    'Calculator Input Height',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  Text(paren.calculatorInputHeight.value.toStringAsFixed(0)),
+                ],
+              ),
+              4.h,
+              Slider(
+                padding: .zero,
+                value: paren.calculatorInputHeight.value,
+                onChanged: (value) {
+                  paren.calculatorInputHeight.value = value;
+                },
+                min: paren.calculatorInputHeightRange.min,
+                max: paren.calculatorInputHeightRange.max,
+                divisions: 20,
+                label: '${paren.calculatorInputHeight.value}',
+              ),
+              16.h,
+            ],
+          );
+        }),
       ),
     );
   }

@@ -67,8 +67,7 @@ class Settings extends StatelessWidget {
             ),
             onTap: () async {
               await Navigator.of(context).push(
-                StupidSimpleCupertinoSheetRoute(
-                  snappingConfig: SheetSnappingConfig.relative([0.5]),
+                StupidSimpleSheetRoute(
                   child: LicensePage(
                     applicationName: 'Par円',
                     applicationIcon: Padding(

@@ -184,48 +184,47 @@ class _ExChartState extends State<ExChart> {
               child: TextButton.icon(
                 onPressed: () {
                   Navigator.of(context).push(
-                    StupidSimpleCupertinoSheetRoute(
-                      snappingConfig: SheetSnappingConfig.relative([0.5]),
-                      child: Scaffold(
-                        appBar: AppBar(
-                          title: Text(
-                            'Select duration',
-                            style: TextStyle(
-                              color: context.theme.colorScheme.primary,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16,
+                    StupidSimpleSheetRoute(
+                      child: Material(
+                        child: Container(
+                          padding: const EdgeInsets.all(16.0),
+                          decoration: BoxDecoration(
+                            borderRadius: const BorderRadius.vertical(
+                              top: Radius.circular(20),
                             ),
                           ),
-                          leading: IconButton(
-                            onPressed: () => Navigator.of(context).pop(),
-                            icon: FaIcon(FontAwesomeIcons.xmark),
-                            color: context.theme.colorScheme.primary,
-                          ),
-                        ),
-                        body: Column(
-                          mainAxisSize: .min,
-                          children: [
-                            ...localDurations.map((localDur) {
-                              return ListTile(
-                                title: Text(
-                                  '${localDur.inDays.toInt()} days',
-                                  style: TextStyle(
-                                    color: localDuration.value == localDur
-                                        ? context.theme.colorScheme.primary
-                                        : context.theme.colorScheme.onSurface,
+                          child: Column(
+                            mainAxisSize: .min,
+
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Select duration',
+                                style: Theme.of(context).textTheme.headlineSmall
+                                    ?.copyWith(fontWeight: FontWeight.bold),
+                              ),
+                              ...localDurations.map((localDur) {
+                                return ListTile(
+                                  title: Text(
+                                    '${localDur.inDays.toInt()} days',
+                                    style: TextStyle(
+                                      color: localDuration.value == localDur
+                                          ? context.theme.colorScheme.primary
+                                          : context.theme.colorScheme.onSurface,
+                                    ),
                                   ),
-                                ),
-                                onTap: () {
-                                  localDuration.value = localDur;
-                                  fetchChartData(
-                                    localIdFrom.value,
-                                    localIdTo.value,
-                                  );
-                                  Navigator.of(context).pop();
-                                },
-                              );
-                            }),
-                          ],
+                                  onTap: () {
+                                    localDuration.value = localDur;
+                                    fetchChartData(
+                                      localIdFrom.value,
+                                      localIdTo.value,
+                                    );
+                                    Navigator.of(context).pop();
+                                  },
+                                );
+                              }),
+                            ],
+                          ),
                         ),
                       ),
                     ),

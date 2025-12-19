@@ -38,8 +38,7 @@ class _CurrencyChangerRowState extends State<CurrencyChangerRow> {
 
   Future<void> _showCurrencyPicker(bool isFrom) async {
     String? selected = await Navigator.of(context).push(
-      StupidSimpleCupertinoSheetRoute(
-        snappingConfig: SheetSnappingConfig.relative([0.5]),
+      StupidSimpleSheetRoute(
         originateAboveBottomViewInset: true,
         child: CurrencyPickerSheet(
           currencies: paren.currencies,

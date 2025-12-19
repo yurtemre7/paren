@@ -64,6 +64,7 @@ class _SheetDetailState extends State<SheetDetail> {
               TextField(
                 controller: descriptionCtrl,
                 decoration: const InputDecoration(labelText: 'Description'),
+                autocorrect: false,
               ),
               TextField(
                 controller: amountCtrl,

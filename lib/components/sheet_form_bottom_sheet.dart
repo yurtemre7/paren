@@ -30,165 +30,167 @@ class _SheetFormBottomSheetState extends State<SheetFormBottomSheet> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(16.0),
-      decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.surface,
-        borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Title
-          Text(
-            'Create New Sheet',
-            style: Theme.of(
-              context,
-            ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
-          ),
-
-          16.h,
-
-          // Name input
-          TextField(
-            controller: _nameController,
-            decoration: InputDecoration(
-              labelText: 'Sheet Name',
-              hintText: 'Enter a name for your sheet',
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-              prefixIcon: const Icon(Icons.edit_note),
+    return Material(
+      child: Container(
+        padding: const EdgeInsets.all(16.0),
+        decoration: BoxDecoration(
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Title
+            Text(
+              'Create New Sheet',
+              style: Theme.of(
+                context,
+              ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
             ),
-            autofocus: true,
-          ),
-
-          16.h,
-
-          CurrencyChangerRow(),
-
-          // // From Currency selector
-          // Obx(() => InputDecorator(
-          //   decoration: InputDecoration(
-          //     labelText: 'From Currency',
-          //     hintText: 'Select currency to convert from',
-          //     border: OutlineInputBorder(
-          //       borderRadius: BorderRadius.circular(12),
-          //     ),
-          //     prefixIcon: const Icon(Icons.currency_exchange),
-          //   ),
-          //   child: DropdownButtonHideUnderline(
-          //     child: DropdownButton<String>(
-          //       isExpanded: true,
-          //       value: _selectedFromCurrency,
-          //       hint: const Text('Select currency'),
-          //       items: paren.currencies.map((currency) {
-          //         return DropdownMenuItem(
-          //           value: currency.id,
-          //           child: Row(
-          //             children: [
-          //               Text('${currency.symbol} ${currency.id.toUpperCase()}'),
-          //               const SizedBox(width: 8),
-          //               Expanded(
-          //                 child: Text(
-          //                   currency.name,
-          //                   overflow: TextOverflow.ellipsis,
-          //                 ),
-          //               ),
-          //             ],
-          //           ),
-          //         );
-          //       }).toList(),
-          //       onChanged: (value) {
-          //         setState(() {
-          //           _selectedFromCurrency = value;
-
-          //           // If both currencies are the same, change the other one to avoid confusion
-          //           if (_selectedFromCurrency == _selectedToCurrency) {
-          //             // Find a different currency
-          //             var otherCurrency = paren.currencies
-          //                 .firstWhere((c) => c.id != _selectedFromCurrency!,
-          //                             orElse: () => paren.currencies.first);
-          //             _selectedToCurrency = otherCurrency.id;
-          //           }
-          //         });
-          //       },
-          //     ),
-          //   ),
-          // )),
-
-          // const SizedBox(height: 16),
-
-          // // To Currency selector
-          // Obx(() => InputDecorator(
-          //   decoration: InputDecoration(
-          //     labelText: 'To Currency',
-          //     hintText: 'Select currency to convert to',
-          //     border: OutlineInputBorder(
-          //       borderRadius: BorderRadius.circular(12),
-          //     ),
-          //     prefixIcon: const Icon(Icons.swap_horiz),
-          //   ),
-          //   child: DropdownButtonHideUnderline(
-          //     child: DropdownButton<String>(
-          //       isExpanded: true,
-          //       value: _selectedToCurrency,
-          //       hint: const Text('Select currency'),
-          //       items: paren.currencies.map((currency) {
-          //         return DropdownMenuItem(
-          //           value: currency.id,
-          //           child: Row(
-          //             children: [
-          //               Text('${currency.symbol} ${currency.id.toUpperCase()}'),
-          //               const SizedBox(width: 8),
-          //               Expanded(
-          //                 child: Text(
-          //                   currency.name,
-          //                   overflow: TextOverflow.ellipsis,
-          //                 ),
-          //               ),
-          //             ],
-          //           ),
-          //         );
-          //       }).toList(),
-          //       onChanged: (value) {
-          //         setState(() {
-          //           _selectedToCurrency = value;
-
-          //           // If both currencies are the same, change the other one to avoid confusion
-          //           if (_selectedToCurrency == _selectedFromCurrency) {
-          //             // Find a different currency
-          //             var otherCurrency = paren.currencies
-          //                 .firstWhere((c) => c.id != _selectedToCurrency!,
-          //                             orElse: () => paren.currencies.first);
-          //             _selectedFromCurrency = otherCurrency.id;
-          //           }
-          //         });
-          //       },
-          //     ),
-          //   ),
-          // )),
-          24.h,
-
-          // Action buttons
-          Row(
-            children: [
-              TextButton(
-                onPressed: () => Navigator.pop(context),
-                child: const Text('Cancel'),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                flex: 2,
-                child: ElevatedButton(
-                  onPressed: _createSheet,
-                  child: const Text('Create Sheet'),
+      
+            16.h,
+      
+            // Name input
+            TextField(
+              controller: _nameController,
+              decoration: InputDecoration(
+                labelText: 'Sheet Name',
+                hintText: 'Enter a name for your sheet',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
                 ),
+                prefixIcon: const Icon(Icons.edit_note),
               ),
-            ],
-          ),
-        ],
+              autofocus: true,
+              autocorrect: false,
+            ),
+      
+            16.h,
+      
+            CurrencyChangerRow(),
+      
+            // // From Currency selector
+            // Obx(() => InputDecorator(
+            //   decoration: InputDecoration(
+            //     labelText: 'From Currency',
+            //     hintText: 'Select currency to convert from',
+            //     border: OutlineInputBorder(
+            //       borderRadius: BorderRadius.circular(12),
+            //     ),
+            //     prefixIcon: const Icon(Icons.currency_exchange),
+            //   ),
+            //   child: DropdownButtonHideUnderline(
+            //     child: DropdownButton<String>(
+            //       isExpanded: true,
+            //       value: _selectedFromCurrency,
+            //       hint: const Text('Select currency'),
+            //       items: paren.currencies.map((currency) {
+            //         return DropdownMenuItem(
+            //           value: currency.id,
+            //           child: Row(
+            //             children: [
+            //               Text('${currency.symbol} ${currency.id.toUpperCase()}'),
+            //               const SizedBox(width: 8),
+            //               Expanded(
+            //                 child: Text(
+            //                   currency.name,
+            //                   overflow: TextOverflow.ellipsis,
+            //                 ),
+            //               ),
+            //             ],
+            //           ),
+            //         );
+            //       }).toList(),
+            //       onChanged: (value) {
+            //         setState(() {
+            //           _selectedFromCurrency = value;
+      
+            //           // If both currencies are the same, change the other one to avoid confusion
+            //           if (_selectedFromCurrency == _selectedToCurrency) {
+            //             // Find a different currency
+            //             var otherCurrency = paren.currencies
+            //                 .firstWhere((c) => c.id != _selectedFromCurrency!,
+            //                             orElse: () => paren.currencies.first);
+            //             _selectedToCurrency = otherCurrency.id;
+            //           }
+            //         });
+            //       },
+            //     ),
+            //   ),
+            // )),
+      
+            // const SizedBox(height: 16),
+      
+            // // To Currency selector
+            // Obx(() => InputDecorator(
+            //   decoration: InputDecoration(
+            //     labelText: 'To Currency',
+            //     hintText: 'Select currency to convert to',
+            //     border: OutlineInputBorder(
+            //       borderRadius: BorderRadius.circular(12),
+            //     ),
+            //     prefixIcon: const Icon(Icons.swap_horiz),
+            //   ),
+            //   child: DropdownButtonHideUnderline(
+            //     child: DropdownButton<String>(
+            //       isExpanded: true,
+            //       value: _selectedToCurrency,
+            //       hint: const Text('Select currency'),
+            //       items: paren.currencies.map((currency) {
+            //         return DropdownMenuItem(
+            //           value: currency.id,
+            //           child: Row(
+            //             children: [
+            //               Text('${currency.symbol} ${currency.id.toUpperCase()}'),
+            //               const SizedBox(width: 8),
+            //               Expanded(
+            //                 child: Text(
+            //                   currency.name,
+            //                   overflow: TextOverflow.ellipsis,
+            //                 ),
+            //               ),
+            //             ],
+            //           ),
+            //         );
+            //       }).toList(),
+            //       onChanged: (value) {
+            //         setState(() {
+            //           _selectedToCurrency = value;
+      
+            //           // If both currencies are the same, change the other one to avoid confusion
+            //           if (_selectedToCurrency == _selectedFromCurrency) {
+            //             // Find a different currency
+            //             var otherCurrency = paren.currencies
+            //                 .firstWhere((c) => c.id != _selectedToCurrency!,
+            //                             orElse: () => paren.currencies.first);
+            //             _selectedFromCurrency = otherCurrency.id;
+            //           }
+            //         });
+            //       },
+            //     ),
+            //   ),
+            // )),
+            24.h,
+      
+            // Action buttons
+            Row(
+              children: [
+                TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: const Text('Cancel'),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  flex: 2,
+                  child: ElevatedButton(
+                    onPressed: _createSheet,
+                    child: const Text('Create Sheet'),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
