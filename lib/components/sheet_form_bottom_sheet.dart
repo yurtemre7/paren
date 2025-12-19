@@ -6,7 +6,8 @@ import 'package:paren/providers/extensions.dart';
 import 'package:paren/providers/paren.dart';
 
 class SheetFormBottomSheet extends StatefulWidget {
-  const SheetFormBottomSheet({super.key});
+  final Sheet? sheet; // Optional sheet for editing
+  const SheetFormBottomSheet({super.key, this.sheet});
 
   @override
   State<SheetFormBottomSheet> createState() => _SheetFormBottomSheetState();
@@ -15,11 +16,25 @@ class SheetFormBottomSheet extends StatefulWidget {
 class _SheetFormBottomSheetState extends State<SheetFormBottomSheet> {
   late final Paren paren = Get.find();
 
-  final _nameController = TextEditingController();
+  late final TextEditingController _nameController;
 
   @override
   void initState() {
     super.initState();
+
+    // Initialize controller based on whether we're editing or creating
+    if (widget.sheet != null) {
+      // Editing existing sheet
+      _nameController = TextEditingController(text: widget.sheet!.name);
+      // Set the provider values to match the sheet being edited
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        paren.fromCurrency.value = widget.sheet!.fromCurrency;
+        paren.toCurrency.value = widget.sheet!.toCurrency;
+      });
+    } else {
+      // Creating new sheet
+      _nameController = TextEditingController();
+    }
   }
 
   @override
@@ -30,7 +45,12 @@ class _SheetFormBottomSheetState extends State<SheetFormBottomSheet> {
 
   @override
   Widget build(BuildContext context) {
+    var isEditing = widget.sheet != null;
+
     return Material(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadiusGeometry.vertical(top: Radius.circular(20)),
+      ),
       child: Container(
         padding: const EdgeInsets.all(16.0),
         decoration: BoxDecoration(
@@ -42,14 +62,14 @@ class _SheetFormBottomSheetState extends State<SheetFormBottomSheet> {
           children: [
             // Title
             Text(
-              'Create New Sheet',
+              isEditing ? 'Edit Sheet' : 'Create New Sheet',
               style: Theme.of(
                 context,
               ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
             ),
-      
+
             16.h,
-      
+
             // Name input
             TextField(
               controller: _nameController,
@@ -64,11 +84,11 @@ class _SheetFormBottomSheetState extends State<SheetFormBottomSheet> {
               autofocus: true,
               autocorrect: false,
             ),
-      
+
             16.h,
-      
+
             CurrencyChangerRow(),
-      
+
             // // From Currency selector
             // Obx(() => InputDecorator(
             //   decoration: InputDecoration(
@@ -104,7 +124,7 @@ class _SheetFormBottomSheetState extends State<SheetFormBottomSheet> {
             //       onChanged: (value) {
             //         setState(() {
             //           _selectedFromCurrency = value;
-      
+
             //           // If both currencies are the same, change the other one to avoid confusion
             //           if (_selectedFromCurrency == _selectedToCurrency) {
             //             // Find a different currency
@@ -118,9 +138,9 @@ class _SheetFormBottomSheetState extends State<SheetFormBottomSheet> {
             //     ),
             //   ),
             // )),
-      
+
             // const SizedBox(height: 16),
-      
+
             // // To Currency selector
             // Obx(() => InputDecorator(
             //   decoration: InputDecoration(
@@ -156,7 +176,7 @@ class _SheetFormBottomSheetState extends State<SheetFormBottomSheet> {
             //       onChanged: (value) {
             //         setState(() {
             //           _selectedToCurrency = value;
-      
+
             //           // If both currencies are the same, change the other one to avoid confusion
             //           if (_selectedToCurrency == _selectedFromCurrency) {
             //             // Find a different currency
@@ -171,7 +191,7 @@ class _SheetFormBottomSheetState extends State<SheetFormBottomSheet> {
             //   ),
             // )),
             24.h,
-      
+
             // Action buttons
             Row(
               children: [
@@ -183,8 +203,8 @@ class _SheetFormBottomSheetState extends State<SheetFormBottomSheet> {
                 Expanded(
                   flex: 2,
                   child: ElevatedButton(
-                    onPressed: _createSheet,
-                    child: const Text('Create Sheet'),
+                    onPressed: isEditing ? _updateSheet : _createSheet,
+                    child: Text(isEditing ? 'Update Sheet' : 'Create Sheet'),
                   ),
                 ),
               ],
@@ -213,5 +233,24 @@ class _SheetFormBottomSheetState extends State<SheetFormBottomSheet> {
 
     paren.addSheet(newSheet);
     Navigator.pop(context, newSheet); // Close the bottom sheet
+  }
+
+  void _updateSheet() {
+    if (_nameController.text.trim().isEmpty || widget.sheet == null) {
+      return;
+    }
+
+    var updatedSheet = Sheet(
+      id: widget.sheet!.id,
+      name: _nameController.text.trim(),
+      fromCurrency: paren.fromCurrency.value,
+      toCurrency: paren.toCurrency.value,
+      createdAt: widget.sheet!.createdAt,
+      updatedAt: DateTime.now(),
+      entries: widget.sheet!.entries,
+    );
+
+    paren.updateSheet(updatedSheet);
+    Navigator.pop(context, updatedSheet); // Close the bottom sheet
   }
 }

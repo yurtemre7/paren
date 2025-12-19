@@ -100,6 +100,33 @@ class _SheetsState extends State<Sheets> {
                         onTap: () {
                           Get.to(() => SheetDetail(sheet: sheet));
                         },
+                        onLongPress: () async {
+                          var res = await Navigator.of(context).push<Sheet>(
+                            StupidSimpleSheetRoute(
+                              originateAboveBottomViewInset: true,
+                              child: SheetFormBottomSheet(sheet: sheet),
+                            ),
+                          );
+                          if (!context.mounted) {
+                            return;
+                          }
+                          if (res != null) {
+                            // Show success message
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(
+                                  'Updated "${res.name}"',
+                                  style: TextStyle(
+                                    color: context.theme.colorScheme.primary,
+                                  ),
+                                ),
+                                duration: const Duration(seconds: 1),
+                                backgroundColor:
+                                    context.theme.colorScheme.primaryContainer,
+                              ),
+                            );
+                          }
+                        },
                       ),
                     );
                   },
@@ -114,7 +141,7 @@ class _SheetsState extends State<Sheets> {
             var res = await Navigator.of(context).push<Sheet>(
               StupidSimpleSheetRoute(
                 originateAboveBottomViewInset: true,
-                child: Material(child: const SheetFormBottomSheet()),
+                child: const SheetFormBottomSheet(),
               ),
             );
             if (!context.mounted) {
