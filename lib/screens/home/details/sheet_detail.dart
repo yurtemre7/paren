@@ -69,7 +69,7 @@ class _SheetDetailState extends State<SheetDetail> {
               TextField(
                 controller: amountCtrl,
                 keyboardType: TextInputType.numberWithOptions(decimal: true),
-                decoration: const InputDecoration(labelText: 'Amount'),
+                decoration:  InputDecoration(labelText: 'Amount in ${widget.sheet.fromCurrency.toUpperCase()}'),
               ),
               if (entry != null) ...[
                 8.h,
@@ -89,7 +89,7 @@ class _SheetDetailState extends State<SheetDetail> {
               onPressed: () => Navigator.pop(context),
               child: const Text('Cancel'),
             ),
-            TextButton(
+            ElevatedButton(
               onPressed: () {
                 var desc = descriptionCtrl.text.trim();
                 var amountStr = amountCtrl.text.trim();
@@ -275,60 +275,6 @@ class _SheetDetailState extends State<SheetDetail> {
         body: SafeArea(
           child: Column(
             children: [
-              // Table(
-              //   children: [
-              //     TableRow(
-              //       children: [
-              //         Text(
-              //           'Description',
-              //           style: Theme.of(context).textTheme.titleMedium,
-              //           textAlign: TextAlign.center,
-              //         ),
-              //         Text(
-              //           'Amount (${widget.sheet.fromCurrency.toUpperCase()})',
-              //           style: Theme.of(context).textTheme.titleMedium,
-              //           textAlign: TextAlign.center,
-              //         ),
-              //         Text(
-              //           'Converted (${widget.sheet.toCurrency.toUpperCase()})',
-              //           style: Theme.of(context).textTheme.titleMedium,
-              //           textAlign: TextAlign.center,
-              //         ),
-              //       ],
-              //     ),
-              //     // Add more TableRow widgets here for each entry
-
-              //     // Table rows
-              //     for (var entry in sheet.entries)
-              //       TableRow(
-              //         children: [
-              //           Text(
-              //             entry.name,
-              //             style: Theme.of(context).textTheme.bodyMedium,
-              //           ),
-              //           Text(
-              //             formatCurrencyAmount(
-              //               entry.amount,
-              //               widget.sheet.fromCurrency,
-              //             ),
-              //             style: Theme.of(context).textTheme.bodyMedium,
-              //           ),
-              //           Text(
-              //             formatCurrencyAmount(
-              //               calculateConvertedAmount(
-              //                 entry.amount,
-              //                 widget.sheet.fromCurrency,
-              //                 widget.sheet.toCurrency,
-              //               ),
-              //               widget.sheet.toCurrency,
-              //             ),
-              //             style: Theme.of(context).textTheme.bodyMedium,
-              //           ),
-              //         ],
-              //       ),
-              //   ]
-              // ),
-              // Table header
               Container(
                 padding: const EdgeInsets.symmetric(
                   horizontal: 16.0,
@@ -456,7 +402,7 @@ class _SheetDetailState extends State<SheetDetail> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Statistics (${widget.sheet.toCurrency.toUpperCase()})',
+                      'Statistics',
                       style: Theme.of(context).textTheme.titleMedium,
                     ),
                     8.h,

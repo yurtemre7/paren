@@ -59,12 +59,6 @@ class _SheetsState extends State<Sheets> {
                   itemCount: filteredSheets.length,
                   itemBuilder: (context, index) {
                     var sheet = filteredSheets[index];
-                    var entriesCount = sheet.entries.length;
-                    var entriesText =
-                        '$entriesCount entr${entriesCount == 1 ? 'y' : 'ies'}';
-                    if (sheet.entries.isEmpty) {
-                      entriesText = 'No entries yet';
-                    }
                     return Dismissible(
                       key: Key(sheet.id),
                       direction: DismissDirection.endToStart,
@@ -92,7 +86,7 @@ class _SheetsState extends State<Sheets> {
                         );
                       },
                       child: ListTile(
-                        title: Text('${sheet.name} ($entriesText)'),
+                        title: Text(sheet.name),
                         subtitle: Text(
                           '${sheet.fromCurrency.toUpperCase()} → ${sheet.toCurrency.toUpperCase()}',
                         ),
