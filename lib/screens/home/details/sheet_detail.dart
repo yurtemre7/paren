@@ -410,7 +410,7 @@ class _SheetDetailState extends State<SheetDetail> {
                                           Text(
                                             DateFormat(
                                               'MMM dd',
-                                            ).format(entry.updatedAt),
+                                            ).format(entry.createdAt),
                                             style: Theme.of(
                                               context,
                                             ).textTheme.bodySmall,
