@@ -281,12 +281,11 @@ class _ConversionState extends State<Conversion> {
 
   Widget buildTextSizeAdjustSheet() {
     return Material(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadiusGeometry.vertical(top: Radius.circular(20)),
+      ),
       child: Container(
         padding: const EdgeInsets.all(16.0),
-        decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.surface,
-          borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
-        ),
         child: Obx(() {
           return Column(
             mainAxisSize: MainAxisSize.min,

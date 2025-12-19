@@ -186,16 +186,15 @@ class _ExChartState extends State<ExChart> {
                   Navigator.of(context).push(
                     StupidSimpleSheetRoute(
                       child: Material(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadiusGeometry.vertical(
+                            top: Radius.circular(20),
+                          ),
+                        ),
                         child: Container(
                           padding: const EdgeInsets.all(16.0),
-                          decoration: BoxDecoration(
-                            borderRadius: const BorderRadius.vertical(
-                              top: Radius.circular(20),
-                            ),
-                          ),
                           child: Column(
                             mainAxisSize: .min,
-
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
