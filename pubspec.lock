@@ -361,10 +361,10 @@ packages:
     dependency: transitive
     description:
       name: image
-      sha256: "51555e36056541237b15b57afc31a0f53d4f9aefd9bd00873a6dc0090e54e332"
+      sha256: "48c11d0943b93b6fb29103d956ff89aafeae48f6058a3939649be2093dcff0bf"
       url: "https://pub.dev"
     source: hosted
-    version: "4.6.0"
+    version: "4.7.1"
   intl:
     dependency: "direct main"
     description:
@@ -609,10 +609,10 @@ packages:
     dependency: transitive
     description:
       name: scroll_drag_detector
-      sha256: dfa444abe6850372ffb614fb0b7729aaea8731047f82fef29b7b2c2b65c74020
+      sha256: "95ab4362eab04d7ab7a8a167c2f25aa512b676ba2011f18e56b9ad478dc10702"
       url: "https://pub.dev"
     source: hosted
-    version: "0.1.0"
+    version: "0.1.0+1"
   share_plus:
     dependency: "direct main"
     description:
@@ -766,10 +766,10 @@ packages:
     dependency: "direct main"
     description:
       name: stupid_simple_sheet
-      sha256: "5fbe6fb585f1547426a1698d7e9e668da1de67c979c7d3d5ad64e84b300b3042"
+      sha256: cfe99b43ad24f70ecabe4d63f8732c6994393125f35161c5f2e377128288648d
       url: "https://pub.dev"
     source: hosted
-    version: "0.7.0"
+    version: "0.8.0"
   term_glyph:
     dependency: transitive
     description:
