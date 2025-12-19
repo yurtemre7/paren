@@ -29,12 +29,12 @@ class HomeHeader extends StatelessWidget implements PreferredSizeWidget {
               if (width >= 1000) ...[
                 buildInfoIconButton(colorScheme),
                 buildLogo(colorScheme),
-                40.w,
+                buildEmptyIcon(colorScheme),
               ] else ...[
                 if (index != 0)
                   buildNavigateIconButtonBackward(colorScheme)
                 else
-                  40.w,
+                  buildEmptyIcon(colorScheme),
                 buildLogo(colorScheme),
                 if (index != 2)
                   buildNavigateIconButtonForward(colorScheme)
@@ -141,6 +141,18 @@ class HomeHeader extends StatelessWidget implements PreferredSizeWidget {
       icon: FaIcon(FontAwesomeIcons.angleLeft),
       color: colorScheme.primary,
       onPressed: onBackward,
+      style: IconButton.styleFrom(
+        shape: const CircleBorder(),
+        backgroundColor: colorScheme.primaryContainer.withValues(alpha: 0.15),
+      ),
+    );
+  }
+
+  IconButton buildEmptyIcon(ColorScheme colorScheme) {
+    return IconButton(
+      icon: 0.h,
+      color: colorScheme.primary,
+      onPressed: null,
       style: IconButton.styleFrom(
         shape: const CircleBorder(),
         backgroundColor: colorScheme.primaryContainer.withValues(alpha: 0.15),

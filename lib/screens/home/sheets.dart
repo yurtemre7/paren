@@ -97,8 +97,13 @@ class _SheetsState extends State<Sheets> {
                           '${sheet.fromCurrency.toUpperCase()} → ${sheet.toCurrency.toUpperCase()}',
                         ),
                         trailing: const Icon(Icons.chevron_right),
-                        onTap: () {
-                          Get.to(() => SheetDetail(sheet: sheet));
+                        onTap: () async {
+                          await Navigator.of(context).push(
+                            StupidSimpleSheetRoute(
+                              originateAboveBottomViewInset: true,
+                              child: SheetDetail(sheet: sheet),
+                            ),
+                          );
                         },
                         onLongPress: () async {
                           var res = await Navigator.of(context).push<Sheet>(
