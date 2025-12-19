@@ -66,7 +66,7 @@ class _SheetsState extends State<Sheets> {
                         color: Colors.red,
                         alignment: Alignment.centerRight,
                         padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child: const Icon(Icons.delete, color: Colors.white),
+                        child: FaIcon(FontAwesomeIcons.trash, color: Colors.white),
                       ),
                       onDismissed: (_) {
                         paren.removeSheet(sheet.id);
@@ -90,14 +90,12 @@ class _SheetsState extends State<Sheets> {
                         subtitle: Text(
                           '${sheet.fromCurrency.toUpperCase()} → ${sheet.toCurrency.toUpperCase()}',
                         ),
-                        trailing: const Icon(Icons.chevron_right),
+                        trailing: FaIcon(
+                          FontAwesomeIcons.angleRight,
+                          color: context.theme.colorScheme.primary,
+                        ),
                         onTap: () async {
-                          await Navigator.of(context).push(
-                            StupidSimpleSheetRoute(
-                              originateAboveBottomViewInset: true,
-                              child: SheetDetail(sheet: sheet),
-                            ),
-                          );
+                          await Get.to(() => SheetDetail(sheet: sheet));
                         },
                         onLongPress: () async {
                           var res = await Navigator.of(context).push<Sheet>(

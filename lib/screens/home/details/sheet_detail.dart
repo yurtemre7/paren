@@ -180,7 +180,7 @@ class _SheetDetailState extends State<SheetDetail> {
           child: Wrap(
             children: [
               ListTile(
-                leading: const Icon(Icons.edit),
+                leading: FaIcon(FontAwesomeIcons.penToSquare),
                 title: const Text('Edit'),
                 onTap: () {
                   Navigator.pop(context);
@@ -188,7 +188,7 @@ class _SheetDetailState extends State<SheetDetail> {
                 },
               ),
               ListTile(
-                leading: const Icon(Icons.delete),
+                leading: FaIcon(FontAwesomeIcons.trash),
                 title: const Text('Delete'),
                 onTap: () {
                   Navigator.pop(context);
@@ -201,17 +201,11 @@ class _SheetDetailState extends State<SheetDetail> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Row(
-                      children: [
-                        const Icon(Icons.info_outline, size: 16),
-                        const SizedBox(width: 8),
-                        Text(
-                          'Entry details',
-                          style: Theme.of(context).textTheme.titleMedium,
-                        ),
-                      ],
+                    Text(
+                      'Entry details',
+                      style: Theme.of(context).textTheme.titleMedium,
                     ),
-                    8.h,
+                    4.h,
                     Text(
                       'Created: ${DateFormat('yyyy-MM-dd HH:mm').format(entry.createdAt)}',
                       style: Theme.of(context).textTheme.bodySmall,
@@ -379,8 +373,8 @@ class _SheetDetailState extends State<SheetDetail> {
                               color: Colors.red,
                               alignment: Alignment.centerRight,
                               padding: const EdgeInsets.only(right: 20),
-                              child: const Icon(
-                                Icons.delete,
+                              child: FaIcon(
+                                FontAwesomeIcons.trash,
                                 color: Colors.white,
                               ),
                             ),
@@ -447,9 +441,6 @@ class _SheetDetailState extends State<SheetDetail> {
                 padding: const EdgeInsets.symmetric(
                   horizontal: 16.0,
                   vertical: 8.0,
-                ),
-                decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.surfaceContainer,
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
