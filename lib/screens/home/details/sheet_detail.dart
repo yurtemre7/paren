@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:paren/classes/sheet.dart';
@@ -52,73 +53,119 @@ class _SheetDetailState extends State<SheetDetail> {
       text: entry?.amount.toString() ?? '',
     );
 
+    // Initialize date with existing entry date or current date
+    var selectedDate = entry?.createdAt ?? DateTime.now();
+    var dateFormatter = DateFormat('yyyy-MM-dd');
+    var dateCtrl = TextEditingController(
+      text: dateFormatter.format(selectedDate),
+    );
+
     await showDialog(
       context: context,
       builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text(entry == null ? 'Add Entry' : 'Edit Entry'),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              TextField(
-                controller: descriptionCtrl,
-                decoration: const InputDecoration(labelText: 'Description'),
-                autocorrect: false,
+        return StatefulBuilder(
+          builder: (BuildContext context, StateSetter setState) {
+            return AlertDialog(
+              title: Text(entry == null ? 'Add Entry' : 'Edit Entry'),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  TextField(
+                    controller: descriptionCtrl,
+                    decoration: const InputDecoration(labelText: 'Description'),
+                    autocorrect: false,
+                  ),
+                  TextField(
+                    controller: amountCtrl,
+                    keyboardType: TextInputType.numberWithOptions(
+                      decimal: true,
+                    ),
+                    decoration: InputDecoration(
+                      labelText:
+                          'Amount in ${widget.sheet.fromCurrency.toUpperCase()}',
+                    ),
+                  ),
+                  8.h,
+                  TextField(
+                    controller: dateCtrl,
+                    onTap: () async {
+                      var pickedDate = await showDatePicker(
+                        context: context,
+                        initialDate: selectedDate,
+                        firstDate: DateTime(2000),
+                        lastDate: DateTime.now().add(
+                          Duration(days: 365),
+                        ), // Allow future dates up to 1 year
+                      );
+                      if (pickedDate != null && context.mounted) {
+                        setState(() {
+                          selectedDate = DateTime(
+                            pickedDate.year,
+                            pickedDate.month,
+                            pickedDate.day,
+                            12,
+                          );
+                          dateCtrl.text = dateFormatter.format(selectedDate);
+                        });
+                      }
+                    },
+                    readOnly: true,
+                    decoration: InputDecoration(
+                      label: Text('Date'),
+                      suffixIcon: Icon(Icons.date_range),
+                    ),
+                  ),
+                  if (entry != null) ...[
+                    8.h,
+                    Text(
+                      'Original Created: ${DateFormat('yyyy-MM-dd HH:mm').format(entry.createdAt)}',
+                      style: Theme.of(context).textTheme.bodySmall,
+                    ),
+                    Text(
+                      'Updated: ${DateFormat('yyyy-MM-dd HH:mm').format(entry.updatedAt)}',
+                      style: Theme.of(context).textTheme.bodySmall,
+                    ),
+                  ],
+                ],
               ),
-              TextField(
-                controller: amountCtrl,
-                keyboardType: TextInputType.numberWithOptions(decimal: true),
-                decoration:  InputDecoration(labelText: 'Amount in ${widget.sheet.fromCurrency.toUpperCase()}'),
-              ),
-              if (entry != null) ...[
-                8.h,
-                Text(
-                  'Created: ${DateFormat('yyyy-MM-dd HH:mm').format(entry.createdAt)}',
-                  style: Theme.of(context).textTheme.bodySmall,
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: const Text('Cancel'),
                 ),
-                Text(
-                  'Updated: ${DateFormat('yyyy-MM-dd HH:mm').format(entry.updatedAt)}',
-                  style: Theme.of(context).textTheme.bodySmall,
+                ElevatedButton(
+                  onPressed: () {
+                    var desc = descriptionCtrl.text.trim();
+                    var amountStr = amountCtrl.text.trim();
+
+                    if (desc.isNotEmpty && amountStr.isNotEmpty) {
+                      var amount = double.tryParse(amountStr);
+                      if (amount != null) {
+                        var newEntry = SheetEntry(
+                          id:
+                              entry?.id ??
+                              DateTime.now().millisecondsSinceEpoch.toString(),
+                          name: desc,
+                          amount: amount,
+                          createdAt: selectedDate,
+                          updatedAt: DateTime.now(),
+                        );
+
+                        if (entry == null) {
+                          paren.addSheetEntry(widget.sheet.id, newEntry);
+                        } else {
+                          paren.updateSheetEntry(widget.sheet.id, newEntry);
+                        }
+                        Navigator.pop(context);
+                      }
+                    }
+                  },
+                  child: Text(entry == null ? 'Add' : 'Update'),
                 ),
               ],
-            ],
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text('Cancel'),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                var desc = descriptionCtrl.text.trim();
-                var amountStr = amountCtrl.text.trim();
-
-                if (desc.isNotEmpty && amountStr.isNotEmpty) {
-                  var amount = double.tryParse(amountStr);
-                  if (amount != null) {
-                    var newEntry = SheetEntry(
-                      id:
-                          entry?.id ??
-                          DateTime.now().millisecondsSinceEpoch.toString(),
-                      name: desc,
-                      amount: amount,
-                      createdAt: entry?.createdAt ?? DateTime.now(),
-                      updatedAt: DateTime.now(),
-                    );
-
-                    if (entry == null) {
-                      paren.addSheetEntry(widget.sheet.id, newEntry);
-                    } else {
-                      paren.updateSheetEntry(widget.sheet.id, newEntry);
-                    }
-                    Navigator.pop(context);
-                  }
-                }
-              },
-              child: Text(entry == null ? 'Add' : 'Update'),
-            ),
-          ],
+            );
+          },
         );
       },
     );
@@ -263,12 +310,18 @@ class _SheetDetailState extends State<SheetDetail> {
 
       return Scaffold(
         appBar: AppBar(
+          leading: IconButton(
+            onPressed: () => Get.back(),
+            icon: FaIcon(FontAwesomeIcons.xmark),
+            color: context.theme.colorScheme.primary,
+          ),
           title: Text(sheet.name),
           actions: [
             IconButton(
               onPressed: () => _showEntryDialog(),
               tooltip: 'Add Entry',
-              icon: const Icon(Icons.add),
+              icon: const FaIcon(FontAwesomeIcons.plus),
+              color: context.theme.colorScheme.primary,
             ),
           ],
         ),
@@ -362,7 +415,7 @@ class _SheetDetailState extends State<SheetDetail> {
                                           ),
                                           Text(
                                             DateFormat(
-                                              'MMM dd, HH:mm',
+                                              'MMM dd',
                                             ).format(entry.updatedAt),
                                             style: Theme.of(
                                               context,
