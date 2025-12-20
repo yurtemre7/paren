@@ -4,7 +4,10 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widget_previews.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:paren/classes/sheet.dart';
+import 'package:paren/components/sheet_form_bottom_sheet.dart';
 import 'package:paren/providers/constants.dart';
 import 'package:paren/providers/extensions.dart';
 import 'package:paren/providers/paren.dart';
@@ -12,6 +15,7 @@ import 'package:paren/screens/home/conversion.dart';
 import 'package:paren/screens/home/customization.dart';
 import 'package:paren/components/home_header.dart';
 import 'package:paren/screens/home/sheets.dart';
+import 'package:stupid_simple_sheet/stupid_simple_sheet.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 @Preview()
@@ -42,17 +46,6 @@ class _HomeState extends State<Home> {
       await initParen();
       await SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
     });
-
-    pageController.addListener(pageControllerListener);
-  }
-
-  Future<void> pageControllerListener() async {
-    // TODO fix issue, when on page 0 or 2, that on resize desktop and resize back to mobile, the index stays on the one before the resize but the page is the page id = 1
-    var currentController = pageController;
-    if (!currentController.hasClients) {
-      return; // no clients yet
-    }
-    paren.currentPage.value = pageController.page?.round() ?? 1;
   }
 
   Future<void> initParen() async {
@@ -73,7 +66,6 @@ class _HomeState extends State<Home> {
 
   @override
   void dispose() {
-    pageController.removeListener(pageControllerListener);
     pageController.dispose();
     super.dispose();
   }
@@ -81,34 +73,34 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     var width = MediaQuery.sizeOf(context).width;
-    return GestureDetector(
-      onTap: () {
-        FocusScope.of(context).unfocus();
-      },
-      child: PopScope(
-        canPop: false,
-        onPopInvokedWithResult: (didPop, result) async {
-          if (!didPop) {
-            if (scaffoldKey.currentState?.isEndDrawerOpen ?? false) {
-              scaffoldKey.currentState?.closeEndDrawer();
-            }
-            if (paren.currentPage.value != 1) {
-              await pageController.animateToPage(
-                1,
-                duration: 250.milliseconds,
-                curve: Curves.ease,
-              );
-            }
-          }
+    return Obx(
+      () => GestureDetector(
+        onTap: () {
+          FocusScope.of(context).unfocus();
         },
-        child: Scaffold(
-          key: scaffoldKey,
-          backgroundColor: context.theme.colorScheme.surface,
-          resizeToAvoidBottomInset: false,
-          appBar: PreferredSize(
-            preferredSize: const Size.fromHeight(80),
-            child: Obx(
-              () => HomeHeader(
+        child: PopScope(
+          canPop: false,
+          onPopInvokedWithResult: (didPop, result) async {
+            if (!didPop) {
+              if (scaffoldKey.currentState?.isEndDrawerOpen ?? false) {
+                scaffoldKey.currentState?.closeEndDrawer();
+              }
+              if (paren.currentPage.value != 1) {
+                await pageController.animateToPage(
+                  1,
+                  duration: 250.milliseconds,
+                  curve: Curves.ease,
+                );
+              }
+            }
+          },
+          child: Scaffold(
+            key: scaffoldKey,
+            backgroundColor: context.theme.colorScheme.surface,
+            resizeToAvoidBottomInset: false,
+            appBar: PreferredSize(
+              preferredSize: const Size.fromHeight(80),
+              child: HomeHeader(
                 index: paren.currentPage.value,
                 onInfo: () {
                   Get.dialog(buildDataInfoSheet());
@@ -133,53 +125,120 @@ class _HomeState extends State<Home> {
                 },
               ),
             ),
-          ),
-          body: SafeArea(
-            child: Obx(() {
-              if (paren.currencies.isEmpty) {
-                return const Center(
-                  child: Text(
-                    'Currencies is empty, an error must have occurred.',
-                  ),
+            body: SafeArea(
+              child: Obx(() {
+                if (paren.currencies.isEmpty) {
+                  return const Center(
+                    child: Text(
+                      'Currencies is empty, an error must have occurred.',
+                    ),
+                  );
+                }
+
+                if (width >= 1000) {
+                  return Row(
+                    children: [
+                      Container(
+                        constraints: BoxConstraints(maxWidth: 300),
+                        padding: EdgeInsets.symmetric(horizontal: 16),
+                        child: Sheets(),
+                      ),
+                      Container(
+                        width: 1,
+                        color: context.theme.colorScheme.outlineVariant,
+                      ),
+                      Expanded(child: Conversion()),
+                      // add border
+                      Container(
+                        width: 1,
+                        color: context.theme.colorScheme.outlineVariant,
+                      ),
+                      Container(
+                        constraints: BoxConstraints.expand(width: 300),
+                        child: Customization(),
+                      ),
+                    ],
+                  );
+                }
+
+                return PageView(
+                  controller: pageController,
+                  onPageChanged: (value) {
+                    paren.currentPage.value = value;
+                  },
+                  children: [Sheets(), Conversion(), Customization()],
+                );
+              }),
+            ),
+            floatingActionButtonLocation: paren.loading.value
+                ? .endDocked
+                : .endFloat,
+            floatingActionButton: Obx(() {
+              if (paren.loading.value) {
+                return const LinearProgressIndicator();
+              }
+
+              if (paren.currentPage.value == 0) {
+                return FloatingActionButton(
+                  onPressed: () async {
+                    var res = await Navigator.of(context).push<Sheet>(
+                      StupidSimpleSheetRoute(
+                        originateAboveBottomViewInset: true,
+                        child: const SheetFormBottomSheet(),
+                      ),
+                    );
+                    if (!context.mounted) {
+                      return;
+                    }
+                    if (res != null) {
+                      // Show success message
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(
+                            'Created "${res.name}"',
+                            style: TextStyle(
+                              color: context.theme.colorScheme.primary,
+                            ),
+                          ),
+                          duration: const Duration(seconds: 1),
+                          backgroundColor:
+                              context.theme.colorScheme.primaryContainer,
+                        ),
+                      );
+                    }
+                  },
+                  child: FaIcon(FontAwesomeIcons.plus),
                 );
               }
 
-              if (width >= 1000) {
-                return Row(
-                  children: [
-                    Container(
-                      constraints: BoxConstraints(maxWidth: 300),
-                      padding: EdgeInsets.symmetric(horizontal: 16),
-                      child: Sheets(),
-                    ),
-                    Container(
-                      width: 1,
-                      color: context.theme.colorScheme.outlineVariant,
-                    ),
-                    Expanded(child: Conversion()),
-                    // add border
-                    Container(
-                      width: 1,
-                      color: context.theme.colorScheme.outlineVariant,
-                    ),
-                    Container(
-                      constraints: BoxConstraints.expand(width: 300),
-                      child: Customization(),
-                    ),
-                  ],
-                );
-              }
-
-              return PageView(
-                controller: pageController,
-                children: [Sheets(), Conversion(), Customization()],
-              );
+              return 0.h;
             }),
-          ),
-          floatingActionButtonLocation:
-              FloatingActionButtonLocation.centerDocked,
-          floatingActionButton: Obx(
-            () => paren.loading.value ? const LinearProgressIndicator() : 0.h,
+            bottomNavigationBar: NavigationBar(
+              selectedIndex: paren.currentPage.value,
+              onDestinationSelected: (value) {
+                // paren.currentPage.value = value;
+                pageController.animateToPage(
+                  value,
+                  duration: 250.milliseconds,
+                  curve: Curves.ease,
+                );
+              },
+              destinations: [
+                NavigationDestination(
+                  icon: FaIcon(FontAwesomeIcons.list),
+                  selectedIcon: FaIcon(FontAwesomeIcons.listUl),
+                  label: 'Sheets',
+                ),
+                NavigationDestination(
+                  icon: FaIcon(FontAwesomeIcons.calculator),
+                  label: 'Calculation',
+                ),
+                NavigationDestination(
+                  icon: FaIcon(FontAwesomeIcons.gear),
+                  label: 'Settings',
+                ),
+              ],
+            ),
           ),
         ),
       ),

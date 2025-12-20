@@ -28,138 +28,142 @@ class _SheetsState extends State<Sheets> {
             sheet.toCurrency.toLowerCase().contains(searchText);
       }).toList();
 
-      return Scaffold(
-        body: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            // Search
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: TextField(
-                controller: searchController,
-                decoration: InputDecoration(
-                  labelText: 'Search Sheets',
-                  prefixIcon: Icon(Icons.search),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          // Search
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: TextField(
+              controller: searchController,
+              decoration: InputDecoration(
+                labelText: 'Search Sheets',
+                prefixIcon: Icon(Icons.search),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8.0),
                 ),
-                onChanged: (value) {
-                  setState(() {});
-                },
-                autocorrect: false,
               ),
+              onChanged: (value) {
+                setState(() {});
+              },
+              autocorrect: false,
             ),
+          ),
 
-            // List of sheets
-            if (filteredSheets.isNotEmpty)
-              Expanded(
-                child: ListView.builder(
-                  itemCount: filteredSheets.length,
-                  itemBuilder: (context, index) {
-                    var sheet = filteredSheets[index];
-                    return Dismissible(
-                      key: Key(sheet.id),
-                      direction: DismissDirection.endToStart,
-                      background: Container(
-                        color: Colors.red,
-                        alignment: Alignment.centerRight,
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child: FaIcon(FontAwesomeIcons.trash, color: Colors.white),
+          // List of sheets
+          if (filteredSheets.isNotEmpty)
+            Expanded(
+              child: ListView.builder(
+                itemCount: filteredSheets.length,
+                itemBuilder: (context, index) {
+                  var sheet = filteredSheets[index];
+                  return Dismissible(
+                    key: Key(sheet.id),
+                    direction: DismissDirection.endToStart,
+                    background: Container(
+                      color: Colors.red,
+                      alignment: Alignment.centerRight,
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: FaIcon(
+                        FontAwesomeIcons.trash,
+                        color: Colors.white,
                       ),
-                      onDismissed: (_) {
-                        paren.removeSheet(sheet.id);
-
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text(
-                              'Deleted "${sheet.name}"',
-                              style: TextStyle(
-                                color: context.theme.colorScheme.primary,
+                    ),
+                    confirmDismiss: (direction) {
+                      return Get.dialog<bool>(
+                        AlertDialog(
+                          title: Text('Delete Sheet'),
+                          content: Text(
+                            'Are you sure you want to delete your Sheet "${sheet.name}?" containing ${sheet.entries.length} Entr${sheet.entries.length == 1 ? 'y' : 'ies'}?',
+                          ),
+                          actions: [
+                            OutlinedButton(
+                              style: OutlinedButton.styleFrom(
+                                foregroundColor:
+                                    context.theme.colorScheme.error,
+                                backgroundColor:
+                                    context.theme.colorScheme.errorContainer,
                               ),
+                              onPressed: () {
+                                Get.back(result: true);
+                              },
+                              child: Text('Confirm'),
                             ),
-                            duration: const Duration(seconds: 1),
-                            backgroundColor:
-                                context.theme.colorScheme.primaryContainer,
+                            TextButton(
+                              onPressed: () {
+                                Get.back(result: false);
+                              },
+                              child: Text('Cancel'),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                    onDismissed: (_) {
+                      paren.removeSheet(sheet.id);
+
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(
+                            'Deleted "${sheet.name}"',
+                            style: TextStyle(
+                              color: context.theme.colorScheme.primary,
+                            ),
+                          ),
+                          duration: const Duration(seconds: 1),
+                          backgroundColor:
+                              context.theme.colorScheme.primaryContainer,
+                        ),
+                      );
+                    },
+                    child: ListTile(
+                      title: Text(sheet.name),
+                      subtitle: Text(
+                        '${sheet.fromCurrency.toUpperCase()} → ${sheet.toCurrency.toUpperCase()}',
+                      ),
+                      trailing: FaIcon(
+                        FontAwesomeIcons.angleRight,
+                        color: context.theme.colorScheme.primary,
+                      ),
+                      onTap: () async {
+                        await Get.to(() => SheetDetail(sheet: sheet));
+                      },
+                      onLongPress: () async {
+                        var res = await Navigator.of(context).push<Sheet>(
+                          StupidSimpleSheetRoute(
+                            originateAboveBottomViewInset: true,
+                            child: SheetFormBottomSheet(sheet: sheet),
                           ),
                         );
-                      },
-                      child: ListTile(
-                        title: Text(sheet.name),
-                        subtitle: Text(
-                          '${sheet.fromCurrency.toUpperCase()} → ${sheet.toCurrency.toUpperCase()}',
-                        ),
-                        trailing: FaIcon(
-                          FontAwesomeIcons.angleRight,
-                          color: context.theme.colorScheme.primary,
-                        ),
-                        onTap: () async {
-                          await Get.to(() => SheetDetail(sheet: sheet));
-                        },
-                        onLongPress: () async {
-                          var res = await Navigator.of(context).push<Sheet>(
-                            StupidSimpleSheetRoute(
-                              originateAboveBottomViewInset: true,
-                              child: SheetFormBottomSheet(sheet: sheet),
+                        if (!context.mounted) {
+                          return;
+                        }
+                        if (res != null) {
+                          // Show success message
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                'Updated "${res.name}"',
+                                style: TextStyle(
+                                  color: context.theme.colorScheme.primary,
+                                ),
+                              ),
+                              duration: const Duration(seconds: 1),
+                              backgroundColor:
+                                  context.theme.colorScheme.primaryContainer,
                             ),
                           );
-                          if (!context.mounted) {
-                            return;
-                          }
-                          if (res != null) {
-                            // Show success message
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text(
-                                  'Updated "${res.name}"',
-                                  style: TextStyle(
-                                    color: context.theme.colorScheme.primary,
-                                  ),
-                                ),
-                                duration: const Duration(seconds: 1),
-                                backgroundColor:
-                                    context.theme.colorScheme.primaryContainer,
-                              ),
-                            );
-                          }
-                        },
-                      ),
-                    );
-                  },
-                ),
-              )
-            else
-              Expanded(child: Center(child: Text('No sheets found'))),
-          ],
-        ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () async {
-            var res = await Navigator.of(context).push<Sheet>(
-              StupidSimpleSheetRoute(
-                originateAboveBottomViewInset: true,
-                child: const SheetFormBottomSheet(),
+                        }
+                      },
+                    ),
+                  );
+                },
               ),
-            );
-            if (!context.mounted) {
-              return;
-            }
-            if (res != null) {
-              // Show success message
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(
-                    'Created "${res.name}"',
-                    style: TextStyle(color: context.theme.colorScheme.primary),
-                  ),
-                  duration: const Duration(seconds: 1),
-                  backgroundColor: context.theme.colorScheme.primaryContainer,
-                ),
-              );
-            }
-          },
-          child: FaIcon(FontAwesomeIcons.plus),
-        ),
+            )
+          else
+            Expanded(child: Center(child: Text('No sheets found'))),
+        ],
       );
     });
   }
