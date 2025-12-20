@@ -17,6 +17,8 @@ class Sheets extends StatefulWidget {
 class _SheetsState extends State<Sheets> {
   final Paren paren = Get.find();
   final searchController = TextEditingController();
+  final isEditing = false.obs;
+  final isSearching = false.obs;
 
   @override
   Widget build(BuildContext context) {
@@ -33,28 +35,67 @@ class _SheetsState extends State<Sheets> {
         mainAxisSize: MainAxisSize.min,
         children: [
           // Search
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: TextField(
-              controller: searchController,
-              decoration: InputDecoration(
-                labelText: 'Search Sheets',
-                prefixIcon: Icon(Icons.search),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8.0),
+          AnimatedContainer(
+            height: isSearching.value ? 75 : 0,
+            duration: 250.milliseconds,
+            child: AnimatedOpacity(
+              opacity: isSearching.value ? 1 : 0,
+              duration: 250.milliseconds,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: TextField(
+                  controller: searchController,
+                  decoration: InputDecoration(
+                    labelText: 'Search Sheets',
+                    prefixIcon: Icon(Icons.search),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                  ),
+                  onChanged: (value) {
+                    setState(() {});
+                  },
+                  autocorrect: false,
                 ),
               ),
-              onChanged: (value) {
-                setState(() {});
-              },
-              autocorrect: false,
             ),
+          ),
+
+          Row(
+            mainAxisAlignment: .spaceBetween,
+            children: [
+              Row(
+                children: [
+                  TextButton(
+                    onPressed: () {
+                      isEditing.toggle();
+                    },
+                    child: Text(isEditing.value ? 'Save' : 'Edit'),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      FocusScope.of(context).unfocus();
+                      isSearching.toggle();
+                    },
+                    child: Text(isSearching.value ? 'Hide search' : 'Search'),
+                  ),
+                ],
+              ),
+
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 16),
+                child: Text(
+                  '${filteredSheets.length} sheet${filteredSheets.length == 1 ? '' : 's'} found',
+                  style: TextStyle(color: context.theme.colorScheme.secondary),
+                ),
+              ),
+            ],
           ),
 
           // List of sheets
           if (filteredSheets.isNotEmpty)
             Expanded(
-              child: ListView.builder(
+              child: ReorderableListView.builder(
                 itemCount: filteredSheets.length,
                 itemBuilder: (context, index) {
                   var sheet = filteredSheets[index];
@@ -122,14 +163,20 @@ class _SheetsState extends State<Sheets> {
                       subtitle: Text(
                         '${sheet.fromCurrency.toUpperCase()} → ${sheet.toCurrency.toUpperCase()}',
                       ),
-                      trailing: FaIcon(
-                        FontAwesomeIcons.angleRight,
-                        color: context.theme.colorScheme.primary,
-                      ),
+                      trailing: !isEditing.value
+                          ? FaIcon(
+                              FontAwesomeIcons.angleRight,
+                              color: context.theme.colorScheme.primary,
+                            )
+                          : FaIcon(
+                              FontAwesomeIcons.pen,
+                              color: context.theme.colorScheme.primary,
+                            ),
                       onTap: () async {
-                        await Get.to(() => SheetDetail(sheet: sheet));
-                      },
-                      onLongPress: () async {
+                        if (!isEditing.value) {
+                          return await Get.to(() => SheetDetail(sheet: sheet));
+                        }
+
                         var res = await Navigator.of(context).push<Sheet>(
                           StupidSimpleSheetRoute(
                             originateAboveBottomViewInset: true,
@@ -158,6 +205,9 @@ class _SheetsState extends State<Sheets> {
                       },
                     ),
                   );
+                },
+                onReorder: (oldIndex, newIndex) {
+                  paren.reorderSheets(oldIndex, newIndex);
                 },
               ),
             )
