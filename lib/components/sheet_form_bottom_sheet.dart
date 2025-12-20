@@ -199,9 +199,8 @@ class _SheetFormBottomSheetState extends State<SheetFormBottomSheet> {
                   onPressed: () => Navigator.pop(context),
                   child: const Text('Cancel'),
                 ),
-                const SizedBox(width: 12),
+                12.w,
                 Expanded(
-                  flex: 2,
                   child: ElevatedButton(
                     onPressed: isEditing ? _updateSheet : _createSheet,
                     child: Text(isEditing ? 'Update Sheet' : 'Create Sheet'),

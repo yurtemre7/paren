@@ -6,6 +6,7 @@ import 'package:paren/classes/sheet.dart';
 import 'package:paren/classes/sheet_entry.dart';
 import 'package:paren/providers/paren.dart';
 import 'package:paren/providers/extensions.dart';
+import 'package:stupid_simple_sheet/stupid_simple_sheet.dart';
 
 class SheetDetail extends StatefulWidget {
   final Sheet sheet;
@@ -15,8 +16,25 @@ class SheetDetail extends StatefulWidget {
   State<SheetDetail> createState() => _SheetDetailState();
 }
 
+enum SheetSorting {
+  date,
+  abc,
+  big;
+
+  String coolName() {
+    return switch (this) {
+      abc => 'by name',
+      date => 'by date',
+      big => 'by amount',
+    };
+  }
+}
+
 class _SheetDetailState extends State<SheetDetail> {
   final Paren paren = Get.find();
+
+  final sortingMode = SheetSorting.date.obs;
+  final reversedSorting = false.obs;
 
   // Format currency amounts based on the currency code
   String formatCurrencyAmount(double amount, String currencyCode) {
@@ -60,195 +78,131 @@ class _SheetDetailState extends State<SheetDetail> {
       text: dateFormatter.format(selectedDate),
     );
 
-    await showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return StatefulBuilder(
-          builder: (BuildContext context, StateSetter setState) {
-            return AlertDialog(
-              title: Text(entry == null ? 'Add Entry' : 'Edit Entry'),
-              content: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  TextField(
-                    controller: descriptionCtrl,
-                    decoration: const InputDecoration(labelText: 'Description'),
-                    autocorrect: false,
+    await Navigator.of(context).push(
+      StupidSimpleSheetRoute(
+        originateAboveBottomViewInset: true,
+        child: Material(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadiusGeometry.vertical(
+              top: Radius.circular(20),
+            ),
+          ),
+          child: Container(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              mainAxisSize: .min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Add Entry',
+                  style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                    fontWeight: FontWeight.bold,
                   ),
-                  TextField(
-                    controller: amountCtrl,
-                    keyboardType: TextInputType.numberWithOptions(
-                      decimal: true,
-                    ),
-                    decoration: InputDecoration(
-                      labelText:
-                          'Amount in ${widget.sheet.fromCurrency.toUpperCase()}',
-                    ),
-                  ),
-                  8.h,
-                  TextField(
-                    controller: dateCtrl,
-                    onTap: () async {
-                      var pickedDate = await showDatePicker(
-                        context: context,
-                        initialDate: selectedDate,
-                        firstDate: DateTime(2000),
-                        lastDate: DateTime.now().add(
-                          Duration(days: 365),
-                        ), // Allow future dates up to 1 year
-                      );
-                      if (pickedDate != null && context.mounted) {
-                        setState(() {
-                          selectedDate = DateTime(
-                            pickedDate.year,
-                            pickedDate.month,
-                            pickedDate.day,
-                            12,
-                          );
-                          dateCtrl.text = dateFormatter.format(selectedDate);
-                        });
-                      }
-                    },
-                    readOnly: true,
-                    decoration: InputDecoration(
-                      label: Text('Date'),
-                      suffixIcon: Icon(Icons.date_range),
-                    ),
-                  ),
-                  if (entry != null) ...[
-                    8.h,
-                    Text(
-                      'Original Created: ${DateFormat('yyyy-MM-dd HH:mm').format(entry.createdAt)}',
-                      style: Theme.of(context).textTheme.bodySmall,
-                    ),
-                    Text(
-                      'Updated: ${DateFormat('yyyy-MM-dd HH:mm').format(entry.updatedAt)}',
-                      style: Theme.of(context).textTheme.bodySmall,
-                    ),
-                  ],
-                ],
-              ),
-              actions: [
-                TextButton(
-                  onPressed: () => Navigator.pop(context),
-                  child: const Text('Cancel'),
                 ),
-                ElevatedButton(
-                  onPressed: () {
-                    var desc = descriptionCtrl.text.trim();
-                    var amountStr = amountCtrl.text.trim();
-
-                    if (desc.isNotEmpty && amountStr.isNotEmpty) {
-                      var amount = double.tryParse(amountStr);
-                      if (amount != null) {
-                        var newEntry = SheetEntry(
-                          id:
-                              entry?.id ??
-                              DateTime.now().millisecondsSinceEpoch.toString(),
-                          name: desc,
-                          amount: amount,
-                          createdAt: selectedDate,
-                          updatedAt: DateTime.now(),
+                TextField(
+                  controller: descriptionCtrl,
+                  decoration: const InputDecoration(labelText: 'Description'),
+                  autocorrect: false,
+                ),
+                TextField(
+                  controller: amountCtrl,
+                  keyboardType: TextInputType.numberWithOptions(decimal: true),
+                  decoration: InputDecoration(
+                    labelText:
+                        'Amount in ${widget.sheet.fromCurrency.toUpperCase()}',
+                  ),
+                ),
+                8.h,
+                TextField(
+                  controller: dateCtrl,
+                  onTap: () async {
+                    var pickedDate = await showDatePicker(
+                      context: context,
+                      initialDate: selectedDate,
+                      firstDate: DateTime(2000),
+                      lastDate: DateTime.now().add(
+                        Duration(days: 365),
+                      ), // Allow future dates up to 1 year
+                    );
+                    if (pickedDate != null && context.mounted) {
+                      setState(() {
+                        selectedDate = DateTime(
+                          pickedDate.year,
+                          pickedDate.month,
+                          pickedDate.day,
+                          12,
                         );
-
-                        if (entry == null) {
-                          paren.addSheetEntry(widget.sheet.id, newEntry);
-                        } else {
-                          paren.updateSheetEntry(widget.sheet.id, newEntry);
-                        }
-                        Navigator.pop(context);
-                      }
+                        dateCtrl.text = dateFormatter.format(selectedDate);
+                      });
                     }
                   },
-                  child: Text(entry == null ? 'Add' : 'Update'),
+                  readOnly: true,
+                  decoration: InputDecoration(
+                    label: Text('Date'),
+                    suffixIcon: Icon(Icons.date_range),
+                  ),
                 ),
-              ],
-            );
-          },
-        );
-      },
-    );
-  }
-
-  // Show options for long press on an entry
-  Future<void> _showEntryOptions(SheetEntry entry) async {
-    await showModalBottomSheet(
-      context: context,
-      builder: (BuildContext context) {
-        return SafeArea(
-          child: Wrap(
-            children: [
-              ListTile(
-                leading: FaIcon(FontAwesomeIcons.penToSquare),
-                title: const Text('Edit'),
-                onTap: () {
-                  Navigator.pop(context);
-                  _showEntryDialog(entry: entry);
-                },
-              ),
-              ListTile(
-                leading: FaIcon(FontAwesomeIcons.trash),
-                title: const Text('Delete'),
-                onTap: () {
-                  Navigator.pop(context);
-                  _confirmDeleteEntry(entry);
-                },
-              ),
-              const Divider(),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                if (entry != null) ...[
+                  8.h,
+                  Text(
+                    'Original Created: ${DateFormat('MMM. dd y').format(entry.createdAt)}',
+                    style: Theme.of(context).textTheme.bodySmall,
+                  ),
+                  Text(
+                    'Updated: ${DateFormat('MMM. dd y, HH:mm').format(entry.updatedAt)}',
+                    style: Theme.of(context).textTheme.bodySmall,
+                  ),
+                ],
+                24.h,
+                Row(
                   children: [
-                    Text(
-                      'Entry details',
-                      style: Theme.of(context).textTheme.titleMedium,
+                    TextButton(
+                      onPressed: () => Navigator.pop(context),
+                      child: const Text('Cancel'),
                     ),
-                    4.h,
-                    Text(
-                      'Created: ${DateFormat('yyyy-MM-dd HH:mm').format(entry.createdAt)}',
-                      style: Theme.of(context).textTheme.bodySmall,
+                    12.w,
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: () {
+                          var desc = descriptionCtrl.text.trim();
+                          var amountStr = amountCtrl.text.trim();
+
+                          if (desc.isNotEmpty && amountStr.isNotEmpty) {
+                            var amount = double.tryParse(amountStr);
+                            if (amount != null) {
+                              var newEntry = SheetEntry(
+                                id:
+                                    entry?.id ??
+                                    DateTime.now().millisecondsSinceEpoch
+                                        .toString(),
+                                name: desc,
+                                amount: amount,
+                                createdAt: selectedDate,
+                                updatedAt: DateTime.now(),
+                              );
+
+                              if (entry == null) {
+                                paren.addSheetEntry(widget.sheet.id, newEntry);
+                              } else {
+                                paren.updateSheetEntry(
+                                  widget.sheet.id,
+                                  newEntry,
+                                );
+                              }
+                              Navigator.pop(context);
+                            }
+                          }
+                        },
+                        child: Text(entry == null ? 'Add' : 'Update'),
+                      ),
                     ),
-                    Text(
-                      'Updated: ${DateFormat('yyyy-MM-dd HH:mm').format(entry.updatedAt)}',
-                      style: Theme.of(context).textTheme.bodySmall,
-                    ),
-                    8.h,
                   ],
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        );
-      },
-    );
-  }
-
-  // Confirm deletion of an entry
-  Future<void> _confirmDeleteEntry(SheetEntry entry) async {
-    await showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Confirm Delete'),
-          content: Text('Are you sure you want to delete "${entry.name}"?'),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text('Cancel'),
-            ),
-            TextButton(
-              onPressed: () {
-                paren.removeSheetEntry(widget.sheet.id, entry.id);
-                Navigator.pop(context);
-              },
-              style: TextButton.styleFrom(foregroundColor: Colors.red),
-              child: const Text('Delete'),
-            ),
-          ],
-        );
-      },
+        ),
+      ),
     );
   }
 
@@ -292,6 +246,19 @@ class _SheetDetailState extends State<SheetDetail> {
     return {'sum': sum, 'avg': avg, 'min': min, 'max': max};
   }
 
+  List<SheetEntry> sortBy(List<SheetEntry> entries) {
+    var reversed = reversedSorting.value ? -1 : 1;
+    entries.sort((a, b) {
+      return reversed *
+          switch (sortingMode.value) {
+            .date => a.createdAt.compareTo(b.createdAt),
+            .abc => a.name.compareTo(b.name),
+            .big => a.amount.compareTo(b.amount),
+          };
+    });
+    return entries;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Obx(() {
@@ -301,6 +268,7 @@ class _SheetDetailState extends State<SheetDetail> {
       );
 
       var stats = _calculateStats(sheet.entries);
+      sortBy(sheet.entries);
 
       return Scaffold(
         appBar: AppBar(
@@ -315,6 +283,66 @@ class _SheetDetailState extends State<SheetDetail> {
               onPressed: () => _showEntryDialog(),
               tooltip: 'Add Entry',
               icon: const FaIcon(FontAwesomeIcons.plus),
+              color: context.theme.colorScheme.primary,
+            ),
+            IconButton(
+              onPressed: () {
+                Navigator.of(context).push(
+                  StupidSimpleSheetRoute(
+                    child: Material(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadiusGeometry.vertical(
+                          top: Radius.circular(20),
+                        ),
+                      ),
+                      child: Container(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Column(
+                          mainAxisSize: .min,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Sort it',
+                              style: Theme.of(context).textTheme.headlineSmall
+                                  ?.copyWith(fontWeight: FontWeight.bold),
+                            ),
+                            ...SheetSorting.values.map((sheetSorting) {
+                              return ListTile(
+                                title: Text(
+                                  sheetSorting.coolName(),
+                                  style: TextStyle(
+                                    color: sortingMode.value == sheetSorting
+                                        ? context.theme.colorScheme.primary
+                                        : context.theme.colorScheme.onSurface,
+                                  ),
+                                ),
+                                subtitle: sortingMode.value == sheetSorting
+                                    ? Text('Click again to reverse the sorting')
+                                    : null,
+                                onTap: () {
+                                  if (sortingMode.value == sheetSorting) {
+                                    reversedSorting.toggle();
+                                  } else {
+                                    sortingMode.value = sheetSorting;
+                                  }
+
+                                  Navigator.of(context).pop();
+                                },
+                              );
+                            }),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                );
+              },
+              tooltip: 'Sort by',
+              icon: FaIcon(
+                reversedSorting.value
+                    ? FontAwesomeIcons.arrowDownWideShort
+                    : FontAwesomeIcons.arrowDownShortWide,
+              ),
               color: context.theme.colorScheme.primary,
             ),
           ],
@@ -379,7 +407,7 @@ class _SheetDetailState extends State<SheetDetail> {
                               ),
                             ),
                             child: InkWell(
-                              onLongPress: () => _showEntryOptions(entry),
+                              onLongPress: () => _showEntryDialog(entry: entry),
                               child: Container(
                                 padding: const EdgeInsets.symmetric(
                                   horizontal: 16.0,
