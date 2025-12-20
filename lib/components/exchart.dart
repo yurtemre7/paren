@@ -236,10 +236,6 @@ class _ExChartState extends State<ExChart> {
           ],
         ),
         body: Obx(() {
-          if (isLoading.value) {
-            return const Center(child: CircularProgressIndicator.adaptive());
-          }
-
           if (hasError.value) {
             return Center(
               child: Container(
@@ -258,6 +254,7 @@ class _ExChartState extends State<ExChart> {
               24.h,
               Container(
                 margin: const EdgeInsets.only(right: 32),
+                constraints: BoxConstraints(maxHeight: context.height * 0.65),
                 child: AspectRatio(
                   aspectRatio: 16 / 9,
                   child: LineChart(mainData(), duration: 500.milliseconds),
