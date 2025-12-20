@@ -178,7 +178,7 @@ class _HomeState extends State<Home> {
                 return const LinearProgressIndicator();
               }
 
-              if (paren.currentPage.value == 0) {
+              if (paren.currentPage.value == 0 || (width >= 1000)) {
                 return FloatingActionButton(
                   onPressed: () async {
                     var res = await Navigator.of(context).push<Sheet>(
@@ -213,7 +213,7 @@ class _HomeState extends State<Home> {
 
               return 0.h;
             }),
-            bottomNavigationBar: NavigationBar(
+            bottomNavigationBar: (width < 1000) ? NavigationBar(
               selectedIndex: paren.currentPage.value,
               onDestinationSelected: (value) {
                 // paren.currentPage.value = value;
@@ -238,7 +238,7 @@ class _HomeState extends State<Home> {
                   label: 'Settings',
                 ),
               ],
-            ),
+            ) : null,
           ),
         ),
       ),

@@ -179,8 +179,8 @@ class _ExChartState extends State<ExChart> {
             ),
           ),
           actions: [
-            Container(
-              padding: const EdgeInsets.only(right: 8),
+            Padding(
+              padding: const EdgeInsets.only(right: 16.0),
               child: TextButton.icon(
                 onPressed: () {
                   Navigator.of(context).push(
@@ -191,7 +191,7 @@ class _ExChartState extends State<ExChart> {
                             top: Radius.circular(20),
                           ),
                         ),
-                        child: Container(
+                        child: Padding(
                           padding: const EdgeInsets.all(16.0),
                           child: Column(
                             mainAxisSize: .min,
@@ -238,7 +238,7 @@ class _ExChartState extends State<ExChart> {
         body: Obx(() {
           if (hasError.value) {
             return Center(
-              child: Container(
+              child: Padding(
                 padding: const EdgeInsets.all(8),
                 child: const Text(
                   'An error has occurred, please try later or contact me about this.',

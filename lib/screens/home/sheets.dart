@@ -42,7 +42,7 @@ class _SheetsState extends State<Sheets> {
               opacity: isSearching.value ? 1 : 0,
               duration: 250.milliseconds,
               child: Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
                 child: TextField(
                   controller: searchController,
                   decoration: InputDecoration(
@@ -61,35 +61,42 @@ class _SheetsState extends State<Sheets> {
             ),
           ),
 
-          Row(
-            mainAxisAlignment: .spaceBetween,
-            children: [
-              Row(
-                children: [
-                  TextButton(
-                    onPressed: () {
-                      isEditing.toggle();
-                    },
-                    child: Text(isEditing.value ? 'Save' : 'Edit'),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      FocusScope.of(context).unfocus();
-                      isSearching.toggle();
-                    },
-                    child: Text(isSearching.value ? 'Hide search' : 'Search'),
-                  ),
-                ],
-              ),
-
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 16),
-                child: Text(
-                  '${filteredSheets.length} sheet${filteredSheets.length == 1 ? '' : 's'} found',
-                  style: TextStyle(color: context.theme.colorScheme.secondary),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            child: Row(
+              mainAxisAlignment: .spaceBetween,
+              children: [
+                Wrap(
+                  children: [
+                    TextButton(
+                      onPressed: () {
+                        isEditing.toggle();
+                      },
+                      child: Text(isEditing.value ? 'Save' : 'Edit'),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        FocusScope.of(context).unfocus();
+                        isSearching.toggle();
+                      },
+                      child: Text(isSearching.value ? 'Hide search' : 'Search'),
+                    ),
+                  ],
                 ),
-              ),
-            ],
+
+                Flexible(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 8),
+                    child: Text(
+                      '${filteredSheets.length} sheet${filteredSheets.length == 1 ? '' : 's'} found',
+                      style: TextStyle(
+                        color: context.theme.colorScheme.secondary,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
 
           // List of sheets

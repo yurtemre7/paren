@@ -67,7 +67,7 @@ class _CurrencyChangerRowState extends State<CurrencyChangerRow> {
         (currency) => currency.id == fromId,
       );
       var to = paren.currencies.firstWhere((currency) => currency.id == toId);
-      return Container(
+      return Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -110,7 +110,7 @@ class _CurrencyChangerRowState extends State<CurrencyChangerRow> {
                 ),
               ),
             ),
-            Container(
+            Padding(
               padding: const EdgeInsets.symmetric(horizontal: 12),
               child: IconButton.filledTonal(
                 icon: FaIcon(FontAwesomeIcons.arrowRightArrowLeft),
@@ -226,7 +226,7 @@ class _CurrencyPickerSheetState extends State<CurrencyPickerSheet> {
         ),
       ),
       body: SafeArea(
-        child: Container(
+        child: Padding(
           padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
           child: Column(
             spacing: 8,

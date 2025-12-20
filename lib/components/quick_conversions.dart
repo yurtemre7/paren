@@ -34,8 +34,8 @@ class QuickConversions extends StatelessWidget {
         ),
       ),
       body: SafeArea(
-        child: Container(
-          margin: EdgeInsets.symmetric(horizontal: 12),
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 12),
           child: GridView.extent(
             maxCrossAxisExtent: 130,
             mainAxisSpacing: 12,

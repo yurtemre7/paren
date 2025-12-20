@@ -284,7 +284,7 @@ class _ConversionState extends State<Conversion> {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadiusGeometry.vertical(top: Radius.circular(20)),
       ),
-      child: Container(
+      child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Obx(() {
           return Column(

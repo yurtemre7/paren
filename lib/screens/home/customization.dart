@@ -50,7 +50,7 @@ class _CustomizationState extends State<Customization> {
   }
 
   Widget buildCurrencyChartTile() {
-    return Container(
+    return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: ListTile(
         title: Text(
@@ -82,7 +82,7 @@ class _CustomizationState extends State<Customization> {
   }
 
   Widget buildCurrencyData() {
-    return Container(
+    return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Column(
         children: [
@@ -116,7 +116,7 @@ class _CustomizationState extends State<Customization> {
   }
 
   Widget buildSaveConversion() {
-    return Container(
+    return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: ListTile(
         title: const Text('Saved Conversions'),
@@ -141,7 +141,7 @@ class _CustomizationState extends State<Customization> {
   }
 
   Widget buildBudgetPlanner() {
-    return Container(
+    return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: ListTile(
         title: const Text('Budget Planner'),
@@ -184,7 +184,7 @@ class _CustomizationState extends State<Customization> {
     }
 
     return Obx(() {
-      return Container(
+      return Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
         child: Column(
           children: [
@@ -253,7 +253,7 @@ class _CustomizationState extends State<Customization> {
                   color: context.theme.colorScheme.primary,
                   children: [
                     ...themeOptions.map(
-                      (option) => Container(
+                      (option) => Padding(
                         padding: const EdgeInsets.symmetric(
                           horizontal: 12,
                           vertical: 6,

@@ -64,7 +64,7 @@ class HomeHeader extends StatelessWidget implements PreferredSizeWidget {
                 bottomLeft: Radius.circular(12),
               ),
             ),
-            child: Container(
+            child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 4),
               child: Center(
                 child: Text(
@@ -91,7 +91,7 @@ class HomeHeader extends StatelessWidget implements PreferredSizeWidget {
               ),
             ),
             elevation: 0,
-            child: Container(
+            child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 4),
               child: Center(
                 child: Text(

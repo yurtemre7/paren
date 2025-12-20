@@ -165,7 +165,7 @@ class _SheetDetailState extends State<SheetDetail> {
                       child: ElevatedButton(
                         onPressed: () {
                           var desc = descriptionCtrl.text.trim();
-                          var amountStr = amountCtrl.text.trim();
+                          var amountStr = amountCtrl.text.trim().replaceAll(',', '.');
 
                           if (desc.isNotEmpty && amountStr.isNotEmpty) {
                             var amount = double.tryParse(amountStr);
@@ -274,7 +274,7 @@ class _SheetDetailState extends State<SheetDetail> {
         appBar: AppBar(
           leading: IconButton(
             onPressed: () => Get.back(),
-            icon: FaIcon(FontAwesomeIcons.xmark),
+            icon: FaIcon(FontAwesomeIcons.angleLeft),
             color: context.theme.colorScheme.primary,
           ),
           title: Text(sheet.name),
@@ -295,7 +295,7 @@ class _SheetDetailState extends State<SheetDetail> {
                           top: Radius.circular(20),
                         ),
                       ),
-                      child: Container(
+                      child: Padding(
                         padding: const EdgeInsets.all(16.0),
                         child: Column(
                           mainAxisSize: .min,
@@ -399,8 +399,7 @@ class _SheetDetailState extends State<SheetDetail> {
                             },
                             background: Container(
                               color: Colors.red,
-                              alignment: Alignment.centerRight,
-                              padding: const EdgeInsets.only(right: 20),
+                              alignment: Alignment.center,
                               child: FaIcon(
                                 FontAwesomeIcons.trash,
                                 color: Colors.white,
@@ -465,7 +464,7 @@ class _SheetDetailState extends State<SheetDetail> {
               ),
 
               // Converted stats section
-              Container(
+              Padding(
                 padding: const EdgeInsets.symmetric(
                   horizontal: 16.0,
                   vertical: 8.0,

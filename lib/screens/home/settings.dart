@@ -27,7 +27,7 @@ class Settings extends StatelessWidget {
   }
 
   Widget buildFeedback(BuildContext context) {
-    return Container(
+    return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Column(
         children: [
@@ -82,7 +82,7 @@ class Settings extends StatelessWidget {
               );
             },
           ),
-          Container(
+          Padding(
             padding: EdgeInsets.only(top: 8),
             child: OverflowBar(
               alignment: MainAxisAlignment.end,
@@ -110,7 +110,7 @@ class Settings extends StatelessWidget {
   }
 
   Widget buildAppInfo() {
-    return Container(
+    return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: ListTile(
         trailing: ClipRRect(

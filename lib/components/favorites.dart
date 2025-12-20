@@ -65,7 +65,11 @@ class FavoritesScreen extends StatelessWidget {
 
             return Dismissible(
               key: Key(favorite.id),
-              background: Container(color: Colors.red),
+              background: Container(
+                color: Colors.red,
+                alignment: Alignment.center,
+                child: FaIcon(FontAwesomeIcons.trash, color: Colors.white),
+              ),
               onDismissed: (_) => paren.removeFavorite(favorite.id),
               direction: DismissDirection.endToStart,
               child: ListTile(
