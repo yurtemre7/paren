@@ -172,6 +172,8 @@ class _HomeState extends State<Home> {
             ),
             floatingActionButtonLocation: paren.loading.value
                 ? .endDocked
+                : width >= 1000
+                ? .startFloat
                 : .endFloat,
             floatingActionButton: Obx(() {
               if (paren.loading.value) {
@@ -213,32 +215,34 @@ class _HomeState extends State<Home> {
 
               return 0.h;
             }),
-            bottomNavigationBar: (width < 1000) ? NavigationBar(
-              selectedIndex: paren.currentPage.value,
-              onDestinationSelected: (value) {
-                // paren.currentPage.value = value;
-                pageController.animateToPage(
-                  value,
-                  duration: 250.milliseconds,
-                  curve: Curves.ease,
-                );
-              },
-              destinations: [
-                NavigationDestination(
-                  icon: FaIcon(FontAwesomeIcons.list),
-                  selectedIcon: FaIcon(FontAwesomeIcons.listUl),
-                  label: 'Sheets',
-                ),
-                NavigationDestination(
-                  icon: FaIcon(FontAwesomeIcons.calculator),
-                  label: 'Calculation',
-                ),
-                NavigationDestination(
-                  icon: FaIcon(FontAwesomeIcons.gear),
-                  label: 'Settings',
-                ),
-              ],
-            ) : null,
+            bottomNavigationBar: (width < 1000)
+                ? NavigationBar(
+                    selectedIndex: paren.currentPage.value,
+                    onDestinationSelected: (value) {
+                      // paren.currentPage.value = value;
+                      pageController.animateToPage(
+                        value,
+                        duration: 250.milliseconds,
+                        curve: Curves.ease,
+                      );
+                    },
+                    destinations: [
+                      NavigationDestination(
+                        icon: FaIcon(FontAwesomeIcons.list),
+                        selectedIcon: FaIcon(FontAwesomeIcons.listUl),
+                        label: 'Sheets',
+                      ),
+                      NavigationDestination(
+                        icon: FaIcon(FontAwesomeIcons.calculator),
+                        label: 'Calculation',
+                      ),
+                      NavigationDestination(
+                        icon: FaIcon(FontAwesomeIcons.gear),
+                        label: 'Settings',
+                      ),
+                    ],
+                  )
+                : null,
           ),
         ),
       ),
