@@ -192,6 +192,23 @@ class Paren extends GetxController {
     var toCString = await sp.getString('toC') ?? 'jpy';
     toCurrency.value = toCString.toLowerCase();
 
+    var hasFromCurrency = currencies.any(
+      (currency) =>
+          fromCurrency.value.toUpperCase() == currency.id.toUpperCase(),
+    );
+
+    if (!hasFromCurrency) {
+      fromCurrency.value = currencies.first.id.toString().toLowerCase();
+    }
+
+    var hasToCurrency = currencies.any(
+      (currency) =>
+          (toCurrency.value.toUpperCase()) == currency.id.toUpperCase(),
+    );
+    if (!hasToCurrency) {
+      toCurrency.value = currencies.first.id.toString().toLowerCase();
+    }
+
     if (today.difference(latestTimestamp.value).abs() >= 1.days) {
       await fetchCurrencyDataOnline();
     }
