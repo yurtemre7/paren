@@ -165,7 +165,10 @@ class _SheetDetailState extends State<SheetDetail> {
                       child: ElevatedButton(
                         onPressed: () {
                           var desc = descriptionCtrl.text.trim();
-                          var amountStr = amountCtrl.text.trim().replaceAll(',', '.');
+                          var amountStr = amountCtrl.text.trim().replaceAll(
+                            ',',
+                            '.',
+                          );
 
                           if (desc.isNotEmpty && amountStr.isNotEmpty) {
                             var amount = double.tryParse(amountStr);

@@ -90,11 +90,9 @@ class _CustomizationState extends State<Customization> {
             title: const Text('Quick Conversions'),
             onTap: () async {
               Get.back();
-              var result = await Navigator.of(context).push(
-                StupidSimpleSheetRoute(
-                  child: buildQuickConversions(),
-                ),
-              );
+              var result = await Navigator.of(
+                context,
+              ).push(StupidSimpleSheetRoute(child: buildQuickConversions()));
               if (result != null) {
                 paren.currencyTextInput.value = result.toString();
               }
@@ -126,11 +124,9 @@ class _CustomizationState extends State<Customization> {
         ),
         onTap: () async {
           Get.back();
-          await Navigator.of(context).push(
-            StupidSimpleSheetRoute(
-              child: buildFavoriteSheet(),
-            ),
-          );
+          await Navigator.of(
+            context,
+          ).push(StupidSimpleSheetRoute(child: buildFavoriteSheet()));
         },
       ),
     );
@@ -151,11 +147,9 @@ class _CustomizationState extends State<Customization> {
         ),
         onTap: () async {
           Get.back();
-          await Navigator.of(context).push(
-            StupidSimpleSheetRoute(
-              child: const BudgetPlanner(),
-            ),
-          );
+          await Navigator.of(
+            context,
+          ).push(StupidSimpleSheetRoute(child: const BudgetPlanner()));
         },
       ),
     );
