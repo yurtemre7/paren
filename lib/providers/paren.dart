@@ -57,6 +57,8 @@ class Paren extends GetxController {
     conv1Size.value = 20.0;
     conv2Size.value = 16.0;
     calculatorInputHeight.value = 250.0;
+    clearFavorites();
+    clearSheets();
   }
 
   Future<void> fetchCurrencyDataOnline() async {
@@ -334,6 +336,11 @@ class Paren extends GetxController {
 
   Future<void> removeFavorite(String id) async {
     favorites.removeWhere((fav) => fav.id == id);
+    await _saveFavorites();
+  }
+
+  Future<void> clearFavorites() async {
+    favorites.clear();
     await _saveFavorites();
   }
 
