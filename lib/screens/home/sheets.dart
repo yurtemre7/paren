@@ -61,43 +61,46 @@ class _SheetsState extends State<Sheets> {
             ),
           ),
 
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
-            child: Row(
-              mainAxisAlignment: .spaceBetween,
-              children: [
-                Wrap(
-                  children: [
-                    TextButton(
-                      onPressed: () {
-                        isEditing.toggle();
-                      },
-                      child: Text(isEditing.value ? 'Save' : 'Edit'),
-                    ),
-                    TextButton(
-                      onPressed: () {
-                        FocusScope.of(context).unfocus();
-                        isSearching.toggle();
-                      },
-                      child: Text(isSearching.value ? 'Hide search' : 'Search'),
-                    ),
-                  ],
-                ),
+          if (filteredSheets.isNotEmpty)
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              child: Row(
+                mainAxisAlignment: .spaceBetween,
+                children: [
+                  Wrap(
+                    children: [
+                      TextButton(
+                        onPressed: () {
+                          isEditing.toggle();
+                        },
+                        child: Text(isEditing.value ? 'Save' : 'Edit'),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          FocusScope.of(context).unfocus();
+                          isSearching.toggle();
+                        },
+                        child: Text(
+                          isSearching.value ? 'Hide search' : 'Search',
+                        ),
+                      ),
+                    ],
+                  ),
 
-                Flexible(
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 8),
-                    child: Text(
-                      '${filteredSheets.length} sheet${filteredSheets.length == 1 ? '' : 's'} found',
-                      style: TextStyle(
-                        color: context.theme.colorScheme.secondary,
+                  Flexible(
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 8),
+                      child: Text(
+                        '${filteredSheets.length} sheet${filteredSheets.length == 1 ? '' : 's'} found',
+                        style: TextStyle(
+                          color: context.theme.colorScheme.secondary,
+                        ),
                       ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
 
           // List of sheets
           if (filteredSheets.isNotEmpty)
