@@ -351,7 +351,9 @@ class _ConversionState extends State<Conversion> {
                     'Calculator Input Height',
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
-                  Text('${paren.calculatorInputHeight.value.toStringAsFixed(0)}px'),
+                  Text(
+                    '${paren.calculatorInputHeight.value.toStringAsFixed(0)}px',
+                  ),
                 ],
               ),
               4.h,
