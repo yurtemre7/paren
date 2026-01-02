@@ -62,6 +62,19 @@ class _CustomizationState extends State<Customization> {
         ),
         onTap: () async {
           Get.back();
+          if (paren.fromCurrency.value == paren.toCurrency.value) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(
+                  'Chart does not exist with this configuration.',
+                  style: TextStyle(color: context.theme.colorScheme.primary),
+                ),
+                duration: const Duration(seconds: 1),
+                backgroundColor: context.theme.colorScheme.primaryContainer,
+              ),
+            );
+            return;
+          }
           await Navigator.of(context).push(
             StupidSimpleSheetRoute(
               child: ExChart(
