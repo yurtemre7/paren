@@ -39,7 +39,7 @@ dev_dependencies:
   json_serializable: 6.11.3
   build_runner: 2.10.4
   # `dart run msix:create`
-  msix: ^3.16.12
+  msix: 3.16.12
 
 msix_config:
   display_name: Paren
