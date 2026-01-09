@@ -766,10 +766,10 @@ packages:
     dependency: "direct main"
     description:
       name: stupid_simple_sheet
-      sha256: cfe99b43ad24f70ecabe4d63f8732c6994393125f35161c5f2e377128288648d
+      sha256: "1d1970757e20a952e45ab17092dd10988e76ce372a31dfb17ef6b4d6ab5e436c"
       url: "https://pub.dev"
     source: hosted
-    version: "0.8.0"
+    version: "0.8.0+1"
   term_glyph:
     dependency: transitive
     description:
