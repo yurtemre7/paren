@@ -1,7 +1,7 @@
 package de.emredev.paren.glance
 
-import HomeWidgetGlanceState
-import HomeWidgetGlanceStateDefinition
+import es.antonborri.home_widget.HomeWidgetGlanceState
+import es.antonborri.home_widget.HomeWidgetGlanceStateDefinition
 import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
@@ -24,13 +24,14 @@ import androidx.glance.text.FontWeight
 import androidx.glance.text.Text
 import androidx.glance.text.TextAlign
 import androidx.glance.text.TextStyle
+import androidx.glance.state.GlanceStateDefinition
 import de.emredev.paren.MainActivity
 import es.antonborri.home_widget.actionStartActivity
 
 class ParenWAppWidget : GlanceAppWidget() {
 
     /** Needed for Updating */
-    override val stateDefinition = HomeWidgetGlanceStateDefinition()
+    override val stateDefinition: GlanceStateDefinition<*> get() = HomeWidgetGlanceStateDefinition()
 
     override suspend fun provideGlance(context: Context, id: GlanceId) {
         provideContent { GlanceContent(context, currentState()) }
@@ -40,48 +41,48 @@ class ParenWAppWidget : GlanceAppWidget() {
     private fun GlanceContent(context: Context, currentState: HomeWidgetGlanceState) {
         val data = currentState.preferences
 
-        val priceString = data.getString("price_string", "") ?: "1.00¥ ➜ 0.01€"
-        val priceReString = data.getString("price_restring", "") ?: "1.00€ ➜ 160.33¥"
-        val priceDatum = data.getString("price_datum", "") ?: "11.08.2024 15:29"
+        val priceString: String = data.getString("price_string", "1¥ ➜ 0.01€")!!
+        val priceReString: String = data.getString("price_restring", "1.00€ ➜ 183¥")!!
+        val priceDatum: String = data.getString("price_datum", "09.01.2026 20:28")!!
 
         Box(
-            modifier =
-            GlanceModifier.background(Color.White)
-                .padding(16.dp)
-                .clickable(onClick = actionStartActivity<MainActivity>(context))) {
+            modifier = GlanceModifier.background(Color.White).padding(16.dp)
+                .clickable(onClick = actionStartActivity<MainActivity>(context))
+        ) {
             Column(
                 modifier = GlanceModifier.fillMaxSize(),
                 verticalAlignment = Alignment.Vertical.Top,
                 horizontalAlignment = Alignment.Horizontal.CenterHorizontally,
             ) {
-                Text("😄",
-                    style =
-                    TextStyle(fontSize = 22.sp,
-                        fontWeight = FontWeight.Bold,
-                        textAlign = TextAlign.Center))
+                Text(
+                    "😄", style = TextStyle(
+                        fontSize = 22.sp, fontWeight = FontWeight.Bold, textAlign = TextAlign.Center
+                    )
+                )
                 Spacer(
-                    modifier =
-                    GlanceModifier.defaultWeight())
+                    modifier = GlanceModifier.defaultWeight()
+                )
                 Column(
                     verticalAlignment = Alignment.Vertical.Top,
                     horizontalAlignment = Alignment.Horizontal.CenterHorizontally,
-                    ) {
+                ) {
                     Text(
-                        priceString,
-                        style =
-                        TextStyle(fontSize = 18.sp,
-                            textAlign = TextAlign.Center))
+                        priceString, style = TextStyle(
+                            fontSize = 18.sp, textAlign = TextAlign.Center
+                        )
+                    )
                     Text(
-                        priceReString,
-                        style =
-                        TextStyle(fontSize = 18.sp,
-                            textAlign = TextAlign.Center))
+                        priceReString, style = TextStyle(
+                            fontSize = 18.sp, textAlign = TextAlign.Center
+                        )
+                    )
                 }
                 Spacer(modifier = GlanceModifier.defaultWeight())
                 Text(
-                    priceDatum,
-                    style = TextStyle(fontSize = 14.sp,
-                        textAlign = TextAlign.Center))
+                    priceDatum, style = TextStyle(
+                        fontSize = 14.sp, textAlign = TextAlign.Center
+                    )
+                )
             }
         }
     }

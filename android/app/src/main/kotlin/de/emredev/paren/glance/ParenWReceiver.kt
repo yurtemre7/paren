@@ -1,6 +1,6 @@
 package de.emredev.paren.glance
 
-import HomeWidgetGlanceWidgetReceiver
+import es.antonborri.home_widget.HomeWidgetGlanceWidgetReceiver
 
 class ParenWReceiver : HomeWidgetGlanceWidgetReceiver<ParenWAppWidget>() {
     override val glanceAppWidget = ParenWAppWidget()
