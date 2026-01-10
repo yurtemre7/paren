@@ -2,7 +2,7 @@
 //  ParenWBundle.swift
 //  ParenW
 //
-//  Created by Emre Yurtseven on 09.08.24.
+//  Created by Emre Yurtseven on 10.01.26.
 //
 
 import WidgetKit

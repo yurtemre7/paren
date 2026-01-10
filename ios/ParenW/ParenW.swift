@@ -2,11 +2,11 @@
 //  ParenW.swift
 //  ParenW
 //
-//  Created by Emre Yurtseven on 09.08.24.
+//  Created by Emre Yurtseven on 10.01.26.
 //
 
-import SwiftUI
 import WidgetKit
+import SwiftUI
 
 private let widgetGroupId = "group.de.emredev.paren"
 
@@ -14,25 +14,22 @@ struct Provider: AppIntentTimelineProvider {
     func placeholder(in context: Context) -> SimpleEntry {
         SimpleEntry(date: Date(), configuration: ConfigurationAppIntent())
     }
-    
-    func snapshot(for configuration: ConfigurationAppIntent, in context: Context) async -> SimpleEntry
-    {
+
+    func snapshot(for configuration: ConfigurationAppIntent, in context: Context) async -> SimpleEntry {
         SimpleEntry(date: Date(), configuration: configuration)
     }
     
-    func timeline(for configuration: ConfigurationAppIntent, in context: Context) async -> Timeline<
-        SimpleEntry
-    > {
+    func timeline(for configuration: ConfigurationAppIntent, in context: Context) async -> Timeline<SimpleEntry> {
         var entries: [SimpleEntry] = []
-        
+
         // Generate a timeline consisting of five entries an hour apart, starting from the current date.
         let currentDate = Date()
-        for hourOffset in 0..<5 {
+        for hourOffset in 0 ..< 5 {
             let entryDate = Calendar.current.date(byAdding: .hour, value: hourOffset, to: currentDate)!
             let entry = SimpleEntry(date: entryDate, configuration: configuration)
             entries.append(entry)
         }
-        
+
         return Timeline(entries: entries, policy: .atEnd)
     }
 }
@@ -51,9 +48,9 @@ struct ParenWEntryView: View {
     
     init(entry: Provider.Entry) {
         self.entry = entry
-        self.priceString = data?.string(forKey: "price_string") ?? "1.00¥ ➜ 0.01€"
-        self.priceReString = data?.string(forKey: "price_restring") ?? "1.00€ ➜ 160.33¥"
-        self.priceDatum = data?.string(forKey: "price_datum") ?? "11.08.2024 15:29"
+        self.priceString = data?.string(forKey: "price_string") ?? "1¥ ➜ 0.01€"
+        self.priceReString = data?.string(forKey: "price_restring") ?? "1.00€ ➜ 184¥"
+        self.priceDatum = data?.string(forKey: "price_datum") ?? "10.01.2026 12:42"
     }
     
     var body: some View {
@@ -80,7 +77,7 @@ struct ParenWEntryView: View {
 
 struct ParenW: Widget {
     let kind: String = "ParenW"
-    
+
     var body: some WidgetConfiguration {
         AppIntentConfiguration(kind: kind, intent: ConfigurationAppIntent.self, provider: Provider()) {
             entry in
