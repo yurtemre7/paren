@@ -1,8 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
 import 'package:home_widget/home_widget.dart';
+import 'package:paren/l10n/app_localizations.dart';
 import 'package:paren/providers/paren.dart';
 import 'package:paren/screens/home.dart';
 import 'package:flutter_web_plugins/url_strategy.dart';
@@ -42,17 +42,10 @@ class MyApp extends StatelessWidget {
           brightness: Brightness.dark,
         ),
         themeMode: paren.appThemeMode.value,
+        locale: paren.currentAppLocale.value,
         home: const Home(),
-        supportedLocales: [
-          Locale('de'), // German
-          Locale('en'), // English
-          Locale('ja'), // Japanese
-        ],
-        localizationsDelegates: [
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-          GlobalCupertinoLocalizations.delegate,
-        ],
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
       ),
     );
   }

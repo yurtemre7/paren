@@ -10,6 +10,7 @@ import 'package:paren/classes/currency.dart';
 import 'package:paren/classes/favorite_conversion.dart';
 import 'package:paren/classes/sheet.dart';
 import 'package:paren/classes/sheet_entry.dart';
+import 'package:paren/l10n/app_localizations.dart';
 import 'package:paren/providers/constants.dart';
 import 'package:paren/providers/extensions.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -26,6 +27,7 @@ class Paren extends GetxController {
 
   final appColor = Colors.orange.getValue.obs;
   final appThemeMode = ThemeMode.system.obs;
+  final currentAppLocale = AppLocalizations.supportedLocales.first.obs;
   final conv1Size = 20.0.obs;
   final conv2Size = 16.0.obs;
   final convSizeRanges = (min: 14.0, max: 34.0);
@@ -54,6 +56,7 @@ class Paren extends GetxController {
     toCurrency.value = 'jpy';
     appColor.value = Colors.orange.getValue;
     appThemeMode.value = ThemeMode.system;
+    currentAppLocale.value = AppLocalizations.supportedLocales.first;
     conv1Size.value = 20.0;
     conv2Size.value = 16.0;
     calculatorInputHeight.value = 250.0;
@@ -131,6 +134,7 @@ class Paren extends GetxController {
     await Future.wait([
       sp.setInt('appColor', appColor.value),
       sp.setInt('appThemeMode', appThemeMode.value.index),
+      sp.setString('currentAppLocale', currentAppLocale.value.languageCode),
       sp.setDouble('conv1Size', conv1Size.value),
       sp.setDouble('conv2Size', conv2Size.value),
       sp.setDouble('calculatorInputHeight', calculatorInputHeight.value),
@@ -144,6 +148,11 @@ class Paren extends GetxController {
     var appThemeModeValue = await sp.getInt('appThemeMode');
     appThemeMode.value =
         ThemeMode.values[appThemeModeValue ?? ThemeMode.system.index];
+
+    var currentAppLocaleValue = await sp.getString('currentAppLocale');
+    currentAppLocale.value = currentAppLocaleValue != null
+        ? Locale(currentAppLocaleValue)
+        : AppLocalizations.supportedLocales.first;
 
     var conv1Value = await sp.getDouble('conv1Size');
     conv1Size.value = conv1Value ?? 20.0;

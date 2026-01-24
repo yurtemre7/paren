@@ -4,6 +4,8 @@ import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:paren/components/budget_planner.dart';
+import 'package:paren/l10n/app_localizations.dart';
+import 'package:paren/l10n/app_localizations_extension.dart';
 import 'package:paren/providers/constants.dart';
 import 'package:paren/providers/extensions.dart';
 import 'package:paren/providers/paren.dart';
@@ -39,6 +41,7 @@ class _CustomizationState extends State<Customization> {
         buildBudgetPlanner(),
         Divider(),
         buildAppThemeColorChanger(),
+        buildAppLocaleChanger(),
         // buildAppColorChanger(),
         Divider(),
         Settings(),
@@ -281,6 +284,39 @@ class _CustomizationState extends State<Customization> {
                   ],
                 ),
               ],
+            ),
+          ],
+        ),
+      );
+    });
+  }
+
+  Widget buildAppLocaleChanger() {
+    return Obx(() {
+      return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+        child: Column(
+          children: [
+            const Text(
+              'App Language',
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            ),
+            8.h,
+            DropdownButton(
+              items: [
+                ...AppLocalizations.supportedLocales.map((locale) {
+                  return DropdownMenuItem(
+                    value: locale,
+                    child: Text(locale.fullName()),
+                  );
+                }),
+              ],
+              value: paren.currentAppLocale.value,
+              underline: 0.h,
+              onChanged: (newLocale) {
+                if (newLocale == null) return;
+                paren.currentAppLocale.value = newLocale;
+              },
             ),
           ],
         ),
