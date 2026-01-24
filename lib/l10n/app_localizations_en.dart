@@ -10,4 +10,281 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get helloWorld => 'Hello World!';
+
+  @override
+  String get sheets => 'Sheets';
+
+  @override
+  String get calculation => 'Calculation';
+
+  @override
+  String get settings => 'Settings';
+
+  @override
+  String get searchSheets => 'Search Sheets';
+
+  @override
+  String get edit => 'Edit';
+
+  @override
+  String get save => 'Save';
+
+  @override
+  String get search => 'Search';
+
+  @override
+  String get hideSearch => 'Hide search';
+
+  @override
+  String sheetCount(num count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count sheets found',
+      one: '1 sheet found',
+      zero: 'No sheets found',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get deleteSheetTitle => 'Delete Sheet';
+
+  @override
+  String deleteSheetContent(Object entryCount, Object name, Object plural) {
+    return 'Are you sure you want to delete your Sheet \"$name\" containing $entryCount entry$plural?';
+  }
+
+  @override
+  String get confirm => 'Confirm';
+
+  @override
+  String get cancel => 'Cancel';
+
+  @override
+  String deletedSheet(Object name) {
+    return 'Deleted \"$name\"';
+  }
+
+  @override
+  String updatedSheet(Object name) {
+    return 'Updated \"$name\"';
+  }
+
+  @override
+  String createdSheet(Object name) {
+    return 'Created \"$name\"';
+  }
+
+  @override
+  String get noSheetsFound => 'No sheets found';
+
+  @override
+  String get madeInGermanyByEmre => 'Made in 🇩🇪 by Emre';
+
+  @override
+  String get appColorAndTheme => 'App Color & Theme';
+
+  @override
+  String get appColor => 'App Color';
+
+  @override
+  String get appLanguage => 'App Language';
+
+  @override
+  String get pickAColor => 'Pick a color';
+
+  @override
+  String get shareTheApp => 'Share the App';
+
+  @override
+  String get shareAppSubtitle =>
+      'With your help the app can help more people on their vacations! I appreciate your effort.';
+
+  @override
+  String get shareAppText =>
+      'With Par円 you can convert money in your travels faster than ever!\nDownload here: https://apps.apple.com/us/app/paren/id6578395712';
+
+  @override
+  String get contactFeedback => 'Contact / Feedback';
+
+  @override
+  String get contactFeedbackSubtitle =>
+      'Feel free to reach out to me, as I take any request seriously and see it as an opportunity to improve my app.';
+
+  @override
+  String get licenses => 'Licenses';
+
+  @override
+  String get licensesSubtitle =>
+      'This app uses the following open source libraries.';
+
+  @override
+  String get github => 'GitHub';
+
+  @override
+  String get email => 'E-Mail';
+
+  @override
+  String get appInfo => 'App Info';
+
+  @override
+  String get thankYouForBeingHere => 'Thank you for being here.';
+
+  @override
+  String get deleteAppData => 'Delete App Data';
+
+  @override
+  String get deleteAppDataContent =>
+      'Are you sure, you want to delete all the app data?\n\nThis contains the data of the offline currency values, your default currency selection and the autofocus status.';
+
+  @override
+  String get abort => 'Abort';
+
+  @override
+  String get delete => 'Delete';
+
+  @override
+  String get fromWhereDoWeFetchData => 'From where do we fetch the data?';
+
+  @override
+  String get weUseApiFrom => 'We use the API provided from ';
+
+  @override
+  String get frankfurter => 'Frankfurter';
+
+  @override
+  String get openSourceAndFree =>
+      ' which is open source and free to use.\nIt gets its data from the ';
+
+  @override
+  String get europeanCentralBank => 'European Central Bank';
+
+  @override
+  String get trustedSource =>
+      ', which is a trusted source.\n\nAlso, we only need to fetch the data once a day, so the App only fetches it, if that duration has passed from the previous fetch. But you can force refresh by pulling from the top.\n\nTo update the values in the widgets, just simply open the app once that day.';
+
+  @override
+  String currenciesLastUpdated(Object timestamp) {
+    return '\n\nCurrencies last updated:\n$timestamp';
+  }
+
+  @override
+  String get currenciesEmptyError =>
+      'Currencies is empty, an error must have occurred.';
+
+  @override
+  String get operationTimedOut => 'Operation timed out';
+
+  @override
+  String get anErrorHasOccurred => 'An error has occurred';
+
+  @override
+  String loadingTimeTaken(Object duration) {
+    return 'Loading time taken: ${duration}ms';
+  }
+
+  @override
+  String exchangeChart(Object fromCurrency, Object toCurrency) {
+    return '$fromCurrency - $toCurrency exchange chart';
+  }
+
+  @override
+  String get chartDoesNotExist =>
+      'Chart does not exist with this configuration.';
+
+  @override
+  String get quickConversions => 'Quick Conversions';
+
+  @override
+  String get savedConversions => 'Saved Conversions';
+
+  @override
+  String get budgetPlanner => 'Budget Planner';
+
+  @override
+  String get favorite => 'Favorite';
+
+  @override
+  String get share => 'Share';
+
+  @override
+  String get copy => 'Copy';
+
+  @override
+  String get adjustSizes => 'Adjust Sizes';
+
+  @override
+  String get primaryConversion => 'Primary Conversion';
+
+  @override
+  String get secondaryConversion => 'Secondary Conversion';
+
+  @override
+  String get calculatorInputHeight => 'Calculator Input Height';
+
+  @override
+  String copiedToClipboard(Object text) {
+    return '$text was copied to the clipboard';
+  }
+
+  @override
+  String get addEntry => 'Add Entry';
+
+  @override
+  String get description => 'Description';
+
+  @override
+  String amountInCurrency(Object currency) {
+    return 'Amount in $currency';
+  }
+
+  @override
+  String get date => 'Date';
+
+  @override
+  String originalCreated(Object date) {
+    return 'Original Created: $date';
+  }
+
+  @override
+  String updated(Object date) {
+    return 'Updated: $date';
+  }
+
+  @override
+  String get sortIt => 'Sort it';
+
+  @override
+  String get sortBy => 'Sort by';
+
+  @override
+  String get clickAgainToReverse => 'Click again to reverse the sorting';
+
+  @override
+  String get byName => 'by name';
+
+  @override
+  String get byDate => 'by date';
+
+  @override
+  String get byAmount => 'by amount';
+
+  @override
+  String get noEntriesYet => 'No entries yet';
+
+  @override
+  String get statistics => 'Statistics';
+
+  @override
+  String get total => 'Total:';
+
+  @override
+  String get average => 'Average:';
+
+  @override
+  String get minimum => 'Minimum:';
+
+  @override
+  String get maximum => 'Maximum:';
 }
