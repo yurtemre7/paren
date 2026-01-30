@@ -235,7 +235,9 @@ class _ExChartState extends State<ExChart> {
                     ),
                   );
                 },
-                label: Text('${localDuration.value.inDays} ${context.l10n.days}'),
+                label: Text(
+                  '${localDuration.value.inDays} ${context.l10n.days}',
+                ),
                 icon: FaIcon(FontAwesomeIcons.calendar),
               ),
             ),

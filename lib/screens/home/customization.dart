@@ -338,7 +338,7 @@ class _CustomizationState extends State<Customization> {
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
         child: Column(
           children: [
-             Text(
+            Text(
               l10n.appLanguage,
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),

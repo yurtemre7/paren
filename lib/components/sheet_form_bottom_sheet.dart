@@ -100,7 +100,11 @@ class _SheetFormBottomSheetState extends State<SheetFormBottomSheet> {
                 Expanded(
                   child: ElevatedButton(
                     onPressed: isEditing ? _updateSheet : _createSheet,
-                    child: Text(isEditing ? context.l10n.updateSheet : context.l10n.createSheet),
+                    child: Text(
+                      isEditing
+                          ? context.l10n.updateSheet
+                          : context.l10n.createSheet,
+                    ),
                   ),
                 ),
               ],
