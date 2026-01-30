@@ -332,13 +332,14 @@ class _CustomizationState extends State<Customization> {
   }
 
   Widget buildAppLocaleChanger() {
+    var l10n = context.l10n;
     return Obx(() {
       return Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
         child: Column(
           children: [
-            const Text(
-              'App Language',
+             Text(
+              l10n.appLanguage,
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
             8.h,
