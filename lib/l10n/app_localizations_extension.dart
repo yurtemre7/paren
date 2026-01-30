@@ -11,6 +11,7 @@ extension FullName on Locale {
       'en' => 'English',
       'ja' => '日本語',
       'de' => 'Deutsch',
+      'tr' => 'Türkçe',
       _ => '',
     };
   }
