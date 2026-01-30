@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widget_previews.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:paren/l10n/app_localizations_extension.dart';
 import 'package:paren/providers/extensions.dart';
 import 'package:paren/providers/paren.dart';
 import 'package:share_plus/share_plus.dart';
@@ -21,45 +22,35 @@ class Settings extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Column(
-        children: [buildAppInfo(), buildFeedback(context), Divider()],
+        children: [buildAppInfo(context), buildFeedback(context), Divider()],
       ),
     );
   }
 
   Widget buildFeedback(BuildContext context) {
+    var l10n = context.l10n;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Column(
         children: [
           ListTile(
-            title: const Text('Share the App'),
-            subtitle: const Text(
-              'With your help the app can help more people on their vacations! I appreciate your effort.',
-            ),
+            title: Text(l10n.shareTheApp),
+            subtitle: Text(l10n.shareAppSubtitle),
             trailing: FaIcon(
               FontAwesomeIcons.shareFromSquare,
               color: context.theme.colorScheme.primary,
             ),
             onTap: () {
-              SharePlus.instance.share(
-                ShareParams(
-                  text:
-                      'With Par円 you can convert money in your travels faster than ever!\nDownload here: https://apps.apple.com/us/app/paren/id6578395712',
-                ),
-              );
+              SharePlus.instance.share(ShareParams(text: l10n.shareAppText));
             },
           ),
-          const ListTile(
-            title: Text('Contact / Feedback'),
-            subtitle: Text(
-              'Feel free to reach out to me, as I take any request seriously and see it as an opportunity to improve my app.',
-            ),
+          ListTile(
+            title: Text(l10n.contactFeedback),
+            subtitle: Text(l10n.contactFeedbackSubtitle),
           ),
           ListTile(
-            title: Text('Licenses'),
-            subtitle: Text(
-              'This app uses the following open source libraries.',
-            ),
+            title: Text(l10n.licenses),
+            subtitle: Text(l10n.licensesSubtitle),
             // trailing: Icon(Icons.open_in_new),
             trailing: FaIcon(
               FontAwesomeIcons.copyright,
@@ -89,14 +80,14 @@ class Settings extends StatelessWidget {
               spacing: 8,
               children: [
                 ActionChip.elevated(
-                  label: const Text('GitHub'),
+                  label: Text(l10n.github),
                   onPressed: () {
                     launchUrl(Uri.parse('https://github.com/yurtemre7/paren'));
                   },
                 ),
                 4.w,
                 ActionChip.elevated(
-                  label: const Text('E-Mail'),
+                  label: Text(l10n.email),
                   onPressed: () {
                     launchUrl(Uri.parse('mailto:yurtemre7@icloud.com'));
                   },
@@ -109,7 +100,8 @@ class Settings extends StatelessWidget {
     );
   }
 
-  Widget buildAppInfo() {
+  Widget buildAppInfo(BuildContext context) {
+    var l10n = context.l10n;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: ListTile(
@@ -117,19 +109,17 @@ class Settings extends StatelessWidget {
           borderRadius: BorderRadius.circular(12),
           child: Image.asset('assets/icon/icon.png'),
         ),
-        title: const Text('App Info'),
-        subtitle: const Text('Thank you for being here.'),
+        title: Text(l10n.appInfo),
+        subtitle: Text(l10n.thankYouForBeingHere),
         onLongPress: () {
           Get.dialog(
             AlertDialog(
-              title: const Text('Delete App Data'),
-              content: const Text(
-                'Are you sure, you want to delete all the app data?\n\nThis contains the data of the offline currency values, your default currency selection and the autofocus status.',
-              ),
+              title: Text(l10n.deleteAppData),
+              content: Text(l10n.deleteAppDataContent),
               actions: [
                 TextButton(
                   onPressed: () => Get.back(),
-                  child: const Text('Abort'),
+                  child: Text(l10n.abort),
                 ),
                 OutlinedButton(
                   onPressed: () async {
@@ -139,7 +129,7 @@ class Settings extends StatelessWidget {
                     Get.back();
                     Get.back();
                   },
-                  child: const Text('Delete'),
+                  child: Text(l10n.delete),
                 ),
               ],
             ),

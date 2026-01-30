@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:paren/providers/extensions.dart';
+import 'package:paren/l10n/app_localizations_extension.dart';
 
 class HomeHeader extends StatelessWidget implements PreferredSizeWidget {
   final VoidCallback onInfo;
@@ -29,7 +30,7 @@ class HomeHeader extends StatelessWidget implements PreferredSizeWidget {
               if (width >= 1000) ...[
                 buildEmptyIcon(colorScheme),
                 buildLogo(colorScheme),
-                buildInfoIconButton(colorScheme),
+                buildInfoIconButton(context, colorScheme),
               ] else ...[
                 if (index != 0)
                   buildNavigateIconButtonBackward(colorScheme)
@@ -39,7 +40,7 @@ class HomeHeader extends StatelessWidget implements PreferredSizeWidget {
                 if (index != 2)
                   buildNavigateIconButtonForward(colorScheme)
                 else
-                  buildInfoIconButton(colorScheme),
+                  buildInfoIconButton(context, colorScheme),
               ],
             ],
           ),
@@ -111,11 +112,11 @@ class HomeHeader extends StatelessWidget implements PreferredSizeWidget {
     );
   }
 
-  IconButton buildInfoIconButton(ColorScheme colorScheme) {
+  Widget buildInfoIconButton(BuildContext context, ColorScheme colorScheme) {
     return IconButton(
       icon: FaIcon(FontAwesomeIcons.circleQuestion),
       color: colorScheme.primary,
-      tooltip: 'Last update info',
+      tooltip: context.l10n.lastUpdateInfo,
       onPressed: onInfo,
       style: IconButton.styleFrom(
         shape: const CircleBorder(),

@@ -51,8 +51,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get deleteSheetTitle => 'Delete Sheet';
 
   @override
-  String deleteSheetContent(Object entryCount, Object name, Object plural) {
-    return 'Are you sure you want to delete your Sheet \"$name\" containing $entryCount entry$plural?';
+  String deleteSheetContent(num entryCount, Object name) {
+    String _temp0 = intl.Intl.pluralLogic(
+      entryCount,
+      locale: localeName,
+      other: '$entryCount entries',
+      one: '1 entry',
+      zero: '0 entries',
+    );
+    return 'Are you sure you want to delete your Sheet \"$name\" containing $_temp0?';
   }
 
   @override
@@ -287,4 +294,155 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get maximum => 'Maximum:';
+
+  @override
+  String amountConvertedHeader(Object convertedCurrency, Object currency) {
+    return 'Amount ($currency) / Converted ($convertedCurrency)';
+  }
+
+  @override
+  String get themeSystem => 'System';
+
+  @override
+  String get themeLight => 'Light';
+
+  @override
+  String get themeDark => 'Dark';
+
+  @override
+  String get weekdayMon => 'MON';
+
+  @override
+  String get weekdayTue => 'TUE';
+
+  @override
+  String get weekdayWed => 'WED';
+
+  @override
+  String get weekdayThu => 'THU';
+
+  @override
+  String get weekdayFri => 'FRI';
+
+  @override
+  String get weekdaySat => 'SAT';
+
+  @override
+  String get weekdaySun => 'SUN';
+
+  @override
+  String get weekdayDay => 'DAY';
+
+  @override
+  String get monthJan => 'JAN';
+
+  @override
+  String get monthMar => 'MAR';
+
+  @override
+  String get monthMay => 'MAY';
+
+  @override
+  String get monthJul => 'JUL';
+
+  @override
+  String get monthSep => 'SEP';
+
+  @override
+  String get monthNov => 'NOV';
+
+  @override
+  String get tripBudget => 'Trip Budget';
+
+  @override
+  String get totalBudget => 'Total Budget';
+
+  @override
+  String get perDayBudget => 'Per-Day Budget';
+
+  @override
+  String get selectCurrency => 'Select Currency';
+
+  @override
+  String get searchCurrency => 'Search currency';
+
+  @override
+  String get noResultsFound => 'No results found';
+
+  @override
+  String get editSheet => 'Edit Sheet';
+
+  @override
+  String get createNewSheet => 'Create New Sheet';
+
+  @override
+  String get sheetName => 'Sheet Name';
+
+  @override
+  String get enterSheetName => 'Enter a name for your sheet';
+
+  @override
+  String get updateSheet => 'Update Sheet';
+
+  @override
+  String get createSheet => 'Create Sheet';
+
+  @override
+  String get noConversionsSaved => 'No conversions saved yet.';
+
+  @override
+  String get selectDuration => 'Select duration';
+
+  @override
+  String get days => 'days';
+
+  @override
+  String get showSimplePrediction => 'Show simple prediction';
+
+  @override
+  String get predictionFunDisclaimer =>
+      'This is just for fun, no financial advice.';
+
+  @override
+  String get howPredictionsWork => 'How Predictions Work';
+
+  @override
+  String predictionExplanation(Object days, Object predictionDays) {
+    return 'The prediction uses the last $days days of data to estimate $predictionDays days of future data. \\n\\n• It follows the average daily trend from historical data.\\n• Adds realistic random fluctuations based on past volatility.\\n• Shorter historical data ➜ shorter predictions -> less accuracy.\\n• Longer historical data ➜ longer predictions -> higher accuracy.\\n\\n⚠️ This is a simplified model. Real-world rates may vary significantly!';
+  }
+
+  @override
+  String get ok => 'OK';
+
+  @override
+  String get swap => 'Swap';
+
+  @override
+  String dailyBudget(Object currency) {
+    return 'Daily Budget ($currency)';
+  }
+
+  @override
+  String get selectTripDates => 'Select Trip Dates';
+
+  @override
+  String tripDatesWithDuration(
+    Object duration,
+    Object endDate,
+    Object startDate,
+  ) {
+    return '$startDate - $endDate ($duration days)';
+  }
+
+  @override
+  String get totalLabel => 'Total:';
+
+  @override
+  String get perDayLabel => 'Per day:';
+
+  @override
+  String get invalidCurrency => 'Invalid currency';
+
+  @override
+  String get lastUpdateInfo => 'Last update info';
 }

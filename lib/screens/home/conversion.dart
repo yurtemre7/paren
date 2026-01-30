@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:paren/components/calculator_keyboard.dart';
 import 'package:paren/components/currency_changer_row.dart';
+import 'package:paren/l10n/app_localizations_extension.dart';
 import 'package:paren/providers/extensions.dart';
 import 'package:paren/providers/paren.dart';
 import 'package:share_plus/share_plus.dart';
@@ -189,6 +190,7 @@ class _ConversionState extends State<Conversion> {
     String inputStr,
     String amountStr,
   ) {
+    var l10n = context.l10n;
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -219,7 +221,7 @@ class _ConversionState extends State<Conversion> {
                     );
                   }
                 },
-                tooltip: 'Favorite',
+                tooltip: l10n.favorite,
               ),
               IconButton(
                 icon: FaIcon(
@@ -231,7 +233,7 @@ class _ConversionState extends State<Conversion> {
                     ShareParams(text: '$inputStr ➜ $amountStr'),
                   );
                 },
-                tooltip: 'Share',
+                tooltip: l10n.share,
               ),
               IconButton(
                 icon: FaIcon(
@@ -246,7 +248,7 @@ class _ConversionState extends State<Conversion> {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       content: Text(
-                        '$inputStr ➜ $amountStr was copied to the clipboard',
+                        l10n.copiedToClipboard('$inputStr ➜ $amountStr'),
                         style: TextStyle(
                           color: context.theme.colorScheme.primary,
                         ),
@@ -257,7 +259,7 @@ class _ConversionState extends State<Conversion> {
                     ),
                   );
                 },
-                tooltip: 'Copy',
+                tooltip: l10n.copy,
               ),
             ],
           ),
@@ -269,7 +271,7 @@ class _ConversionState extends State<Conversion> {
             ).push(StupidSimpleSheetRoute(child: buildTextSizeAdjustSheet()));
             paren.saveSettings();
           },
-          tooltip: 'Adjust Sizes',
+          tooltip: l10n.adjustSizes,
           icon: FaIcon(
             FontAwesomeIcons.textHeight,
             color: context.theme.colorScheme.primary,
@@ -280,6 +282,7 @@ class _ConversionState extends State<Conversion> {
   }
 
   Widget buildTextSizeAdjustSheet() {
+    var l10n = context.l10n;
     return Material(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadiusGeometry.vertical(top: Radius.circular(20)),
@@ -292,7 +295,7 @@ class _ConversionState extends State<Conversion> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Adjust Sizes',
+                l10n.adjustSizes,
                 style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                   fontWeight: FontWeight.bold,
                 ),
@@ -301,8 +304,8 @@ class _ConversionState extends State<Conversion> {
               Row(
                 mainAxisAlignment: .spaceBetween,
                 children: [
-                  const Text(
-                    'Primary Conversion',
+                  Text(
+                    l10n.primaryConversion,
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                   Text('${paren.conv1Size.value.toStringAsFixed(0)}px'),
@@ -324,8 +327,8 @@ class _ConversionState extends State<Conversion> {
               Row(
                 mainAxisAlignment: .spaceBetween,
                 children: [
-                  const Text(
-                    'Secondary Conversion',
+                  Text(
+                    l10n.secondaryConversion,
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                   Text('${paren.conv2Size.value.toStringAsFixed(0)}px'),
@@ -347,8 +350,8 @@ class _ConversionState extends State<Conversion> {
               Row(
                 mainAxisAlignment: .spaceBetween,
                 children: [
-                  const Text(
-                    'Calculator Input Height',
+                  Text(
+                    l10n.calculatorInputHeight,
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                   Text(

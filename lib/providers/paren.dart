@@ -304,6 +304,10 @@ class Paren extends GetxController {
     );
   }
 
+  void setLocale(Locale newLocale) {
+    Get.updateLocale(newLocale);
+  }
+
   Future<void> initFavorites() async {
     var favoritesJson = await sp.getStringList('favorites') ?? [];
     favorites.value = favoritesJson

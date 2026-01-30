@@ -6,7 +6,6 @@ import 'package:get/get.dart';
 import 'package:paren/components/budget_planner.dart';
 import 'package:paren/l10n/app_localizations.dart';
 import 'package:paren/l10n/app_localizations_extension.dart';
-import 'package:paren/providers/constants.dart';
 import 'package:paren/providers/extensions.dart';
 import 'package:paren/providers/paren.dart';
 import 'package:paren/components/exchart.dart';
@@ -33,11 +32,12 @@ class _CustomizationState extends State<Customization> {
 
   @override
   Widget build(BuildContext context) {
+    var l10n = context.l10n;
     return ListView(
       children: [
         buildCurrencyChartTile(),
         buildCurrencyData(),
-        buildSaveConversion(),
+        buildSavedConversion(),
         buildBudgetPlanner(),
         Divider(),
         buildAppThemeColorChanger(),
@@ -46,18 +46,22 @@ class _CustomizationState extends State<Customization> {
         Divider(),
         Settings(),
         16.h,
-        const Center(child: Text('Made in 🇩🇪 by Emre')),
+        Center(child: Text(l10n.madeInGermanyByEmre)),
         16.h,
       ],
     );
   }
 
   Widget buildCurrencyChartTile() {
+    var l10n = context.l10n;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: ListTile(
         title: Text(
-          '${paren.fromCurrency.toUpperCase()} - ${paren.toCurrency.toUpperCase()} exchange chart',
+          l10n.exchangeChart(
+            paren.fromCurrency.toUpperCase(),
+            paren.toCurrency.toUpperCase(),
+          ),
         ),
         trailing: FaIcon(
           FontAwesomeIcons.chartLine,
@@ -69,7 +73,7 @@ class _CustomizationState extends State<Customization> {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text(
-                  'Chart does not exist with this configuration.',
+                  l10n.chartDoesNotExist,
                   style: TextStyle(color: context.theme.colorScheme.primary),
                 ),
                 duration: const Duration(seconds: 1),
@@ -98,12 +102,13 @@ class _CustomizationState extends State<Customization> {
   }
 
   Widget buildCurrencyData() {
+    var l10n = context.l10n;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Column(
         children: [
           ListTile(
-            title: const Text('Quick Conversions'),
+            title: Text(l10n.quickConversions),
             onTap: () async {
               Get.back();
               var result = await Navigator.of(
@@ -129,11 +134,12 @@ class _CustomizationState extends State<Customization> {
     );
   }
 
-  Widget buildSaveConversion() {
+  Widget buildSavedConversion() {
+    var l10n = context.l10n;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: ListTile(
-        title: const Text('Saved Conversions'),
+        title: Text(l10n.savedConversions),
         trailing: FaIcon(
           FontAwesomeIcons.solidHeart,
           color: context.theme.colorScheme.primary,
@@ -153,10 +159,11 @@ class _CustomizationState extends State<Customization> {
   }
 
   Widget buildBudgetPlanner() {
+    var l10n = context.l10n;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: ListTile(
-        title: const Text('Budget Planner'),
+        title: Text(l10n.budgetPlanner),
         trailing: FaIcon(
           FontAwesomeIcons.moneyBill1,
           color: context.theme.colorScheme.primary,
@@ -172,10 +179,11 @@ class _CustomizationState extends State<Customization> {
   }
 
   Widget buildAppThemeColorChanger() {
+    var l10n = context.l10n;
     Future<void> showColorPickerDialog() async {
       await Get.dialog(
         AlertDialog(
-          title: const Text('Pick a color'),
+          title: Text(l10n.pickAColor),
           content: Obx(
             () => SingleChildScrollView(
               child: ColorPicker(
@@ -198,8 +206,8 @@ class _CustomizationState extends State<Customization> {
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
         child: Column(
           children: [
-            const Text(
-              'App Color & Theme',
+            Text(
+              l10n.appColorAndTheme,
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
             8.h,
@@ -234,7 +242,7 @@ class _CustomizationState extends State<Customization> {
                           ),
                           4.h,
                           Text(
-                            'App Color',
+                            l10n.appColor,
                             style: TextStyle(
                               fontSize: 12,
                               color: context.theme.colorScheme.onSurface,
@@ -262,23 +270,55 @@ class _CustomizationState extends State<Customization> {
                   fillColor: context.theme.colorScheme.primary,
                   color: context.theme.colorScheme.primary,
                   children: [
-                    ...themeOptions.map(
-                      (option) => Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 12,
-                          vertical: 6,
-                        ),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            FaIcon(option['icon'] as IconData, size: 20),
-                            4.h,
-                            Text(
-                              option['label'] as String,
-                              style: const TextStyle(fontSize: 12),
-                            ),
-                          ],
-                        ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 6,
+                      ),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          FaIcon(FontAwesomeIcons.mobileRetro, size: 20),
+                          4.h,
+                          Text(
+                            l10n.themeSystem,
+                            style: const TextStyle(fontSize: 12),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 6,
+                      ),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          FaIcon(FontAwesomeIcons.sun, size: 20),
+                          4.h,
+                          Text(
+                            l10n.themeLight,
+                            style: const TextStyle(fontSize: 12),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 6,
+                      ),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          FaIcon(FontAwesomeIcons.solidMoon, size: 20),
+                          4.h,
+                          Text(
+                            l10n.themeDark,
+                            style: const TextStyle(fontSize: 12),
+                          ),
+                        ],
                       ),
                     ),
                   ],
@@ -316,6 +356,8 @@ class _CustomizationState extends State<Customization> {
               onChanged: (newLocale) {
                 if (newLocale == null) return;
                 paren.currentAppLocale.value = newLocale;
+                paren.setLocale(newLocale);
+                paren.saveSettings();
               },
             ),
           ],

@@ -3,6 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:paren/classes/currency.dart';
+import 'package:paren/l10n/app_localizations_extension.dart';
 
 class QuickConversions extends StatelessWidget {
   final List<Currency> currencies;
@@ -26,7 +27,7 @@ class QuickConversions extends StatelessWidget {
           color: context.theme.colorScheme.primary,
         ),
         title: Text(
-          'Quick Conversions',
+          context.l10n.quickConversions,
           style: TextStyle(
             color: context.theme.colorScheme.primary,
             fontWeight: FontWeight.bold,

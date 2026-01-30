@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:paren/classes/currency.dart';
+import 'package:paren/l10n/app_localizations_extension.dart';
 import 'package:paren/providers/paren.dart';
 import 'package:stupid_simple_sheet/stupid_simple_sheet.dart';
 
@@ -210,6 +211,7 @@ class _CurrencyPickerSheetState extends State<CurrencyPickerSheet> {
 
   @override
   Widget build(BuildContext context) {
+    var l10n = context.l10n;
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -218,7 +220,7 @@ class _CurrencyPickerSheetState extends State<CurrencyPickerSheet> {
           color: context.theme.colorScheme.primary,
         ),
         title: Text(
-          'Select Currency',
+          l10n.selectCurrency,
           style: TextStyle(
             color: context.theme.colorScheme.primary,
             fontWeight: FontWeight.bold,
@@ -235,7 +237,7 @@ class _CurrencyPickerSheetState extends State<CurrencyPickerSheet> {
               TextField(
                 controller: _searchController,
                 decoration: InputDecoration(
-                  hintText: 'Search currency',
+                  hintText: l10n.searchCurrency,
                   prefixIcon: Icon(Icons.search),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
@@ -247,7 +249,7 @@ class _CurrencyPickerSheetState extends State<CurrencyPickerSheet> {
                   return Expanded(
                     child: Center(
                       child: Text(
-                        'No results found',
+                        l10n.noResultsFound,
                         style: TextStyle(
                           color: context.theme.colorScheme.primary,
                           fontSize: 16,

@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:paren/providers/extensions.dart';
 import 'package:paren/providers/paren.dart';
+import 'package:paren/l10n/app_localizations_extension.dart';
 
 class BudgetPlanner extends StatefulWidget {
   const BudgetPlanner({super.key});
@@ -75,7 +76,7 @@ class _BudgetPlannerState extends State<BudgetPlanner> {
               color: context.theme.colorScheme.primary,
             ),
             title: Text(
-              'Trip Budget',
+              context.l10n.tripBudget,
               style: TextStyle(
                 color: context.theme.colorScheme.primary,
                 fontWeight: FontWeight.bold,
@@ -96,7 +97,7 @@ class _BudgetPlannerState extends State<BudgetPlanner> {
                           Expanded(
                             child: ChoiceChip(
                               elevation: 1,
-                              label: const Text('Total Budget'),
+                              label: Text(context.l10n.totalBudget),
                               selected: !_isDailyMode.value,
                               labelStyle: TextStyle(
                                 color: !_isDailyMode.value
@@ -120,7 +121,7 @@ class _BudgetPlannerState extends State<BudgetPlanner> {
                           Expanded(
                             child: ChoiceChip(
                               elevation: 1,
-                              label: const Text('Per-Day Budget'),
+                              label: Text(context.l10n.perDayBudget),
                               selected: _isDailyMode.value,
                               labelStyle: TextStyle(
                                 color: _isDailyMode.value
@@ -150,8 +151,10 @@ class _BudgetPlannerState extends State<BudgetPlanner> {
                         keyboardType: TextInputType.number,
                         decoration: InputDecoration(
                           labelText: _isDailyMode.value
-                              ? 'Daily Budget (${paren.fromCurrency.value.toUpperCase()})'
-                              : 'Total Budget (${paren.fromCurrency.value.toUpperCase()})',
+                              ? context.l10n.dailyBudget(
+                                  paren.fromCurrency.value.toUpperCase(),
+                                )
+                              : '${context.l10n.totalBudget} (${paren.fromCurrency.value.toUpperCase()})',
                           border: const OutlineInputBorder(),
                         ),
                         onChanged: (_) => setState(() {}),
@@ -165,7 +168,7 @@ class _BudgetPlannerState extends State<BudgetPlanner> {
                       Center(
                         child: ElevatedButton.icon(
                           icon: FaIcon(FontAwesomeIcons.calendarDays),
-                          label: const Text('Select Trip Dates'),
+                          label: Text(context.l10n.selectTripDates),
                           onPressed: _pickTripDates,
                         ),
                       ),
@@ -173,7 +176,11 @@ class _BudgetPlannerState extends State<BudgetPlanner> {
                       if (_tripDates.value != null)
                         Center(
                           child: Text(
-                            '${DateFormat.yMd().format(_tripDates.value!.start)} - ${DateFormat.yMd().format(_tripDates.value!.end)} (${_tripDates.value!.duration.inDays} days)',
+                            context.l10n.tripDatesWithDuration(
+                              _tripDates.value!.duration.inDays,
+                              DateFormat.yMd().format(_tripDates.value!.end),
+                              DateFormat.yMd().format(_tripDates.value!.start),
+                            ),
                             textAlign: TextAlign.center,
                           ),
                         ),
@@ -183,13 +190,13 @@ class _BudgetPlannerState extends State<BudgetPlanner> {
                   if (!_isDailyMode.value) ...[
                     Center(
                       child: Text(
-                        'Total: ${currencyToFormatter.format(localBudget)} (${currencyFromFormatter.format(budget)})',
+                        '${context.l10n.totalLabel} ${currencyToFormatter.format(localBudget)} (${currencyFromFormatter.format(budget)})',
                         textAlign: TextAlign.center,
                       ),
                     ),
                     Center(
                       child: Text(
-                        'Per day: ${currencyToFormatter.format(perDay)} (${currencyFromFormatter.format(perDayFrom)})',
+                        '${context.l10n.perDayLabel} ${currencyToFormatter.format(perDay)} (${currencyFromFormatter.format(perDayFrom)})',
                         textAlign: TextAlign.center,
                       ),
                     ),
@@ -197,13 +204,13 @@ class _BudgetPlannerState extends State<BudgetPlanner> {
                     // Calculate from daily input
                     Center(
                       child: Text(
-                        'Daily: ${currencyToFormatter.format((double.tryParse(_dailyBudgetController.text) ?? 0) * toRate / fromRate)} (${currencyFromFormatter.format(double.tryParse(_dailyBudgetController.text) ?? 0)})',
+                        '${context.l10n.perDayLabel} ${currencyToFormatter.format((double.tryParse(_dailyBudgetController.text) ?? 0) * toRate / fromRate)} (${currencyFromFormatter.format(double.tryParse(_dailyBudgetController.text) ?? 0)})',
                         textAlign: TextAlign.center,
                       ),
                     ),
                     Center(
                       child: Text(
-                        'Total: ${currencyToFormatter.format(((double.tryParse(_dailyBudgetController.text) ?? 0) * effectiveDays) * toRate / fromRate)} (${currencyFromFormatter.format((double.tryParse(_dailyBudgetController.text) ?? 0) * effectiveDays)})',
+                        '${context.l10n.totalLabel} ${currencyToFormatter.format(((double.tryParse(_dailyBudgetController.text) ?? 0) * effectiveDays) * toRate / fromRate)} (${currencyFromFormatter.format((double.tryParse(_dailyBudgetController.text) ?? 0) * effectiveDays)})',
                         textAlign: TextAlign.center,
                       ),
                     ),

@@ -9,18 +9,24 @@ import 'package:paren/providers/constants.dart';
 import 'package:paren/providers/extensions.dart';
 import 'package:paren/providers/paren.dart';
 import 'package:stupid_simple_sheet/stupid_simple_sheet.dart';
+import 'package:paren/l10n/app_localizations_extension.dart';
 
 class ExChart extends StatefulWidget {
   final String idFrom;
   final int idxFrom;
   final String idTo;
   final int idxTo;
+  final Map<int, String>? localizedWeekdays;
+  final Map<int, String>? localizedMonths;
+
   const ExChart({
     super.key,
     required this.idFrom,
     required this.idxFrom,
     required this.idTo,
     required this.idxTo,
+    this.localizedWeekdays,
+    this.localizedMonths,
   });
 
   @override
@@ -198,14 +204,14 @@ class _ExChartState extends State<ExChart> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                'Select duration',
+                                context.l10n.selectDuration,
                                 style: Theme.of(context).textTheme.headlineSmall
                                     ?.copyWith(fontWeight: FontWeight.bold),
                               ),
                               ...localDurations.map((localDur) {
                                 return ListTile(
                                   title: Text(
-                                    '${localDur.inDays.toInt()} days',
+                                    '${localDur.inDays.toInt()} ${context.l10n.days}',
                                     style: TextStyle(
                                       color: localDuration.value == localDur
                                           ? context.theme.colorScheme.primary
@@ -229,7 +235,7 @@ class _ExChartState extends State<ExChart> {
                     ),
                   );
                 },
-                label: Text('${localDuration.value.inDays} days'),
+                label: Text('${localDuration.value.inDays} ${context.l10n.days}'),
                 icon: FaIcon(FontAwesomeIcons.calendar),
               ),
             ),
@@ -240,8 +246,8 @@ class _ExChartState extends State<ExChart> {
             return Center(
               child: Padding(
                 padding: const EdgeInsets.all(8),
-                child: const Text(
-                  'An error has occurred, please try later or contact me about this.',
+                child: Text(
+                  context.l10n.anErrorHasOccurred,
                   textAlign: TextAlign.center,
                 ),
               ),
@@ -272,10 +278,8 @@ class _ExChartState extends State<ExChart> {
                         icon: FaIcon(FontAwesomeIcons.circleQuestion),
                         color: context.theme.colorScheme.primary,
                       ),
-                      title: Text('Show simple prediction'),
-                      subtitle: Text(
-                        'This is just for fun, no financial advice.',
-                      ),
+                      title: Text(context.l10n.showSimplePrediction),
+                      subtitle: Text(context.l10n.predictionFunDisclaimer),
                       value: showPrediction.value,
                       onChanged: (value) {
                         showPrediction.value = value;
@@ -297,7 +301,7 @@ class _ExChartState extends State<ExChart> {
 
                         fetchChartData(localIdFrom.value, localIdTo.value);
                       },
-                      label: const Text('Swap'),
+                      label: Text(context.l10n.swap),
                       icon: FaIcon(FontAwesomeIcons.arrowRightArrowLeft),
                     ),
                   ],
@@ -313,19 +317,17 @@ class _ExChartState extends State<ExChart> {
 
   Widget buildPredictionInfoDialog() {
     return AlertDialog(
-      title: Text('How Predictions Work'),
+      title: Text(context.l10n.howPredictionsWork),
       content: SingleChildScrollView(
         child: Text(
-          'The prediction uses the last ${localDuration.value.inDays} days of data to estimate ${predictionDuration.value.inDays} days of future data. \n\n'
-          '• It follows the average daily trend from historical data.\n'
-          '• Adds realistic random fluctuations based on past volatility.\n'
-          '• Shorter historical data ➜ shorter predictions -> less accuracy.\n'
-          '• Longer historical data ➜ longer predictions -> higher accuracy.\n\n'
-          '⚠️ This is a simplified model. Real-world rates may vary significantly!',
+          context.l10n.predictionExplanation(
+            localDuration.value.inDays,
+            predictionDuration.value.inDays,
+          ),
           style: TextStyle(fontSize: 14),
         ),
       ),
-      actions: [TextButton(onPressed: Get.back, child: Text('OK'))],
+      actions: [TextButton(onPressed: Get.back, child: Text(context.l10n.ok))],
     );
   }
 
@@ -337,22 +339,31 @@ class _ExChartState extends State<ExChart> {
     if (localDuration.value == 90.days ||
         localDuration.value == 180.days ||
         localDuration.value == 365.days) {
+      // Use localized month abbreviations if available, otherwise fallback to English
+      var monthText = '';
       switch (date.month) {
         case DateTime.january:
-          text = const Text('JAN', style: style);
+          monthText = widget.localizedMonths?[DateTime.january] ?? 'JAN';
+          break;
         case DateTime.march:
-          text = const Text('MAR', style: style);
+          monthText = widget.localizedMonths?[DateTime.march] ?? 'MAR';
+          break;
         case DateTime.may:
-          text = const Text('MAY', style: style);
+          monthText = widget.localizedMonths?[DateTime.may] ?? 'MAY';
+          break;
         case DateTime.july:
-          text = const Text('JUL', style: style);
+          monthText = widget.localizedMonths?[DateTime.july] ?? 'JUL';
+          break;
         case DateTime.september:
-          text = const Text('SEP', style: style);
+          monthText = widget.localizedMonths?[DateTime.september] ?? 'SEP';
+          break;
         case DateTime.november:
-          text = const Text('NOV', style: style);
+          monthText = widget.localizedMonths?[DateTime.november] ?? 'NOV';
+          break;
         default:
-          text = const Text('', style: style);
+          monthText = '';
       }
+      text = Text(monthText, style: style);
     } else if (localDuration.value == 14.days ||
         localDuration.value == 30.days) {
       switch (date.weekday) {
@@ -360,6 +371,7 @@ class _ExChartState extends State<ExChart> {
           var month = date.month.toString().padLeft(2, '0');
           var day = date.day.toString().padLeft(2, '0');
           text = Text('$day/$month', style: style);
+          break;
         default:
           text = const Text('', style: style);
       }
@@ -367,8 +379,13 @@ class _ExChartState extends State<ExChart> {
       switch (date.weekday) {
         case 6 || 7:
           text = const Text('', style: style);
+          break;
         default:
-          text = Text(weekdayFromInt(date.weekday), style: style);
+          // Use localized weekday if available, otherwise fallback to the original function
+          String weekdayText =
+              widget.localizedWeekdays?[date.weekday] ??
+              weekdayFromInt(date.weekday);
+          text = Text(weekdayText, style: style);
       }
     } else {
       text = const Text('', style: style);

@@ -169,8 +169,8 @@ abstract class AppLocalizations {
   /// No description provided for @deleteSheetContent.
   ///
   /// In en, this message translates to:
-  /// **'Are you sure you want to delete your Sheet \"{name}\" containing {entryCount} entry{plural}?'**
-  String deleteSheetContent(Object entryCount, Object name, Object plural);
+  /// **'Are you sure you want to delete your Sheet \"{name}\" containing {entryCount, plural, =0 {0 entries} =1 {1 entry} other {{entryCount} entries}}?'**
+  String deleteSheetContent(num entryCount, Object name);
 
   /// No description provided for @confirm.
   ///
@@ -579,6 +579,286 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Maximum:'**
   String get maximum;
+
+  /// No description provided for @amountConvertedHeader.
+  ///
+  /// In en, this message translates to:
+  /// **'Amount ({currency}) / Converted ({convertedCurrency})'**
+  String amountConvertedHeader(Object convertedCurrency, Object currency);
+
+  /// No description provided for @themeSystem.
+  ///
+  /// In en, this message translates to:
+  /// **'System'**
+  String get themeSystem;
+
+  /// No description provided for @themeLight.
+  ///
+  /// In en, this message translates to:
+  /// **'Light'**
+  String get themeLight;
+
+  /// No description provided for @themeDark.
+  ///
+  /// In en, this message translates to:
+  /// **'Dark'**
+  String get themeDark;
+
+  /// No description provided for @weekdayMon.
+  ///
+  /// In en, this message translates to:
+  /// **'MON'**
+  String get weekdayMon;
+
+  /// No description provided for @weekdayTue.
+  ///
+  /// In en, this message translates to:
+  /// **'TUE'**
+  String get weekdayTue;
+
+  /// No description provided for @weekdayWed.
+  ///
+  /// In en, this message translates to:
+  /// **'WED'**
+  String get weekdayWed;
+
+  /// No description provided for @weekdayThu.
+  ///
+  /// In en, this message translates to:
+  /// **'THU'**
+  String get weekdayThu;
+
+  /// No description provided for @weekdayFri.
+  ///
+  /// In en, this message translates to:
+  /// **'FRI'**
+  String get weekdayFri;
+
+  /// No description provided for @weekdaySat.
+  ///
+  /// In en, this message translates to:
+  /// **'SAT'**
+  String get weekdaySat;
+
+  /// No description provided for @weekdaySun.
+  ///
+  /// In en, this message translates to:
+  /// **'SUN'**
+  String get weekdaySun;
+
+  /// No description provided for @weekdayDay.
+  ///
+  /// In en, this message translates to:
+  /// **'DAY'**
+  String get weekdayDay;
+
+  /// No description provided for @monthJan.
+  ///
+  /// In en, this message translates to:
+  /// **'JAN'**
+  String get monthJan;
+
+  /// No description provided for @monthMar.
+  ///
+  /// In en, this message translates to:
+  /// **'MAR'**
+  String get monthMar;
+
+  /// No description provided for @monthMay.
+  ///
+  /// In en, this message translates to:
+  /// **'MAY'**
+  String get monthMay;
+
+  /// No description provided for @monthJul.
+  ///
+  /// In en, this message translates to:
+  /// **'JUL'**
+  String get monthJul;
+
+  /// No description provided for @monthSep.
+  ///
+  /// In en, this message translates to:
+  /// **'SEP'**
+  String get monthSep;
+
+  /// No description provided for @monthNov.
+  ///
+  /// In en, this message translates to:
+  /// **'NOV'**
+  String get monthNov;
+
+  /// No description provided for @tripBudget.
+  ///
+  /// In en, this message translates to:
+  /// **'Trip Budget'**
+  String get tripBudget;
+
+  /// No description provided for @totalBudget.
+  ///
+  /// In en, this message translates to:
+  /// **'Total Budget'**
+  String get totalBudget;
+
+  /// No description provided for @perDayBudget.
+  ///
+  /// In en, this message translates to:
+  /// **'Per-Day Budget'**
+  String get perDayBudget;
+
+  /// No description provided for @selectCurrency.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Currency'**
+  String get selectCurrency;
+
+  /// No description provided for @searchCurrency.
+  ///
+  /// In en, this message translates to:
+  /// **'Search currency'**
+  String get searchCurrency;
+
+  /// No description provided for @noResultsFound.
+  ///
+  /// In en, this message translates to:
+  /// **'No results found'**
+  String get noResultsFound;
+
+  /// No description provided for @editSheet.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Sheet'**
+  String get editSheet;
+
+  /// No description provided for @createNewSheet.
+  ///
+  /// In en, this message translates to:
+  /// **'Create New Sheet'**
+  String get createNewSheet;
+
+  /// No description provided for @sheetName.
+  ///
+  /// In en, this message translates to:
+  /// **'Sheet Name'**
+  String get sheetName;
+
+  /// No description provided for @enterSheetName.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a name for your sheet'**
+  String get enterSheetName;
+
+  /// No description provided for @updateSheet.
+  ///
+  /// In en, this message translates to:
+  /// **'Update Sheet'**
+  String get updateSheet;
+
+  /// No description provided for @createSheet.
+  ///
+  /// In en, this message translates to:
+  /// **'Create Sheet'**
+  String get createSheet;
+
+  /// No description provided for @noConversionsSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'No conversions saved yet.'**
+  String get noConversionsSaved;
+
+  /// No description provided for @selectDuration.
+  ///
+  /// In en, this message translates to:
+  /// **'Select duration'**
+  String get selectDuration;
+
+  /// No description provided for @days.
+  ///
+  /// In en, this message translates to:
+  /// **'days'**
+  String get days;
+
+  /// No description provided for @showSimplePrediction.
+  ///
+  /// In en, this message translates to:
+  /// **'Show simple prediction'**
+  String get showSimplePrediction;
+
+  /// No description provided for @predictionFunDisclaimer.
+  ///
+  /// In en, this message translates to:
+  /// **'This is just for fun, no financial advice.'**
+  String get predictionFunDisclaimer;
+
+  /// No description provided for @howPredictionsWork.
+  ///
+  /// In en, this message translates to:
+  /// **'How Predictions Work'**
+  String get howPredictionsWork;
+
+  /// No description provided for @predictionExplanation.
+  ///
+  /// In en, this message translates to:
+  /// **'The prediction uses the last {days} days of data to estimate {predictionDays} days of future data. \\n\\n• It follows the average daily trend from historical data.\\n• Adds realistic random fluctuations based on past volatility.\\n• Shorter historical data ➜ shorter predictions -> less accuracy.\\n• Longer historical data ➜ longer predictions -> higher accuracy.\\n\\n⚠️ This is a simplified model. Real-world rates may vary significantly!'**
+  String predictionExplanation(Object days, Object predictionDays);
+
+  /// No description provided for @ok.
+  ///
+  /// In en, this message translates to:
+  /// **'OK'**
+  String get ok;
+
+  /// No description provided for @swap.
+  ///
+  /// In en, this message translates to:
+  /// **'Swap'**
+  String get swap;
+
+  /// No description provided for @dailyBudget.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily Budget ({currency})'**
+  String dailyBudget(Object currency);
+
+  /// No description provided for @selectTripDates.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Trip Dates'**
+  String get selectTripDates;
+
+  /// No description provided for @tripDatesWithDuration.
+  ///
+  /// In en, this message translates to:
+  /// **'{startDate} - {endDate} ({duration} days)'**
+  String tripDatesWithDuration(
+    Object duration,
+    Object endDate,
+    Object startDate,
+  );
+
+  /// No description provided for @totalLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Total:'**
+  String get totalLabel;
+
+  /// No description provided for @perDayLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Per day:'**
+  String get perDayLabel;
+
+  /// No description provided for @invalidCurrency.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid currency'**
+  String get invalidCurrency;
+
+  /// No description provided for @lastUpdateInfo.
+  ///
+  /// In en, this message translates to:
+  /// **'Last update info'**
+  String get lastUpdateInfo;
 }
 
 class _AppLocalizationsDelegate

@@ -3,6 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:paren/classes/sheet.dart';
 import 'package:paren/components/sheet_form_bottom_sheet.dart';
+import 'package:paren/l10n/app_localizations_extension.dart';
 import 'package:paren/providers/paren.dart';
 import 'package:paren/screens/home/details/sheet_detail.dart';
 import 'package:stupid_simple_sheet/stupid_simple_sheet.dart';
@@ -22,6 +23,7 @@ class _SheetsState extends State<Sheets> {
 
   @override
   Widget build(BuildContext context) {
+    var l10n = context.l10n;
     return Obx(() {
       var filteredSheets = paren.sheets.where((sheet) {
         var searchText = searchController.text.toLowerCase();
@@ -46,7 +48,7 @@ class _SheetsState extends State<Sheets> {
                 child: TextField(
                   controller: searchController,
                   decoration: InputDecoration(
-                    labelText: 'Search Sheets',
+                    labelText: l10n.searchSheets,
                     prefixIcon: Icon(Icons.search),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8.0),
@@ -73,7 +75,7 @@ class _SheetsState extends State<Sheets> {
                         onPressed: () {
                           isEditing.toggle();
                         },
-                        child: Text(isEditing.value ? 'Save' : 'Edit'),
+                        child: Text(isEditing.value ? l10n.save : l10n.edit),
                       ),
                       TextButton(
                         onPressed: () {
@@ -81,7 +83,7 @@ class _SheetsState extends State<Sheets> {
                           isSearching.toggle();
                         },
                         child: Text(
-                          isSearching.value ? 'Hide search' : 'Search',
+                          isSearching.value ? l10n.hideSearch : l10n.search,
                         ),
                       ),
                     ],
@@ -91,7 +93,7 @@ class _SheetsState extends State<Sheets> {
                     child: Padding(
                       padding: EdgeInsets.symmetric(horizontal: 8),
                       child: Text(
-                        '${filteredSheets.length} sheet${filteredSheets.length == 1 ? '' : 's'} found',
+                        l10n.sheetCount(filteredSheets.length),
                         style: TextStyle(
                           color: context.theme.colorScheme.secondary,
                         ),
@@ -124,9 +126,12 @@ class _SheetsState extends State<Sheets> {
                     confirmDismiss: (direction) {
                       return Get.dialog<bool>(
                         AlertDialog(
-                          title: Text('Delete Sheet'),
+                          title: Text(l10n.deleteSheetTitle),
                           content: Text(
-                            'Are you sure you want to delete your Sheet "${sheet.name}?" containing ${sheet.entries.length} Entr${sheet.entries.length == 1 ? 'y' : 'ies'}?',
+                            l10n.deleteSheetContent(
+                              sheet.entries.length,
+                              sheet.name,
+                            ),
                           ),
                           actions: [
                             OutlinedButton(
@@ -139,13 +144,13 @@ class _SheetsState extends State<Sheets> {
                               onPressed: () {
                                 Get.back(result: true);
                               },
-                              child: Text('Confirm'),
+                              child: Text(l10n.confirm),
                             ),
                             TextButton(
                               onPressed: () {
                                 Get.back(result: false);
                               },
-                              child: Text('Cancel'),
+                              child: Text(l10n.cancel),
                             ),
                           ],
                         ),
@@ -157,7 +162,7 @@ class _SheetsState extends State<Sheets> {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
                           content: Text(
-                            'Deleted "${sheet.name}"',
+                            l10n.deletedSheet(sheet.name),
                             style: TextStyle(
                               color: context.theme.colorScheme.primary,
                             ),
@@ -201,7 +206,7 @@ class _SheetsState extends State<Sheets> {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                               content: Text(
-                                'Updated "${res.name}"',
+                                l10n.updatedSheet(sheet.name),
                                 style: TextStyle(
                                   color: context.theme.colorScheme.primary,
                                 ),
@@ -222,7 +227,7 @@ class _SheetsState extends State<Sheets> {
               ),
             )
           else
-            Expanded(child: Center(child: Text('No sheets found'))),
+            Expanded(child: Center(child: Text(l10n.noSheetsFound))),
         ],
       );
     });

@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:paren/classes/sheet.dart';
 import 'package:paren/classes/sheet_entry.dart';
+import 'package:paren/l10n/app_localizations_extension.dart';
 import 'package:paren/providers/paren.dart';
 import 'package:paren/providers/extensions.dart';
 import 'package:stupid_simple_sheet/stupid_simple_sheet.dart';
@@ -264,6 +265,7 @@ class _SheetDetailState extends State<SheetDetail> {
 
   @override
   Widget build(BuildContext context) {
+    var l10n = context.l10n;
     return Obx(() {
       var sheet = paren.sheets.firstWhere(
         (s) => s.id == widget.sheet.id,
@@ -284,7 +286,7 @@ class _SheetDetailState extends State<SheetDetail> {
           actions: [
             IconButton(
               onPressed: () => _showEntryDialog(),
-              tooltip: 'Add Entry',
+              tooltip: l10n.addEntry,
               icon: const FaIcon(FontAwesomeIcons.plus),
               color: context.theme.colorScheme.primary,
             ),
@@ -305,7 +307,7 @@ class _SheetDetailState extends State<SheetDetail> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Sort it',
+                              l10n.sortIt,
                               style: Theme.of(context).textTheme.headlineSmall
                                   ?.copyWith(fontWeight: FontWeight.bold),
                             ),
@@ -320,7 +322,7 @@ class _SheetDetailState extends State<SheetDetail> {
                                   ),
                                 ),
                                 subtitle: sortingMode.value == sheetSorting
-                                    ? Text('Click again to reverse the sorting')
+                                    ? Text(l10n.clickAgainToReverse)
                                     : null,
                                 onTap: () {
                                   if (sortingMode.value == sheetSorting) {
@@ -340,7 +342,7 @@ class _SheetDetailState extends State<SheetDetail> {
                   ),
                 );
               },
-              tooltip: 'Sort by',
+              tooltip: l10n.sortBy,
               icon: FaIcon(
                 reversedSorting.value
                     ? FontAwesomeIcons.arrowDownWideShort
@@ -366,12 +368,15 @@ class _SheetDetailState extends State<SheetDetail> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      'Description',
+                      l10n.description,
                       style: Theme.of(context).textTheme.titleMedium,
                     ),
                     Flexible(
                       child: Text(
-                        'Amount (${widget.sheet.fromCurrency.toUpperCase()}) / Converted (${widget.sheet.toCurrency.toUpperCase()})',
+                        l10n.amountConvertedHeader(
+                          widget.sheet.fromCurrency.toUpperCase(),
+                          widget.sheet.toCurrency.toUpperCase(),
+                        ),
                         style: Theme.of(context).textTheme.titleMedium,
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -383,7 +388,7 @@ class _SheetDetailState extends State<SheetDetail> {
               // Table rows
               Expanded(
                 child: sheet.entries.isEmpty
-                    ? const Center(child: Text('No entries yet'))
+                    ? Center(child: Text(l10n.noEntriesYet))
                     : ListView.builder(
                         itemCount: sheet.entries.length,
                         itemBuilder: (context, index) {
@@ -476,7 +481,7 @@ class _SheetDetailState extends State<SheetDetail> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Statistics',
+                      l10n.statistics,
                       style: Theme.of(context).textTheme.titleMedium,
                     ),
                     8.h,
@@ -508,7 +513,7 @@ class _SheetDetailState extends State<SheetDetail> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text('Total:'),
+                                Text(l10n.total),
                                 Flexible(
                                   child: Text(
                                     sumStr,
@@ -522,7 +527,7 @@ class _SheetDetailState extends State<SheetDetail> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text('Average:'),
+                                Text(l10n.average),
                                 Flexible(
                                   child: Text(
                                     avgStr,
@@ -536,7 +541,7 @@ class _SheetDetailState extends State<SheetDetail> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text('Minimum:'),
+                                Text(l10n.minimum),
                                 Flexible(
                                   child: Text(
                                     minStr,
@@ -550,7 +555,7 @@ class _SheetDetailState extends State<SheetDetail> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text('Maximum:'),
+                                Text(l10n.maximum),
                                 Flexible(
                                   child: Text(
                                     maxStr,

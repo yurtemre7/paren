@@ -5,6 +5,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:paren/providers/paren.dart';
+import 'package:paren/l10n/app_localizations_extension.dart';
 
 class FavoritesScreen extends StatelessWidget {
   const FavoritesScreen({super.key});
@@ -21,7 +22,7 @@ class FavoritesScreen extends StatelessWidget {
           color: context.theme.colorScheme.primary,
         ),
         title: Text(
-          'Saved Conversions',
+          context.l10n.savedConversions,
           style: TextStyle(
             color: context.theme.colorScheme.primary,
             fontWeight: FontWeight.bold,
@@ -32,7 +33,7 @@ class FavoritesScreen extends StatelessWidget {
         var favorites = paren.favorites;
         var currencies = paren.currencies;
         if (favorites.isEmpty) {
-          return Center(child: Text('No conversions saved yet.'));
+          return Center(child: Text(context.l10n.noConversionsSaved));
         }
 
         return ReorderableListView.builder(
@@ -47,7 +48,7 @@ class FavoritesScreen extends StatelessWidget {
             );
 
             if (fromCurrency == null || toCurrency == null) {
-              return const ListTile(title: Text('Invalid currency'));
+              return ListTile(title: Text(context.l10n.invalidCurrency));
             }
 
             var numberFormatFrom = NumberFormat.simpleCurrency(

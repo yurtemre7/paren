@@ -8,6 +8,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:paren/classes/sheet.dart';
 import 'package:paren/components/sheet_form_bottom_sheet.dart';
+import 'package:paren/l10n/app_localizations_extension.dart';
 import 'package:paren/providers/constants.dart';
 import 'package:paren/providers/extensions.dart';
 import 'package:paren/providers/paren.dart';
@@ -73,6 +74,7 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     var width = MediaQuery.sizeOf(context).width;
+    var l10n = context.l10n;
     return Obx(
       () => GestureDetector(
         onTap: () {
@@ -128,11 +130,7 @@ class _HomeState extends State<Home> {
             body: SafeArea(
               child: Obx(() {
                 if (paren.currencies.isEmpty) {
-                  return const Center(
-                    child: Text(
-                      'Currencies is empty, an error must have occurred.',
-                    ),
-                  );
+                  return Center(child: Text(l10n.currenciesEmptyError));
                 }
 
                 if (width >= 1000) {
@@ -197,7 +195,7 @@ class _HomeState extends State<Home> {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
                           content: Text(
-                            'Created "${res.name}"',
+                            l10n.createdSheet(res.name),
                             style: TextStyle(
                               color: context.theme.colorScheme.primary,
                             ),
@@ -230,15 +228,15 @@ class _HomeState extends State<Home> {
                       NavigationDestination(
                         icon: FaIcon(FontAwesomeIcons.list),
                         selectedIcon: FaIcon(FontAwesomeIcons.listUl),
-                        label: 'Sheets',
+                        label: l10n.sheets,
                       ),
                       NavigationDestination(
                         icon: FaIcon(FontAwesomeIcons.calculator),
-                        label: 'Calculation',
+                        label: l10n.calculation,
                       ),
                       NavigationDestination(
                         icon: FaIcon(FontAwesomeIcons.gear),
-                        label: 'Settings',
+                        label: l10n.settings,
                       ),
                     ],
                   )
@@ -250,10 +248,11 @@ class _HomeState extends State<Home> {
   }
 
   Widget buildDataInfoSheet() {
+    var l10n = context.l10n;
     return AlertDialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       title: Text(
-        'From where do we fetch the data?',
+        l10n.fromWhereDoWeFetchData,
         style: TextStyle(
           color: context.theme.colorScheme.primary,
           fontWeight: FontWeight.bold,
@@ -266,10 +265,10 @@ class _HomeState extends State<Home> {
           children: [
             Text.rich(
               TextSpan(
-                text: 'We use the API provided from ',
+                text: l10n.weUseApiFrom,
                 children: [
                   TextSpan(
-                    text: 'Frankfurter',
+                    text: l10n.frankfurter,
                     recognizer: TapGestureRecognizer()
                       ..onTap = () {
                         launchUrl(Uri.parse('https://www.frankfurter.app/'));
@@ -279,12 +278,9 @@ class _HomeState extends State<Home> {
                       decoration: TextDecoration.underline,
                     ),
                   ),
+                  TextSpan(text: l10n.openSourceAndFree),
                   TextSpan(
-                    text:
-                        ' which is open source and free to use.\nIt gets its data from the ',
-                  ),
-                  TextSpan(
-                    text: 'European Central Bank',
+                    text: l10n.europeanCentralBank,
                     recognizer: TapGestureRecognizer()
                       ..onTap = () {
                         launchUrl(
@@ -298,13 +294,11 @@ class _HomeState extends State<Home> {
                       decoration: TextDecoration.underline,
                     ),
                   ),
+                  TextSpan(text: l10n.trustedSource),
                   TextSpan(
-                    text:
-                        ', which is a trusted source.\n\nAlso, we only need to fetch the data once a day, so the App only fetches it, if that duration has passed from the previous fetch. But you can force refresh by pulling from the top.\n\nTo update the values in the widgets, just simply open the app once that day.',
-                  ),
-                  TextSpan(
-                    text:
-                        '\n\nCurrencies last updated:\n${timestampToString(paren.latestTimestamp.value)}',
+                    text: l10n.currenciesLastUpdated(
+                      timestampToString(paren.latestTimestamp.value),
+                    ),
                     style: TextStyle(
                       color: context.theme.colorScheme.secondary,
                     ),

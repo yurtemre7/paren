@@ -51,8 +51,15 @@ class AppLocalizationsJa extends AppLocalizations {
   String get deleteSheetTitle => 'シートを削除';
 
   @override
-  String deleteSheetContent(Object entryCount, Object name, Object plural) {
-    return '本当にシート「$name」を削除しますか？$entryCount個のエントリ$pluralが含まれています。';
+  String deleteSheetContent(num entryCount, Object name) {
+    String _temp0 = intl.Intl.pluralLogic(
+      entryCount,
+      locale: localeName,
+      other: '$entryCount個のエントリ',
+      one: '1個のエントリ',
+      zero: '0個のエントリ',
+    );
+    return '本当にシート「$name」を削除しますか？$_temp0が含まれています。';
   }
 
   @override
@@ -283,4 +290,154 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get maximum => '最大:';
+
+  @override
+  String amountConvertedHeader(Object convertedCurrency, Object currency) {
+    return '金額 ($currency) / 換算後 ($convertedCurrency)';
+  }
+
+  @override
+  String get themeSystem => 'システム';
+
+  @override
+  String get themeLight => 'ライト';
+
+  @override
+  String get themeDark => 'ダーク';
+
+  @override
+  String get weekdayMon => '月';
+
+  @override
+  String get weekdayTue => '火';
+
+  @override
+  String get weekdayWed => '水';
+
+  @override
+  String get weekdayThu => '木';
+
+  @override
+  String get weekdayFri => '金';
+
+  @override
+  String get weekdaySat => '土';
+
+  @override
+  String get weekdaySun => '日';
+
+  @override
+  String get weekdayDay => '曜日';
+
+  @override
+  String get monthJan => '1月';
+
+  @override
+  String get monthMar => '3月';
+
+  @override
+  String get monthMay => '5月';
+
+  @override
+  String get monthJul => '7月';
+
+  @override
+  String get monthSep => '9月';
+
+  @override
+  String get monthNov => '11月';
+
+  @override
+  String get tripBudget => '旅行予算';
+
+  @override
+  String get totalBudget => '総予算';
+
+  @override
+  String get perDayBudget => '1日あたりの予算';
+
+  @override
+  String get selectCurrency => '通貨を選択';
+
+  @override
+  String get searchCurrency => '通貨を検索';
+
+  @override
+  String get noResultsFound => '結果が見つかりません';
+
+  @override
+  String get editSheet => 'シートを編集';
+
+  @override
+  String get createNewSheet => '新しいシートを作成';
+
+  @override
+  String get sheetName => 'シート名';
+
+  @override
+  String get enterSheetName => 'シートの名前を入力してください';
+
+  @override
+  String get updateSheet => 'シートを更新';
+
+  @override
+  String get createSheet => 'シートを作成';
+
+  @override
+  String get noConversionsSaved => 'まだ変換が保存されていません。';
+
+  @override
+  String get selectDuration => '期間を選択';
+
+  @override
+  String get days => '日';
+
+  @override
+  String get showSimplePrediction => '簡単な予測を表示';
+
+  @override
+  String get predictionFunDisclaimer => 'これは単なる楽しみであり、金融アドバイスではありません。';
+
+  @override
+  String get howPredictionsWork => '予測の仕組み';
+
+  @override
+  String predictionExplanation(Object days, Object predictionDays) {
+    return '予測は過去$days日間のデータを使用して、今後$predictionDays日間のデータを推定します。 \\n\\n• 歴史的データからの平均的な日々の傾向に従います。\\n• 過去のボラティリティに基づいた現実的なランダム変動を追加します。\\n• 短い履歴データ ➜ 短い予測 -> 精度が低くなります。\\n• 長い履歴データ ➜ 長い予測 -> 精度が高くなります。\\n\\n⚠️ これは簡略化されたモデルです。実際のレートは大きく異なる可能性があります！';
+  }
+
+  @override
+  String get ok => 'OK';
+
+  @override
+  String get swap => '交換';
+
+  @override
+  String dailyBudget(Object currency) {
+    return '1日あたりの予算 ($currency)';
+  }
+
+  @override
+  String get selectTripDates => '旅行日を選択';
+
+  @override
+  String tripDatesWithDuration(
+    Object duration,
+    Object endDate,
+    Object startDate,
+  ) {
+    return '$startDate - $endDate ($duration 日)';
+  }
+
+  @override
+  String get totalLabel => '合計:';
+
+  @override
+  String get perDayLabel => '1日あたり:';
+
+  @override
+  String get invalidCurrency => '無効な通貨';
+
+  @override
+  String get lastUpdateInfo => '最終更新情報';
 }

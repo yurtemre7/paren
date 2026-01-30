@@ -51,8 +51,15 @@ class AppLocalizationsDe extends AppLocalizations {
   String get deleteSheetTitle => 'Tabelle löschen';
 
   @override
-  String deleteSheetContent(Object entryCount, Object name, Object plural) {
-    return 'Möchten Sie Ihre Tabelle \"$name\" wirklich löschen? Sie enthält $entryCount Eintr$plural?';
+  String deleteSheetContent(num entryCount, Object name) {
+    String _temp0 = intl.Intl.pluralLogic(
+      entryCount,
+      locale: localeName,
+      other: '$entryCount Einträge',
+      one: '1 Eintrag',
+      zero: '0 Einträge',
+    );
+    return 'Möchten Sie Ihre Tabelle \"$name\" wirklich löschen? Sie enthält $_temp0?';
   }
 
   @override
@@ -287,4 +294,155 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get maximum => 'Maximum:';
+
+  @override
+  String amountConvertedHeader(Object convertedCurrency, Object currency) {
+    return 'Betrag ($currency) / Umgerechnet ($convertedCurrency)';
+  }
+
+  @override
+  String get themeSystem => 'System';
+
+  @override
+  String get themeLight => 'Hell';
+
+  @override
+  String get themeDark => 'Dunkel';
+
+  @override
+  String get weekdayMon => 'MO';
+
+  @override
+  String get weekdayTue => 'DI';
+
+  @override
+  String get weekdayWed => 'MI';
+
+  @override
+  String get weekdayThu => 'DO';
+
+  @override
+  String get weekdayFri => 'FR';
+
+  @override
+  String get weekdaySat => 'SA';
+
+  @override
+  String get weekdaySun => 'SO';
+
+  @override
+  String get weekdayDay => 'TAG';
+
+  @override
+  String get monthJan => 'JAN';
+
+  @override
+  String get monthMar => 'MRZ';
+
+  @override
+  String get monthMay => 'MAI';
+
+  @override
+  String get monthJul => 'JUL';
+
+  @override
+  String get monthSep => 'SEP';
+
+  @override
+  String get monthNov => 'NOV';
+
+  @override
+  String get tripBudget => 'Reisebudget';
+
+  @override
+  String get totalBudget => 'Gesamtbudget';
+
+  @override
+  String get perDayBudget => 'Tagesbudget';
+
+  @override
+  String get selectCurrency => 'Währung auswählen';
+
+  @override
+  String get searchCurrency => 'Währung suchen';
+
+  @override
+  String get noResultsFound => 'Keine Ergebnisse gefunden';
+
+  @override
+  String get editSheet => 'Tabelle bearbeiten';
+
+  @override
+  String get createNewSheet => 'Neue Tabelle erstellen';
+
+  @override
+  String get sheetName => 'Tabellenname';
+
+  @override
+  String get enterSheetName => 'Geben Sie einen Namen für Ihre Tabelle ein';
+
+  @override
+  String get updateSheet => 'Tabelle aktualisieren';
+
+  @override
+  String get createSheet => 'Tabelle erstellen';
+
+  @override
+  String get noConversionsSaved => 'Noch keine Umrechnungen gespeichert.';
+
+  @override
+  String get selectDuration => 'Dauer auswählen';
+
+  @override
+  String get days => 'Tage';
+
+  @override
+  String get showSimplePrediction => 'Einfache Vorhersage anzeigen';
+
+  @override
+  String get predictionFunDisclaimer =>
+      'Dies ist nur zum Spaß, keine Finanzberatung.';
+
+  @override
+  String get howPredictionsWork => 'So funktionieren Vorhersagen';
+
+  @override
+  String predictionExplanation(Object days, Object predictionDays) {
+    return 'Die Vorhersage verwendet die letzten $days Tage an Daten, um $predictionDays Tage zukünftiger Daten abzuschätzen. \\n\\n• Sie folgt dem durchschnittlichen täglichen Trend aus historischen Daten.\\n• Fügt realistische zufällige Schwankungen basierend auf vergangener Volatilität hinzu.\\n• Kürzere historische Daten ➜ kürzere Vorhersagen -> geringere Genauigkeit.\\n• Längere historische Daten ➜ längere Vorhersagen -> höhere Genauigkeit.\\n\\n⚠️ Dies ist ein vereinfachtes Modell. Reale Kurse können erheblich abweichen!';
+  }
+
+  @override
+  String get ok => 'OK';
+
+  @override
+  String get swap => 'Tauschen';
+
+  @override
+  String dailyBudget(Object currency) {
+    return 'Tagesbudget ($currency)';
+  }
+
+  @override
+  String get selectTripDates => 'Reisedaten auswählen';
+
+  @override
+  String tripDatesWithDuration(
+    Object duration,
+    Object endDate,
+    Object startDate,
+  ) {
+    return '$startDate - $endDate ($duration Tage)';
+  }
+
+  @override
+  String get totalLabel => 'Gesamt:';
+
+  @override
+  String get perDayLabel => 'Pro Tag:';
+
+  @override
+  String get invalidCurrency => 'Ungültige Währung';
+
+  @override
+  String get lastUpdateInfo => 'Letzte Aktualisierungsinformationen';
 }
