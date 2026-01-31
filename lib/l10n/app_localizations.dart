@@ -474,6 +474,18 @@ abstract class AppLocalizations {
   /// **'{text} was copied to the clipboard'**
   String copiedToClipboard(Object text);
 
+  /// No description provided for @add.
+  ///
+  /// In en, this message translates to:
+  /// **'Add'**
+  String get add;
+
+  /// No description provided for @update.
+  ///
+  /// In en, this message translates to:
+  /// **'Update'**
+  String get update;
+
   /// No description provided for @addEntry.
   ///
   /// In en, this message translates to:

@@ -64,6 +64,8 @@
   "secondaryConversion": "Secondary Conversion",
   "calculatorInputHeight": "Calculator Input Height",
   "copiedToClipboard": "{text} was copied to the clipboard",
+  "add": "Add",
+  "update": "Update",
   "addEntry": "Add Entry",
   "description": "Description",
   "amountInCurrency": "Amount in {currency}",

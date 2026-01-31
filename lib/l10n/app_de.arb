@@ -61,6 +61,8 @@
     "secondaryConversion": "Sekundäre Umrechnung",
     "calculatorInputHeight": "Taschenrechner Eingabehöhe",
     "copiedToClipboard": "{text} wurde in die Zwischenablage kopiert",
+    "add": "Hinzufügen",
+    "update": "Aktualisieren",
     "addEntry": "Eintrag hinzufügen",
     "description": "Beschreibung",
     "amountInCurrency": "Betrag in {currency}",

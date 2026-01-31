@@ -236,6 +236,12 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get add => 'Add';
+
+  @override
+  String get update => 'Update';
+
+  @override
   String get addEntry => 'Add Entry';
 
   @override

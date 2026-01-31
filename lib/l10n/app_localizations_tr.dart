@@ -234,6 +234,12 @@ class AppLocalizationsTr extends AppLocalizations {
   }
 
   @override
+  String get add => 'Ekle';
+
+  @override
+  String get update => 'Güncelle';
+
+  @override
   String get addEntry => 'Kayıt Ekle';
 
   @override

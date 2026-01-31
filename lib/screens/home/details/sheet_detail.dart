@@ -22,11 +22,12 @@ enum SheetSorting {
   abc,
   big;
 
-  String coolName() {
+  String coolName(BuildContext context) {
+    var l10n = context.l10n;
     return switch (this) {
-      abc => 'by name',
-      date => 'by date',
-      big => 'by amount',
+      abc => l10n.byName,
+      date => l10n.byDate,
+      big => l10n.byAmount,
     };
   }
 }
@@ -67,6 +68,7 @@ class _SheetDetailState extends State<SheetDetail> {
 
   // Show a bottom sheet for adding/editing an entry
   Future<void> _showEntryDialog({SheetEntry? entry}) async {
+    var l10n = context.l10n;
     var descriptionCtrl = TextEditingController(text: entry?.name ?? '');
     var amountCtrl = TextEditingController(
       text: entry?.amount.toString() ?? '',
@@ -95,22 +97,23 @@ class _SheetDetailState extends State<SheetDetail> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Add Entry',
+                  l10n.addEntry,
                   style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                     fontWeight: FontWeight.bold,
                   ),
                 ),
                 TextField(
                   controller: descriptionCtrl,
-                  decoration: const InputDecoration(labelText: 'Description'),
+                  decoration: InputDecoration(labelText: l10n.description),
                   autocorrect: false,
                 ),
                 TextField(
                   controller: amountCtrl,
                   keyboardType: TextInputType.numberWithOptions(decimal: true),
                   decoration: InputDecoration(
-                    labelText:
-                        'Amount in ${widget.sheet.fromCurrency.toUpperCase()}',
+                    labelText: l10n.amountInCurrency(
+                      widget.sheet.fromCurrency.toUpperCase(),
+                    ),
                   ),
                 ),
                 8.h,
@@ -139,18 +142,22 @@ class _SheetDetailState extends State<SheetDetail> {
                   },
                   readOnly: true,
                   decoration: InputDecoration(
-                    label: Text('Date'),
+                    label: Text(l10n.date),
                     suffixIcon: Icon(Icons.date_range),
                   ),
                 ),
                 if (entry != null) ...[
                   8.h,
                   Text(
-                    'Original Created: ${DateFormat('MMM. dd y').format(entry.createdAt)}',
+                    l10n.originalCreated(
+                      DateFormat('MMM. dd y').format(entry.createdAt),
+                    ),
                     style: Theme.of(context).textTheme.bodySmall,
                   ),
                   Text(
-                    'Updated: ${DateFormat('MMM. dd y, HH:mm').format(entry.updatedAt)}',
+                    l10n.updated(
+                      DateFormat('MMM. dd y, HH:mm').format(entry.updatedAt),
+                    ),
                     style: Theme.of(context).textTheme.bodySmall,
                   ),
                 ],
@@ -159,7 +166,7 @@ class _SheetDetailState extends State<SheetDetail> {
                   children: [
                     TextButton(
                       onPressed: () => Navigator.pop(context),
-                      child: const Text('Cancel'),
+                      child:  Text(l10n.cancel),
                     ),
                     12.w,
                     Expanded(
@@ -197,7 +204,7 @@ class _SheetDetailState extends State<SheetDetail> {
                             }
                           }
                         },
-                        child: Text(entry == null ? 'Add' : 'Update'),
+                        child: Text(entry == null ? l10n.add : l10n.update),
                       ),
                     ),
                   ],
@@ -314,7 +321,7 @@ class _SheetDetailState extends State<SheetDetail> {
                             ...SheetSorting.values.map((sheetSorting) {
                               return ListTile(
                                 title: Text(
-                                  sheetSorting.coolName(),
+                                  sheetSorting.coolName(context),
                                   style: TextStyle(
                                     color: sortingMode.value == sheetSorting
                                         ? context.theme.colorScheme.primary

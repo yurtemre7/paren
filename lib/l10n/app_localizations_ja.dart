@@ -232,6 +232,12 @@ class AppLocalizationsJa extends AppLocalizations {
   }
 
   @override
+  String get add => '追加';
+
+  @override
+  String get update => '更新';
+
+  @override
   String get addEntry => 'エントリ追加';
 
   @override

@@ -236,6 +236,12 @@ class AppLocalizationsDe extends AppLocalizations {
   }
 
   @override
+  String get add => 'Hinzufügen';
+
+  @override
+  String get update => 'Aktualisieren';
+
+  @override
   String get addEntry => 'Eintrag hinzufügen';
 
   @override

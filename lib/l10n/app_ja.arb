@@ -61,6 +61,8 @@
     "secondaryConversion": "二次変換",
     "calculatorInputHeight": "電卓入力高さ",
     "copiedToClipboard": "{text} をクリップボードにコピーしました",
+    "add": "追加",
+    "update": "更新",
     "addEntry": "エントリ追加",
     "description": "説明",
     "amountInCurrency": "{currency}での金額",

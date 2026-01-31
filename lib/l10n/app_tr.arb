@@ -64,6 +64,8 @@
   "secondaryConversion": "İkincil Dönüştürme",
   "calculatorInputHeight": "Hesap Makinesi Giriş Yüksekliği",
   "copiedToClipboard": "{text} panoya kopyalandı",
+  "add": "Ekle",
+  "update": "Güncelle",
   "addEntry": "Kayıt Ekle",
   "description": "Açıklama",
   "amountInCurrency": "{currency} cinsinden miktar",
