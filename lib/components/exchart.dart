@@ -342,7 +342,6 @@ class _ExChartState extends State<ExChart> {
         localDuration.value == 180.days ||
         localDuration.value == 365.days) {
       var size = MediaQuery.sizeOf(context);
-      
       var monthText = widget.localizedMonths?[date.month] ?? '?';
       if (size.width < 1000 && date.month % 2 == 0) {
         monthText = '';
