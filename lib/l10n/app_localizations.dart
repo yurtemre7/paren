@@ -660,11 +660,23 @@ abstract class AppLocalizations {
   /// **'JAN'**
   String get monthJan;
 
+  /// No description provided for @monthFeb.
+  ///
+  /// In en, this message translates to:
+  /// **'FEB'**
+  String get monthFeb;
+
   /// No description provided for @monthMar.
   ///
   /// In en, this message translates to:
   /// **'MAR'**
   String get monthMar;
+
+  /// No description provided for @monthApr.
+  ///
+  /// In en, this message translates to:
+  /// **'APR'**
+  String get monthApr;
 
   /// No description provided for @monthMay.
   ///
@@ -672,11 +684,23 @@ abstract class AppLocalizations {
   /// **'MAY'**
   String get monthMay;
 
+  /// No description provided for @monthJun.
+  ///
+  /// In en, this message translates to:
+  /// **'JUN'**
+  String get monthJun;
+
   /// No description provided for @monthJul.
   ///
   /// In en, this message translates to:
   /// **'JUL'**
   String get monthJul;
+
+  /// No description provided for @monthAug.
+  ///
+  /// In en, this message translates to:
+  /// **'AUG'**
+  String get monthAug;
 
   /// No description provided for @monthSep.
   ///
@@ -684,11 +708,23 @@ abstract class AppLocalizations {
   /// **'SEP'**
   String get monthSep;
 
+  /// No description provided for @monthOct.
+  ///
+  /// In en, this message translates to:
+  /// **'OCT'**
+  String get monthOct;
+
   /// No description provided for @monthNov.
   ///
   /// In en, this message translates to:
   /// **'NOV'**
   String get monthNov;
+
+  /// No description provided for @monthDec.
+  ///
+  /// In en, this message translates to:
+  /// **'DEC'**
+  String get monthDec;
 
   /// No description provided for @tripBudget.
   ///

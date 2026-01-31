@@ -341,29 +341,11 @@ class _ExChartState extends State<ExChart> {
     if (localDuration.value == 90.days ||
         localDuration.value == 180.days ||
         localDuration.value == 365.days) {
-      // Use localized month abbreviations if available, otherwise fallback to English
-      var monthText = '';
-      switch (date.month) {
-        case DateTime.january:
-          monthText = widget.localizedMonths?[DateTime.january] ?? 'JAN';
-          break;
-        case DateTime.march:
-          monthText = widget.localizedMonths?[DateTime.march] ?? 'MAR';
-          break;
-        case DateTime.may:
-          monthText = widget.localizedMonths?[DateTime.may] ?? 'MAY';
-          break;
-        case DateTime.july:
-          monthText = widget.localizedMonths?[DateTime.july] ?? 'JUL';
-          break;
-        case DateTime.september:
-          monthText = widget.localizedMonths?[DateTime.september] ?? 'SEP';
-          break;
-        case DateTime.november:
-          monthText = widget.localizedMonths?[DateTime.november] ?? 'NOV';
-          break;
-        default:
-          monthText = '';
+      var size = MediaQuery.sizeOf(context);
+      
+      var monthText = widget.localizedMonths?[date.month] ?? '?';
+      if (size.width < 1000 && date.month % 2 == 0) {
+        monthText = '';
       }
       text = Text(monthText, style: style);
     } else if (localDuration.value == 14.days ||
@@ -415,15 +397,21 @@ class _ExChartState extends State<ExChart> {
 
   LineChartData mainData() {
     double? getDateInterval() {
-      if (localDuration.value == 7.days) {
-        return Duration.millisecondsPerDay.toDouble();
-      } else if (localDuration.value == 30.days) {
-        return Duration.millisecondsPerDay.toDouble() * 7;
-      } else if (localDuration.value == 90.days ||
-          localDuration.value == 180.days) {
-        return Duration.millisecondsPerDay.toDouble() * 30;
-      }
-      return null;
+      const days7 = Duration(days: 7);
+      const days14 = Duration(days: 14);
+      const days30 = Duration(days: 30);
+      const days90 = Duration(days: 90);
+      const days180 = Duration(days: 180);
+      const days365 = Duration(days: 365);
+
+      var mspd = Duration.millisecondsPerDay.toDouble();
+
+      return switch (localDuration.value) {
+        days7 || days14 => mspd,
+        days30 => mspd * 7,
+        days90 || days180 || days365 => mspd * 30,
+        _ => null,
+      };
     }
 
     return LineChartData(

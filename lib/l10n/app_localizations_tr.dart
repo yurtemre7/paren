@@ -336,19 +336,37 @@ class AppLocalizationsTr extends AppLocalizations {
   String get monthJan => 'OCA';
 
   @override
+  String get monthFeb => 'ŞUB';
+
+  @override
   String get monthMar => 'MAR';
+
+  @override
+  String get monthApr => 'NİS';
 
   @override
   String get monthMay => 'MAY';
 
   @override
+  String get monthJun => 'HAZ';
+
+  @override
   String get monthJul => 'TEM';
+
+  @override
+  String get monthAug => 'AĞU';
 
   @override
   String get monthSep => 'EYL';
 
   @override
+  String get monthOct => 'EKİ';
+
+  @override
   String get monthNov => 'KAS';
+
+  @override
+  String get monthDec => 'ARA';
 
   @override
   String get tripBudget => 'Seyahat Bütçesi';

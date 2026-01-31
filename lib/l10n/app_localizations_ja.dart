@@ -333,19 +333,37 @@ class AppLocalizationsJa extends AppLocalizations {
   String get monthJan => '1月';
 
   @override
+  String get monthFeb => '2月';
+
+  @override
   String get monthMar => '3月';
+
+  @override
+  String get monthApr => '4月';
 
   @override
   String get monthMay => '5月';
 
   @override
+  String get monthJun => '6月';
+
+  @override
   String get monthJul => '7月';
+
+  @override
+  String get monthAug => '8月';
 
   @override
   String get monthSep => '9月';
 
   @override
+  String get monthOct => '10月';
+
+  @override
   String get monthNov => '11月';
+
+  @override
+  String get monthDec => '12月';
 
   @override
   String get tripBudget => '旅行予算';
