@@ -12,6 +12,10 @@ extension FullName on Locale {
       'ja' => '日本語',
       'de' => 'Deutsch',
       'tr' => 'Türkçe',
+      'zh' => '中文',
+      'fr' => 'Français',
+      'hi' => 'हिंदी',
+      'id' => 'Indonesia',
       _ => '',
     };
   }
