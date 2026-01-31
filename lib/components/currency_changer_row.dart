@@ -243,6 +243,7 @@ class _CurrencyPickerSheetState extends State<CurrencyPickerSheet> {
                     borderRadius: BorderRadius.circular(12),
                   ),
                 ),
+                autocorrect: false,
               ),
               Obx(() {
                 if (_filteredIndices.isEmpty) {
