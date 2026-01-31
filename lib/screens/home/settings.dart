@@ -44,10 +44,7 @@ class Settings extends StatelessWidget {
               SharePlus.instance.share(ShareParams(text: l10n.shareAppText));
             },
           ),
-          ListTile(
-            title: Text(l10n.contactFeedback),
-            subtitle: Text(l10n.contactFeedbackSubtitle),
-          ),
+
           ListTile(
             title: Text(l10n.licenses),
             subtitle: Text(l10n.licensesSubtitle),
@@ -72,6 +69,10 @@ class Settings extends StatelessWidget {
                 ),
               );
             },
+          ),
+          ListTile(
+            title: Text(l10n.contactFeedback),
+            subtitle: Text(l10n.contactFeedbackSubtitle),
           ),
           Padding(
             padding: EdgeInsets.only(top: 8),
