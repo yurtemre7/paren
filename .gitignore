@@ -52,3 +52,6 @@ ios/Runner.app.dSYM.zip
 android/pc-api-7086122894529242474-140-a0d4627c1575.json
 android/fastlane/
 android/build/reports/problems/problems-report.html
+
+# FVM Version Cache
+.fvm/
