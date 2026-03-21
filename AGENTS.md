@@ -1,7 +1,7 @@
 # AGENTS.md
 
 ## Project Summary
-- `paren` is a Flutter app for currency conversion and trip budgeting.
+- `paren` is a Flutter app for currency conversion, trip documenting, and trip budgeting.
 - The main app entrypoint is `lib/main.dart`.
 - Core UI lives under `lib/components/` and `lib/screens/`.
 - App state and shared logic live under `lib/providers/`.
@@ -9,6 +9,7 @@
 
 ## Working Agreements
 - Keep changes focused and minimal; preserve existing architecture and naming.
+- We use GetX as the state management solution, so .obs and Obx(() => Widget()), is your best friend.
 - Follow the existing Flutter and Dart style in nearby files.
 - Prefer `rg` for code search and `dart format` for formatting changed Dart files.
 - Do not edit generated files by hand unless the task explicitly requires it.
