@@ -114,6 +114,7 @@ class _CurrencyChangerRowState extends State<CurrencyChangerRow> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 12),
               child: IconButton.filledTonal(
+                key: const Key('swap_button'),
                 icon: FaIcon(FontAwesomeIcons.arrowRightArrowLeft),
                 onPressed: () {
                   _onSwap();
