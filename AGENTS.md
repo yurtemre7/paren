@@ -6,6 +6,7 @@
 - Core UI lives under `lib/components/` and `lib/screens/`.
 - App state and shared logic live under `lib/providers/`.
 - JSON-serializable data models live under `lib/classes/`.
+- For a broader feature and architecture overview, see `PROJECT.md`.
 
 ## Working Agreements
 - Keep changes focused and minimal; preserve existing architecture and naming.
