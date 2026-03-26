@@ -4,10 +4,10 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:paren/classes/sheet.dart';
 import 'package:paren/classes/sheet_entry.dart';
+import 'package:paren/components/adaptive_overlay.dart';
 import 'package:paren/l10n/app_localizations_extension.dart';
 import 'package:paren/providers/paren.dart';
 import 'package:paren/providers/extensions.dart';
-import 'package:stupid_simple_sheet/stupid_simple_sheet.dart';
 
 class SheetDetail extends StatefulWidget {
   final Sheet sheet;
@@ -82,7 +82,7 @@ class _SheetDetailState extends State<SheetDetail> {
     );
 
     await Navigator.of(context).push(
-      StupidSimpleSheetRoute(
+      adaptiveSheetRoute(
         originateAboveBottomViewInset: true,
         child: Material(
           shape: RoundedRectangleBorder(
@@ -166,7 +166,7 @@ class _SheetDetailState extends State<SheetDetail> {
                   children: [
                     TextButton(
                       onPressed: () => Navigator.pop(context),
-                      child:  Text(l10n.cancel),
+                      child: Text(l10n.cancel),
                     ),
                     12.w,
                     Expanded(
@@ -300,7 +300,7 @@ class _SheetDetailState extends State<SheetDetail> {
             IconButton(
               onPressed: () {
                 Navigator.of(context).push(
-                  StupidSimpleSheetRoute(
+                  adaptiveSheetRoute(
                     child: Material(
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadiusGeometry.vertical(

@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:paren/classes/sheet.dart';
+import 'package:paren/components/adaptive_overlay.dart';
 import 'package:paren/components/sheet_form_bottom_sheet.dart';
 import 'package:paren/l10n/app_localizations_extension.dart';
 import 'package:paren/providers/paren.dart';
 import 'package:paren/screens/home/details/sheet_detail.dart';
-import 'package:stupid_simple_sheet/stupid_simple_sheet.dart';
 
 class Sheets extends StatefulWidget {
   const Sheets({super.key});
@@ -126,6 +126,8 @@ class _SheetsState extends State<Sheets> {
                     confirmDismiss: (direction) {
                       return Get.dialog<bool>(
                         AlertDialog(
+                          constraints: adaptiveDialogConstraints(context),
+                          insetPadding: adaptiveDialogInsetPadding(context),
                           title: Text(l10n.deleteSheetTitle),
                           content: Text(
                             l10n.deleteSheetContent(
@@ -193,7 +195,7 @@ class _SheetsState extends State<Sheets> {
                         }
 
                         var res = await Navigator.of(context).push<Sheet>(
-                          StupidSimpleSheetRoute(
+                          adaptiveSheetRoute(
                             originateAboveBottomViewInset: true,
                             child: SheetFormBottomSheet(sheet: sheet),
                           ),

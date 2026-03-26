@@ -3,9 +3,9 @@ import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:paren/classes/currency.dart';
+import 'package:paren/components/adaptive_overlay.dart';
 import 'package:paren/l10n/app_localizations_extension.dart';
 import 'package:paren/providers/paren.dart';
-import 'package:stupid_simple_sheet/stupid_simple_sheet.dart';
 
 class CurrencyChangerRow extends StatefulWidget {
   const CurrencyChangerRow({super.key});
@@ -39,7 +39,7 @@ class _CurrencyChangerRowState extends State<CurrencyChangerRow> {
 
   Future<void> _showCurrencyPicker(bool isFrom) async {
     String? selected = await Navigator.of(context).push(
-      StupidSimpleSheetRoute(
+      adaptiveSheetRoute(
         originateAboveBottomViewInset: true,
         child: CurrencyPickerSheet(
           currencies: paren.currencies,

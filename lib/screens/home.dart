@@ -7,6 +7,7 @@ import 'package:flutter/widget_previews.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:paren/classes/sheet.dart';
+import 'package:paren/components/adaptive_overlay.dart';
 import 'package:paren/components/sheet_form_bottom_sheet.dart';
 import 'package:paren/l10n/app_localizations_extension.dart';
 import 'package:paren/providers/constants.dart';
@@ -16,7 +17,6 @@ import 'package:paren/screens/home/conversion.dart';
 import 'package:paren/screens/home/customization.dart';
 import 'package:paren/components/home_header.dart';
 import 'package:paren/screens/home/sheets.dart';
-import 'package:stupid_simple_sheet/stupid_simple_sheet.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 @Preview()
@@ -182,7 +182,7 @@ class _HomeState extends State<Home> {
                 return FloatingActionButton(
                   onPressed: () async {
                     var res = await Navigator.of(context).push<Sheet>(
-                      StupidSimpleSheetRoute(
+                      adaptiveSheetRoute(
                         originateAboveBottomViewInset: true,
                         child: const SheetFormBottomSheet(),
                       ),
@@ -250,6 +250,8 @@ class _HomeState extends State<Home> {
   Widget buildDataInfoSheet() {
     var l10n = context.l10n;
     return AlertDialog(
+      constraints: adaptiveDialogConstraints(context),
+      insetPadding: adaptiveDialogInsetPadding(context),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       title: Text(
         l10n.fromWhereDoWeFetchData,

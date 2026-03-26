@@ -3,6 +3,7 @@ import 'package:flutter/widget_previews.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:paren/components/adaptive_overlay.dart';
 import 'package:paren/components/budget_planner.dart';
 import 'package:paren/l10n/app_localizations.dart';
 import 'package:paren/l10n/app_localizations_extension.dart';
@@ -12,7 +13,6 @@ import 'package:paren/components/exchart.dart';
 import 'package:paren/components/favorites.dart';
 import 'package:paren/components/quick_conversions.dart';
 import 'package:paren/screens/home/settings.dart';
-import 'package:stupid_simple_sheet/stupid_simple_sheet.dart';
 
 @Preview()
 Widget HomePreview() {
@@ -83,7 +83,7 @@ class _CustomizationState extends State<Customization> {
             return;
           }
           await Navigator.of(context).push(
-            StupidSimpleSheetRoute(
+            adaptiveSheetRoute(
               child: ExChart(
                 idFrom: paren.fromCurrency.value,
                 idxFrom: paren.currencies.indexWhere(
@@ -136,7 +136,7 @@ class _CustomizationState extends State<Customization> {
               Get.back();
               var result = await Navigator.of(
                 context,
-              ).push(StupidSimpleSheetRoute(child: buildQuickConversions()));
+              ).push(adaptiveSheetRoute(child: buildQuickConversions()));
               if (result != null) {
                 paren.currencyTextInput.value = result.toString();
               }
@@ -171,7 +171,7 @@ class _CustomizationState extends State<Customization> {
           Get.back();
           await Navigator.of(
             context,
-          ).push(StupidSimpleSheetRoute(child: buildFavoriteSheet()));
+          ).push(adaptiveSheetRoute(child: buildFavoriteSheet()));
         },
       ),
     );
@@ -195,7 +195,7 @@ class _CustomizationState extends State<Customization> {
           Get.back();
           await Navigator.of(
             context,
-          ).push(StupidSimpleSheetRoute(child: const BudgetPlanner()));
+          ).push(adaptiveSheetRoute(child: const BudgetPlanner()));
         },
       ),
     );
@@ -206,6 +206,8 @@ class _CustomizationState extends State<Customization> {
     Future<void> showColorPickerDialog() async {
       await Get.dialog(
         AlertDialog(
+          constraints: adaptiveDialogConstraints(context),
+          insetPadding: adaptiveDialogInsetPadding(context),
           title: Text(l10n.pickAColor),
           content: Obx(
             () => SingleChildScrollView(

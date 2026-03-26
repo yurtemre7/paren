@@ -4,13 +4,13 @@ import 'package:flutter/widget_previews.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:paren/components/adaptive_overlay.dart';
 import 'package:paren/components/calculator_keyboard.dart';
 import 'package:paren/components/currency_changer_row.dart';
 import 'package:paren/l10n/app_localizations_extension.dart';
 import 'package:paren/providers/extensions.dart';
 import 'package:paren/providers/paren.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:stupid_simple_sheet/stupid_simple_sheet.dart';
 
 @Preview()
 Widget HomePreview() {
@@ -268,7 +268,7 @@ class _ConversionState extends State<Conversion> {
           onPressed: () async {
             await Navigator.of(
               context,
-            ).push(StupidSimpleSheetRoute(child: buildTextSizeAdjustSheet()));
+            ).push(adaptiveSheetRoute(child: buildTextSizeAdjustSheet()));
             paren.saveSettings();
           },
           tooltip: l10n.adjustSizes,

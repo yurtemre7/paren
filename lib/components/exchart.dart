@@ -5,10 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:paren/components/adaptive_overlay.dart';
 import 'package:paren/providers/constants.dart';
 import 'package:paren/providers/extensions.dart';
 import 'package:paren/providers/paren.dart';
-import 'package:stupid_simple_sheet/stupid_simple_sheet.dart';
 import 'package:paren/l10n/app_localizations_extension.dart';
 
 class ExChart extends StatefulWidget {
@@ -190,7 +190,7 @@ class _ExChartState extends State<ExChart> {
               child: TextButton.icon(
                 onPressed: () {
                   Navigator.of(context).push(
-                    StupidSimpleSheetRoute(
+                    adaptiveSheetRoute(
                       child: Material(
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadiusGeometry.vertical(
@@ -243,82 +243,87 @@ class _ExChartState extends State<ExChart> {
             ),
           ],
         ),
-        body: Obx(() {
-          if (hasError.value) {
-            return Center(
-              child: Padding(
-                padding: const EdgeInsets.all(8),
-                child: Text(
-                  context.l10n.anErrorHasOccurred,
-                  textAlign: TextAlign.center,
+        body: SafeArea(
+          top: false,
+          child: Obx(() {
+            if (hasError.value) {
+              return Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(8),
+                  child: Text(
+                    context.l10n.anErrorHasOccurred,
+                    textAlign: TextAlign.center,
+                  ),
                 ),
-              ),
-            );
-          }
+              );
+            }
 
-          return ListView(
-            padding: EdgeInsets.zero,
-            children: [
-              24.h,
-              Container(
-                margin: const EdgeInsets.only(right: 32),
-                constraints: BoxConstraints(maxHeight: context.height * 0.65),
-                child: AspectRatio(
-                  aspectRatio: 16 / 9,
-                  child: LineChart(mainData(), duration: 500.milliseconds),
+            return ListView(
+              padding: EdgeInsets.zero,
+              children: [
+                24.h,
+                Container(
+                  margin: const EdgeInsets.only(right: 32),
+                  constraints: BoxConstraints(maxHeight: context.height * 0.65),
+                  child: AspectRatio(
+                    aspectRatio: 16 / 9,
+                    child: LineChart(mainData(), duration: 500.milliseconds),
+                  ),
                 ),
-              ),
-              24.h,
-              Center(
-                child: Column(
-                  children: [
-                    SwitchListTile(
-                      secondary: IconButton(
-                        onPressed: () {
-                          Get.dialog(buildPredictionInfoDialog());
+                24.h,
+                Center(
+                  child: Column(
+                    children: [
+                      SwitchListTile(
+                        secondary: IconButton(
+                          onPressed: () {
+                            Get.dialog(buildPredictionInfoDialog());
+                          },
+                          icon: FaIcon(FontAwesomeIcons.circleQuestion),
+                          color: context.theme.colorScheme.primary,
+                        ),
+                        title: Text(context.l10n.showSimplePrediction),
+                        subtitle: Text(context.l10n.predictionFunDisclaimer),
+                        value: showPrediction.value,
+                        onChanged: (value) {
+                          showPrediction.value = value;
+                          fetchChartData(localIdFrom.value, localIdTo.value);
                         },
-                        icon: FaIcon(FontAwesomeIcons.circleQuestion),
-                        color: context.theme.colorScheme.primary,
+                        activeThumbColor: context.theme.colorScheme.primary,
                       ),
-                      title: Text(context.l10n.showSimplePrediction),
-                      subtitle: Text(context.l10n.predictionFunDisclaimer),
-                      value: showPrediction.value,
-                      onChanged: (value) {
-                        showPrediction.value = value;
-                        fetchChartData(localIdFrom.value, localIdTo.value);
-                      },
-                      activeThumbColor: context.theme.colorScheme.primary,
-                    ),
-                    8.h,
-                    OutlinedButton.icon(
-                      onPressed: () {
-                        if (isLoading.value) return;
-                        var temp = localIdFrom.value;
-                        localIdFrom.value = localIdTo.value;
-                        localIdTo.value = temp;
+                      8.h,
+                      OutlinedButton.icon(
+                        onPressed: () {
+                          if (isLoading.value) return;
+                          var temp = localIdFrom.value;
+                          localIdFrom.value = localIdTo.value;
+                          localIdTo.value = temp;
 
-                        var tempIdx = localIdxFrom.value;
-                        localIdxFrom.value = localIdxTo.value;
-                        localIdxTo.value = tempIdx;
+                          var tempIdx = localIdxFrom.value;
+                          localIdxFrom.value = localIdxTo.value;
+                          localIdxTo.value = tempIdx;
 
-                        fetchChartData(localIdFrom.value, localIdTo.value);
-                      },
-                      label: Text(context.l10n.swap),
-                      icon: FaIcon(FontAwesomeIcons.arrowRightArrowLeft),
-                    ),
-                  ],
+                          fetchChartData(localIdFrom.value, localIdTo.value);
+                        },
+                        label: Text(context.l10n.swap),
+                        icon: FaIcon(FontAwesomeIcons.arrowRightArrowLeft),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              24.h,
-            ],
-          );
-        }),
+                24.h,
+              ],
+            );
+          }),
+        ),
       ),
     );
   }
 
   Widget buildPredictionInfoDialog() {
     return AlertDialog(
+      constraints: adaptiveDialogConstraints(context),
+      insetPadding: adaptiveDialogInsetPadding(context),
       title: Text(context.l10n.howPredictionsWork),
       content: SingleChildScrollView(
         child: Text(

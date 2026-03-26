@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widget_previews.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:paren/components/adaptive_overlay.dart';
 import 'package:paren/l10n/app_localizations_extension.dart';
 import 'package:paren/providers/extensions.dart';
 import 'package:paren/providers/paren.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:stupid_simple_sheet/stupid_simple_sheet.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 @Preview()
@@ -55,7 +55,7 @@ class Settings extends StatelessWidget {
             ),
             onTap: () async {
               await Navigator.of(context).push(
-                StupidSimpleSheetRoute(
+                adaptiveSheetRoute(
                   child: LicensePage(
                     applicationName: 'Par円',
                     applicationIcon: Padding(
@@ -115,6 +115,8 @@ class Settings extends StatelessWidget {
         onLongPress: () {
           Get.dialog(
             AlertDialog(
+              constraints: adaptiveDialogConstraints(context),
+              insetPadding: adaptiveDialogInsetPadding(context),
               title: Text(l10n.deleteAppData),
               content: Text(l10n.deleteAppDataContent),
               actions: [
