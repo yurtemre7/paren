@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -34,9 +35,46 @@ enum SheetSorting {
 
 class _SheetDetailState extends State<SheetDetail> {
   final Paren paren = Get.find();
+  final _entryAmountFormatter = TextInputFormatter.withFunction((
+    oldValue,
+    newValue,
+  ) {
+    var normalized = newValue.text.replaceAll(',', '.');
+    if (normalized.isEmpty) {
+      return newValue.copyWith(text: '');
+    }
+
+    var isValid = RegExp(r'^\d*([.]\d{0,2})?$').hasMatch(normalized);
+    if (!isValid) {
+      return oldValue;
+    }
+
+    return newValue.copyWith(
+      text: normalized,
+      selection: TextSelection.collapsed(offset: normalized.length),
+    );
+  });
 
   final sortingMode = SheetSorting.date.obs;
   final reversedSorting = false.obs;
+
+  String _normalizeAmountInput(String value) {
+    var trimmed = value.trim().replaceAll(',', '.');
+    if (trimmed.startsWith('.')) {
+      return '0$trimmed';
+    }
+    return trimmed;
+  }
+
+  bool _isValidAmountInput(String value) {
+    var normalized = _normalizeAmountInput(value);
+    return RegExp(r'^\d+([.]\d{1,2})?$').hasMatch(normalized);
+  }
+
+  String _formatAmountInput(double amount) {
+    var fixed = amount.toStringAsFixed(2);
+    return fixed.replaceFirst(RegExp(r'\.?0+$'), '');
+  }
 
   // Format currency amounts based on the currency code
   String formatCurrencyAmount(double amount, String currencyCode) {
@@ -69,9 +107,10 @@ class _SheetDetailState extends State<SheetDetail> {
   // Show a bottom sheet for adding/editing an entry
   Future<void> _showEntryDialog({SheetEntry? entry}) async {
     var l10n = context.l10n;
+    var formKey = GlobalKey<FormState>();
     var descriptionCtrl = TextEditingController(text: entry?.name ?? '');
     var amountCtrl = TextEditingController(
-      text: entry?.amount.toString() ?? '',
+      text: entry != null ? _formatAmountInput(entry.amount) : '',
     );
 
     // Initialize date with existing entry date or current date
@@ -92,124 +131,162 @@ class _SheetDetailState extends State<SheetDetail> {
           ),
           child: Container(
             padding: const EdgeInsets.all(16.0),
-            child: Column(
-              mainAxisSize: .min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  l10n.addEntry,
-                  style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                TextField(
-                  controller: descriptionCtrl,
-                  decoration: InputDecoration(labelText: l10n.description),
-                  autocorrect: false,
-                ),
-                TextField(
-                  controller: amountCtrl,
-                  keyboardType: TextInputType.numberWithOptions(decimal: true),
-                  decoration: InputDecoration(
-                    labelText: l10n.amountInCurrency(
-                      widget.sheet.fromCurrency.toUpperCase(),
-                    ),
-                  ),
-                ),
-                8.h,
-                TextField(
-                  controller: dateCtrl,
-                  onTap: () async {
-                    var pickedDate = await showDatePicker(
-                      context: context,
-                      initialDate: selectedDate,
-                      firstDate: DateTime(2000),
-                      lastDate: DateTime.now().add(
-                        Duration(days: 365),
-                      ), // Allow future dates up to 1 year
-                    );
-                    if (pickedDate != null && context.mounted) {
-                      setState(() {
-                        selectedDate = DateTime(
-                          pickedDate.year,
-                          pickedDate.month,
-                          pickedDate.day,
-                          12,
-                        );
-                        dateCtrl.text = dateFormatter.format(selectedDate);
-                      });
-                    }
-                  },
-                  readOnly: true,
-                  decoration: InputDecoration(
-                    label: Text(l10n.date),
-                    suffixIcon: Icon(Icons.date_range),
-                  ),
-                ),
-                if (entry != null) ...[
-                  8.h,
+            child: Form(
+              key: formKey,
+              autovalidateMode: AutovalidateMode.onUserInteractionIfError,
+              child: Column(
+                mainAxisSize: .min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
                   Text(
-                    l10n.originalCreated(
-                      DateFormat('MMM. dd y').format(entry.createdAt),
+                    l10n.addEntry,
+                    style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                      fontWeight: FontWeight.bold,
                     ),
-                    style: Theme.of(context).textTheme.bodySmall,
                   ),
-                  Text(
-                    l10n.updated(
-                      DateFormat('MMM. dd y, HH:mm').format(entry.updatedAt),
-                    ),
-                    style: Theme.of(context).textTheme.bodySmall,
+                  TextFormField(
+                    controller: descriptionCtrl,
+                    decoration: InputDecoration(labelText: l10n.description),
+                    textInputAction: TextInputAction.next,
+                    validator: (value) {
+                      if ((value ?? '').trim().isEmpty) {
+                        return 'Enter a description';
+                      }
+                      return null;
+                    },
+                    autocorrect: false,
                   ),
-                ],
-                24.h,
-                Row(
-                  children: [
-                    TextButton(
-                      onPressed: () => Navigator.pop(context),
-                      child: Text(l10n.cancel),
+                  TextFormField(
+                    controller: amountCtrl,
+                    keyboardType: const TextInputType.numberWithOptions(
+                      decimal: true,
                     ),
-                    12.w,
-                    Expanded(
-                      child: ElevatedButton(
-                        onPressed: () {
-                          var desc = descriptionCtrl.text.trim();
-                          var amountStr = amountCtrl.text.trim().replaceAll(
-                            ',',
-                            '.',
-                          );
-
-                          if (desc.isNotEmpty && amountStr.isNotEmpty) {
-                            var amount = double.tryParse(amountStr);
-                            if (amount != null) {
-                              var newEntry = SheetEntry(
-                                id:
-                                    entry?.id ??
-                                    DateTime.now().millisecondsSinceEpoch
-                                        .toString(),
-                                name: desc,
-                                amount: amount,
-                                createdAt: selectedDate,
-                                updatedAt: DateTime.now(),
-                              );
-
-                              if (entry == null) {
-                                paren.addSheetEntry(widget.sheet.id, newEntry);
-                              } else {
-                                paren.updateSheetEntry(
-                                  widget.sheet.id,
-                                  newEntry,
-                                );
-                              }
-                              Navigator.pop(context);
-                            }
-                          }
-                        },
-                        child: Text(entry == null ? l10n.add : l10n.update),
+                    textInputAction: TextInputAction.done,
+                    inputFormatters: [_entryAmountFormatter],
+                    decoration: InputDecoration(
+                      labelText: l10n.amountInCurrency(
+                        widget.sheet.fromCurrency.toUpperCase(),
                       ),
+                      hintText: '0.00',
+                    ),
+                    validator: (value) {
+                      var rawValue = value ?? '';
+                      if (rawValue.trim().isEmpty) {
+                        return 'Enter an amount';
+                      }
+                      if (!_isValidAmountInput(rawValue)) {
+                        return 'Use a valid number with up to 2 decimals';
+                      }
+                      var amount = double.tryParse(
+                        _normalizeAmountInput(rawValue),
+                      );
+                      if (amount == null || amount <= 0) {
+                        return 'Enter an amount greater than 0';
+                      }
+                      return null;
+                    },
+                    onChanged: (value) {
+                      var normalized = _normalizeAmountInput(value);
+                      if (normalized != value) {
+                        amountCtrl.value = TextEditingValue(
+                          text: normalized,
+                          selection: TextSelection.collapsed(
+                            offset: normalized.length,
+                          ),
+                        );
+                      }
+                    },
+                  ),
+                  8.h,
+                  TextField(
+                    controller: dateCtrl,
+                    onTap: () async {
+                      var pickedDate = await showDatePicker(
+                        context: context,
+                        initialDate: selectedDate,
+                        firstDate: DateTime(2000),
+                        lastDate: DateTime.now().add(
+                          Duration(days: 365),
+                        ), // Allow future dates up to 1 year
+                      );
+                      if (pickedDate != null && context.mounted) {
+                        setState(() {
+                          selectedDate = DateTime(
+                            pickedDate.year,
+                            pickedDate.month,
+                            pickedDate.day,
+                            12,
+                          );
+                          dateCtrl.text = dateFormatter.format(selectedDate);
+                        });
+                      }
+                    },
+                    readOnly: true,
+                    decoration: InputDecoration(
+                      label: Text(l10n.date),
+                      suffixIcon: Icon(Icons.date_range),
+                    ),
+                  ),
+                  if (entry != null) ...[
+                    8.h,
+                    Text(
+                      l10n.originalCreated(
+                        DateFormat('MMM. dd y').format(entry.createdAt),
+                      ),
+                      style: Theme.of(context).textTheme.bodySmall,
+                    ),
+                    Text(
+                      l10n.updated(
+                        DateFormat('MMM. dd y, HH:mm').format(entry.updatedAt),
+                      ),
+                      style: Theme.of(context).textTheme.bodySmall,
                     ),
                   ],
-                ),
-              ],
+                  24.h,
+                  Row(
+                    children: [
+                      TextButton(
+                        onPressed: () => Navigator.pop(context),
+                        child: Text(l10n.cancel),
+                      ),
+                      12.w,
+                      Expanded(
+                        child: ElevatedButton(
+                          onPressed: () {
+                            if (!(formKey.currentState?.validate() ?? false)) {
+                              return;
+                            }
+
+                            var desc = descriptionCtrl.text.trim();
+                            var amount = double.parse(
+                              _normalizeAmountInput(amountCtrl.text),
+                            );
+
+                            var newEntry = SheetEntry(
+                              id:
+                                  entry?.id ??
+                                  DateTime.now().millisecondsSinceEpoch
+                                      .toString(),
+                              name: desc,
+                              amount: amount,
+                              createdAt: selectedDate,
+                              updatedAt: DateTime.now(),
+                            );
+
+                            if (entry == null) {
+                              paren.addSheetEntry(widget.sheet.id, newEntry);
+                            } else {
+                              paren.updateSheetEntry(widget.sheet.id, newEntry);
+                            }
+                            Navigator.pop(context);
+                          },
+                          child: Text(entry == null ? l10n.add : l10n.update),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
         ),
