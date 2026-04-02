@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -9,6 +11,7 @@ import 'package:paren/components/adaptive_overlay.dart';
 import 'package:paren/l10n/app_localizations_extension.dart';
 import 'package:paren/providers/paren.dart';
 import 'package:paren/providers/extensions.dart';
+import 'package:share_plus/share_plus.dart';
 
 class SheetDetail extends StatefulWidget {
   final Sheet sheet;
@@ -76,6 +79,20 @@ class _SheetDetailState extends State<SheetDetail> {
     return fixed.replaceFirst(RegExp(r'\.?0+$'), '');
   }
 
+  String _csvEscape(String value) {
+    return '"${value.replaceAll('"', '""')}"';
+  }
+
+  String _formatCsvAmount(double amount) => amount.toStringAsFixed(2);
+
+  String _csvFileName(String sheetName) {
+    var sanitized = sheetName
+        .trim()
+        .replaceAll(RegExp(r'[^\w\s-]'), '')
+        .replaceAll(RegExp(r'\s+'), '_');
+    return sanitized.isEmpty ? 'sheet_export.csv' : '$sanitized.csv';
+  }
+
   // Format currency amounts based on the currency code
   String formatCurrencyAmount(double amount, String currencyCode) {
     var numberFormat = NumberFormat.simpleCurrency(
@@ -102,6 +119,79 @@ class _SheetDetailState extends State<SheetDetail> {
     // Convert through EUR base rate
     var inEur = fromAmount / fromC.rate;
     return inEur * toC.rate;
+  }
+
+  String _buildCsvContent(Sheet sheet, List<SheetEntry> entries) {
+    var l10n = context.l10n;
+    var dateFormat = DateFormat('yyyy-MM-dd');
+    var stats = _calculateStats(entries);
+    var convertedStats = _calculateConvertedStats(entries);
+    var lines = <String>[
+      [
+        l10n.date,
+        l10n.description,
+        sheet.fromCurrency.toUpperCase(),
+        sheet.toCurrency.toUpperCase(),
+      ].map(_csvEscape).join(','),
+      ...entries.map((entry) {
+        var convertedAmount = calculateConvertedAmount(
+          entry.amount,
+          sheet.fromCurrency,
+          sheet.toCurrency,
+        );
+
+        return [
+          dateFormat.format(entry.createdAt),
+          entry.name,
+          _formatCsvAmount(entry.amount),
+          _formatCsvAmount(convertedAmount),
+        ].map(_csvEscape).join(',');
+      }),
+      '',
+      [
+        l10n.statistics,
+        sheet.fromCurrency.toUpperCase(),
+        sheet.toCurrency.toUpperCase(),
+      ].map(_csvEscape).join(','),
+      [
+        l10n.total,
+        _formatCsvAmount(stats['sum'] ?? 0.0),
+        _formatCsvAmount(convertedStats['sum'] ?? 0.0),
+      ].map(_csvEscape).join(','),
+      [
+        l10n.average,
+        _formatCsvAmount(stats['avg'] ?? 0.0),
+        _formatCsvAmount(convertedStats['avg'] ?? 0.0),
+      ].map(_csvEscape).join(','),
+      [
+        l10n.minimum,
+        _formatCsvAmount(stats['min'] ?? 0.0),
+        _formatCsvAmount(convertedStats['min'] ?? 0.0),
+      ].map(_csvEscape).join(','),
+      [
+        l10n.maximum,
+        _formatCsvAmount(stats['max'] ?? 0.0),
+        _formatCsvAmount(convertedStats['max'] ?? 0.0),
+      ].map(_csvEscape).join(','),
+    ];
+
+    return lines.join('\n');
+  }
+
+  Future<void> _exportSheetAsCsv(Sheet sheet) async {
+    var sortedEntries = sortBy(List<SheetEntry>.from(sheet.entries));
+    var csvContent = _buildCsvContent(sheet, sortedEntries);
+    var box = context.findRenderObject() as RenderBox?;
+
+    await SharePlus.instance.share(
+      ShareParams(
+        files: [XFile.fromData(utf8.encode(csvContent), mimeType: 'text/csv')],
+        fileNameOverrides: [_csvFileName(sheet.name)],
+        sharePositionOrigin: box == null
+            ? null
+            : box.localToGlobal(Offset.zero) & box.size,
+      ),
+    );
   }
 
   // Show a bottom sheet for adding/editing an entry
@@ -372,6 +462,12 @@ class _SheetDetailState extends State<SheetDetail> {
               onPressed: () => _showEntryDialog(),
               tooltip: l10n.addEntry,
               icon: const FaIcon(FontAwesomeIcons.plus),
+              color: context.theme.colorScheme.primary,
+            ),
+            IconButton(
+              onPressed: () => _exportSheetAsCsv(sheet),
+              tooltip: l10n.share,
+              icon: const FaIcon(FontAwesomeIcons.fileCsv),
               color: context.theme.colorScheme.primary,
             ),
             IconButton(
