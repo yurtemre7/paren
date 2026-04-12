@@ -33,6 +33,9 @@ class AppLocalizationsTr extends AppLocalizations {
   String get search => 'Ara';
 
   @override
+  String get all => 'Tümü';
+
+  @override
   String get hideSearch => 'Aramayı gizle';
 
   @override
@@ -244,6 +247,24 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get description => 'Açıklama';
+
+  @override
+  String get category => 'Kategori';
+
+  @override
+  String get categoryFood => 'Yemek';
+
+  @override
+  String get categoryTransport => 'Ulaşım';
+
+  @override
+  String get categoryHotel => 'Konaklama';
+
+  @override
+  String get categoryShopping => 'Alışveriş';
+
+  @override
+  String get categoryOther => 'Diğer';
 
   @override
   String amountInCurrency(Object currency) {

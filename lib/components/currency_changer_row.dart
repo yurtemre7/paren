@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:paren/classes/currency.dart';
 import 'package:paren/components/adaptive_overlay.dart';
 import 'package:paren/l10n/app_localizations_extension.dart';
+import 'package:paren/providers/constants.dart';
 import 'package:paren/providers/paren.dart';
 
 class CurrencyChangerRow extends StatefulWidget {
@@ -213,73 +214,76 @@ class _CurrencyPickerSheetState extends State<CurrencyPickerSheet> {
   @override
   Widget build(BuildContext context) {
     var l10n = context.l10n;
-    return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          onPressed: () => Get.back(),
-          icon: FaIcon(FontAwesomeIcons.xmark),
-          color: context.theme.colorScheme.primary,
-        ),
-        title: Text(
-          l10n.selectCurrency,
-          style: TextStyle(
+    return GestureDetector(
+      onTap: hideKeyboard,
+      child: Scaffold(
+        appBar: AppBar(
+          leading: IconButton(
+            onPressed: () => Get.back(),
+            icon: FaIcon(FontAwesomeIcons.xmark),
             color: context.theme.colorScheme.primary,
-            fontWeight: FontWeight.bold,
+          ),
+          title: Text(
+            l10n.selectCurrency,
+            style: TextStyle(
+              color: context.theme.colorScheme.primary,
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ),
-      ),
-      body: SafeArea(
-        child: Padding(
-          padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-          child: Column(
-            spacing: 8,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextField(
-                controller: _searchController,
-                decoration: InputDecoration(
-                  hintText: l10n.searchCurrency,
-                  prefixIcon: Icon(Icons.search),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
+        body: SafeArea(
+          child: Padding(
+            padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+            child: Column(
+              spacing: 8,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextField(
+                  controller: _searchController,
+                  decoration: InputDecoration(
+                    hintText: l10n.searchCurrency,
+                    prefixIcon: Icon(Icons.search),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
                   ),
+                  autocorrect: false,
                 ),
-                autocorrect: false,
-              ),
-              Obx(() {
-                if (_filteredIndices.isEmpty) {
-                  return Expanded(
-                    child: Center(
-                      child: Text(
-                        l10n.noResultsFound,
-                        style: TextStyle(
-                          color: context.theme.colorScheme.primary,
-                          fontSize: 16,
+                Obx(() {
+                  if (_filteredIndices.isEmpty) {
+                    return Expanded(
+                      child: Center(
+                        child: Text(
+                          l10n.noResultsFound,
+                          style: TextStyle(
+                            color: context.theme.colorScheme.primary,
+                            fontSize: 16,
+                          ),
                         ),
                       ),
+                    );
+                  }
+                  
+                  return Expanded(
+                    child: ListView.builder(
+                      itemCount: _filteredIndices.length,
+                      itemBuilder: (context, idx) {
+                        var i = _filteredIndices[idx];
+                        var currency = widget.currencies[i];
+                        return ListTile(
+                          title: Text(
+                            '${currency.id.toUpperCase()} (${currency.symbol})',
+                          ),
+                          subtitle: Text(currency.name),
+                          selected: currency.id == widget.initialCurrency,
+                          onTap: () => Navigator.of(context).pop(currency.id),
+                        );
+                      },
                     ),
                   );
-                }
-
-                return Expanded(
-                  child: ListView.builder(
-                    itemCount: _filteredIndices.length,
-                    itemBuilder: (context, idx) {
-                      var i = _filteredIndices[idx];
-                      var currency = widget.currencies[i];
-                      return ListTile(
-                        title: Text(
-                          '${currency.id.toUpperCase()} (${currency.symbol})',
-                        ),
-                        subtitle: Text(currency.name),
-                        selected: currency.id == widget.initialCurrency,
-                        onTap: () => Navigator.of(context).pop(currency.id),
-                      );
-                    },
-                  ),
-                );
-              }),
-            ],
+                }),
+              ],
+            ),
           ),
         ),
       ),

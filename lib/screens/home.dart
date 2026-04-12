@@ -77,9 +77,7 @@ class _HomeState extends State<Home> {
     var l10n = context.l10n;
     return Obx(
       () => GestureDetector(
-        onTap: () {
-          FocusScope.of(context).unfocus();
-        },
+        onTap: hideKeyboard,
         child: PopScope(
           canPop: false,
           onPopInvokedWithResult: (didPop, result) async {

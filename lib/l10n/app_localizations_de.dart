@@ -33,6 +33,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get search => 'Suchen';
 
   @override
+  String get all => 'Alle';
+
+  @override
   String get hideSearch => 'Suche ausblenden';
 
   @override
@@ -246,6 +249,24 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get description => 'Beschreibung';
+
+  @override
+  String get category => 'Kategorie';
+
+  @override
+  String get categoryFood => 'Essen';
+
+  @override
+  String get categoryTransport => 'Transport';
+
+  @override
+  String get categoryHotel => 'Unterkunft';
+
+  @override
+  String get categoryShopping => 'Einkaufen';
+
+  @override
+  String get categoryOther => 'Sonstiges';
 
   @override
   String amountInCurrency(Object currency) {

@@ -33,6 +33,9 @@ class AppLocalizationsId extends AppLocalizations {
   String get search => 'Cari';
 
   @override
+  String get all => 'Semua';
+
+  @override
   String get hideSearch => 'Sembunyikan pencarian';
 
   @override
@@ -246,6 +249,24 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get description => 'Deskripsi';
+
+  @override
+  String get category => 'Kategori';
+
+  @override
+  String get categoryFood => 'Makanan';
+
+  @override
+  String get categoryTransport => 'Transportasi';
+
+  @override
+  String get categoryHotel => 'Akomodasi';
+
+  @override
+  String get categoryShopping => 'Belanja';
+
+  @override
+  String get categoryOther => 'Lainnya';
 
   @override
   String amountInCurrency(Object currency) {

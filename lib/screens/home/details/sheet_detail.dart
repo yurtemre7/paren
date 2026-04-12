@@ -9,6 +9,7 @@ import 'package:paren/classes/sheet.dart';
 import 'package:paren/classes/sheet_entry.dart';
 import 'package:paren/components/adaptive_overlay.dart';
 import 'package:paren/l10n/app_localizations_extension.dart';
+import 'package:paren/providers/constants.dart';
 import 'package:paren/providers/paren.dart';
 import 'package:paren/providers/extensions.dart';
 import 'package:share_plus/share_plus.dart';
@@ -60,6 +61,7 @@ class _SheetDetailState extends State<SheetDetail> {
 
   final sortingMode = SheetSorting.date.obs;
   final reversedSorting = false.obs;
+  final selectedCategoryFilter = Rxn<SheetEntryCategory>();
 
   String _normalizeAmountInput(String value) {
     var trimmed = value.trim().replaceAll(',', '.');
@@ -84,6 +86,31 @@ class _SheetDetailState extends State<SheetDetail> {
   }
 
   String _formatCsvAmount(double amount) => amount.toStringAsFixed(2);
+
+  String _categoryLabel(SheetEntryCategory category) {
+    var l10n = context.l10n;
+    return switch (category) {
+      SheetEntryCategory.food => l10n.categoryFood,
+      SheetEntryCategory.transport => l10n.categoryTransport,
+      SheetEntryCategory.hotel => l10n.categoryHotel,
+      SheetEntryCategory.shopping => l10n.categoryShopping,
+      SheetEntryCategory.other => l10n.categoryOther,
+    };
+  }
+
+  String _categoryFilterLabel(SheetEntryCategory? category) {
+    return category == null ? context.l10n.all : _categoryLabel(category);
+  }
+
+  List<SheetEntry> _filterEntries(
+    List<SheetEntry> entries,
+    SheetEntryCategory? category,
+  ) {
+    if (category == null) {
+      return entries;
+    }
+    return entries.where((entry) => entry.category == category).toList();
+  }
 
   String _csvFileName(String sheetName) {
     var sanitized = sheetName
@@ -123,13 +150,14 @@ class _SheetDetailState extends State<SheetDetail> {
 
   String _buildCsvContent(Sheet sheet, List<SheetEntry> entries) {
     var l10n = context.l10n;
-    var dateFormat = DateFormat('yyyy-MM-dd');
+    var dateFormat = DateFormat('dd. MMMM yyyy');
     var stats = _calculateStats(entries);
     var convertedStats = _calculateConvertedStats(entries);
     var lines = <String>[
       [
         l10n.date,
         l10n.description,
+        l10n.category,
         sheet.fromCurrency.toUpperCase(),
         sheet.toCurrency.toUpperCase(),
       ].map(_csvEscape).join(','),
@@ -143,6 +171,7 @@ class _SheetDetailState extends State<SheetDetail> {
         return [
           dateFormat.format(entry.createdAt),
           entry.name,
+          _categoryLabel(entry.category),
           _formatCsvAmount(entry.amount),
           _formatCsvAmount(convertedAmount),
         ].map(_csvEscape).join(',');
@@ -197,6 +226,7 @@ class _SheetDetailState extends State<SheetDetail> {
   // Show a bottom sheet for adding/editing an entry
   Future<void> _showEntryDialog({SheetEntry? entry}) async {
     var l10n = context.l10n;
+    var theme = context.theme;
     var formKey = GlobalKey<FormState>();
     var descriptionCtrl = TextEditingController(text: entry?.name ?? '');
     var amountCtrl = TextEditingController(
@@ -205,7 +235,8 @@ class _SheetDetailState extends State<SheetDetail> {
 
     // Initialize date with existing entry date or current date
     var selectedDate = entry?.createdAt ?? DateTime.now();
-    var dateFormatter = DateFormat('yyyy-MM-dd');
+    var selectedCategory = (entry?.category ?? SheetEntryCategory.other).obs;
+    var dateFormatter = DateFormat('dd. MMMM yyyy');
     var dateCtrl = TextEditingController(
       text: dateFormatter.format(selectedDate),
     );
@@ -213,169 +244,227 @@ class _SheetDetailState extends State<SheetDetail> {
     await Navigator.of(context).push(
       adaptiveSheetRoute(
         originateAboveBottomViewInset: true,
-        child: Material(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadiusGeometry.vertical(
-              top: Radius.circular(20),
+        child: GestureDetector(
+          onTap: hideKeyboard,
+          child: Material(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadiusGeometry.vertical(
+                top: Radius.circular(20),
+              ),
             ),
-          ),
-          child: Container(
-            padding: const EdgeInsets.all(16.0),
-            child: Form(
-              key: formKey,
-              autovalidateMode: AutovalidateMode.onUserInteractionIfError,
-              child: Column(
-                mainAxisSize: .min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    l10n.addEntry,
-                    style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                      fontWeight: FontWeight.bold,
+            child: Container(
+              padding: const EdgeInsets.all(16.0),
+              child: Form(
+                key: formKey,
+                autovalidateMode: AutovalidateMode.onUserInteractionIfError,
+                child: Column(
+                  mainAxisSize: .min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      l10n.addEntry,
+                      style: Theme.of(context).textTheme.headlineSmall
+                          ?.copyWith(fontWeight: FontWeight.bold),
                     ),
-                  ),
-                  TextFormField(
-                    controller: descriptionCtrl,
-                    decoration: InputDecoration(labelText: l10n.description),
-                    textInputAction: TextInputAction.next,
-                    validator: (value) {
-                      if ((value ?? '').trim().isEmpty) {
-                        return 'Enter a description';
-                      }
-                      return null;
-                    },
-                    autocorrect: false,
-                  ),
-                  TextFormField(
-                    controller: amountCtrl,
-                    keyboardType: const TextInputType.numberWithOptions(
-                      decimal: true,
+                    TextFormField(
+                      controller: descriptionCtrl,
+                      decoration: InputDecoration(labelText: l10n.description),
+                      textInputAction: TextInputAction.next,
+                      validator: (value) {
+                        if ((value ?? '').trim().isEmpty) {
+                          return 'Enter a description';
+                        }
+                        return null;
+                      },
+                      autocorrect: false,
                     ),
-                    textInputAction: TextInputAction.done,
-                    inputFormatters: [_entryAmountFormatter],
-                    decoration: InputDecoration(
-                      labelText: l10n.amountInCurrency(
-                        widget.sheet.fromCurrency.toUpperCase(),
+                    TextFormField(
+                      controller: amountCtrl,
+                      keyboardType: const TextInputType.numberWithOptions(
+                        decimal: true,
                       ),
-                      hintText: '0.00',
-                    ),
-                    validator: (value) {
-                      var rawValue = value ?? '';
-                      if (rawValue.trim().isEmpty) {
-                        return 'Enter an amount';
-                      }
-                      if (!_isValidAmountInput(rawValue)) {
-                        return 'Use a valid number with up to 2 decimals';
-                      }
-                      var amount = double.tryParse(
-                        _normalizeAmountInput(rawValue),
-                      );
-                      if (amount == null || amount <= 0) {
-                        return 'Enter an amount greater than 0';
-                      }
-                      return null;
-                    },
-                    onChanged: (value) {
-                      var normalized = _normalizeAmountInput(value);
-                      if (normalized != value) {
-                        amountCtrl.value = TextEditingValue(
-                          text: normalized,
-                          selection: TextSelection.collapsed(
-                            offset: normalized.length,
-                          ),
+                      textInputAction: TextInputAction.done,
+                      inputFormatters: [_entryAmountFormatter],
+                      decoration: InputDecoration(
+                        labelText: l10n.amountInCurrency(
+                          widget.sheet.fromCurrency.toUpperCase(),
+                        ),
+                        hintText: '0.00',
+                      ),
+                      validator: (value) {
+                        var rawValue = value ?? '';
+                        if (rawValue.trim().isEmpty) {
+                          return 'Enter an amount';
+                        }
+                        if (!_isValidAmountInput(rawValue)) {
+                          return 'Use a valid number with up to 2 decimals';
+                        }
+                        var amount = double.tryParse(
+                          _normalizeAmountInput(rawValue),
                         );
-                      }
-                    },
-                  ),
-                  8.h,
-                  TextField(
-                    controller: dateCtrl,
-                    onTap: () async {
-                      var pickedDate = await showDatePicker(
-                        context: context,
-                        initialDate: selectedDate,
-                        firstDate: DateTime(2000),
-                        lastDate: DateTime.now().add(
-                          Duration(days: 365),
-                        ), // Allow future dates up to 1 year
-                      );
-                      if (pickedDate != null && context.mounted) {
-                        setState(() {
-                          selectedDate = DateTime(
-                            pickedDate.year,
-                            pickedDate.month,
-                            pickedDate.day,
-                            12,
+                        if (amount == null || amount <= 0) {
+                          return 'Enter an amount greater than 0';
+                        }
+                        return null;
+                      },
+                      onChanged: (value) {
+                        var normalized = _normalizeAmountInput(value);
+                        if (normalized != value) {
+                          amountCtrl.value = TextEditingValue(
+                            text: normalized,
+                            selection: TextSelection.collapsed(
+                              offset: normalized.length,
+                            ),
                           );
-                          dateCtrl.text = dateFormatter.format(selectedDate);
-                        });
-                      }
-                    },
-                    readOnly: true,
-                    decoration: InputDecoration(
-                      label: Text(l10n.date),
-                      suffixIcon: Icon(Icons.date_range),
+                        }
+                      },
                     ),
-                  ),
-                  if (entry != null) ...[
                     8.h,
                     Text(
-                      l10n.originalCreated(
-                        DateFormat('MMM. dd y').format(entry.createdAt),
+                      l10n.category,
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        fontWeight: FontWeight.w600,
                       ),
-                      style: Theme.of(context).textTheme.bodySmall,
                     ),
-                    Text(
-                      l10n.updated(
-                        DateFormat('MMM. dd y, HH:mm').format(entry.updatedAt),
+                    8.h,
+                    Obx(() {
+                      return Wrap(
+                        spacing: 8,
+                        runSpacing: 8,
+                        children: SheetEntryCategory.values.map((category) {
+                          var isSelected = selectedCategory.value == category;
+                          return RawChip(
+                            label: Text(_categoryLabel(category)),
+                            selected: isSelected,
+                            showCheckmark: false,
+                            onSelected: (_) {
+                              selectedCategory.value = category;
+                            },
+                            labelStyle: theme.textTheme.bodyMedium?.copyWith(
+                              color: isSelected
+                                  ? theme.colorScheme.onPrimaryContainer
+                                  : theme.colorScheme.onSurfaceVariant,
+                            ),
+                            backgroundColor:
+                                theme.colorScheme.surfaceContainerLow,
+                            selectedColor: theme.colorScheme.primaryContainer,
+                            side: BorderSide(
+                              color: isSelected
+                                  ? theme.colorScheme.primary.withValues(
+                                      alpha: 0.25,
+                                    )
+                                  : theme.colorScheme.outlineVariant,
+                            ),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 10,
+                              vertical: 8,
+                            ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(999),
+                            ),
+                          );
+                        }).toList(),
+                      );
+                    }),
+                    8.h,
+                    TextField(
+                      controller: dateCtrl,
+                      onTap: () async {
+                        var pickedDate = await showDatePicker(
+                          context: context,
+                          initialDate: selectedDate,
+                          firstDate: DateTime(2000),
+                          lastDate: DateTime.now().add(
+                            Duration(days: 365),
+                          ), // Allow future dates up to 1 year
+                        );
+                        if (pickedDate != null && context.mounted) {
+                          setState(() {
+                            selectedDate = DateTime(
+                              pickedDate.year,
+                              pickedDate.month,
+                              pickedDate.day,
+                              12,
+                            );
+                            dateCtrl.text = dateFormatter.format(selectedDate);
+                          });
+                        }
+                      },
+                      readOnly: true,
+                      decoration: InputDecoration(
+                        label: Text(l10n.date),
+                        suffixIcon: Icon(Icons.date_range),
                       ),
-                      style: Theme.of(context).textTheme.bodySmall,
                     ),
-                  ],
-                  24.h,
-                  Row(
-                    children: [
-                      TextButton(
-                        onPressed: () => Navigator.pop(context),
-                        child: Text(l10n.cancel),
-                      ),
-                      12.w,
-                      Expanded(
-                        child: ElevatedButton(
-                          onPressed: () {
-                            if (!(formKey.currentState?.validate() ?? false)) {
-                              return;
-                            }
-
-                            var desc = descriptionCtrl.text.trim();
-                            var amount = double.parse(
-                              _normalizeAmountInput(amountCtrl.text),
-                            );
-
-                            var newEntry = SheetEntry(
-                              id:
-                                  entry?.id ??
-                                  DateTime.now().millisecondsSinceEpoch
-                                      .toString(),
-                              name: desc,
-                              amount: amount,
-                              createdAt: selectedDate,
-                              updatedAt: DateTime.now(),
-                            );
-
-                            if (entry == null) {
-                              paren.addSheetEntry(widget.sheet.id, newEntry);
-                            } else {
-                              paren.updateSheetEntry(widget.sheet.id, newEntry);
-                            }
-                            Navigator.pop(context);
-                          },
-                          child: Text(entry == null ? l10n.add : l10n.update),
+                    if (entry != null) ...[
+                      8.h,
+                      Text(
+                        l10n.originalCreated(
+                          DateFormat(
+                            'dd. MMMM yyyy, HH:mm',
+                          ).format(entry.createdAt),
                         ),
+                        style: Theme.of(context).textTheme.bodySmall,
+                      ),
+                      Text(
+                        l10n.updated(
+                          DateFormat(
+                            'dd. MMMM yyyy, HH:mm',
+                          ).format(entry.updatedAt),
+                        ),
+                        style: Theme.of(context).textTheme.bodySmall,
                       ),
                     ],
-                  ),
-                ],
+                    24.h,
+                    Row(
+                      children: [
+                        TextButton(
+                          onPressed: () => Navigator.pop(context),
+                          child: Text(l10n.cancel),
+                        ),
+                        12.w,
+                        Expanded(
+                          child: ElevatedButton(
+                            onPressed: () {
+                              if (!(formKey.currentState?.validate() ??
+                                  false)) {
+                                return;
+                              }
+
+                              var desc = descriptionCtrl.text.trim();
+                              var amount = double.parse(
+                                _normalizeAmountInput(amountCtrl.text),
+                              );
+
+                              var newEntry = SheetEntry(
+                                id:
+                                    entry?.id ??
+                                    DateTime.now().millisecondsSinceEpoch
+                                        .toString(),
+                                name: desc,
+                                amount: amount,
+                                category: selectedCategory.value,
+                                createdAt: selectedDate,
+                                updatedAt: DateTime.now(),
+                              );
+
+                              if (entry == null) {
+                                paren.addSheetEntry(widget.sheet.id, newEntry);
+                              } else {
+                                paren.updateSheetEntry(
+                                  widget.sheet.id,
+                                  newEntry,
+                                );
+                              }
+                              Navigator.pop(context);
+                            },
+                            child: Text(entry == null ? l10n.add : l10n.update),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
@@ -446,8 +535,13 @@ class _SheetDetailState extends State<SheetDetail> {
         orElse: () => widget.sheet,
       );
 
-      var stats = _calculateStats(sheet.entries);
-      sortBy(sheet.entries);
+      var filteredEntries = _filterEntries(
+        sheet.entries,
+        selectedCategoryFilter.value,
+      );
+      var sortedEntries = sortBy(List<SheetEntry>.from(filteredEntries));
+      var stats = _calculateStats(sortedEntries);
+      var convertedStats = _calculateConvertedStats(sortedEntries);
 
       return Scaffold(
         appBar: AppBar(
@@ -564,15 +658,67 @@ class _SheetDetailState extends State<SheetDetail> {
                   ],
                 ),
               ),
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16.0,
+                  vertical: 12.0,
+                ),
+                child: Obx(() {
+                  var theme = context.theme;
+                  var filters = <SheetEntryCategory?>[
+                    null,
+                    ...SheetEntryCategory.values,
+                  ];
+                  return Row(
+                    children: filters.map((category) {
+                      var isSelected = selectedCategoryFilter.value == category;
+                      return Padding(
+                        padding: const EdgeInsets.only(right: 8.0),
+                        child: RawChip(
+                          label: Text(_categoryFilterLabel(category)),
+                          selected: isSelected,
+                          showCheckmark: false,
+                          onSelected: (_) {
+                            selectedCategoryFilter.value = category;
+                          },
+                          labelStyle: theme.textTheme.bodyMedium?.copyWith(
+                            color: isSelected
+                                ? theme.colorScheme.onPrimaryContainer
+                                : theme.colorScheme.onSurfaceVariant,
+                          ),
+                          backgroundColor:
+                              theme.colorScheme.surfaceContainerLow,
+                          selectedColor: theme.colorScheme.primaryContainer,
+                          side: BorderSide(
+                            color: isSelected
+                                ? theme.colorScheme.primary.withValues(
+                                    alpha: 0.25,
+                                  )
+                                : theme.colorScheme.outlineVariant,
+                          ),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 10,
+                            vertical: 8,
+                          ),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(999),
+                          ),
+                        ),
+                      );
+                    }).toList(),
+                  );
+                }),
+              ),
 
               // Table rows
               Expanded(
-                child: sheet.entries.isEmpty
+                child: sortedEntries.isEmpty
                     ? Center(child: Text(l10n.noEntriesYet))
                     : ListView.builder(
-                        itemCount: sheet.entries.length,
+                        itemCount: sortedEntries.length,
                         itemBuilder: (context, index) {
-                          var entry = sheet.entries[index];
+                          var entry = sortedEntries[index];
                           var convertedAmount = calculateConvertedAmount(
                             entry.amount,
                             widget.sheet.fromCurrency,
@@ -623,8 +769,21 @@ class _SheetDetailState extends State<SheetDetail> {
                                             ).textTheme.titleMedium,
                                           ),
                                           Text(
+                                            _categoryLabel(entry.category),
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodySmall
+                                                ?.copyWith(
+                                                  color: context
+                                                      .theme
+                                                      .colorScheme
+                                                      .primary,
+                                                  fontWeight: FontWeight.w600,
+                                                ),
+                                          ),
+                                          Text(
                                             DateFormat(
-                                              'MMM dd',
+                                              'dd. MMMM yyyy',
                                             ).format(entry.createdAt),
                                             style: Theme.of(
                                               context,
@@ -667,15 +826,6 @@ class _SheetDetailState extends State<SheetDetail> {
                     8.h,
                     Builder(
                       builder: (context) {
-                        var currentSheet = paren.sheets.firstWhere(
-                          (s) => s.id == widget.sheet.id,
-                          orElse: () => widget.sheet,
-                        );
-
-                        var convertedStats = _calculateConvertedStats(
-                          currentSheet.entries,
-                        );
-
                         var sumStr =
                             '${formatCurrencyAmount(stats['sum'] ?? 0.0, widget.sheet.fromCurrency)} / ${formatCurrencyAmount(convertedStats['sum'] ?? 0.0, widget.sheet.toCurrency)}';
 

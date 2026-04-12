@@ -33,6 +33,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get search => '検索';
 
   @override
+  String get all => 'すべて';
+
+  @override
   String get hideSearch => '検索を隠す';
 
   @override
@@ -242,6 +245,24 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get description => '説明';
+
+  @override
+  String get category => 'カテゴリ';
+
+  @override
+  String get categoryFood => '食事';
+
+  @override
+  String get categoryTransport => '交通';
+
+  @override
+  String get categoryHotel => '宿泊';
+
+  @override
+  String get categoryShopping => '買い物';
+
+  @override
+  String get categoryOther => 'その他';
 
   @override
   String amountInCurrency(Object currency) {

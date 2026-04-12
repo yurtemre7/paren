@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:paren/providers/constants.dart';
 import 'package:paren/providers/extensions.dart';
 import 'package:paren/providers/paren.dart';
 import 'package:paren/l10n/app_localizations_extension.dart';
@@ -64,9 +65,7 @@ class _BudgetPlannerState extends State<BudgetPlanner> {
         name: paren.fromCurrency.value.toUpperCase(),
       );
       return GestureDetector(
-        onTap: () {
-          FocusScope.of(context).unfocus();
-        },
+        onTap: hideKeyboard,
         child: Scaffold(
           resizeToAvoidBottomInset: false,
           appBar: AppBar(

@@ -33,6 +33,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get search => '搜索';
 
   @override
+  String get all => '全部';
+
+  @override
   String get hideSearch => '隐藏搜索';
 
   @override
@@ -240,6 +243,24 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get description => '描述';
+
+  @override
+  String get category => '类别';
+
+  @override
+  String get categoryFood => '餐饮';
+
+  @override
+  String get categoryTransport => '交通';
+
+  @override
+  String get categoryHotel => '住宿';
+
+  @override
+  String get categoryShopping => '购物';
+
+  @override
+  String get categoryOther => '其他';
 
   @override
   String amountInCurrency(Object currency) {

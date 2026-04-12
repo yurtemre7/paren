@@ -158,6 +158,12 @@ abstract class AppLocalizations {
   /// **'Search'**
   String get search;
 
+  /// No description provided for @all.
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get all;
+
   /// No description provided for @hideSearch.
   ///
   /// In en, this message translates to:
@@ -505,6 +511,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Description'**
   String get description;
+
+  /// No description provided for @category.
+  ///
+  /// In en, this message translates to:
+  /// **'Category'**
+  String get category;
+
+  /// No description provided for @categoryFood.
+  ///
+  /// In en, this message translates to:
+  /// **'Food'**
+  String get categoryFood;
+
+  /// No description provided for @categoryTransport.
+  ///
+  /// In en, this message translates to:
+  /// **'Transport'**
+  String get categoryTransport;
+
+  /// No description provided for @categoryHotel.
+  ///
+  /// In en, this message translates to:
+  /// **'Accommodation'**
+  String get categoryHotel;
+
+  /// No description provided for @categoryShopping.
+  ///
+  /// In en, this message translates to:
+  /// **'Shopping'**
+  String get categoryShopping;
+
+  /// No description provided for @categoryOther.
+  ///
+  /// In en, this message translates to:
+  /// **'Other'**
+  String get categoryOther;
 
   /// No description provided for @amountInCurrency.
   ///

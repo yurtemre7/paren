@@ -5,6 +5,7 @@ import 'package:paren/classes/sheet.dart';
 import 'package:paren/components/adaptive_overlay.dart';
 import 'package:paren/components/sheet_form_bottom_sheet.dart';
 import 'package:paren/l10n/app_localizations_extension.dart';
+import 'package:paren/providers/constants.dart';
 import 'package:paren/providers/paren.dart';
 import 'package:paren/screens/home/details/sheet_detail.dart';
 
@@ -79,7 +80,7 @@ class _SheetsState extends State<Sheets> {
                       ),
                       TextButton(
                         onPressed: () {
-                          FocusScope.of(context).unfocus();
+                          hideKeyboard();
                           isSearching.toggle();
                         },
                         child: Text(

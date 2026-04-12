@@ -33,6 +33,9 @@ class AppLocalizationsHi extends AppLocalizations {
   String get search => 'खोजें';
 
   @override
+  String get all => 'सभी';
+
+  @override
   String get hideSearch => 'खोज छिपाएं';
 
   @override
@@ -245,6 +248,24 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get description => 'विवरण';
+
+  @override
+  String get category => 'श्रेणी';
+
+  @override
+  String get categoryFood => 'भोजन';
+
+  @override
+  String get categoryTransport => 'परिवहन';
+
+  @override
+  String get categoryHotel => 'आवास';
+
+  @override
+  String get categoryShopping => 'खरीदारी';
+
+  @override
+  String get categoryOther => 'अन्य';
 
   @override
   String amountInCurrency(Object currency) {
