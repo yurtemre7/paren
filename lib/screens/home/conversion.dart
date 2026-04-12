@@ -31,7 +31,6 @@ class _ConversionState extends State<Conversion> {
   @override
   Widget build(BuildContext context) {
     return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
       mainAxisSize: MainAxisSize.min,
       children: [
         Expanded(
@@ -43,7 +42,7 @@ class _ConversionState extends State<Conversion> {
             child: SingleChildScrollView(
               physics: const AlwaysScrollableScrollPhysics(),
               child: Column(
-                children: [buildConvertTextField(), CurrencyChangerRow()],
+                children: [buildConversionField(), CurrencyChangerRow()],
               ),
             ),
           ),
@@ -54,9 +53,9 @@ class _ConversionState extends State<Conversion> {
     );
   }
 
-  Widget buildConvertTextField() {
+  Widget buildConversionField() {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
+      margin: .symmetric(horizontal: 16, vertical: 16),
       child: Column(
         children: [
           Obx(() {
@@ -108,7 +107,7 @@ class _ConversionState extends State<Conversion> {
                         inputStr,
                         style: TextStyle(
                           fontSize: paren.conv1Size.value,
-                          fontWeight: FontWeight.bold,
+                          fontWeight: FontWeight.w800,
                           color: context.theme.colorScheme.primary,
                         ),
                         textAlign: TextAlign.center,
@@ -117,7 +116,7 @@ class _ConversionState extends State<Conversion> {
                         '➜',
                         style: TextStyle(
                           fontSize: paren.conv1Size.value,
-                          fontWeight: FontWeight.bold,
+                          fontWeight: FontWeight.w800,
                           color: context.theme.colorScheme.primary,
                         ),
                         textAlign: TextAlign.center,
@@ -126,7 +125,7 @@ class _ConversionState extends State<Conversion> {
                         amountStr,
                         style: TextStyle(
                           fontSize: paren.conv1Size.value,
-                          fontWeight: FontWeight.bold,
+                          fontWeight: FontWeight.w800,
                           color: context.theme.colorScheme.primary,
                         ),
                         textAlign: TextAlign.center,
@@ -142,18 +141,20 @@ class _ConversionState extends State<Conversion> {
                         inputStrRe,
                         style: TextStyle(
                           fontSize: paren.conv2Size.value,
-                          fontWeight: FontWeight.bold,
+                          fontWeight: FontWeight.w800,
                           color: context.theme.colorScheme.primary.withValues(
                             alpha: 0.75,
                           ),
+                          height: 1.05,
                         ),
+
                         textAlign: TextAlign.center,
                       ),
                       Text(
                         '➜',
                         style: TextStyle(
                           fontSize: paren.conv2Size.value,
-                          fontWeight: FontWeight.bold,
+                          fontWeight: FontWeight.w800,
                           color: context.theme.colorScheme.primary.withValues(
                             alpha: 0.75,
                           ),
@@ -164,7 +165,7 @@ class _ConversionState extends State<Conversion> {
                         reAmountStr,
                         style: TextStyle(
                           fontSize: paren.conv2Size.value,
-                          fontWeight: FontWeight.bold,
+                          fontWeight: FontWeight.w800,
                           color: context.theme.colorScheme.primary.withValues(
                             alpha: 0.75,
                           ),

@@ -142,5 +142,8 @@
   "totalLabel": "कुल:",
   "perDayLabel": "प्रति दिन:",
   "invalidCurrency": "अमान्य मुद्रा",
-  "lastUpdateInfo": "अंतिम अपडेट जानकारी"
+  "lastUpdateInfo": "अंतिम अपडेट जानकारी",
+  "tapToChange": "बदलने के लिए टैप करें",
+  "fromLabel": "से",
+  "toLabel": "में"
 }

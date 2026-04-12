@@ -490,4 +490,13 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get lastUpdateInfo => 'अंतिम अपडेट जानकारी';
+
+  @override
+  String get tapToChange => 'बदलने के लिए टैप करें';
+
+  @override
+  String get fromLabel => 'से';
+
+  @override
+  String get toLabel => 'में';
 }

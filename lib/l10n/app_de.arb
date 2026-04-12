@@ -139,5 +139,8 @@
     "totalLabel": "Gesamt:",
     "perDayLabel": "Pro Tag:",
     "invalidCurrency": "Ungültige Währung",
-    "lastUpdateInfo": "Letzte Aktualisierungsinformationen"
+    "lastUpdateInfo": "Letzte Aktualisierungsinformationen",
+    "tapToChange": "Tippen zum Ändern",
+    "fromLabel": "Von",
+    "toLabel": "Nach"
 }

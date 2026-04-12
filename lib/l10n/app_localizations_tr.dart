@@ -489,4 +489,13 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get lastUpdateInfo => 'Son güncelleme bilgisi';
+
+  @override
+  String get tapToChange => 'Değiştirmek için dokun';
+
+  @override
+  String get fromLabel => 'Şundan';
+
+  @override
+  String get toLabel => 'Şuna';
 }

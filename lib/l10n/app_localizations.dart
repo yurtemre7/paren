@@ -959,6 +959,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Last update info'**
   String get lastUpdateInfo;
+
+  /// No description provided for @tapToChange.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap to change'**
+  String get tapToChange;
+
+  /// No description provided for @fromLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'From'**
+  String get fromLabel;
+
+  /// No description provided for @toLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'To'**
+  String get toLabel;
 }
 
 class _AppLocalizationsDelegate

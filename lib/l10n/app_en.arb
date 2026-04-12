@@ -142,5 +142,8 @@
   "totalLabel": "Total:",
   "perDayLabel": "Per day:",
   "invalidCurrency": "Invalid currency",
-  "lastUpdateInfo": "Last update info"
+  "lastUpdateInfo": "Last update info",
+  "tapToChange": "Tap to change",
+  "fromLabel": "From",
+  "toLabel": "To"
 }

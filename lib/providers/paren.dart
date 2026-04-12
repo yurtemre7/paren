@@ -31,8 +31,8 @@ class Paren extends GetxController {
   final conv1Size = 20.0.obs;
   final conv2Size = 16.0.obs;
   final convSizeRanges = (min: 14.0, max: 34.0);
-  final calculatorInputHeight = 250.0.obs;
-  final calculatorInputHeightRange = (min: 100.0, max: 350.0);
+  final calculatorInputHeight = 225.0.obs;
+  final calculatorInputHeightRange = (min: 175.0, max: 300.0);
 
   final favorites = <FavoriteConversion>[].obs;
   final sheets = <Sheet>[].obs;
@@ -59,7 +59,7 @@ class Paren extends GetxController {
     currentAppLocale.value = AppLocalizations.supportedLocales.first;
     conv1Size.value = 20.0;
     conv2Size.value = 16.0;
-    calculatorInputHeight.value = 250.0;
+    calculatorInputHeight.value = 225.0;
     clearFavorites();
     clearSheets();
   }
@@ -163,7 +163,7 @@ class Paren extends GetxController {
     var calculatorInputHeightValue = await sp.getDouble(
       'calculatorInputHeight',
     );
-    calculatorInputHeight.value = calculatorInputHeightValue ?? 250.0;
+    calculatorInputHeight.value = calculatorInputHeightValue ?? 225.0;
     if (calculatorInputHeight.value > calculatorInputHeightRange.max) {
       calculatorInputHeight.value = calculatorInputHeightRange.max;
     }
@@ -364,6 +364,23 @@ class Paren extends GetxController {
     var item = favorites.removeAt(oldIndex);
     favorites.insert(newIndex, item);
     await _saveFavorites();
+  }
+
+  Currency currencyById(String id) {
+    return currencies.firstWhere(
+      (currency) => currency.id == id,
+      orElse: () => currencies.first,
+    );
+  }
+
+  double convertValue(
+    double amount, {
+    required String fromId,
+    required String toId,
+  }) {
+    var from = currencyById(fromId);
+    var to = currencyById(toId);
+    return amount * to.rate / from.rate;
   }
 
   Future<void> initSheets() async {

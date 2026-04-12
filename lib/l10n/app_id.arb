@@ -142,5 +142,8 @@
   "totalLabel": "Total:",
   "perDayLabel": "Per hari:",
   "invalidCurrency": "Mata uang tidak valid",
-  "lastUpdateInfo": "Info pembaruan terakhir"
+  "lastUpdateInfo": "Info pembaruan terakhir",
+  "tapToChange": "Ketuk untuk mengubah",
+  "fromLabel": "Dari",
+  "toLabel": "Ke"
 }

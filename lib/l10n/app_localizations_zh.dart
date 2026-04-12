@@ -483,4 +483,13 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get lastUpdateInfo => '最后更新信息';
+
+  @override
+  String get tapToChange => '点击修改';
+
+  @override
+  String get fromLabel => '从';
+
+  @override
+  String get toLabel => '到';
 }

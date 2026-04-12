@@ -490,4 +490,13 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get lastUpdateInfo => 'Info pembaruan terakhir';
+
+  @override
+  String get tapToChange => 'Ketuk untuk mengubah';
+
+  @override
+  String get fromLabel => 'Dari';
+
+  @override
+  String get toLabel => 'Ke';
 }

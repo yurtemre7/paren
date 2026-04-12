@@ -491,4 +491,13 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get lastUpdateInfo => 'Dernières informations de mise à jour';
+
+  @override
+  String get tapToChange => 'Touchez pour modifier';
+
+  @override
+  String get fromLabel => 'De';
+
+  @override
+  String get toLabel => 'Vers';
 }

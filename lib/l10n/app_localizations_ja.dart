@@ -485,4 +485,13 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get lastUpdateInfo => '最終更新情報';
+
+  @override
+  String get tapToChange => 'タップして変更';
+
+  @override
+  String get fromLabel => '変換元';
+
+  @override
+  String get toLabel => '変換先';
 }

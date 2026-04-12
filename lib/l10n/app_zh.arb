@@ -142,5 +142,8 @@
   "totalLabel": "总计：",
   "perDayLabel": "每日：",
   "invalidCurrency": "无效货币",
-  "lastUpdateInfo": "最后更新信息"
+  "lastUpdateInfo": "最后更新信息",
+  "tapToChange": "点击修改",
+  "fromLabel": "从",
+  "toLabel": "到"
 }

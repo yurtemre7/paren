@@ -6,7 +6,6 @@ import 'package:get/get.dart';
 import 'package:paren/providers/extensions.dart';
 import 'package:paren/providers/paren.dart';
 
-/// Calculator-style numeric keyboard widget.
 class CalculatorKeyboard extends StatefulWidget {
   final RxString input;
 
@@ -22,14 +21,9 @@ class _CalculatorKeyboardState extends State<CalculatorKeyboard> {
 
   void _append(String value) {
     var text = widget.input.value;
-
-    // Limit total length to 25
     if (text.length >= 25) return;
-
-    // Only allow one '.'
     if (value == '.' && text.contains('.')) return;
 
-    // If '.' is first, prepend '0'
     if (value == '.' && text.isEmpty) {
       widget.input.value = '0.';
       return;
@@ -39,14 +33,12 @@ class _CalculatorKeyboardState extends State<CalculatorKeyboard> {
       return;
     }
 
-    // If already has '.', allow only 2 digits after it
     if (text.contains('.')) {
       int dotIndex = text.indexOf('.');
       int decimals = text.length - dotIndex - 1;
       if (dotIndex != -1 && decimals >= 2 && value != '.') return;
     }
 
-    // Remove leading zeros (but keep '0.' and '0')
     String newText = text + value;
     if (newText.startsWith('0') &&
         !newText.startsWith('0.') &&
@@ -55,9 +47,6 @@ class _CalculatorKeyboardState extends State<CalculatorKeyboard> {
     }
 
     widget.input.value = newText;
-
-    // print('input: $text');
-    // print('input.value: ${input.value}');
   }
 
   void _delete() {
@@ -69,34 +58,24 @@ class _CalculatorKeyboardState extends State<CalculatorKeyboard> {
         widget.input.value = text.substring(0, text.length - 1);
       }
     }
-    // print('input: $text');
-    // print('input.value: ${input.value}');
   }
 
   void _clear() {
     widget.input.value = '0';
   }
 
-  // Handle keyboard input
   void handleKeyEvent(KeyEvent event) {
     if (event is KeyDownEvent || event is KeyRepeatEvent) {
       var keyLabel = event.logicalKey.keyLabel;
 
-      // Handle number keys
       if (RegExp(r'^\d$').hasMatch(keyLabel)) {
         _append(keyLabel);
-      }
-      // Handle decimal point
-      else if (keyLabel == '.' || keyLabel == ',') {
+      } else if (keyLabel == '.' || keyLabel == ',') {
         _append('.');
-      }
-      // Handle backspace/delete
-      else if (event.logicalKey == LogicalKeyboardKey.backspace ||
+      } else if (event.logicalKey == LogicalKeyboardKey.backspace ||
           event.logicalKey == LogicalKeyboardKey.delete) {
         _delete();
-      }
-      // Handle escape to clear
-      else if (event.logicalKey == LogicalKeyboardKey.escape) {
+      } else if (event.logicalKey == LogicalKeyboardKey.escape) {
         _clear();
       }
     }
@@ -121,39 +100,53 @@ class _CalculatorKeyboardState extends State<CalculatorKeyboard> {
             constraints: BoxConstraints(
               maxWidth: paren.calculatorInputHeight.value,
             ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                SelectableText(
-                  widget.input.value,
-                  style: TextStyle(
-                    fontSize: 28,
-                    color: context.theme.colorScheme.onSurface,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                16.h,
-                GridView.count(
-                  crossAxisCount: 3,
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  mainAxisSpacing: 8,
-                  crossAxisSpacing: 8,
+            padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                color: context.theme.colorScheme.surfaceContainerHighest
+                    .withValues(alpha: 0.45),
+                borderRadius: BorderRadius.circular(24),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(14, 10, 14, 14),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
                   children: [
-                    for (var i = 1; i <= 9; i++)
-                      _CalcButton(label: '$i', onTap: () => _append('$i')),
-                    _CalcButton(label: '.', onTap: () => _append('.')),
-                    _CalcButton(label: '0', onTap: () => _append('0')),
-                    _CalcButton(
-                      label: '⌫',
-                      onTap: _delete,
-                      onLongPress: _clear,
-                      color: Theme.of(context).colorScheme.error,
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: SelectableText(
+                        widget.input.value,
+                        style: TextStyle(
+                          fontSize: 22,
+                          color: context.theme.colorScheme.onSurfaceVariant,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    ),
+                    10.h,
+                    GridView.count(
+                      crossAxisCount: 3,
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      mainAxisSpacing: 6,
+                      crossAxisSpacing: 6,
+                      childAspectRatio: 1.2,
+                      children: [
+                        for (var i = 1; i <= 9; i++)
+                          _CalcButton(label: '$i', onTap: () => _append('$i')),
+                        _CalcButton(label: '.', onTap: () => _append('.')),
+                        _CalcButton(label: '0', onTap: () => _append('0')),
+                        _CalcButton(
+                          label: '⌫',
+                          onTap: _delete,
+                          onLongPress: _clear,
+                          color: Theme.of(context).colorScheme.error,
+                        ),
+                      ],
                     ),
                   ],
                 ),
-                16.h,
-              ],
+              ),
             ),
           ),
         ),
@@ -217,32 +210,26 @@ class _CalcButtonState extends State<_CalcButton>
     return AnimatedBuilder(
       animation: _offsetAnimation,
       builder: (context, child) {
-        // Shake amplitude in pixels
-        const shakeAmount = 1.0;
-        // Sine wave for shake effect
-        double offsetX =
-            math.sin(_offsetAnimation.value * math.pi * 4) *
-            (1 - _offsetAnimation.value) *
-            shakeAmount;
-        return Transform.translate(offset: Offset(offsetX, 0), child: child);
+        const amplitude = 1.0;
+        double dx = math.sin(_offsetAnimation.value * math.pi * 5) * amplitude;
+        return Transform.translate(offset: Offset(dx, 0), child: child);
       },
       child: Material(
-        elevation: 1,
-        color: context.theme.colorScheme.secondaryContainer,
-        borderRadius: BorderRadius.circular(12),
+        color:
+            widget.color?.withValues(alpha: 0.16) ??
+            context.theme.colorScheme.surface,
+        borderRadius: BorderRadius.circular(18),
         child: InkWell(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(18),
           onTap: _onTap,
-          onLongPress: _onLongPress,
+          onLongPress: widget.onLongPress != null ? _onLongPress : null,
           child: Center(
             child: Text(
               widget.label,
               style: TextStyle(
-                fontSize: 18,
-                color:
-                    widget.color ??
-                    context.theme.colorScheme.onSecondaryContainer,
-                fontWeight: FontWeight.bold,
+                fontSize: 24,
+                fontWeight: FontWeight.w700,
+                color: widget.color ?? context.theme.colorScheme.onSurface,
               ),
             ),
           ),

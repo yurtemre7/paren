@@ -142,5 +142,8 @@
   "totalLabel": "Toplam:",
   "perDayLabel": "Günlük:",
   "invalidCurrency": "Geçersiz para birimi",
-  "lastUpdateInfo": "Son güncelleme bilgisi"
+  "lastUpdateInfo": "Son güncelleme bilgisi",
+  "tapToChange": "Değiştirmek için dokun",
+  "fromLabel": "Şundan",
+  "toLabel": "Şuna"
 }

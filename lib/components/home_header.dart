@@ -8,6 +8,7 @@ class HomeHeader extends StatelessWidget implements PreferredSizeWidget {
   final VoidCallback onForward;
   final VoidCallback onBackward;
   final int index;
+
   const HomeHeader({
     super.key,
     required this.onInfo,
@@ -20,32 +21,41 @@ class HomeHeader extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     var colorScheme = Theme.of(context).colorScheme;
     var width = MediaQuery.sizeOf(context).width;
+    var isDesktop = width >= 1000;
+
     return SafeArea(
+      bottom: false,
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-        child: Center(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              if (width >= 1000) ...[
-                buildEmptyIcon(colorScheme),
-                buildLogo(colorScheme),
-                buildInfoIconButton(context, colorScheme),
-              ] else ...[
-                if (index != 0)
-                  buildNavigateIconButtonBackward(colorScheme)
-                else
-                  buildEmptyIcon(colorScheme),
-                buildLogo(colorScheme),
-                if (index != 2)
-                  buildNavigateIconButtonForward(colorScheme)
-                else
-                  buildInfoIconButton(context, colorScheme),
-              ],
-            ],
-          ),
+        padding: const EdgeInsets.fromLTRB(12, 8, 12, 6),
+        child: Row(
+          children: [
+            SizedBox(
+              width: 52,
+              child: isDesktop
+                  ? buildEmptyIcon(colorScheme)
+                  : index != 0
+                  ? buildNavigateIconButtonBackward(colorScheme)
+                  : buildEmptyIcon(colorScheme),
+            ),
+            Expanded(child: buildHeroTitle(colorScheme)),
+            SizedBox(
+              width: 52,
+              child: isDesktop
+                  ? buildInfoIconButton(context, colorScheme)
+                  : index != 2
+                  ? buildNavigateIconButtonForward(colorScheme)
+                  : buildInfoIconButton(context, colorScheme),
+            ),
+          ],
         ),
       ),
+    );
+  }
+
+  Widget buildHeroTitle(ColorScheme colorScheme) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [buildLogo(colorScheme)],
     );
   }
 
@@ -53,57 +63,43 @@ class HomeHeader extends StatelessWidget implements PreferredSizeWidget {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        SizedBox(
-          height: 32,
-          child: Card(
-            color: colorScheme.primaryContainer,
-            elevation: 0,
-            margin: EdgeInsets.zero,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(12),
-                bottomLeft: Radius.circular(12),
-              ),
+        Container(
+          height: 28,
+          padding: const EdgeInsets.symmetric(horizontal: 6),
+          decoration: BoxDecoration(
+            color: colorScheme.primaryContainer.withValues(alpha: 0.65),
+            borderRadius: const BorderRadius.horizontal(
+              left: Radius.circular(10),
             ),
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 4),
-              child: Center(
-                child: Text(
-                  'Par',
-                  style: TextStyle(
-                    color: colorScheme.primary,
-                    fontWeight: FontWeight.bold,
-                    letterSpacing: 1.2,
-                  ),
-                ),
+          ),
+          child: Center(
+            child: Text(
+              'Par',
+              style: TextStyle(
+                color: colorScheme.primary,
+                fontWeight: FontWeight.bold,
+                letterSpacing: 1.1,
               ),
             ),
           ),
         ),
-        SizedBox(
-          height: 32,
-          child: Card(
+        Container(
+          height: 28,
+          padding: const EdgeInsets.symmetric(horizontal: 6),
+          decoration: BoxDecoration(
             color: colorScheme.primary,
-            margin: EdgeInsets.zero,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.only(
-                topRight: Radius.circular(12),
-                bottomRight: Radius.circular(12),
-              ),
+            borderRadius: const BorderRadius.horizontal(
+              right: Radius.circular(10),
             ),
-            elevation: 0,
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 4),
-              child: Center(
-                child: Text(
-                  '円',
-                  style: TextStyle(
-                    fontSize: 20,
-                    color: colorScheme.primaryContainer,
-                    fontWeight: FontWeight.bold,
-                    letterSpacing: 1.2,
-                  ),
-                ),
+          ),
+          child: Center(
+            child: Text(
+              '円',
+              style: TextStyle(
+                fontSize: 18,
+                color: colorScheme.primaryContainer,
+                fontWeight: FontWeight.bold,
+                letterSpacing: 1.1,
               ),
             ),
           ),
@@ -114,7 +110,7 @@ class HomeHeader extends StatelessWidget implements PreferredSizeWidget {
 
   Widget buildInfoIconButton(BuildContext context, ColorScheme colorScheme) {
     return IconButton(
-      icon: FaIcon(FontAwesomeIcons.circleQuestion),
+      icon: const FaIcon(FontAwesomeIcons.circleQuestion),
       color: colorScheme.primary,
       tooltip: context.l10n.lastUpdateInfo,
       onPressed: onInfo,
@@ -127,7 +123,7 @@ class HomeHeader extends StatelessWidget implements PreferredSizeWidget {
 
   IconButton buildNavigateIconButtonForward(ColorScheme colorScheme) {
     return IconButton(
-      icon: FaIcon(FontAwesomeIcons.angleRight),
+      icon: const FaIcon(FontAwesomeIcons.angleRight),
       color: colorScheme.primary,
       onPressed: onForward,
       style: IconButton.styleFrom(
@@ -139,7 +135,7 @@ class HomeHeader extends StatelessWidget implements PreferredSizeWidget {
 
   IconButton buildNavigateIconButtonBackward(ColorScheme colorScheme) {
     return IconButton(
-      icon: FaIcon(FontAwesomeIcons.angleLeft),
+      icon: const FaIcon(FontAwesomeIcons.angleLeft),
       color: colorScheme.primary,
       onPressed: onBackward,
       style: IconButton.styleFrom(
@@ -162,5 +158,5 @@ class HomeHeader extends StatelessWidget implements PreferredSizeWidget {
   }
 
   @override
-  Size get preferredSize => const Size.fromHeight(80);
+  Size get preferredSize => const Size.fromHeight(78);
 }

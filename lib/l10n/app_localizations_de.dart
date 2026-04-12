@@ -490,4 +490,13 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get lastUpdateInfo => 'Letzte Aktualisierungsinformationen';
+
+  @override
+  String get tapToChange => 'Tippen zum Ändern';
+
+  @override
+  String get fromLabel => 'Von';
+
+  @override
+  String get toLabel => 'Nach';
 }

@@ -142,5 +142,8 @@
   "totalLabel": "Total :",
   "perDayLabel": "Par jour :",
   "invalidCurrency": "Devise invalide",
-  "lastUpdateInfo": "Dernières informations de mise à jour"
+  "lastUpdateInfo": "Dernières informations de mise à jour",
+  "tapToChange": "Touchez pour modifier",
+  "fromLabel": "De",
+  "toLabel": "Vers"
 }
