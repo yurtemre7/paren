@@ -107,7 +107,7 @@ class _ConversionState extends State<Conversion> {
                         inputStr,
                         style: TextStyle(
                           fontSize: paren.conv1Size.value,
-                          fontWeight: FontWeight.w800,
+                          fontWeight: FontWeight.bold,
                           color: context.theme.colorScheme.primary,
                         ),
                         textAlign: TextAlign.center,
@@ -116,7 +116,7 @@ class _ConversionState extends State<Conversion> {
                         '➜',
                         style: TextStyle(
                           fontSize: paren.conv1Size.value,
-                          fontWeight: FontWeight.w800,
+                          fontWeight: FontWeight.bold,
                           color: context.theme.colorScheme.primary,
                         ),
                         textAlign: TextAlign.center,
@@ -125,7 +125,7 @@ class _ConversionState extends State<Conversion> {
                         amountStr,
                         style: TextStyle(
                           fontSize: paren.conv1Size.value,
-                          fontWeight: FontWeight.w800,
+                          fontWeight: FontWeight.bold,
                           color: context.theme.colorScheme.primary,
                         ),
                         textAlign: TextAlign.center,
@@ -141,7 +141,7 @@ class _ConversionState extends State<Conversion> {
                         inputStrRe,
                         style: TextStyle(
                           fontSize: paren.conv2Size.value,
-                          fontWeight: FontWeight.w800,
+                          fontWeight: FontWeight.bold,
                           color: context.theme.colorScheme.primary.withValues(
                             alpha: 0.75,
                           ),
@@ -154,7 +154,7 @@ class _ConversionState extends State<Conversion> {
                         '➜',
                         style: TextStyle(
                           fontSize: paren.conv2Size.value,
-                          fontWeight: FontWeight.w800,
+                          fontWeight: FontWeight.bold,
                           color: context.theme.colorScheme.primary.withValues(
                             alpha: 0.75,
                           ),
@@ -165,7 +165,7 @@ class _ConversionState extends State<Conversion> {
                         reAmountStr,
                         style: TextStyle(
                           fontSize: paren.conv2Size.value,
-                          fontWeight: FontWeight.w800,
+                          fontWeight: FontWeight.bold,
                           color: context.theme.colorScheme.primary.withValues(
                             alpha: 0.75,
                           ),

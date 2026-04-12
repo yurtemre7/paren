@@ -103,8 +103,9 @@ class _CalculatorKeyboardState extends State<CalculatorKeyboard> {
             padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
             child: DecoratedBox(
               decoration: BoxDecoration(
-                color: context.theme.colorScheme.surfaceContainerHighest
-                    .withValues(alpha: 0.45),
+                color: context.theme.colorScheme.primaryContainer.withValues(
+                  alpha: 0.45,
+                ),
                 borderRadius: BorderRadius.circular(24),
               ),
               child: Padding(
