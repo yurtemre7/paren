@@ -263,7 +263,7 @@ class _CurrencyPickerSheetState extends State<CurrencyPickerSheet> {
                       ),
                     );
                   }
-                  
+
                   return Expanded(
                     child: ListView.builder(
                       itemCount: _filteredIndices.length,
