@@ -212,6 +212,7 @@ class _CustomizationState extends State<Customization> {
           content: Obx(
             () => SingleChildScrollView(
               child: ColorPicker(
+                portraitOnly: true,
                 pickerColor: Color(paren.appColor.value),
                 onColorChanged: (Color newColor) {
                   paren.appColor.value = newColor.getValue;
