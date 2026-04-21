@@ -22,7 +22,7 @@ dependencies:
   dio: 5.9.2
   shared_preferences: 2.5.5
   url_launcher: 6.3.2
-  share_plus: 13.0.0
+  share_plus: 13.1.0
   fl_chart: 1.2.0
   home_widget: 0.9.1
   flutter_colorpicker: 1.1.0
