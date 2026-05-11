@@ -24,7 +24,7 @@ kotlin {
 
 android {
     namespace = "de.emredev.paren"
-    compileSdk = 36
+    compileSdk = 37
     ndkVersion = flutter.ndkVersion
     // ndkVersion = "27.0.12077973"
 
@@ -38,7 +38,7 @@ android {
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
         minSdk = 24
-        targetSdk = 36
+        targetSdk = 37
         versionCode = flutter.versionCode
         versionName = flutter.versionName
     }
