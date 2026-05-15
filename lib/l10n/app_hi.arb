@@ -146,6 +146,7 @@
   "tapToChange": "बदलने के लिए टैप करें",
   "fromLabel": "से",
   "toLabel": "में",
+  "more": "अधिक",
   "deleteEntryTitle": "प्रविष्टि हटाएं",
   "deleteEntryContent": "क्या आप वाकई \"{description}\" को हटाना चाहते हैं?"
 }

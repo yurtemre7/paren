@@ -146,6 +146,7 @@
   "tapToChange": "Değiştirmek için dokun",
   "fromLabel": "Şundan",
   "toLabel": "Şuna",
+  "more": "Daha fazla",
   "deleteEntryTitle": "Kaydı Sil",
   "deleteEntryContent": "\"{description}\" kaydını silmek istediğinizden emin misiniz?"
 }

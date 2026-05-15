@@ -143,6 +143,7 @@
   "tapToChange": "タップして変更",
   "fromLabel": "変換元",
   "toLabel": "変換先",
+  "more": "その他",
   "deleteEntryTitle": "エントリを削除",
   "deleteEntryContent": "「{description}」を本当に削除しますか？"
 }

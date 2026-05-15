@@ -146,6 +146,7 @@
   "tapToChange": "点击修改",
   "fromLabel": "从",
   "toLabel": "到",
+  "more": "更多",
   "deleteEntryTitle": "删除记录",
   "deleteEntryContent": "确定要删除“{description}”吗？"
 }

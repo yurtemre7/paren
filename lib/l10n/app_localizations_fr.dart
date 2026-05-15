@@ -502,6 +502,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get toLabel => 'Vers';
 
   @override
+  String get more => 'Plus';
+
+  @override
   String get deleteEntryTitle => 'Supprimer l\'entrée';
 
   @override

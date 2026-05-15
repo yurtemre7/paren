@@ -496,6 +496,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get toLabel => '変換先';
 
   @override
+  String get more => 'その他';
+
+  @override
   String get deleteEntryTitle => 'エントリを削除';
 
   @override

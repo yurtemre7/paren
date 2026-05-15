@@ -8,6 +8,7 @@ import 'package:intl/intl.dart';
 import 'package:paren/classes/sheet.dart';
 import 'package:paren/classes/sheet_entry.dart';
 import 'package:paren/components/adaptive_overlay.dart';
+import 'package:paren/components/sheet_form_bottom_sheet.dart';
 import 'package:paren/l10n/app_localizations_extension.dart';
 import 'package:paren/providers/constants.dart';
 import 'package:paren/providers/paren.dart';
@@ -36,6 +37,8 @@ enum SheetSorting {
     };
   }
 }
+
+enum _SheetAction { edit, export, sort }
 
 class _SheetDetailState extends State<SheetDetail> {
   final Paren paren = Get.find();
@@ -152,7 +155,7 @@ class _SheetDetailState extends State<SheetDetail> {
     var l10n = context.l10n;
     var dateFormat = DateFormat('dd. MMMM yyyy');
     var stats = _calculateStats(entries);
-    var convertedStats = _calculateConvertedStats(entries);
+    var convertedStats = _calculateConvertedStats(entries, sheet);
     var lines = <String>[
       [
         l10n.date,
@@ -223,8 +226,199 @@ class _SheetDetailState extends State<SheetDetail> {
     );
   }
 
+  Future<void> _showEditSheet(Sheet sheet) async {
+    var l10n = context.l10n;
+    var res = await Navigator.of(context).push<Sheet>(
+      adaptiveSheetRoute(
+        originateAboveBottomViewInset: true,
+        child: SheetFormBottomSheet(sheet: sheet),
+      ),
+    );
+    if (!mounted || res == null) {
+      return;
+    }
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          l10n.updatedSheet(res.name),
+          style: TextStyle(color: context.theme.colorScheme.primary),
+        ),
+        duration: const Duration(seconds: 1),
+        backgroundColor: context.theme.colorScheme.primaryContainer,
+      ),
+    );
+  }
+
+  Future<void> _showSortSheet() {
+    var l10n = context.l10n;
+    return Navigator.of(context).push(
+      adaptiveSheetRoute(
+        child: Material(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadiusGeometry.vertical(
+              top: Radius.circular(20),
+            ),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              mainAxisSize: .min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  l10n.sortIt,
+                  style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                ...SheetSorting.values.map((sheetSorting) {
+                  return ListTile(
+                    title: Text(
+                      sheetSorting.coolName(context),
+                      style: TextStyle(
+                        color: sortingMode.value == sheetSorting
+                            ? context.theme.colorScheme.primary
+                            : context.theme.colorScheme.onSurface,
+                      ),
+                    ),
+                    subtitle: sortingMode.value == sheetSorting
+                        ? Text(l10n.clickAgainToReverse)
+                        : null,
+                    onTap: () {
+                      if (sortingMode.value == sheetSorting) {
+                        reversedSorting.toggle();
+                      } else {
+                        sortingMode.value = sheetSorting;
+                      }
+
+                      Navigator.of(context).pop();
+                    },
+                  );
+                }),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  bool _hasRoomForExpandedActions(BuildContext context, String title) {
+    var textScaler = MediaQuery.textScalerOf(context);
+    var textStyle =
+        Theme.of(context).appBarTheme.titleTextStyle ??
+        Theme.of(context).textTheme.titleLarge ??
+        const TextStyle(fontSize: 22);
+    var textPainter = TextPainter(
+      text: TextSpan(text: title, style: textStyle),
+      maxLines: 1,
+      textDirection: Directionality.of(context),
+      textScaler: textScaler,
+    )..layout();
+
+    const leadingWidth = kToolbarHeight;
+    const actionWidth = kToolbarHeight;
+    const horizontalPadding = 32.0;
+    var fullActionsWidth = actionWidth * 4;
+    var availableTitleWidth =
+        MediaQuery.sizeOf(context).width -
+        leadingWidth -
+        fullActionsWidth -
+        horizontalPadding;
+
+    return textPainter.width <= availableTitleWidth;
+  }
+
+  List<Widget> _buildSheetActions(Sheet sheet) {
+    var l10n = context.l10n;
+    var expanded = _hasRoomForExpandedActions(context, sheet.name);
+    return [
+      IconButton(
+        onPressed: () => _showEntryDialog(sheet),
+        tooltip: l10n.addEntry,
+        icon: const FaIcon(FontAwesomeIcons.plus),
+        color: context.theme.colorScheme.primary,
+      ),
+      if (expanded) ...[
+        IconButton(
+          onPressed: () => _showEditSheet(sheet),
+          tooltip: l10n.editSheet,
+          icon: const FaIcon(FontAwesomeIcons.pen),
+          color: context.theme.colorScheme.primary,
+        ),
+        IconButton(
+          onPressed: () => _exportSheetAsCsv(sheet),
+          tooltip: l10n.share,
+          icon: const FaIcon(FontAwesomeIcons.fileCsv),
+          color: context.theme.colorScheme.primary,
+        ),
+        IconButton(
+          onPressed: _showSortSheet,
+          tooltip: l10n.sortBy,
+          icon: FaIcon(
+            reversedSorting.value
+                ? FontAwesomeIcons.arrowDownWideShort
+                : FontAwesomeIcons.arrowDownShortWide,
+          ),
+          color: context.theme.colorScheme.primary,
+        ),
+      ] else
+        _buildSheetOverflowMenu(sheet),
+    ];
+  }
+
+  Widget _buildSheetOverflowMenu(Sheet sheet) {
+    var l10n = context.l10n;
+    return PopupMenuButton<_SheetAction>(
+      tooltip: l10n.more,
+      icon: FaIcon(
+        FontAwesomeIcons.ellipsisVertical,
+        color: context.theme.colorScheme.primary,
+      ),
+      onSelected: (action) async {
+        switch (action) {
+          case _SheetAction.edit:
+            await _showEditSheet(sheet);
+          case _SheetAction.export:
+            await _exportSheetAsCsv(sheet);
+          case _SheetAction.sort:
+            await _showSortSheet();
+        }
+      },
+      itemBuilder: (context) {
+        return [
+          PopupMenuItem(
+            value: _SheetAction.edit,
+            child: ListTile(
+              leading: const FaIcon(FontAwesomeIcons.pen),
+              title: Text(l10n.editSheet),
+            ),
+          ),
+          PopupMenuItem(
+            value: _SheetAction.export,
+            child: ListTile(
+              leading: const FaIcon(FontAwesomeIcons.fileCsv),
+              title: Text(l10n.share),
+            ),
+          ),
+          PopupMenuItem(
+            value: _SheetAction.sort,
+            child: ListTile(
+              leading: FaIcon(
+                reversedSorting.value
+                    ? FontAwesomeIcons.arrowDownWideShort
+                    : FontAwesomeIcons.arrowDownShortWide,
+              ),
+              title: Text(l10n.sortBy),
+            ),
+          ),
+        ];
+      },
+    );
+  }
+
   // Show a bottom sheet for adding/editing an entry
-  Future<void> _showEntryDialog({SheetEntry? entry}) async {
+  Future<void> _showEntryDialog(Sheet sheet, {SheetEntry? entry}) async {
     var l10n = context.l10n;
     var theme = context.theme;
     var formKey = GlobalKey<FormState>();
@@ -287,7 +481,7 @@ class _SheetDetailState extends State<SheetDetail> {
                       inputFormatters: [_entryAmountFormatter],
                       decoration: InputDecoration(
                         labelText: l10n.amountInCurrency(
-                          widget.sheet.fromCurrency.toUpperCase(),
+                          sheet.fromCurrency.toUpperCase(),
                         ),
                         hintText: '0.00',
                       ),
@@ -449,12 +643,9 @@ class _SheetDetailState extends State<SheetDetail> {
                               );
 
                               if (entry == null) {
-                                paren.addSheetEntry(widget.sheet.id, newEntry);
+                                paren.addSheetEntry(sheet.id, newEntry);
                               } else {
-                                paren.updateSheetEntry(
-                                  widget.sheet.id,
-                                  newEntry,
-                                );
+                                paren.updateSheetEntry(sheet.id, newEntry);
                               }
                               Navigator.pop(context);
                             },
@@ -490,7 +681,10 @@ class _SheetDetailState extends State<SheetDetail> {
   }
 
   // Calculate statistics for the converted amounts
-  Map<String, double> _calculateConvertedStats(List<SheetEntry> entries) {
+  Map<String, double> _calculateConvertedStats(
+    List<SheetEntry> entries,
+    Sheet sheet,
+  ) {
     if (entries.isEmpty) {
       return {'sum': 0.0, 'avg': 0.0, 'min': 0.0, 'max': 0.0};
     }
@@ -499,8 +693,8 @@ class _SheetDetailState extends State<SheetDetail> {
         .map(
           (e) => calculateConvertedAmount(
             e.amount,
-            widget.sheet.fromCurrency,
-            widget.sheet.toCurrency,
+            sheet.fromCurrency,
+            sheet.toCurrency,
           ),
         )
         .toList();
@@ -541,7 +735,7 @@ class _SheetDetailState extends State<SheetDetail> {
       );
       var sortedEntries = sortBy(List<SheetEntry>.from(filteredEntries));
       var stats = _calculateStats(sortedEntries);
-      var convertedStats = _calculateConvertedStats(sortedEntries);
+      var convertedStats = _calculateConvertedStats(sortedEntries, sheet);
 
       return Scaffold(
         appBar: AppBar(
@@ -550,81 +744,8 @@ class _SheetDetailState extends State<SheetDetail> {
             icon: FaIcon(FontAwesomeIcons.angleLeft),
             color: context.theme.colorScheme.primary,
           ),
-          title: Text(sheet.name),
-          actions: [
-            IconButton(
-              onPressed: () => _showEntryDialog(),
-              tooltip: l10n.addEntry,
-              icon: const FaIcon(FontAwesomeIcons.plus),
-              color: context.theme.colorScheme.primary,
-            ),
-            IconButton(
-              onPressed: () => _exportSheetAsCsv(sheet),
-              tooltip: l10n.share,
-              icon: const FaIcon(FontAwesomeIcons.fileCsv),
-              color: context.theme.colorScheme.primary,
-            ),
-            IconButton(
-              onPressed: () {
-                Navigator.of(context).push(
-                  adaptiveSheetRoute(
-                    child: Material(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadiusGeometry.vertical(
-                          top: Radius.circular(20),
-                        ),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Column(
-                          mainAxisSize: .min,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              l10n.sortIt,
-                              style: Theme.of(context).textTheme.headlineSmall
-                                  ?.copyWith(fontWeight: FontWeight.bold),
-                            ),
-                            ...SheetSorting.values.map((sheetSorting) {
-                              return ListTile(
-                                title: Text(
-                                  sheetSorting.coolName(context),
-                                  style: TextStyle(
-                                    color: sortingMode.value == sheetSorting
-                                        ? context.theme.colorScheme.primary
-                                        : context.theme.colorScheme.onSurface,
-                                  ),
-                                ),
-                                subtitle: sortingMode.value == sheetSorting
-                                    ? Text(l10n.clickAgainToReverse)
-                                    : null,
-                                onTap: () {
-                                  if (sortingMode.value == sheetSorting) {
-                                    reversedSorting.toggle();
-                                  } else {
-                                    sortingMode.value = sheetSorting;
-                                  }
-
-                                  Navigator.of(context).pop();
-                                },
-                              );
-                            }),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                );
-              },
-              tooltip: l10n.sortBy,
-              icon: FaIcon(
-                reversedSorting.value
-                    ? FontAwesomeIcons.arrowDownWideShort
-                    : FontAwesomeIcons.arrowDownShortWide,
-              ),
-              color: context.theme.colorScheme.primary,
-            ),
-          ],
+          title: Text(sheet.name, overflow: TextOverflow.ellipsis),
+          actions: _buildSheetActions(sheet),
         ),
         body: SafeArea(
           child: Column(
@@ -648,8 +769,8 @@ class _SheetDetailState extends State<SheetDetail> {
                     Flexible(
                       child: Text(
                         l10n.amountConvertedHeader(
-                          widget.sheet.fromCurrency.toUpperCase(),
-                          widget.sheet.toCurrency.toUpperCase(),
+                          sheet.fromCurrency.toUpperCase(),
+                          sheet.toCurrency.toUpperCase(),
                         ),
                         style: Theme.of(context).textTheme.titleMedium,
                         overflow: TextOverflow.ellipsis,
@@ -721,8 +842,8 @@ class _SheetDetailState extends State<SheetDetail> {
                           var entry = sortedEntries[index];
                           var convertedAmount = calculateConvertedAmount(
                             entry.amount,
-                            widget.sheet.fromCurrency,
-                            widget.sheet.toCurrency,
+                            sheet.fromCurrency,
+                            sheet.toCurrency,
                           );
 
                           return Dismissible(
@@ -767,7 +888,7 @@ class _SheetDetailState extends State<SheetDetail> {
                               );
                             },
                             onDismissed: (_) {
-                              paren.removeSheetEntry(widget.sheet.id, entry.id);
+                              paren.removeSheetEntry(sheet.id, entry.id);
                             },
                             background: Container(
                               color: Colors.red,
@@ -778,7 +899,8 @@ class _SheetDetailState extends State<SheetDetail> {
                               ),
                             ),
                             child: InkWell(
-                              onLongPress: () => _showEntryDialog(entry: entry),
+                              onLongPress: () =>
+                                  _showEntryDialog(sheet, entry: entry),
                               child: Container(
                                 padding: const EdgeInsets.symmetric(
                                   horizontal: 16.0,
@@ -832,7 +954,7 @@ class _SheetDetailState extends State<SheetDetail> {
                                     ),
                                     Flexible(
                                       child: Text(
-                                        '${formatCurrencyAmount(entry.amount, widget.sheet.fromCurrency)} / ${formatCurrencyAmount(convertedAmount, widget.sheet.toCurrency)}',
+                                        '${formatCurrencyAmount(entry.amount, sheet.fromCurrency)} / ${formatCurrencyAmount(convertedAmount, sheet.toCurrency)}',
                                         textAlign: TextAlign.center,
                                         style: Theme.of(
                                           context,
@@ -865,16 +987,16 @@ class _SheetDetailState extends State<SheetDetail> {
                     Builder(
                       builder: (context) {
                         var sumStr =
-                            '${formatCurrencyAmount(stats['sum'] ?? 0.0, widget.sheet.fromCurrency)} / ${formatCurrencyAmount(convertedStats['sum'] ?? 0.0, widget.sheet.toCurrency)}';
+                            '${formatCurrencyAmount(stats['sum'] ?? 0.0, sheet.fromCurrency)} / ${formatCurrencyAmount(convertedStats['sum'] ?? 0.0, sheet.toCurrency)}';
 
                         var avgStr =
-                            '${formatCurrencyAmount(stats['avg'] ?? 0.0, widget.sheet.fromCurrency)} / ${formatCurrencyAmount(convertedStats['avg'] ?? 0.0, widget.sheet.toCurrency)}';
+                            '${formatCurrencyAmount(stats['avg'] ?? 0.0, sheet.fromCurrency)} / ${formatCurrencyAmount(convertedStats['avg'] ?? 0.0, sheet.toCurrency)}';
 
                         var minStr =
-                            '${formatCurrencyAmount(stats['min'] ?? 0.0, widget.sheet.fromCurrency)} / ${formatCurrencyAmount(convertedStats['min'] ?? 0.0, widget.sheet.toCurrency)}';
+                            '${formatCurrencyAmount(stats['min'] ?? 0.0, sheet.fromCurrency)} / ${formatCurrencyAmount(convertedStats['min'] ?? 0.0, sheet.toCurrency)}';
 
                         var maxStr =
-                            '${formatCurrencyAmount(stats['max'] ?? 0.0, widget.sheet.fromCurrency)} / ${formatCurrencyAmount(convertedStats['max'] ?? 0.0, widget.sheet.toCurrency)}';
+                            '${formatCurrencyAmount(stats['max'] ?? 0.0, sheet.fromCurrency)} / ${formatCurrencyAmount(convertedStats['max'] ?? 0.0, sheet.toCurrency)}';
 
                         return Column(
                           children: [

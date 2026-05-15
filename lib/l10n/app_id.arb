@@ -146,6 +146,7 @@
   "tapToChange": "Ketuk untuk mengubah",
   "fromLabel": "Dari",
   "toLabel": "Ke",
+  "more": "Lainnya",
   "deleteEntryTitle": "Hapus Entri",
   "deleteEntryContent": "Apakah Anda yakin ingin menghapus \"{description}\"?"
 }

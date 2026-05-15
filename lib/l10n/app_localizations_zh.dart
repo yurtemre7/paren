@@ -494,6 +494,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get toLabel => '到';
 
   @override
+  String get more => '更多';
+
+  @override
   String get deleteEntryTitle => '删除记录';
 
   @override

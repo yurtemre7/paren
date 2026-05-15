@@ -501,6 +501,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get toLabel => 'To';
 
   @override
+  String get more => 'More';
+
+  @override
   String get deleteEntryTitle => 'Delete Entry';
 
   @override

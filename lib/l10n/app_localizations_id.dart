@@ -501,6 +501,9 @@ class AppLocalizationsId extends AppLocalizations {
   String get toLabel => 'Ke';
 
   @override
+  String get more => 'Lainnya';
+
+  @override
   String get deleteEntryTitle => 'Hapus Entri';
 
   @override

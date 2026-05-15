@@ -146,6 +146,7 @@
   "tapToChange": "Tap to change",
   "fromLabel": "From",
   "toLabel": "To",
+  "more": "More",
   "deleteEntryTitle": "Delete Entry",
   "deleteEntryContent": "Are you sure you want to delete \"{description}\"?"
 }

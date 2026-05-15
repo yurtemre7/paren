@@ -501,6 +501,9 @@ class AppLocalizationsHi extends AppLocalizations {
   String get toLabel => 'में';
 
   @override
+  String get more => 'अधिक';
+
+  @override
   String get deleteEntryTitle => 'प्रविष्टि हटाएं';
 
   @override

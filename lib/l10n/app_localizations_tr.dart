@@ -500,6 +500,9 @@ class AppLocalizationsTr extends AppLocalizations {
   String get toLabel => 'Şuna';
 
   @override
+  String get more => 'Daha fazla';
+
+  @override
   String get deleteEntryTitle => 'Kaydı Sil';
 
   @override

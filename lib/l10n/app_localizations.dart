@@ -978,6 +978,12 @@ abstract class AppLocalizations {
   /// **'To'**
   String get toLabel;
 
+  /// No description provided for @more.
+  ///
+  /// In en, this message translates to:
+  /// **'More'**
+  String get more;
+
   /// No description provided for @deleteEntryTitle.
   ///
   /// In en, this message translates to:

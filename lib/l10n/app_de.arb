@@ -143,6 +143,7 @@
     "tapToChange": "Tippen zum Ändern",
     "fromLabel": "Von",
     "toLabel": "Nach",
+    "more": "Mehr",
     "deleteEntryTitle": "Eintrag löschen",
     "deleteEntryContent": "Möchten Sie \"{description}\" wirklich löschen?"
 }

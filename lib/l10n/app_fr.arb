@@ -146,6 +146,7 @@
   "tapToChange": "Touchez pour modifier",
   "fromLabel": "De",
   "toLabel": "Vers",
+  "more": "Plus",
   "deleteEntryTitle": "Supprimer l'entrée",
   "deleteEntryContent": "Voulez-vous vraiment supprimer \"{description}\" ?"
 }
