@@ -27,7 +27,7 @@ dependencies:
   home_widget: 0.9.1
   flutter_colorpicker: 1.1.0
   stupid_simple_sheet: 0.9.1+1
-  json_annotation: 4.11.0
+  json_annotation: 4.12.0
   font_awesome_flutter: 11.0.0
   # image_picker: 1.1.2
 
@@ -38,7 +38,7 @@ dev_dependencies:
   flutter_lints: 6.0.0
   # `flutter pub run flutter_launcher_icons:main`
   flutter_launcher_icons: 0.14.4
-  json_serializable: 6.13.2
+  json_serializable: 6.14.0
   # `dart run build_runner build`
   build_runner: 2.15.0
   # `dart run msix:create`
