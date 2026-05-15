@@ -977,6 +977,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'To'**
   String get toLabel;
+
+  /// No description provided for @deleteEntryTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Entry'**
+  String get deleteEntryTitle;
+
+  /// No description provided for @deleteEntryContent.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete \"{description}\"?'**
+  String deleteEntryContent(Object description);
 }
 
 class _AppLocalizationsDelegate

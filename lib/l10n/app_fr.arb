@@ -145,5 +145,7 @@
   "lastUpdateInfo": "Dernières informations de mise à jour",
   "tapToChange": "Touchez pour modifier",
   "fromLabel": "De",
-  "toLabel": "Vers"
+  "toLabel": "Vers",
+  "deleteEntryTitle": "Supprimer l'entrée",
+  "deleteEntryContent": "Voulez-vous vraiment supprimer \"{description}\" ?"
 }

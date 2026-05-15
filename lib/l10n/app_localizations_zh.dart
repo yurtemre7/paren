@@ -492,4 +492,12 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get toLabel => '到';
+
+  @override
+  String get deleteEntryTitle => '删除记录';
+
+  @override
+  String deleteEntryContent(Object description) {
+    return '确定要删除“$description”吗？';
+  }
 }

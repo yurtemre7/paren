@@ -145,5 +145,7 @@
   "lastUpdateInfo": "最后更新信息",
   "tapToChange": "点击修改",
   "fromLabel": "从",
-  "toLabel": "到"
+  "toLabel": "到",
+  "deleteEntryTitle": "删除记录",
+  "deleteEntryContent": "确定要删除“{description}”吗？"
 }

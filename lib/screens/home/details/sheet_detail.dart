@@ -728,6 +728,44 @@ class _SheetDetailState extends State<SheetDetail> {
                           return Dismissible(
                             key: Key(entry.id),
                             direction: DismissDirection.endToStart,
+                            confirmDismiss: (direction) {
+                              return Get.dialog<bool>(
+                                AlertDialog(
+                                  constraints: adaptiveDialogConstraints(
+                                    context,
+                                  ),
+                                  insetPadding: adaptiveDialogInsetPadding(
+                                    context,
+                                  ),
+                                  title: Text(l10n.deleteEntryTitle),
+                                  content: Text(
+                                    l10n.deleteEntryContent(entry.name),
+                                  ),
+                                  actions: [
+                                    OutlinedButton(
+                                      style: OutlinedButton.styleFrom(
+                                        foregroundColor:
+                                            context.theme.colorScheme.error,
+                                        backgroundColor: context
+                                            .theme
+                                            .colorScheme
+                                            .errorContainer,
+                                      ),
+                                      onPressed: () {
+                                        Get.back(result: true);
+                                      },
+                                      child: Text(l10n.confirm),
+                                    ),
+                                    TextButton(
+                                      onPressed: () {
+                                        Get.back(result: false);
+                                      },
+                                      child: Text(l10n.cancel),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
                             onDismissed: (_) {
                               paren.removeSheetEntry(widget.sheet.id, entry.id);
                             },

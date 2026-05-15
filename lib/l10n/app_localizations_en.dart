@@ -499,4 +499,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get toLabel => 'To';
+
+  @override
+  String get deleteEntryTitle => 'Delete Entry';
+
+  @override
+  String deleteEntryContent(Object description) {
+    return 'Are you sure you want to delete \"$description\"?';
+  }
 }

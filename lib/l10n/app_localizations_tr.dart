@@ -498,4 +498,12 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get toLabel => 'Şuna';
+
+  @override
+  String get deleteEntryTitle => 'Kaydı Sil';
+
+  @override
+  String deleteEntryContent(Object description) {
+    return '\"$description\" kaydını silmek istediğinizden emin misiniz?';
+  }
 }

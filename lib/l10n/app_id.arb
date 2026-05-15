@@ -145,5 +145,7 @@
   "lastUpdateInfo": "Info pembaruan terakhir",
   "tapToChange": "Ketuk untuk mengubah",
   "fromLabel": "Dari",
-  "toLabel": "Ke"
+  "toLabel": "Ke",
+  "deleteEntryTitle": "Hapus Entri",
+  "deleteEntryContent": "Apakah Anda yakin ingin menghapus \"{description}\"?"
 }

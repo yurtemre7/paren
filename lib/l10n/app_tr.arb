@@ -145,5 +145,7 @@
   "lastUpdateInfo": "Son güncelleme bilgisi",
   "tapToChange": "Değiştirmek için dokun",
   "fromLabel": "Şundan",
-  "toLabel": "Şuna"
+  "toLabel": "Şuna",
+  "deleteEntryTitle": "Kaydı Sil",
+  "deleteEntryContent": "\"{description}\" kaydını silmek istediğinizden emin misiniz?"
 }

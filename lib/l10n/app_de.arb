@@ -142,5 +142,7 @@
     "lastUpdateInfo": "Letzte Aktualisierungsinformationen",
     "tapToChange": "Tippen zum Ändern",
     "fromLabel": "Von",
-    "toLabel": "Nach"
+    "toLabel": "Nach",
+    "deleteEntryTitle": "Eintrag löschen",
+    "deleteEntryContent": "Möchten Sie \"{description}\" wirklich löschen?"
 }

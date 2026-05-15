@@ -145,5 +145,7 @@
   "lastUpdateInfo": "Last update info",
   "tapToChange": "Tap to change",
   "fromLabel": "From",
-  "toLabel": "To"
+  "toLabel": "To",
+  "deleteEntryTitle": "Delete Entry",
+  "deleteEntryContent": "Are you sure you want to delete \"{description}\"?"
 }

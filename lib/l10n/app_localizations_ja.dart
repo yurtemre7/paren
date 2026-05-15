@@ -494,4 +494,12 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get toLabel => '変換先';
+
+  @override
+  String get deleteEntryTitle => 'エントリを削除';
+
+  @override
+  String deleteEntryContent(Object description) {
+    return '「$description」を本当に削除しますか？';
+  }
 }

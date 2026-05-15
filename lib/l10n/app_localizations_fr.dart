@@ -500,4 +500,12 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get toLabel => 'Vers';
+
+  @override
+  String get deleteEntryTitle => 'Supprimer l\'entrée';
+
+  @override
+  String deleteEntryContent(Object description) {
+    return 'Voulez-vous vraiment supprimer \"$description\" ?';
+  }
 }

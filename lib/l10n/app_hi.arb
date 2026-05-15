@@ -145,5 +145,7 @@
   "lastUpdateInfo": "अंतिम अपडेट जानकारी",
   "tapToChange": "बदलने के लिए टैप करें",
   "fromLabel": "से",
-  "toLabel": "में"
+  "toLabel": "में",
+  "deleteEntryTitle": "प्रविष्टि हटाएं",
+  "deleteEntryContent": "क्या आप वाकई \"{description}\" को हटाना चाहते हैं?"
 }

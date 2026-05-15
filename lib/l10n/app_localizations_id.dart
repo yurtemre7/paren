@@ -499,4 +499,12 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get toLabel => 'Ke';
+
+  @override
+  String get deleteEntryTitle => 'Hapus Entri';
+
+  @override
+  String deleteEntryContent(Object description) {
+    return 'Apakah Anda yakin ingin menghapus \"$description\"?';
+  }
 }

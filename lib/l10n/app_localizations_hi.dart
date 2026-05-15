@@ -499,4 +499,12 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get toLabel => 'में';
+
+  @override
+  String get deleteEntryTitle => 'प्रविष्टि हटाएं';
+
+  @override
+  String deleteEntryContent(Object description) {
+    return 'क्या आप वाकई \"$description\" को हटाना चाहते हैं?';
+  }
 }
