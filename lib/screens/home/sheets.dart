@@ -224,7 +224,7 @@ class _SheetsState extends State<Sheets> {
                     ),
                   );
                 },
-                onReorder: (oldIndex, newIndex) {
+                onReorderItem: (oldIndex, newIndex) {
                   paren.reorderSheets(oldIndex, newIndex);
                 },
               ),
