@@ -89,6 +89,8 @@ class Paren extends GetxController {
         );
       });
 
+      onlineCurrencies.sort((c1, c2) => c1.name.compareTo(c2.name));
+
       currencies.value = onlineCurrencies;
       if (!currencieNamesMap.containsKey(fromCurrency.value.toUpperCase())) {
         fromCurrency.value = currencieNamesMap.entries.first.key
