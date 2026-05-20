@@ -16,7 +16,7 @@ class SheetFormBottomSheet extends StatefulWidget {
 }
 
 class _SheetFormBottomSheetState extends State<SheetFormBottomSheet> {
-  late final Paren paren = Get.find();
+  Paren paren = Get.find();
 
   late final TextEditingController _nameController;
 
