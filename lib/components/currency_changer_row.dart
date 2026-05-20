@@ -241,21 +241,21 @@ class CurrencyPickerSheet extends StatefulWidget {
 }
 
 class _CurrencyPickerSheetState extends State<CurrencyPickerSheet> {
-  late TextEditingController _searchController;
+  final _searchController = TextEditingController();
+  final _scrollController = ScrollController();
   final _filteredIndices = <int>[].obs;
 
   @override
   void initState() {
     super.initState();
-    _searchController = TextEditingController();
-    _filteredIndices.value = List.generate(widget.currencies.length, (i) => i);
+    _filteredIndices.value = _currencyIndices();
     _searchController.addListener(_onSearchChanged);
   }
 
   void _onSearchChanged() {
     var query = _searchController.text.toLowerCase();
 
-    _filteredIndices.value = List.generate(widget.currencies.length, (i) => i)
+    _filteredIndices.value = _currencyIndices()
         .where(
           (i) =>
               widget.currencies[i].id.toLowerCase().contains(query) ||
@@ -263,11 +263,29 @@ class _CurrencyPickerSheetState extends State<CurrencyPickerSheet> {
               widget.currencies[i].name.toLowerCase().contains(query),
         )
         .toList();
+
+    if (_scrollController.hasClients) {
+      _scrollController.jumpTo(0);
+    }
+  }
+
+  List<int> _currencyIndices() {
+    var selectedCurrency = widget.initialCurrency.toLowerCase();
+    var selectedIndex = widget.currencies.indexWhere(
+      (currency) => currency.id.toLowerCase() == selectedCurrency,
+    );
+
+    var indices = List.generate(widget.currencies.length, (i) => i);
+    if (selectedIndex <= 0) return indices;
+
+    indices.remove(selectedIndex);
+    return [selectedIndex, ...indices];
   }
 
   @override
   void dispose() {
     _searchController.dispose();
+    _scrollController.dispose();
     super.dispose();
   }
 
@@ -325,38 +343,47 @@ class _CurrencyPickerSheetState extends State<CurrencyPickerSheet> {
                   }
 
                   return Expanded(
-                    child: ListView.builder(
-                      itemCount: _filteredIndices.length,
-                      itemBuilder: (context, index) {
-                        var currency =
-                            widget.currencies[_filteredIndices[index]];
-                        var isSelected =
-                            currency.id.toLowerCase() ==
-                            widget.initialCurrency.toLowerCase();
-                        return ListTile(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(14),
-                          ),
-                          selected: isSelected,
-                          selectedTileColor: context
-                              .theme
-                              .colorScheme
-                              .primaryContainer
-                              .withValues(alpha: 0.3),
-                          title: Text(
-                            '${currency.id.toUpperCase()} (${currency.symbol})',
-                            style: const TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                          subtitle: Text(currency.name),
-                          trailing: isSelected
-                              ? Icon(
-                                  Icons.check_circle,
-                                  color: context.theme.colorScheme.primary,
-                                )
-                              : null,
-                          onTap: () => Get.back(result: currency.id),
-                        );
-                      },
+                    child: Scrollbar(
+                      controller: _scrollController,
+                      thumbVisibility: true,
+                      trackVisibility: true,
+                      interactive: true,
+                      child: ListView.builder(
+                        controller: _scrollController,
+                        itemCount: _filteredIndices.length,
+                        itemBuilder: (context, index) {
+                          var currency =
+                              widget.currencies[_filteredIndices[index]];
+                          var isSelected =
+                              currency.id.toLowerCase() ==
+                              widget.initialCurrency.toLowerCase();
+                          return ListTile(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(14),
+                            ),
+                            selected: isSelected,
+                            selectedTileColor: context
+                                .theme
+                                .colorScheme
+                                .primaryContainer
+                                .withValues(alpha: 0.3),
+                            title: Text(
+                              '${currency.id.toUpperCase()} (${currency.symbol})',
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            subtitle: Text(currency.name),
+                            trailing: isSelected
+                                ? Icon(
+                                    Icons.check_circle,
+                                    color: context.theme.colorScheme.primary,
+                                  )
+                                : null,
+                            onTap: () => Get.back(result: currency.id),
+                          );
+                        },
+                      ),
                     ),
                   );
                 }),
