@@ -14,6 +14,7 @@ import 'package:paren/components/sheet_form_bottom_sheet.dart';
 import 'package:paren/l10n/app_localizations.dart';
 import 'package:paren/l10n/app_localizations_extension.dart';
 import 'package:paren/providers/constants.dart';
+import 'package:paren/providers/extensions.dart';
 import 'package:paren/providers/paren.dart';
 import 'package:paren/screens/home/conversion.dart';
 import 'package:paren/screens/home/customization.dart';
@@ -64,6 +65,42 @@ class _HomeState extends State<Home> {
       stopwatch.stop();
       logMessage('Loading time taken: ${stopwatch.elapsedMilliseconds}ms');
       paren.loading.value = false;
+    }
+  }
+
+  Future<void> createSheetDialog() async {
+    var l10n = context.l10n;
+    var res = await Navigator.of(context).push<Sheet>(
+      adaptiveSheetRoute(
+        originateAboveBottomViewInset: true,
+        child: const SheetFormBottomSheet(),
+      ),
+    );
+    if (!mounted) {
+      return;
+    }
+    if (res != null) {
+      // Show success message
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            l10n.createdSheet(res.name),
+            style: TextStyle(color: context.theme.colorScheme.primary),
+          ),
+          duration: const Duration(seconds: 1),
+          backgroundColor: context.theme.colorScheme.primaryContainer,
+          action: SnackBarAction(
+            label: l10n.ok,
+            onPressed: () {
+              pageController.animateToPage(
+                0,
+                duration: 300.milliseconds,
+                curve: Curves.ease,
+              );
+            },
+          ),
+        ),
+      );
     }
   }
 
@@ -168,6 +205,14 @@ class _HomeState extends State<Home> {
                 );
               }),
             ),
+            floatingActionButtonLocation: .startFloat,
+            floatingActionButton: (context.width >= 1000)
+                ? FloatingActionButton.extended(
+                    onPressed: createSheetDialog,
+                    icon: FaIcon(FontAwesomeIcons.plus),
+                    label: Text(l10n.createSheet),
+                  )
+                : null,
             bottomNavigationBar: buildBottomBar(width, l10n),
           ),
         ),
@@ -177,13 +222,21 @@ class _HomeState extends State<Home> {
 
   Widget? buildBottomBar(double width, AppLocalizations l10n) {
     var colorScheme = context.theme.colorScheme;
+
+    if (width >= 1000) {
+      return 0.h;
+    }
+
     return GlassBottomBar(
       verticalPadding: Platform.isIOS ? 20 : 38,
       unselectedIconColor: colorScheme.secondary,
       selectedIconColor: colorScheme.primary,
       indicatorColor: colorScheme.primary.withValues(alpha: 0.1),
-      glassSettings: LiquidGlassSettings(glassColor: colorScheme.surface),
-      indicatorSettings: LiquidGlassSettings(
+      glassSettings: LiquidGlassSettings().copyWith(
+        glassColor: colorScheme.surface,
+      ),
+      indicatorSettings: LiquidGlassSettings().copyWith(
+        thickness: Platform.isWindows ? 0 : null,
         blur: 0,
         // glassColor: Colors.white,
         glassColor: colorScheme.onSurface.withValues(alpha: 0.1),
@@ -203,40 +256,7 @@ class _HomeState extends State<Home> {
         ),
       ],
       extraButton: GlassBottomBarExtraButton(
-        onTap: () async {
-          var res = await Navigator.of(context).push<Sheet>(
-            adaptiveSheetRoute(
-              originateAboveBottomViewInset: true,
-              child: const SheetFormBottomSheet(),
-            ),
-          );
-          if (!mounted) {
-            return;
-          }
-          if (res != null) {
-            // Show success message
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(
-                  l10n.createdSheet(res.name),
-                  style: TextStyle(color: context.theme.colorScheme.primary),
-                ),
-                duration: const Duration(seconds: 1),
-                backgroundColor: context.theme.colorScheme.primaryContainer,
-                action: SnackBarAction(
-                  label: l10n.ok,
-                  onPressed: () {
-                    pageController.animateToPage(
-                      0,
-                      duration: 300.milliseconds,
-                      curve: Curves.ease,
-                    );
-                  },
-                ),
-              ),
-            );
-          }
-        },
+        onTap: createSheetDialog,
         icon: FaIcon(FontAwesomeIcons.plus),
         label: l10n.createSheet,
       ),
