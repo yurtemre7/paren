@@ -893,6 +893,9 @@ class _SheetDetailState extends State<SheetDetail> {
                             background: Container(
                               color: Colors.red,
                               alignment: Alignment.center,
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 20,
+                              ),
                               child: FaIcon(
                                 FontAwesomeIcons.trash,
                                 color: Colors.white,

@@ -117,7 +117,7 @@ class _SheetsState extends State<Sheets> {
                     direction: DismissDirection.endToStart,
                     background: Container(
                       color: Colors.red,
-                      alignment: Alignment.centerRight,
+                      alignment: Alignment.center,
                       padding: const EdgeInsets.symmetric(horizontal: 20),
                       child: FaIcon(
                         FontAwesomeIcons.trash,
