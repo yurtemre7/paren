@@ -169,51 +169,6 @@ class _HomeState extends State<Home> {
                 );
               }),
             ),
-            floatingActionButtonLocation: paren.loading.value
-                ? .endDocked
-                : width >= 1000
-                ? .startFloat
-                : .endFloat,
-            floatingActionButton: Obx(() {
-              if (paren.loading.value) {
-                return const LinearProgressIndicator();
-              }
-
-              if (paren.currentPage.value == 0 || (width >= 1000)) {
-                return FloatingActionButton(
-                  onPressed: () async {
-                    var res = await Navigator.of(context).push<Sheet>(
-                      adaptiveSheetRoute(
-                        originateAboveBottomViewInset: true,
-                        child: const SheetFormBottomSheet(),
-                      ),
-                    );
-                    if (!context.mounted) {
-                      return;
-                    }
-                    if (res != null) {
-                      // Show success message
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text(
-                            l10n.createdSheet(res.name),
-                            style: TextStyle(
-                              color: context.theme.colorScheme.primary,
-                            ),
-                          ),
-                          duration: const Duration(seconds: 1),
-                          backgroundColor:
-                              context.theme.colorScheme.primaryContainer,
-                        ),
-                      );
-                    }
-                  },
-                  child: FaIcon(FontAwesomeIcons.plus),
-                );
-              }
-
-              return 0.h;
-            }),
             bottomNavigationBar: buildBottomBar(width, l10n),
           ),
         ),
@@ -225,17 +180,14 @@ class _HomeState extends State<Home> {
     if (Platform.isIOS || Platform.isMacOS) {
       var colorScheme = context.theme.colorScheme;
       return GlassBottomBar(
-        unselectedIconColor: colorScheme.onSurface,
-        selectedIconColor: colorScheme.onPrimary,
-        indicatorColor: colorScheme.primary,
-        glassSettings: LiquidGlassSettings.figma(
-          refraction: 1,
-          depth: 1,
-          dispersion: 1,
-          frost: 1,
-        ),
+        unselectedIconColor: colorScheme.secondary,
+        selectedIconColor: colorScheme.primary,
+        indicatorColor: colorScheme.primary.withValues(alpha: 0.1),
+        glassSettings: LiquidGlassSettings(glassColor: colorScheme.surface),
         indicatorSettings: LiquidGlassSettings(
-
+          blur: 0,
+          // glassColor: Colors.white,
+          glassColor: colorScheme.onSurface.withValues(alpha: 0.1),
         ),
         tabs: [
           GlassBottomBarTab(
@@ -251,10 +203,48 @@ class _HomeState extends State<Home> {
             label: l10n.settings,
           ),
         ],
+        extraButton: GlassBottomBarExtraButton(
+          onTap: () async {
+            var res = await Navigator.of(context).push<Sheet>(
+              adaptiveSheetRoute(
+                originateAboveBottomViewInset: true,
+                child: const SheetFormBottomSheet(),
+              ),
+            );
+            if (!mounted) {
+              return;
+            }
+            if (res != null) {
+              // Show success message
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(
+                    l10n.createdSheet(res.name),
+                    style: TextStyle(color: context.theme.colorScheme.primary),
+                  ),
+                  duration: const Duration(seconds: 1),
+                  backgroundColor: context.theme.colorScheme.primaryContainer,
+                  action: SnackBarAction(
+                    label: l10n.ok,
+                    onPressed: () {
+                      pageController.animateToPage(
+                        0,
+                        duration: 300.milliseconds,
+                        curve: Curves.ease,
+                      );
+                    },
+                  ),
+                ),
+              );
+            }
+          },
+          icon: FaIcon(FontAwesomeIcons.plus),
+          label: l10n.createSheet,
+        ),
         onTabSelected: (value) {
           pageController.animateToPage(
             value,
-            duration: 250.milliseconds,
+            duration: 300.milliseconds,
             curve: Curves.ease,
           );
         },

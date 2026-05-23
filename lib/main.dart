@@ -29,18 +29,6 @@ class MyApp extends StatelessWidget {
     Paren paren = Get.find();
     return Obx(
       () => LiquidGlassWidgets.wrap(
-        theme: GlassThemeData(
-          light: GlassThemeVariant.light.copyWith(
-            settings: GlassThemeSettings(
-              glassColor: Color(paren.appColor.value),
-            ),
-          ),
-          dark: GlassThemeVariant.dark.copyWith(
-            settings: GlassThemeSettings(
-              glassColor: Color(paren.appColor.value),
-            ),
-          ),
-        ),
         child: GetMaterialApp(
           title: 'paren',
           debugShowCheckedModeBanner: false,
