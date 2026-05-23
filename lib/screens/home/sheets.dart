@@ -70,24 +70,38 @@ class _SheetsState extends State<Sheets> {
               child: Row(
                 mainAxisAlignment: .spaceBetween,
                 children: [
-                  Wrap(
-                    children: [
-                      TextButton(
-                        onPressed: () {
-                          isEditing.toggle();
-                        },
-                        child: Text(isEditing.value ? l10n.save : l10n.edit),
-                      ),
-                      TextButton(
-                        onPressed: () {
-                          hideKeyboard();
-                          isSearching.toggle();
-                        },
-                        child: Text(
-                          isSearching.value ? l10n.hideSearch : l10n.search,
+                  Flexible(
+                    child: Wrap(
+                      spacing: 8,
+                      runSpacing: 8,
+                      children: [
+                        // TextButton(
+                        //   onPressed: () {
+                        //     isEditing.toggle();
+                        //   },
+                        //   child: Text(isEditing.value ? l10n.save : l10n.edit),
+                        // ),
+                        ChoiceChip(
+                          label: Text(isEditing.value ? l10n.save : l10n.edit),
+                          selected: isEditing.value,
+                          showCheckmark: false,
+                          onSelected: (value) {
+                            isEditing.toggle();
+                          },
                         ),
-                      ),
-                    ],
+                        ChoiceChip(
+                          selected: isSearching.value,
+                          showCheckmark: false,
+                          onSelected: (value) {
+                            hideKeyboard();
+                            isSearching.toggle();
+                          },
+                          label: Text(
+                            isSearching.value ? l10n.hideSearch : l10n.search,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
 
                   Flexible(
@@ -98,6 +112,7 @@ class _SheetsState extends State<Sheets> {
                         style: TextStyle(
                           color: context.theme.colorScheme.secondary,
                         ),
+                        overflow: .ellipsis,
                       ),
                     ),
                   ),
