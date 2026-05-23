@@ -14,7 +14,6 @@ import 'package:paren/components/sheet_form_bottom_sheet.dart';
 import 'package:paren/l10n/app_localizations.dart';
 import 'package:paren/l10n/app_localizations_extension.dart';
 import 'package:paren/providers/constants.dart';
-import 'package:paren/providers/extensions.dart';
 import 'package:paren/providers/paren.dart';
 import 'package:paren/screens/home/conversion.dart';
 import 'package:paren/screens/home/customization.dart';
@@ -177,109 +176,108 @@ class _HomeState extends State<Home> {
   }
 
   Widget? buildBottomBar(double width, AppLocalizations l10n) {
-    if (Platform.isIOS || Platform.isMacOS) {
-      var colorScheme = context.theme.colorScheme;
-      return GlassBottomBar(
-        unselectedIconColor: colorScheme.secondary,
-        selectedIconColor: colorScheme.primary,
-        indicatorColor: colorScheme.primary.withValues(alpha: 0.1),
-        glassSettings: LiquidGlassSettings(glassColor: colorScheme.surface),
-        indicatorSettings: LiquidGlassSettings(
-          blur: 0,
-          // glassColor: Colors.white,
-          glassColor: colorScheme.onSurface.withValues(alpha: 0.1),
+    var colorScheme = context.theme.colorScheme;
+    return GlassBottomBar(
+      verticalPadding: Platform.isIOS ? 20 : 38,
+      unselectedIconColor: colorScheme.secondary,
+      selectedIconColor: colorScheme.primary,
+      indicatorColor: colorScheme.primary.withValues(alpha: 0.1),
+      glassSettings: LiquidGlassSettings(glassColor: colorScheme.surface),
+      indicatorSettings: LiquidGlassSettings(
+        blur: 0,
+        // glassColor: Colors.white,
+        glassColor: colorScheme.onSurface.withValues(alpha: 0.1),
+      ),
+      tabs: [
+        GlassBottomBarTab(
+          icon: FaIcon(FontAwesomeIcons.list),
+          label: l10n.sheets,
         ),
-        tabs: [
-          GlassBottomBarTab(
-            icon: FaIcon(FontAwesomeIcons.list),
-            label: l10n.sheets,
-          ),
-          GlassBottomBarTab(
-            icon: FaIcon(FontAwesomeIcons.calculator),
-            label: l10n.calculation,
-          ),
-          GlassBottomBarTab(
-            icon: FaIcon(FontAwesomeIcons.gear),
-            label: l10n.settings,
-          ),
-        ],
-        extraButton: GlassBottomBarExtraButton(
-          onTap: () async {
-            var res = await Navigator.of(context).push<Sheet>(
-              adaptiveSheetRoute(
-                originateAboveBottomViewInset: true,
-                child: const SheetFormBottomSheet(),
+        GlassBottomBarTab(
+          icon: FaIcon(FontAwesomeIcons.calculator),
+          label: l10n.calculation,
+        ),
+        GlassBottomBarTab(
+          icon: FaIcon(FontAwesomeIcons.gear),
+          label: l10n.settings,
+        ),
+      ],
+      extraButton: GlassBottomBarExtraButton(
+        onTap: () async {
+          var res = await Navigator.of(context).push<Sheet>(
+            adaptiveSheetRoute(
+              originateAboveBottomViewInset: true,
+              child: const SheetFormBottomSheet(),
+            ),
+          );
+          if (!mounted) {
+            return;
+          }
+          if (res != null) {
+            // Show success message
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(
+                  l10n.createdSheet(res.name),
+                  style: TextStyle(color: context.theme.colorScheme.primary),
+                ),
+                duration: const Duration(seconds: 1),
+                backgroundColor: context.theme.colorScheme.primaryContainer,
+                action: SnackBarAction(
+                  label: l10n.ok,
+                  onPressed: () {
+                    pageController.animateToPage(
+                      0,
+                      duration: 300.milliseconds,
+                      curve: Curves.ease,
+                    );
+                  },
+                ),
               ),
             );
-            if (!mounted) {
-              return;
-            }
-            if (res != null) {
-              // Show success message
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(
-                    l10n.createdSheet(res.name),
-                    style: TextStyle(color: context.theme.colorScheme.primary),
-                  ),
-                  duration: const Duration(seconds: 1),
-                  backgroundColor: context.theme.colorScheme.primaryContainer,
-                  action: SnackBarAction(
-                    label: l10n.ok,
-                    onPressed: () {
-                      pageController.animateToPage(
-                        0,
-                        duration: 300.milliseconds,
-                        curve: Curves.ease,
-                      );
-                    },
-                  ),
-                ),
-              );
-            }
-          },
-          icon: FaIcon(FontAwesomeIcons.plus),
-          label: l10n.createSheet,
-        ),
-        onTabSelected: (value) {
-          pageController.animateToPage(
-            value,
-            duration: 300.milliseconds,
-            curve: Curves.ease,
-          );
+          }
         },
-        selectedIndex: paren.currentPage.value,
-      );
-    }
+        icon: FaIcon(FontAwesomeIcons.plus),
+        label: l10n.createSheet,
+      ),
+      onTabSelected: (value) {
+        pageController.animateToPage(
+          value,
+          duration: 300.milliseconds,
+          curve: Curves.ease,
+        );
+      },
+      selectedIndex: paren.currentPage.value,
+    );
 
-    return (width < 1000)
-        ? NavigationBar(
-            selectedIndex: paren.currentPage.value,
-            onDestinationSelected: (value) {
-              // paren.currentPage.value = value;
-              pageController.animateToPage(
-                value,
-                duration: 250.milliseconds,
-                curve: Curves.ease,
-              );
-            },
-            destinations: [
-              NavigationDestination(
-                icon: FaIcon(FontAwesomeIcons.list),
-                selectedIcon: FaIcon(FontAwesomeIcons.listUl),
-                label: l10n.sheets,
-              ),
-              NavigationDestination(
-                icon: FaIcon(FontAwesomeIcons.calculator),
-                label: l10n.calculation,
-              ),
-              NavigationDestination(
-                icon: FaIcon(FontAwesomeIcons.gear),
-                label: l10n.settings,
-              ),
-            ],
-          )
-        : null;
+    // return (width < 1000)
+    //     ? NavigationBar(
+    //         selectedIndex: paren.currentPage.value,
+    //         onDestinationSelected: (value) {
+    //           // paren.currentPage.value = value;
+    //           pageController.animateToPage(
+    //             value,
+    //             duration: 250.milliseconds,
+    //             curve: Curves.ease,
+    //           );
+    //         },
+    //         destinations: [
+    //           NavigationDestination(
+    //             icon: FaIcon(FontAwesomeIcons.list),
+    //             selectedIcon: FaIcon(FontAwesomeIcons.listUl),
+    //             label: l10n.sheets,
+    //           ),
+    //           NavigationDestination(
+    //             icon: FaIcon(FontAwesomeIcons.calculator),
+    //             label: l10n.calculation,
+    //           ),
+    //           NavigationDestination(
+    //             icon: FaIcon(FontAwesomeIcons.gear),
+    //             label: l10n.settings,
+    //           ),
+    //         ],
+    //       )
+    //     : null;
   }
 
   Widget buildDataInfoSheet() {
