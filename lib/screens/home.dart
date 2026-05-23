@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -6,9 +7,11 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widget_previews.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:liquid_glass_widgets/liquid_glass_widgets.dart';
 import 'package:paren/classes/sheet.dart';
 import 'package:paren/components/adaptive_overlay.dart';
 import 'package:paren/components/sheet_form_bottom_sheet.dart';
+import 'package:paren/l10n/app_localizations.dart';
 import 'package:paren/l10n/app_localizations_extension.dart';
 import 'package:paren/providers/constants.dart';
 import 'package:paren/providers/extensions.dart';
@@ -211,38 +214,82 @@ class _HomeState extends State<Home> {
 
               return 0.h;
             }),
-            bottomNavigationBar: (width < 1000)
-                ? NavigationBar(
-                    selectedIndex: paren.currentPage.value,
-                    onDestinationSelected: (value) {
-                      // paren.currentPage.value = value;
-                      pageController.animateToPage(
-                        value,
-                        duration: 250.milliseconds,
-                        curve: Curves.ease,
-                      );
-                    },
-                    destinations: [
-                      NavigationDestination(
-                        icon: FaIcon(FontAwesomeIcons.list),
-                        selectedIcon: FaIcon(FontAwesomeIcons.listUl),
-                        label: l10n.sheets,
-                      ),
-                      NavigationDestination(
-                        icon: FaIcon(FontAwesomeIcons.calculator),
-                        label: l10n.calculation,
-                      ),
-                      NavigationDestination(
-                        icon: FaIcon(FontAwesomeIcons.gear),
-                        label: l10n.settings,
-                      ),
-                    ],
-                  )
-                : null,
+            bottomNavigationBar: buildBottomBar(width, l10n),
           ),
         ),
       ),
     );
+  }
+
+  Widget? buildBottomBar(double width, AppLocalizations l10n) {
+    if (Platform.isIOS || Platform.isMacOS) {
+      var colorScheme = context.theme.colorScheme;
+      return GlassBottomBar(
+        unselectedIconColor: colorScheme.onSurface,
+        selectedIconColor: colorScheme.onPrimary,
+        indicatorColor: colorScheme.primary,
+        glassSettings: LiquidGlassSettings.figma(
+          refraction: 1,
+          depth: 1,
+          dispersion: 1,
+          frost: 1,
+        ),
+        indicatorSettings: LiquidGlassSettings(
+
+        ),
+        tabs: [
+          GlassBottomBarTab(
+            icon: FaIcon(FontAwesomeIcons.list),
+            label: l10n.sheets,
+          ),
+          GlassBottomBarTab(
+            icon: FaIcon(FontAwesomeIcons.calculator),
+            label: l10n.calculation,
+          ),
+          GlassBottomBarTab(
+            icon: FaIcon(FontAwesomeIcons.gear),
+            label: l10n.settings,
+          ),
+        ],
+        onTabSelected: (value) {
+          pageController.animateToPage(
+            value,
+            duration: 250.milliseconds,
+            curve: Curves.ease,
+          );
+        },
+        selectedIndex: paren.currentPage.value,
+      );
+    }
+
+    return (width < 1000)
+        ? NavigationBar(
+            selectedIndex: paren.currentPage.value,
+            onDestinationSelected: (value) {
+              // paren.currentPage.value = value;
+              pageController.animateToPage(
+                value,
+                duration: 250.milliseconds,
+                curve: Curves.ease,
+              );
+            },
+            destinations: [
+              NavigationDestination(
+                icon: FaIcon(FontAwesomeIcons.list),
+                selectedIcon: FaIcon(FontAwesomeIcons.listUl),
+                label: l10n.sheets,
+              ),
+              NavigationDestination(
+                icon: FaIcon(FontAwesomeIcons.calculator),
+                label: l10n.calculation,
+              ),
+              NavigationDestination(
+                icon: FaIcon(FontAwesomeIcons.gear),
+                label: l10n.settings,
+              ),
+            ],
+          )
+        : null;
   }
 
   Widget buildDataInfoSheet() {

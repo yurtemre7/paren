@@ -2,6 +2,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:home_widget/home_widget.dart';
+import 'package:liquid_glass_widgets/liquid_glass_setup.dart';
+import 'package:liquid_glass_widgets/theme/glass_theme_data.dart';
+import 'package:liquid_glass_widgets/theme/glass_theme_settings.dart';
 import 'package:paren/l10n/app_localizations.dart';
 import 'package:paren/providers/paren.dart';
 import 'package:paren/screens/home.dart';
@@ -9,6 +12,7 @@ import 'package:flutter_web_plugins/url_strategy.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await LiquidGlassWidgets.initialize();
   if (GetPlatform.isIOS && !kIsWeb) {
     await HomeWidget.setAppGroupId('group.de.emredev.paren');
   }
@@ -24,28 +28,42 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     Paren paren = Get.find();
     return Obx(
-      () => GetMaterialApp(
-        title: 'paren',
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(
-            seedColor: Color(paren.appColor.value),
+      () => LiquidGlassWidgets.wrap(
+        theme: GlassThemeData(
+          light: GlassThemeVariant.light.copyWith(
+            settings: GlassThemeSettings(
+              glassColor: Color(paren.appColor.value),
+            ),
           ),
-          useMaterial3: true,
+          dark: GlassThemeVariant.dark.copyWith(
+            settings: GlassThemeSettings(
+              glassColor: Color(paren.appColor.value),
+            ),
+          ),
         ),
-        darkTheme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(
-            seedColor: Color(paren.appColor.value),
+        child: GetMaterialApp(
+          title: 'paren',
+          debugShowCheckedModeBanner: false,
+          theme: ThemeData(
+            colorScheme: ColorScheme.fromSeed(
+              seedColor: Color(paren.appColor.value),
+            ),
+            useMaterial3: true,
+          ),
+          darkTheme: ThemeData(
+            colorScheme: ColorScheme.fromSeed(
+              seedColor: Color(paren.appColor.value),
+              brightness: Brightness.dark,
+            ),
+            useMaterial3: true,
             brightness: Brightness.dark,
           ),
-          useMaterial3: true,
-          brightness: Brightness.dark,
+          themeMode: paren.appThemeMode.value,
+          locale: paren.currentAppLocale.value,
+          home: const Home(),
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
         ),
-        themeMode: paren.appThemeMode.value,
-        locale: paren.currentAppLocale.value,
-        home: const Home(),
-        localizationsDelegates: AppLocalizations.localizationsDelegates,
-        supportedLocales: AppLocalizations.supportedLocales,
       ),
     );
   }
