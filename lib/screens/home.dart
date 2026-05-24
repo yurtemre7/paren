@@ -234,9 +234,10 @@ class _HomeState extends State<Home> {
       indicatorColor: colorScheme.primary.withValues(alpha: 0.1),
       glassSettings: LiquidGlassSettings().copyWith(
         glassColor: colorScheme.surface,
+        thickness: Platform.isWindows || Platform.isMacOS ? 0 : null,
       ),
       indicatorSettings: LiquidGlassSettings().copyWith(
-        thickness: Platform.isWindows ? 0 : null,
+        thickness: Platform.isWindows || Platform.isMacOS ? 0 : null,
         blur: 0,
         glassColor: colorScheme.onSurface.withValues(alpha: 0.1),
       ),
