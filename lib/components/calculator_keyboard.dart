@@ -1,8 +1,7 @@
-import 'dart:math' as math;
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:liquid_glass_widgets/liquid_glass_widgets.dart';
 import 'package:paren/providers/extensions.dart';
 import 'package:paren/providers/paren.dart';
 
@@ -173,68 +172,40 @@ class _CalcButton extends StatefulWidget {
   State<_CalcButton> createState() => _CalcButtonState();
 }
 
-class _CalcButtonState extends State<_CalcButton>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
-  late Animation<double> _offsetAnimation;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = AnimationController(
-      duration: const Duration(milliseconds: 300),
-      vsync: this,
-    );
-    _offsetAnimation = Tween<double>(begin: 0, end: 1).animate(_controller);
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
+class _CalcButtonState extends State<_CalcButton> {
   void _onTap() {
-    _controller.forward(from: 0.0);
     HapticFeedback.mediumImpact();
     widget.onTap();
   }
 
   void _onLongPress() {
-    _controller.forward(from: 0.0);
     HapticFeedback.mediumImpact();
     widget.onLongPress?.call();
   }
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedBuilder(
-      animation: _offsetAnimation,
-      builder: (context, child) {
-        const amplitude = 1.0;
-        double dx = math.sin(_offsetAnimation.value * math.pi * 5) * amplitude;
-        return Transform.translate(offset: Offset(dx, 0), child: child);
-      },
-      child: Material(
-        color:
-            widget.color?.withValues(alpha: 0.16) ??
-            context.theme.colorScheme.surface,
-        borderRadius: BorderRadius.circular(18),
-        child: InkWell(
-          borderRadius: BorderRadius.circular(18),
-          onTap: _onTap,
-          onLongPress: widget.onLongPress != null ? _onLongPress : null,
-          child: Center(
-            child: Text(
-              widget.label,
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.w700,
-                color: widget.color ?? context.theme.colorScheme.onSurface,
-              ),
+    return GestureDetector(
+      onLongPress: widget.onLongPress != null ? _onLongPress : null,
+      child: GlassIconButton(
+        icon: Center(
+          child: Text(
+            widget.label,
+            style: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.w700,
+              color: widget.color ?? context.theme.colorScheme.onSurface,
             ),
           ),
         ),
+        onPressed: _onTap,
+        glowRadius: 0,
+        settings: LiquidGlassSettings().copyWith(
+          glassColor:
+              widget.color?.withValues(alpha: 0.16) ??
+              context.theme.colorScheme.surface,
+        ),
+        shape: GlassIconButtonShape.roundedSquare,
       ),
     );
   }
