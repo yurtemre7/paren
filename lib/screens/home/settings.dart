@@ -41,7 +41,14 @@ class Settings extends StatelessWidget {
               color: context.theme.colorScheme.primary,
             ),
             onTap: () {
-              SharePlus.instance.share(ShareParams(text: l10n.shareAppText));
+              var box = context.findRenderObject() as RenderBox?;
+              Rect? rect;
+              if (box != null) {
+                rect = box.localToGlobal(Offset.zero) & box.size;
+              }
+              SharePlus.instance.share(
+                ShareParams(text: l10n.shareAppText, sharePositionOrigin: rect),
+              );
             },
           ),
 

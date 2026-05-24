@@ -214,14 +214,16 @@ class _SheetDetailState extends State<SheetDetail> {
     var sortedEntries = sortBy(List<SheetEntry>.from(sheet.entries));
     var csvContent = _buildCsvContent(sheet, sortedEntries);
     var box = context.findRenderObject() as RenderBox?;
+    Rect? rect;
+    if (box != null) {
+      rect = box.localToGlobal(Offset.zero) & box.size;
+    }
 
     await SharePlus.instance.share(
       ShareParams(
         files: [XFile.fromData(utf8.encode(csvContent), mimeType: 'text/csv')],
         fileNameOverrides: [_csvFileName(sheet.name)],
-        sharePositionOrigin: box == null
-            ? null
-            : box.localToGlobal(Offset.zero) & box.size,
+        sharePositionOrigin: rect,
       ),
     );
   }

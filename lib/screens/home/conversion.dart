@@ -230,8 +230,17 @@ class _ConversionState extends State<Conversion> {
                   color: context.theme.colorScheme.primary,
                 ),
                 onPressed: () {
+                  var box = context.findRenderObject() as RenderBox?;
+                  Rect? rect;
+                  if (box != null) {
+                    rect = box.localToGlobal(Offset.zero) & box.size;
+                  }
+
                   SharePlus.instance.share(
-                    ShareParams(text: '$inputStr ➜ $amountStr'),
+                    ShareParams(
+                      text: '$inputStr ➜ $amountStr',
+                      sharePositionOrigin: rect,
+                    ),
                   );
                 },
                 tooltip: l10n.share,
