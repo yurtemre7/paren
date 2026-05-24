@@ -1,4 +1,5 @@
 #!/bin/bash
+git pull
 git_count=$(git rev-list --count main)
 
 flutter clean && flutter pub get
