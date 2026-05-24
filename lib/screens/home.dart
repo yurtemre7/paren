@@ -238,7 +238,6 @@ class _HomeState extends State<Home> {
       indicatorSettings: LiquidGlassSettings().copyWith(
         thickness: Platform.isWindows ? 0 : null,
         blur: 0,
-        // glassColor: Colors.white,
         glassColor: colorScheme.onSurface.withValues(alpha: 0.1),
       ),
       tabs: [
