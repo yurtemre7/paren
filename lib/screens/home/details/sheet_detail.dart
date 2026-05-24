@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:paren/classes/sheet.dart';
@@ -338,29 +337,29 @@ class _SheetDetailState extends State<SheetDetail> {
       IconButton(
         onPressed: () => _showEntryDialog(sheet),
         tooltip: l10n.addEntry,
-        icon: const FaIcon(FontAwesomeIcons.plus),
+        icon: const Icon(Icons.add),
         color: context.theme.colorScheme.primary,
       ),
       if (expanded) ...[
         IconButton(
           onPressed: () => _showEditSheet(sheet),
           tooltip: l10n.editSheet,
-          icon: const FaIcon(FontAwesomeIcons.pen),
+          icon: const Icon(Icons.edit),
           color: context.theme.colorScheme.primary,
         ),
         IconButton(
           onPressed: () => _exportSheetAsCsv(sheet),
           tooltip: l10n.share,
-          icon: const FaIcon(FontAwesomeIcons.fileCsv),
+          icon: const Icon(Icons.file_present),
           color: context.theme.colorScheme.primary,
         ),
         IconButton(
           onPressed: _showSortSheet,
           tooltip: l10n.sortBy,
-          icon: FaIcon(
+          icon: Icon(
             reversedSorting.value
-                ? FontAwesomeIcons.arrowDownWideShort
-                : FontAwesomeIcons.arrowDownShortWide,
+                ? Icons.text_rotate_up
+                : Icons.text_rotation_down,
           ),
           color: context.theme.colorScheme.primary,
         ),
@@ -373,10 +372,7 @@ class _SheetDetailState extends State<SheetDetail> {
     var l10n = context.l10n;
     return PopupMenuButton<_SheetAction>(
       tooltip: l10n.more,
-      icon: FaIcon(
-        FontAwesomeIcons.ellipsisVertical,
-        color: context.theme.colorScheme.primary,
-      ),
+      icon: Icon(Icons.more_vert, color: context.theme.colorScheme.primary),
       onSelected: (action) async {
         switch (action) {
           case _SheetAction.edit:
@@ -392,24 +388,24 @@ class _SheetDetailState extends State<SheetDetail> {
           PopupMenuItem(
             value: _SheetAction.edit,
             child: ListTile(
-              leading: const FaIcon(FontAwesomeIcons.pen),
+              leading: const Icon(Icons.edit),
               title: Text(l10n.editSheet),
             ),
           ),
           PopupMenuItem(
             value: _SheetAction.export,
             child: ListTile(
-              leading: const FaIcon(FontAwesomeIcons.fileCsv),
+              leading: const Icon(Icons.file_present),
               title: Text(l10n.share),
             ),
           ),
           PopupMenuItem(
             value: _SheetAction.sort,
             child: ListTile(
-              leading: FaIcon(
+              leading: Icon(
                 reversedSorting.value
-                    ? FontAwesomeIcons.arrowDownWideShort
-                    : FontAwesomeIcons.arrowDownShortWide,
+                    ? Icons.text_rotate_up
+                    : Icons.text_rotation_down,
               ),
               title: Text(l10n.sortBy),
             ),
@@ -743,7 +739,7 @@ class _SheetDetailState extends State<SheetDetail> {
         appBar: AppBar(
           leading: IconButton(
             onPressed: () => Get.back(),
-            icon: FaIcon(FontAwesomeIcons.angleLeft),
+            icon: Icon(Icons.keyboard_arrow_left),
             color: context.theme.colorScheme.primary,
           ),
           title: Text(sheet.name, overflow: TextOverflow.ellipsis),
@@ -898,10 +894,7 @@ class _SheetDetailState extends State<SheetDetail> {
                               padding: const EdgeInsets.symmetric(
                                 horizontal: 20,
                               ),
-                              child: FaIcon(
-                                FontAwesomeIcons.trash,
-                                color: Colors.white,
-                              ),
+                              child: Icon(Icons.delete, color: Colors.white),
                             ),
                             child: InkWell(
                               onLongPress: () =>

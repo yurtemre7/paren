@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:paren/classes/sheet.dart';
 import 'package:paren/components/adaptive_overlay.dart';
@@ -134,10 +133,7 @@ class _SheetsState extends State<Sheets> {
                       color: Colors.red,
                       alignment: Alignment.center,
                       padding: const EdgeInsets.symmetric(horizontal: 20),
-                      child: FaIcon(
-                        FontAwesomeIcons.trash,
-                        color: Colors.white,
-                      ),
+                      child: Icon(Icons.delete, color: Colors.white),
                     ),
                     confirmDismiss: (direction) {
                       return Get.dialog<bool>(
@@ -197,12 +193,12 @@ class _SheetsState extends State<Sheets> {
                         '${sheet.fromCurrency.toUpperCase()} → ${sheet.toCurrency.toUpperCase()}',
                       ),
                       trailing: !isEditing.value
-                          ? FaIcon(
-                              FontAwesomeIcons.angleRight,
+                          ? Icon(
+                              Icons.keyboard_arrow_right,
                               color: context.theme.colorScheme.primary,
                             )
-                          : FaIcon(
-                              FontAwesomeIcons.pen,
+                          : Icon(
+                              Icons.edit,
                               color: context.theme.colorScheme.primary,
                             ),
                       onTap: () async {

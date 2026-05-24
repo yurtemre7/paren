@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:paren/providers/extensions.dart';
 import 'package:paren/l10n/app_localizations_extension.dart';
 
@@ -110,7 +109,7 @@ class HomeHeader extends StatelessWidget implements PreferredSizeWidget {
 
   Widget buildInfoIconButton(BuildContext context, ColorScheme colorScheme) {
     return IconButton(
-      icon: const FaIcon(FontAwesomeIcons.circleQuestion),
+      icon: const Icon(Icons.question_mark),
       color: colorScheme.primary,
       tooltip: context.l10n.lastUpdateInfo,
       onPressed: onInfo,
@@ -123,7 +122,7 @@ class HomeHeader extends StatelessWidget implements PreferredSizeWidget {
 
   IconButton buildNavigateIconButtonForward(ColorScheme colorScheme) {
     return IconButton(
-      icon: const FaIcon(FontAwesomeIcons.angleRight),
+      icon: const Icon(Icons.keyboard_arrow_right),
       color: colorScheme.primary,
       onPressed: onForward,
       style: IconButton.styleFrom(
@@ -135,7 +134,7 @@ class HomeHeader extends StatelessWidget implements PreferredSizeWidget {
 
   IconButton buildNavigateIconButtonBackward(ColorScheme colorScheme) {
     return IconButton(
-      icon: const FaIcon(FontAwesomeIcons.angleLeft),
+      icon: const Icon(Icons.keyboard_arrow_left),
       color: colorScheme.primary,
       onPressed: onBackward,
       style: IconButton.styleFrom(

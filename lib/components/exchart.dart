@@ -2,7 +2,6 @@ import 'dart:math';
 
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:paren/components/adaptive_overlay.dart';
@@ -174,7 +173,7 @@ class _ExChartState extends State<ExChart> {
         appBar: AppBar(
           leading: IconButton(
             onPressed: () => Get.back(),
-            icon: FaIcon(FontAwesomeIcons.xmark),
+            icon: Icon(Icons.close),
             color: context.theme.colorScheme.primary,
           ),
           title: Text(
@@ -238,7 +237,7 @@ class _ExChartState extends State<ExChart> {
                 label: Text(
                   '${localDuration.value.inDays} ${context.l10n.days}',
                 ),
-                icon: FaIcon(FontAwesomeIcons.calendar),
+                icon: Icon(Icons.calendar_today_outlined),
               ),
             ),
           ],
@@ -279,7 +278,7 @@ class _ExChartState extends State<ExChart> {
                           onPressed: () {
                             Get.dialog(buildPredictionInfoDialog());
                           },
-                          icon: FaIcon(FontAwesomeIcons.circleQuestion),
+                          icon: Icon(Icons.question_mark),
                           color: context.theme.colorScheme.primary,
                         ),
                         title: Text(context.l10n.showSimplePrediction),
@@ -306,7 +305,7 @@ class _ExChartState extends State<ExChart> {
                           fetchChartData(localIdFrom.value, localIdTo.value);
                         },
                         label: Text(context.l10n.swap),
-                        icon: FaIcon(FontAwesomeIcons.arrowRightArrowLeft),
+                        icon: Icon(Icons.swap_horiz),
                       ),
                     ],
                   ),

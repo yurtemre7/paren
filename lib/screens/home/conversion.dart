@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widget_previews.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:paren/components/adaptive_overlay.dart';
@@ -200,15 +199,15 @@ class _ConversionState extends State<Conversion> {
             children: [
               IconButton(
                 icon: Obx(() {
-                  return FaIcon(
+                  return Icon(
                     paren.favorites.any((fav) {
                           return fav.fromCurrency == paren.fromCurrency.value &&
                               fav.toCurrency == paren.toCurrency.value &&
                               fav.amount.toStringAsFixed(2) ==
                                   inputConverted.toStringAsFixed(2);
                         })
-                        ? FontAwesomeIcons.solidHeart
-                        : FontAwesomeIcons.heart,
+                        ? Icons.favorite
+                        : Icons.favorite_border,
                     color: context.theme.colorScheme.primary,
                   );
                 }),
@@ -225,8 +224,8 @@ class _ConversionState extends State<Conversion> {
                 tooltip: l10n.favorite,
               ),
               IconButton(
-                icon: FaIcon(
-                  FontAwesomeIcons.shareFromSquare,
+                icon: Icon(
+                  Icons.ios_share,
                   color: context.theme.colorScheme.primary,
                 ),
                 onPressed: () {
@@ -246,8 +245,8 @@ class _ConversionState extends State<Conversion> {
                 tooltip: l10n.share,
               ),
               IconButton(
-                icon: FaIcon(
-                  FontAwesomeIcons.copy,
+                icon: Icon(
+                  Icons.copy,
                   color: context.theme.colorScheme.primary,
                 ),
                 onPressed: () {
@@ -282,8 +281,8 @@ class _ConversionState extends State<Conversion> {
             paren.saveSettings();
           },
           tooltip: l10n.adjustSizes,
-          icon: FaIcon(
-            FontAwesomeIcons.textHeight,
+          icon: Icon(
+            Icons.text_fields,
             color: context.theme.colorScheme.primary,
           ),
         ),

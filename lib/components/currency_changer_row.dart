@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:paren/classes/currency.dart';
 import 'package:paren/components/adaptive_overlay.dart';
@@ -174,8 +173,8 @@ class _CurrencySelectorCard extends StatelessWidget {
                   ),
                 ),
                 4.w,
-                FaIcon(
-                  FontAwesomeIcons.chevronDown,
+                Icon(
+                  Icons.keyboard_arrow_down,
                   size: 16,
                   color: context.theme.colorScheme.primary,
                 ),
@@ -206,7 +205,7 @@ class _SwapButton extends StatelessWidget {
         6.h,
         IconButton.filledTonal(
           key: const Key('swap_button'),
-          icon: const FaIcon(FontAwesomeIcons.arrowRightArrowLeft, size: 16),
+          icon: const Icon(Icons.swap_horiz, size: 16),
           onPressed: onPressed,
           tooltip: context.l10n.swap,
           style: IconButton.styleFrom(
@@ -298,7 +297,7 @@ class _CurrencyPickerSheetState extends State<CurrencyPickerSheet> {
         appBar: AppBar(
           leading: IconButton(
             onPressed: () => Get.back(),
-            icon: const FaIcon(FontAwesomeIcons.xmark),
+            icon: Icon(Icons.close),
             color: context.theme.colorScheme.primary,
           ),
           title: Text(

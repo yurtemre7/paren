@@ -5,7 +5,6 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widget_previews.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:liquid_glass_widgets/liquid_glass_widgets.dart';
 import 'package:paren/classes/sheet.dart';
@@ -209,7 +208,7 @@ class _HomeState extends State<Home> {
             floatingActionButton: (context.width >= 1000)
                 ? FloatingActionButton.extended(
                     onPressed: createSheetDialog,
-                    icon: FaIcon(FontAwesomeIcons.plus),
+                    icon: Icon(Icons.add),
                     label: Text(l10n.createSheet),
                   )
                 : null,
@@ -242,22 +241,16 @@ class _HomeState extends State<Home> {
         glassColor: colorScheme.onSurface.withValues(alpha: 0.1),
       ),
       tabs: [
+        GlassBottomBarTab(icon: Icon(Icons.list), label: l10n.sheets),
         GlassBottomBarTab(
-          icon: FaIcon(FontAwesomeIcons.list),
-          label: l10n.sheets,
-        ),
-        GlassBottomBarTab(
-          icon: FaIcon(FontAwesomeIcons.calculator),
+          icon: Icon(Icons.calculate_outlined),
           label: l10n.calculation,
         ),
-        GlassBottomBarTab(
-          icon: FaIcon(FontAwesomeIcons.gear),
-          label: l10n.settings,
-        ),
+        GlassBottomBarTab(icon: Icon(Icons.settings), label: l10n.settings),
       ],
       extraButton: GlassBottomBarExtraButton(
         onTap: createSheetDialog,
-        icon: FaIcon(FontAwesomeIcons.plus),
+        icon: Icon(Icons.add),
         label: l10n.createSheet,
       ),
       onTabSelected: (value) {

@@ -31,7 +31,6 @@ dependencies:
   flutter_colorpicker: 1.1.0
   stupid_simple_sheet: 0.9.1+1
   json_annotation: 4.12.0
-  font_awesome_flutter: 11.0.0
   liquid_glass_widgets: ^0.12.6
   # image_picker: 1.1.2
 

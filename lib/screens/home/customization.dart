@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widget_previews.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:paren/components/adaptive_overlay.dart';
 import 'package:paren/components/budget_planner.dart';
@@ -63,8 +62,8 @@ class _CustomizationState extends State<Customization> {
             paren.toCurrency.toUpperCase(),
           ),
         ),
-        trailing: FaIcon(
-          FontAwesomeIcons.chartLine,
+        trailing: Icon(
+          Icons.show_chart,
           color: context.theme.colorScheme.primary,
         ),
         onTap: () async {
@@ -141,7 +140,7 @@ class _CustomizationState extends State<Customization> {
                 paren.currencyTextInput.value = result.toString();
               }
             },
-            trailing: FaIcon(FontAwesomeIcons.moneyBillTransfer),
+            trailing: Icon(Icons.money),
             iconColor: context.theme.colorScheme.primary,
           ),
         ],
@@ -163,8 +162,8 @@ class _CustomizationState extends State<Customization> {
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: ListTile(
         title: Text(l10n.savedConversions),
-        trailing: FaIcon(
-          FontAwesomeIcons.solidHeart,
+        trailing: Icon(
+          Icons.favorite,
           color: context.theme.colorScheme.primary,
         ),
         onTap: () async {
@@ -187,10 +186,7 @@ class _CustomizationState extends State<Customization> {
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: ListTile(
         title: Text(l10n.budgetPlanner),
-        trailing: FaIcon(
-          FontAwesomeIcons.moneyBill1,
-          color: context.theme.colorScheme.primary,
-        ),
+        trailing: Icon(Icons.savings, color: context.theme.colorScheme.primary),
         onTap: () async {
           Get.back();
           await Navigator.of(
@@ -262,8 +258,8 @@ class _CustomizationState extends State<Customization> {
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          FaIcon(
-                            FontAwesomeIcons.palette,
+                          Icon(
+                            Icons.palette,
                             color: context.theme.colorScheme.primary,
                           ),
                           4.h,
@@ -304,7 +300,7 @@ class _CustomizationState extends State<Customization> {
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          FaIcon(FontAwesomeIcons.mobileRetro, size: 20),
+                          Icon(Icons.auto_mode, size: 20),
                           4.h,
                           Text(
                             l10n.themeSystem,
@@ -321,7 +317,7 @@ class _CustomizationState extends State<Customization> {
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          FaIcon(FontAwesomeIcons.sun, size: 20),
+                          Icon(Icons.light_mode, size: 20),
                           4.h,
                           Text(
                             l10n.themeLight,
@@ -338,7 +334,7 @@ class _CustomizationState extends State<Customization> {
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          FaIcon(FontAwesomeIcons.solidMoon, size: 20),
+                          Icon(Icons.dark_mode, size: 20),
                           4.h,
                           Text(
                             l10n.themeDark,

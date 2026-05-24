@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:paren/providers/constants.dart';
@@ -71,7 +70,7 @@ class _BudgetPlannerState extends State<BudgetPlanner> {
           appBar: AppBar(
             leading: IconButton(
               onPressed: () => Get.back(),
-              icon: FaIcon(FontAwesomeIcons.xmark),
+              icon: Icon(Icons.close),
               color: context.theme.colorScheme.primary,
             ),
             title: Text(
@@ -168,7 +167,7 @@ class _BudgetPlannerState extends State<BudgetPlanner> {
                       children: [
                         Center(
                           child: ElevatedButton.icon(
-                            icon: FaIcon(FontAwesomeIcons.calendarDays),
+                            icon: Icon(Icons.calendar_month_outlined),
                             label: Text(context.l10n.selectTripDates),
                             onPressed: _pickTripDates,
                           ),

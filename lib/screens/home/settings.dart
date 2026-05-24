@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widget_previews.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:paren/components/adaptive_overlay.dart';
 import 'package:paren/l10n/app_localizations_extension.dart';
@@ -36,8 +35,8 @@ class Settings extends StatelessWidget {
           ListTile(
             title: Text(l10n.shareTheApp),
             subtitle: Text(l10n.shareAppSubtitle),
-            trailing: FaIcon(
-              FontAwesomeIcons.shareFromSquare,
+            trailing: Icon(
+              Icons.ios_share,
               color: context.theme.colorScheme.primary,
             ),
             onTap: () {
@@ -56,8 +55,8 @@ class Settings extends StatelessWidget {
             title: Text(l10n.licenses),
             subtitle: Text(l10n.licensesSubtitle),
             // trailing: Icon(Icons.open_in_new),
-            trailing: FaIcon(
-              FontAwesomeIcons.copyright,
+            trailing: Icon(
+              Icons.copyright,
               color: context.theme.colorScheme.primary,
             ),
             onTap: () async {

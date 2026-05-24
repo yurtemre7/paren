@@ -1,7 +1,6 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:paren/providers/paren.dart';
@@ -18,7 +17,7 @@ class FavoritesScreen extends StatelessWidget {
       appBar: AppBar(
         leading: IconButton(
           onPressed: () => Get.back(),
-          icon: FaIcon(FontAwesomeIcons.xmark),
+          icon: Icon(Icons.close),
           color: context.theme.colorScheme.primary,
         ),
         title: Text(
@@ -71,7 +70,7 @@ class FavoritesScreen extends StatelessWidget {
                 background: Container(
                   color: Colors.red,
                   alignment: Alignment.center,
-                  child: FaIcon(FontAwesomeIcons.trash, color: Colors.white),
+                  child: Icon(Icons.delete, color: Colors.white),
                 ),
                 onDismissed: (_) => paren.removeFavorite(favorite.id),
                 direction: DismissDirection.endToStart,
