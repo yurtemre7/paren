@@ -490,6 +490,8 @@ class Paren extends GetxController {
         );
         sheets[sheetIndex] = updatedSheet;
         await _saveSheets();
+      } else {
+        await addSheetEntry(sheetId, updatedEntry);
       }
     }
   }
