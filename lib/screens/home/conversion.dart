@@ -3,12 +3,14 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widget_previews.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:paren/classes/sheet_entry.dart';
 import 'package:paren/components/adaptive_overlay.dart';
 import 'package:paren/components/calculator_keyboard.dart';
 import 'package:paren/components/currency_changer_row.dart';
 import 'package:paren/l10n/app_localizations_extension.dart';
 import 'package:paren/providers/extensions.dart';
 import 'package:paren/providers/paren.dart';
+import 'package:paren/providers/sheets_provider.dart';
 import 'package:share_plus/share_plus.dart';
 
 @Preview()
@@ -270,6 +272,31 @@ class _ConversionState extends State<Conversion> {
                 },
                 tooltip: l10n.copy,
               ),
+              if (paren.sheets.any(
+                (sheet) => sheet.fromCurrency == paren.fromCurrency.value,
+              ))
+                IconButton(
+                  onPressed: () async {
+                    var fromCurrency = paren.currencies.firstWhere(
+                      (element) => element.id == paren.fromCurrency.value,
+                    );
+                    var sheetsProvider = SheetsProvider(
+                      paren,
+                      context,
+                      fromCurrency.id.toUpperCase(),
+                    );
+                    var newEntry = SheetEntry(
+                      id: DateTime.now().millisecondsSinceEpoch.toString(),
+                      name: '',
+                      amount: inputConverted,
+                      createdAt: DateTime.now(),
+                      updatedAt: DateTime.now(),
+                    );
+                    await sheetsProvider.showEntryDialog(null, entry: newEntry);
+                  },
+                  color: context.theme.colorScheme.primary,
+                  icon: Icon(Icons.format_list_bulleted_add),
+                ),
             ],
           ),
         ),
