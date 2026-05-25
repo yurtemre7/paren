@@ -899,7 +899,7 @@ abstract class AppLocalizations {
   /// No description provided for @predictionExplanation.
   ///
   /// In en, this message translates to:
-  /// **'The prediction uses the last {days} days of data to estimate {predictionDays} days of future data. \\n\\n• It follows the average daily trend from historical data.\\n• Adds realistic random fluctuations based on past volatility.\\n• Shorter historical data ➜ shorter predictions -> less accuracy.\\n• Longer historical data ➜ longer predictions -> higher accuracy.\\n\\n⚠️ This is a simplified model. Real-world rates may vary significantly!'**
+  /// **'The prediction uses the last {days} days of data to estimate {predictionDays} days of future data. \n\n• It follows the average daily trend from historical data.\n• Adds realistic random fluctuations based on past volatility.\n• Shorter historical data → shorter predictions → less accuracy.\n• Longer historical data → longer predictions → higher accuracy.\n\n⚠️ This is a simplified model. Real-world rates may vary significantly!'**
   String predictionExplanation(Object days, Object predictionDays);
 
   /// No description provided for @ok.

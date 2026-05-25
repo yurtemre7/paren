@@ -133,7 +133,7 @@
   "showSimplePrediction": "显示简单预测",
   "predictionFunDisclaimer": "这只是为了好玩，不构成财务建议。",
   "howPredictionsWork": "预测如何工作",
-  "predictionExplanation": "预测使用过去{days}天的数据来估计未来{predictionDays}天的数据。\\n\\n• 它遵循历史数据的平均每日趋势。\\n• 根据过去的波动性添加现实的随机波动。\\n• 较短的历史数据 ➜ 较短的预测 -> 准确性较低。\\n• 较长的历史数据 ➜ 较长的预测 -> 准确性较高。\\n\\n⚠️ 这是一个简化模型。现实世界的汇率可能会有显著差异！",
+  "predictionExplanation": "预测使用过去{days}天的数据来估计未来{predictionDays}天的数据。\n\n• 它遵循历史数据的平均每日趋势。\n• 根据过去的波动性添加现实的随机波动。\n• 较短的历史数据 → 较短的预测 → 准确性较低。\n• 较长的历史数据 → 较长的预测 → 准确性较高。\n\n⚠️ 这是一个简化模型。现实世界的汇率可能会有显著差异！",
   "ok": "确定",
   "swap": "交换",
   "dailyBudget": "每日预算 ({currency})",

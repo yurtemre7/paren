@@ -452,7 +452,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String predictionExplanation(Object days, Object predictionDays) {
-    return 'Tahmin, gelecek $predictionDays günün verilerini tahmin etmek için son $days günün verilerini kullanır. \\n\\n• Geçmiş verilerden ortalama günlük eğilimi takip eder.\\n• Geçmiş volatiliteye dayalı gerçekçi rastgele dalgalanmalar ekler.\\n• Daha kısa geçmiş veri ➜ daha kısa tahminler -> daha az doğruluk.\\n• Daha uzun geçmiş veri ➜ daha uzun tahminler -> daha yüksek doğruluk.\\n\\n⚠️ Bu sadece basitleştirilmiş bir modeldir. Gerçek dünya oranları önemli ölçüde değişebilir!';
+    return 'Tahmin, gelecek $predictionDays günün verilerini tahmin etmek için son $days günün verilerini kullanır. \n\n• Geçmiş verilerden ortalama günlük eğilimi takip eder.\n• Geçmiş volatiliteye dayalı gerçekçi rastgele dalgalanmalar ekler.\n• Daha kısa geçmiş veri → daha kısa tahminler → daha az doğruluk.\n• Daha uzun geçmiş veri → daha uzun tahminler → daha yüksek doğruluk.\n\n⚠️ Bu sadece basitleştirilmiş bir modeldir. Gerçek dünya oranları önemli ölçüde değişebilir!';
   }
 
   @override

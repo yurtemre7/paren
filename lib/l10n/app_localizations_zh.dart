@@ -446,7 +446,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String predictionExplanation(Object days, Object predictionDays) {
-    return '预测使用过去$days天的数据来估计未来$predictionDays天的数据。\\n\\n• 它遵循历史数据的平均每日趋势。\\n• 根据过去的波动性添加现实的随机波动。\\n• 较短的历史数据 ➜ 较短的预测 -> 准确性较低。\\n• 较长的历史数据 ➜ 较长的预测 -> 准确性较高。\\n\\n⚠️ 这是一个简化模型。现实世界的汇率可能会有显著差异！';
+    return '预测使用过去$days天的数据来估计未来$predictionDays天的数据。\n\n• 它遵循历史数据的平均每日趋势。\n• 根据过去的波动性添加现实的随机波动。\n• 较短的历史数据 → 较短的预测 → 准确性较低。\n• 较长的历史数据 → 较长的预测 → 准确性较高。\n\n⚠️ 这是一个简化模型。现实世界的汇率可能会有显著差异！';
   }
 
   @override

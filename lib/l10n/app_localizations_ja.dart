@@ -448,7 +448,7 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String predictionExplanation(Object days, Object predictionDays) {
-    return '予測は過去$days日間のデータを使用して、今後$predictionDays日間のデータを推定します。 \\n\\n• 歴史的データからの平均的な日々の傾向に従います。\\n• 過去のボラティリティに基づいた現実的なランダム変動を追加します。\\n• 短い履歴データ ➜ 短い予測 -> 精度が低くなります。\\n• 長い履歴データ ➜ 長い予測 -> 精度が高くなります。\\n\\n⚠️ これは簡略化されたモデルです。実際のレートは大きく異なる可能性があります！';
+    return '予測は過去$days日間のデータを使用して、今後$predictionDays日間のデータを推定します。 \n\n• 歴史的データからの平均的な日々の傾向に従います。\n• 過去のボラティリティに基づいた現実的なランダム変動を追加します。\n• 短い履歴データ → 短い予測 → 精度が低くなります。\n• 長い履歴データ → 長い予測 → 精度が高くなります。\n\n⚠️ これは簡略化されたモデルです。実際のレートは大きく異なる可能性があります！';
   }
 
   @override

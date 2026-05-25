@@ -133,7 +133,7 @@
   "showSimplePrediction": "Show simple prediction",
   "predictionFunDisclaimer": "This is just for fun, no financial advice.",
   "howPredictionsWork": "How Predictions Work",
-  "predictionExplanation": "The prediction uses the last {days} days of data to estimate {predictionDays} days of future data. \\n\\n• It follows the average daily trend from historical data.\\n• Adds realistic random fluctuations based on past volatility.\\n• Shorter historical data ➜ shorter predictions -> less accuracy.\\n• Longer historical data ➜ longer predictions -> higher accuracy.\\n\\n⚠️ This is a simplified model. Real-world rates may vary significantly!",
+  "predictionExplanation": "The prediction uses the last {days} days of data to estimate {predictionDays} days of future data. \n\n• It follows the average daily trend from historical data.\n• Adds realistic random fluctuations based on past volatility.\n• Shorter historical data → shorter predictions → less accuracy.\n• Longer historical data → longer predictions → higher accuracy.\n\n⚠️ This is a simplified model. Real-world rates may vary significantly!",
   "ok": "OK",
   "swap": "Swap",
   "dailyBudget": "Daily Budget ({currency})",

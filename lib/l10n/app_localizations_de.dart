@@ -453,7 +453,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String predictionExplanation(Object days, Object predictionDays) {
-    return 'Die Vorhersage verwendet die letzten $days Tage an Daten, um $predictionDays Tage zukünftiger Daten abzuschätzen. \\n\\n• Sie folgt dem durchschnittlichen täglichen Trend aus historischen Daten.\\n• Fügt realistische zufällige Schwankungen basierend auf vergangener Volatilität hinzu.\\n• Kürzere historische Daten ➜ kürzere Vorhersagen -> geringere Genauigkeit.\\n• Längere historische Daten ➜ längere Vorhersagen -> höhere Genauigkeit.\\n\\n⚠️ Dies ist ein vereinfachtes Modell. Reale Kurse können erheblich abweichen!';
+    return 'Die Vorhersage verwendet die letzten $days Tage an Daten, um $predictionDays Tage zukünftiger Daten abzuschätzen. \n\n• Sie folgt dem durchschnittlichen täglichen Trend aus historischen Daten.\n• Fügt realistische zufällige Schwankungen basierend auf vergangener Volatilität hinzu.\n• Kürzere historische Daten → kürzere Vorhersagen → geringere Genauigkeit.\n• Längere historische Daten → längere Vorhersagen → höhere Genauigkeit.\n\n⚠️ Dies ist ein vereinfachtes Modell. Reale Kurse können erheblich abweichen!';
   }
 
   @override

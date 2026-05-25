@@ -130,7 +130,7 @@
     "showSimplePrediction": "Einfache Vorhersage anzeigen",
     "predictionFunDisclaimer": "Dies ist nur zum Spaß, keine Finanzberatung.",
     "howPredictionsWork": "So funktionieren Vorhersagen",
-    "predictionExplanation": "Die Vorhersage verwendet die letzten {days} Tage an Daten, um {predictionDays} Tage zukünftiger Daten abzuschätzen. \\n\\n• Sie folgt dem durchschnittlichen täglichen Trend aus historischen Daten.\\n• Fügt realistische zufällige Schwankungen basierend auf vergangener Volatilität hinzu.\\n• Kürzere historische Daten ➜ kürzere Vorhersagen -> geringere Genauigkeit.\\n• Längere historische Daten ➜ längere Vorhersagen -> höhere Genauigkeit.\\n\\n⚠️ Dies ist ein vereinfachtes Modell. Reale Kurse können erheblich abweichen!",
+    "predictionExplanation": "Die Vorhersage verwendet die letzten {days} Tage an Daten, um {predictionDays} Tage zukünftiger Daten abzuschätzen. \n\n• Sie folgt dem durchschnittlichen täglichen Trend aus historischen Daten.\n• Fügt realistische zufällige Schwankungen basierend auf vergangener Volatilität hinzu.\n• Kürzere historische Daten → kürzere Vorhersagen → geringere Genauigkeit.\n• Längere historische Daten → längere Vorhersagen → höhere Genauigkeit.\n\n⚠️ Dies ist ein vereinfachtes Modell. Reale Kurse können erheblich abweichen!",
     "ok": "OK",
     "swap": "Tauschen",
     "dailyBudget": "Tagesbudget ({currency})",

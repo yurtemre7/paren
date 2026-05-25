@@ -453,7 +453,7 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String predictionExplanation(Object days, Object predictionDays) {
-    return 'Prediksi menggunakan data $days hari terakhir untuk memperkirakan data $predictionDays hari ke depan. \\n\\n• Ini mengikuti tren harian rata-rata dari data historis.\\n• Menambahkan fluktuasi acak yang realistis berdasarkan volatilitas sebelumnya.\\n• Data historis lebih pendek ➜ prediksi lebih pendek -> akurasi lebih rendah.\\n• Data historis lebih panjang ➜ prediksi lebih panjang -> akurasi lebih tinggi.\\n\\n⚠️ Ini adalah model sederhana. Nilai-nilai di dunia nyata bisa sangat berbeda!';
+    return 'Prediksi menggunakan data $days hari terakhir untuk memperkirakan data $predictionDays hari ke depan. \n\n• Ini mengikuti tren harian rata-rata dari data historis.\n• Menambahkan fluktuasi acak yang realistis berdasarkan volatilitas sebelumnya.\n• Data historis lebih pendek → prediksi lebih pendek → akurasi lebih rendah.\n• Data historis lebih panjang → prediksi lebih panjang → akurasi lebih tinggi.\n\n⚠️ Ini adalah model sederhana. Nilai-nilai di dunia nyata bisa sangat berbeda!';
   }
 
   @override
