@@ -248,6 +248,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get addEntry => 'Add Entry';
 
   @override
+  String get updateEntry => 'Update Entry';
+
+  @override
   String get description => 'Description';
 
   @override

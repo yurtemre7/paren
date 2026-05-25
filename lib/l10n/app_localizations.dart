@@ -506,6 +506,12 @@ abstract class AppLocalizations {
   /// **'Add Entry'**
   String get addEntry;
 
+  /// No description provided for @updateEntry.
+  ///
+  /// In en, this message translates to:
+  /// **'Update Entry'**
+  String get updateEntry;
+
   /// No description provided for @description.
   ///
   /// In en, this message translates to:

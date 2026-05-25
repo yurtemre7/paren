@@ -68,6 +68,7 @@
   "add": "Ekle",
   "update": "Güncelle",
   "addEntry": "Kayıt Ekle",
+  "updateEntry": "Kaydı Güncelle",
   "description": "Açıklama",
   "category": "Kategori",
   "categoryFood": "Yemek",

@@ -65,6 +65,7 @@
     "add": "Hinzufügen",
     "update": "Aktualisieren",
     "addEntry": "Eintrag hinzufügen",
+    "updateEntry": "Eintrag aktualisieren",
     "description": "Beschreibung",
     "category": "Kategorie",
     "categoryFood": "Essen",

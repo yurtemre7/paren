@@ -68,6 +68,7 @@
   "add": "添加",
   "update": "更新",
   "addEntry": "添加条目",
+  "updateEntry": "更新条目",
   "description": "描述",
   "category": "类别",
   "categoryFood": "餐饮",

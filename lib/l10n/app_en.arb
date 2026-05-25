@@ -68,6 +68,7 @@
   "add": "Add",
   "update": "Update",
   "addEntry": "Add Entry",
+  "updateEntry": "Update Entry",
   "description": "Description",
   "category": "Category",
   "categoryFood": "Food",

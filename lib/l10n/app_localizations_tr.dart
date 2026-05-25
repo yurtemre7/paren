@@ -246,6 +246,9 @@ class AppLocalizationsTr extends AppLocalizations {
   String get addEntry => 'Kayıt Ekle';
 
   @override
+  String get updateEntry => 'Kaydı Güncelle';
+
+  @override
   String get description => 'Açıklama';
 
   @override

@@ -248,6 +248,9 @@ class AppLocalizationsId extends AppLocalizations {
   String get addEntry => 'Tambah Entri';
 
   @override
+  String get updateEntry => 'Perbarui Entri';
+
+  @override
   String get description => 'Deskripsi';
 
   @override

@@ -247,6 +247,9 @@ class AppLocalizationsHi extends AppLocalizations {
   String get addEntry => 'प्रविष्टि जोड़ें';
 
   @override
+  String get updateEntry => 'प्रविष्टि अपडेट करें';
+
+  @override
   String get description => 'विवरण';
 
   @override

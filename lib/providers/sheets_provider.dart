@@ -67,6 +67,7 @@ class SheetsProvider extends GetxController {
   }
 
   Future<void> showEntryDialog(Sheet? sheet, {SheetEntry? entry}) async {
+    var isEditing = entry != null && sheet != null;
     var l10n = context.l10n;
     var theme = context.theme;
     var formKey = GlobalKey<FormState>();
@@ -111,7 +112,7 @@ class SheetsProvider extends GetxController {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            l10n.addEntry,
+                            isEditing ? l10n.updateEntry : l10n.addEntry,
                             style: Theme.of(context).textTheme.headlineSmall
                                 ?.copyWith(fontWeight: FontWeight.bold),
                           ),
@@ -138,7 +139,9 @@ class SheetsProvider extends GetxController {
                             inputFormatters: [_entryAmountFormatter],
                             decoration: InputDecoration(
                               labelText: l10n.amountInCurrency(
-                                inputCurrency.toUpperCase(),
+                                sheet != null
+                                    ? sheet.fromCurrency.toUpperCase()
+                                    : inputCurrency.toUpperCase(),
                               ),
                               hintText: '0.00',
                             ),
@@ -307,7 +310,8 @@ class SheetsProvider extends GetxController {
                                     return TextFormField(
                                       controller: textEditingController,
                                       focusNode: focusNode,
-                                      onFieldSubmitted: (s) => onFieldSubmitted,
+                                      onFieldSubmitted: (s) =>
+                                          onFieldSubmitted(),
                                       decoration: InputDecoration(
                                         label: Text(l10n.searchSheets),
                                       ),
@@ -356,13 +360,13 @@ class SheetsProvider extends GetxController {
                                             updatedAt: DateTime.now(),
                                           );
 
-                                          if (entry == null) {
-                                            paren.addSheetEntry(
+                                          if (isEditing) {
+                                            paren.updateSheetEntry(
                                               selectedSheet!.id,
                                               newEntry,
                                             );
                                           } else {
-                                            paren.updateSheetEntry(
+                                            paren.addSheetEntry(
                                               selectedSheet!.id,
                                               newEntry,
                                             );
@@ -370,7 +374,7 @@ class SheetsProvider extends GetxController {
                                           Navigator.pop(context);
                                         },
                                   child: Text(
-                                    entry == null ? l10n.add : l10n.update,
+                                    isEditing ? l10n.update : l10n.add,
                                   ),
                                 ),
                               ),

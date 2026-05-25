@@ -68,6 +68,7 @@
   "add": "Ajouter",
   "update": "Mettre à jour",
   "addEntry": "Ajouter une entrée",
+  "updateEntry": "Mettre à jour l'entrée",
   "description": "Description",
   "category": "Catégorie",
   "categoryFood": "Nourriture",

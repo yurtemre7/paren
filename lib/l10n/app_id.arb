@@ -68,6 +68,7 @@
   "add": "Tambah",
   "update": "Perbarui",
   "addEntry": "Tambah Entri",
+  "updateEntry": "Perbarui Entri",
   "description": "Deskripsi",
   "category": "Kategori",
   "categoryFood": "Makanan",

@@ -65,6 +65,7 @@
   "add": "追加",
   "update": "更新",
   "addEntry": "エントリ追加",
+  "updateEntry": "エントリを更新",
   "description": "説明",
   "category": "カテゴリ",
   "categoryFood": "食事",

@@ -244,6 +244,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get addEntry => 'エントリ追加';
 
   @override
+  String get updateEntry => 'エントリを更新';
+
+  @override
   String get description => '説明';
 
   @override

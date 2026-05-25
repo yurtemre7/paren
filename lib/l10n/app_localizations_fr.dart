@@ -248,6 +248,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get addEntry => 'Ajouter une entrée';
 
   @override
+  String get updateEntry => 'Mettre à jour l\'entrée';
+
+  @override
   String get description => 'Description';
 
   @override

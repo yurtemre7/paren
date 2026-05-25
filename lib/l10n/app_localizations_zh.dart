@@ -242,6 +242,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get addEntry => '添加条目';
 
   @override
+  String get updateEntry => '更新条目';
+
+  @override
   String get description => '描述';
 
   @override
