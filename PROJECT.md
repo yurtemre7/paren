@@ -99,7 +99,7 @@ Represents an item inside a sheet.
 - `amount`
 Generated serialization files live next to these models as `*.g.dart` and should not be edited manually.
 ## Data Sources and Persistence
-- Exchange-rate and historical-rate data are fetched from the Frankfurter API via `https://api.frankfurter.dev/v1`
+- Exchange-rate and historical-rate data are fetched from the Frankfurter API via `https://frankfurter.dev/`
 - App settings, favorites, currencies, and sheets are persisted locally with `shared_preferences`
 - The app refreshes stale currency data instead of fetching on every launch
 ## Localization

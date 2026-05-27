@@ -319,7 +319,7 @@ class _HomeState extends State<Home> {
                     text: l10n.frankfurter,
                     recognizer: TapGestureRecognizer()
                       ..onTap = () {
-                        launchUrl(Uri.parse('https://www.frankfurter.app/'));
+                        launchUrl(Uri.parse('https://frankfurter.dev/'));
                       },
                     style: TextStyle(
                       color: context.theme.colorScheme.tertiary,
