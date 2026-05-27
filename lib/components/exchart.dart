@@ -83,25 +83,27 @@ class _ExChartState extends State<ExChart> {
     hasError.value = false;
     hasNotShownDoubleValue.value = false;
     try {
-      var beginDate = DateTime.now().subtract(localDuration.value);
-      var year = beginDate.year;
-      var month = beginDate.month.toString().padLeft(2, '0');
-      var day = beginDate.day.toString().padLeft(2, '0');
-      var beginDateString = '$year-$month-$day';
-      var resp = await paren.dio.get('/$beginDateString..?from=$from&to=$to');
+      var today = DateTime.now();
+      var beginDate = today.subtract(localDuration.value);
+      var beginYear = beginDate.year;
+      var beginMonth = beginDate.month.toString().padLeft(2, '0');
+      var beginDay = beginDate.day.toString().padLeft(2, '0');
+      var todayYear = today.year;
+      var todayMonth = today.month.toString().padLeft(2, '0');
+      var todayDay = today.day.toString().padLeft(2, '0');
+      var beginDateString = '$beginYear-$beginMonth-$beginDay';
+      var todayString = '$todayYear-$todayMonth-$todayDay';
+      var groupingParam = localDuration.value.inDays >= 30 ? '&group=week' : '';
+      var resp = await paren.dio.get(
+        '$latestRates?base=$from&quotes=$to&from=$beginDateString&to=$todayString$groupingParam',
+      );
 
       if (resp.statusCode == 200) {
-        var body = resp.data;
-        Map rates = body['rates'];
-        var ratesList = rates.entries.map((e) {
-          var key = e.key.toString();
+        List body = resp.data;
+        var ratesList = body.map((element) {
+          var key = element['date'].toString();
           var dateKey = DateTime.parse(key);
-          var value = e.value.toString();
-          var dataValue =
-              double.tryParse(
-                value.toString().substring(5, value.length - 1).trim(),
-              ) ??
-              0.0;
+          var dataValue = double.tryParse(element['rate'].toString()) ?? 0.0;
           return (x: dateKey.millisecondsSinceEpoch.toDouble(), y: dataValue);
         }).toList();
         currencyDataList.value = ratesList;
@@ -269,7 +271,10 @@ class _ExChartState extends State<ExChart> {
                     child: LineChart(mainData(), duration: 500.milliseconds),
                   ),
                 ),
+                
                 24.h,
+                if (isLoading.value) 
+                  LinearProgressIndicator(),
                 Center(
                   child: Column(
                     children: [
@@ -410,9 +415,10 @@ class _ExChartState extends State<ExChart> {
       var mspd = Duration.millisecondsPerDay.toDouble();
 
       return switch (localDuration.value) {
-        days7 || days14 => mspd,
+        days7 || days14 => mspd * 2,
         days30 => mspd * 7,
-        days90 || days180 || days365 => mspd * 30,
+        days90 || days180 => mspd * 30,
+        days365 => mspd * 45,
         _ => null,
       };
     }

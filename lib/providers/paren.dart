@@ -69,36 +69,50 @@ class Paren extends GetxController {
       loading.value = true;
       logMessage('Fetching currency data online');
       var responds = await Future.wait([
-        dio.get(latest),
+        dio.get(latestRates),
         dio.get(currencieNames),
       ]);
-      Map rates = responds[0].data['rates'];
-      Map currencieNamesMap = responds[1].data;
+      List rates = responds[0].data;
+      List currencieNamesList = responds[1].data;
       var onlineCurrencies = <Currency>[
         Currency(id: 'eur', name: 'Euro', symbol: '€', rate: 1.0),
       ];
 
-      rates.forEach((var key, var value) {
+      for (var rate in rates) {
+        var currencyInfo = currencieNamesList.firstWhere(
+          (element) =>
+              element['iso_code'].toString().toLowerCase() ==
+              rate['quote'].toString().toLowerCase(),
+        );
         onlineCurrencies.add(
           Currency(
-            id: key.toString().toLowerCase(),
-            name: currencieNamesMap[key.toString()],
-            symbol: NumberFormat().simpleCurrencySymbol(key.toString()),
-            rate: double.tryParse(value.toString()) ?? 1.0,
+            id: rate['quote'].toString().toLowerCase(),
+            name: currencyInfo['name'],
+            // INFO: maybe use currencyInfo['symbol'] later
+            symbol: NumberFormat().simpleCurrencySymbol(currencyInfo['iso_code']),
+            rate: double.tryParse(rate['rate'].toString()) ?? 1.0,
           ),
         );
-      });
+      }
 
       onlineCurrencies.sort((c1, c2) => c1.name.compareTo(c2.name));
 
       currencies.value = onlineCurrencies;
-      if (!currencieNamesMap.containsKey(fromCurrency.value.toUpperCase())) {
-        fromCurrency.value = currencieNamesMap.entries.first.key
+      if (!currencieNamesList.any(
+        (element) =>
+            element['iso_code'].toString().toLowerCase() ==
+            fromCurrency.value.toLowerCase(),
+      )) {
+        fromCurrency.value = currencieNamesList.first['iso_code']
             .toString()
             .toLowerCase();
       }
-      if (!currencieNamesMap.containsKey(toCurrency.value.toUpperCase())) {
-        toCurrency.value = currencieNamesMap.entries.first.key
+      if (!currencieNamesList.any(
+        (element) =>
+            element['iso_code'].toString().toLowerCase() ==
+            toCurrency.value.toLowerCase(),
+      )) {
+        toCurrency.value = currencieNamesList.first['iso_code']
             .toString()
             .toLowerCase();
       }

@@ -3,8 +3,8 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:paren/classes/currency.dart';
 
-const baseUrl = 'https://api.frankfurter.dev/v1';
-const latest = '/latest';
+const baseUrl = 'https://api.frankfurter.dev/v2';
+const latestRates = '/rates';
 const currencieNames = '/currencies';
 
 var EUR = Currency(id: 'eur', name: 'Euro', symbol: '€', rate: 1.0);
