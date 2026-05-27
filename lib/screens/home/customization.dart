@@ -53,74 +53,76 @@ class _CustomizationState extends State<Customization> {
 
   Widget buildCurrencyChartTile() {
     var l10n = context.l10n;
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: ListTile(
-        title: Text(
-          l10n.exchangeChart(
-            paren.fromCurrency.toUpperCase(),
-            paren.toCurrency.toUpperCase(),
+    return Obx(() {
+      return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: ListTile(
+          title: Text(
+            l10n.exchangeChart(
+              paren.fromCurrency.toUpperCase(),
+              paren.toCurrency.toUpperCase(),
+            ),
           ),
-        ),
-        trailing: Icon(
-          Icons.show_chart,
-          color: context.theme.colorScheme.primary,
-        ),
-        onTap: () async {
-          Get.back();
-          if (paren.fromCurrency.value == paren.toCurrency.value) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(
-                  l10n.chartDoesNotExist,
-                  style: TextStyle(color: context.theme.colorScheme.primary),
+          trailing: Icon(
+            Icons.show_chart,
+            color: context.theme.colorScheme.primary,
+          ),
+          onTap: () async {
+            Get.back();
+            if (paren.fromCurrency.value == paren.toCurrency.value) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(
+                    l10n.chartDoesNotExist,
+                    style: TextStyle(color: context.theme.colorScheme.primary),
+                  ),
+                  duration: const Duration(seconds: 1),
+                  backgroundColor: context.theme.colorScheme.primaryContainer,
                 ),
-                duration: const Duration(seconds: 1),
-                backgroundColor: context.theme.colorScheme.primaryContainer,
+              );
+              return;
+            }
+            await Navigator.of(context).push(
+              adaptiveSheetRoute(
+                child: ExChart(
+                  idFrom: paren.fromCurrency.value,
+                  idxFrom: paren.currencies.indexWhere(
+                    (element) => element.id == paren.fromCurrency.value,
+                  ),
+                  idTo: paren.toCurrency.value,
+                  idxTo: paren.currencies.indexWhere(
+                    (element) => element.id == paren.toCurrency.value,
+                  ),
+                  localizedMonths: {
+                    DateTime.january: l10n.monthJan,
+                    DateTime.february: l10n.monthFeb,
+                    DateTime.march: l10n.monthMar,
+                    DateTime.april: l10n.monthApr,
+                    DateTime.may: l10n.monthMay,
+                    DateTime.june: l10n.monthJun,
+                    DateTime.july: l10n.monthJul,
+                    DateTime.august: l10n.monthAug,
+                    DateTime.september: l10n.monthSep,
+                    DateTime.october: l10n.monthOct,
+                    DateTime.november: l10n.monthNov,
+                    DateTime.december: l10n.monthDec,
+                  },
+                  localizedWeekdays: {
+                    DateTime.monday: l10n.weekdayMon,
+                    DateTime.tuesday: l10n.weekdayTue,
+                    DateTime.wednesday: l10n.weekdayWed,
+                    DateTime.thursday: l10n.weekdayThu,
+                    DateTime.friday: l10n.weekdayFri,
+                    DateTime.saturday: l10n.weekdaySat,
+                    DateTime.sunday: l10n.weekdaySun,
+                  },
+                ),
               ),
             );
-            return;
-          }
-          await Navigator.of(context).push(
-            adaptiveSheetRoute(
-              child: ExChart(
-                idFrom: paren.fromCurrency.value,
-                idxFrom: paren.currencies.indexWhere(
-                  (element) => element.id == paren.fromCurrency.value,
-                ),
-                idTo: paren.toCurrency.value,
-                idxTo: paren.currencies.indexWhere(
-                  (element) => element.id == paren.toCurrency.value,
-                ),
-                localizedMonths: {
-                  DateTime.january: l10n.monthJan,
-                  DateTime.february: l10n.monthFeb,
-                  DateTime.march: l10n.monthMar,
-                  DateTime.april: l10n.monthApr,
-                  DateTime.may: l10n.monthMay,
-                  DateTime.june: l10n.monthJun,
-                  DateTime.july: l10n.monthJul,
-                  DateTime.august: l10n.monthAug,
-                  DateTime.september: l10n.monthSep,
-                  DateTime.october: l10n.monthOct,
-                  DateTime.november: l10n.monthNov,
-                  DateTime.december: l10n.monthDec,
-                },
-                localizedWeekdays: {
-                  DateTime.monday: l10n.weekdayMon,
-                  DateTime.tuesday: l10n.weekdayTue,
-                  DateTime.wednesday: l10n.weekdayWed,
-                  DateTime.thursday: l10n.weekdayThu,
-                  DateTime.friday: l10n.weekdayFri,
-                  DateTime.saturday: l10n.weekdaySat,
-                  DateTime.sunday: l10n.weekdaySun,
-                },
-              ),
-            ),
-          );
-        },
-      ),
-    );
+          },
+        ),
+      );
+    });
   }
 
   Widget buildCurrencyData() {
