@@ -120,7 +120,7 @@ class _CalculatorKeyboardState extends State<CalculatorKeyboard> {
         locale: context.l10n.localeName,
         name: '',
         decimalDigits: 2,
-      ).format(double.tryParse(widget.input.value) ?? 0.0);
+      ).format(double.tryParse(widget.input.value) ?? 0.0).trim();
 
       var inputStringFormattedRev = inputStringFormatted.characters
           .toList()
