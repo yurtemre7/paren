@@ -89,6 +89,7 @@ class _SheetDetailState extends State<SheetDetail> {
   String formatCurrencyAmount(double amount, String currencyCode) {
     var numberFormat = NumberFormat.simpleCurrency(
       name: currencyCode.toUpperCase(),
+      locale: context.l10n.localeName,
     );
     return numberFormat.format(amount);
   }

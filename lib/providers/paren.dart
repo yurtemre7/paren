@@ -11,6 +11,7 @@ import 'package:paren/classes/favorite_conversion.dart';
 import 'package:paren/classes/sheet.dart';
 import 'package:paren/classes/sheet_entry.dart';
 import 'package:paren/l10n/app_localizations.dart';
+import 'package:paren/l10n/app_localizations_extension.dart';
 import 'package:paren/providers/constants.dart';
 import 'package:paren/providers/extensions.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -89,7 +90,8 @@ class Paren extends GetxController {
             id: rate['quote'].toString().toLowerCase(),
             name: currencyInfo['name'],
             // INFO: maybe use currencyInfo['symbol'] later
-            symbol: NumberFormat().simpleCurrencySymbol(currencyInfo['iso_code']),
+            symbol: currencyInfo['symbol'],
+            // symbol: NumberFormat().simpleCurrencySymbol(currencyInfo['iso_code']),
             rate: double.tryParse(rate['rate'].toString()) ?? 1.0,
           ),
         );
@@ -276,12 +278,15 @@ class Paren extends GetxController {
 
     var numberFormatFrom = NumberFormat.simpleCurrency(
       name: fromCurrency.id.toUpperCase(),
+      locale: Get.context?.l10n.localeName,
     );
     var numberFormatRe = NumberFormat.simpleCurrency(
       name: fromCurrency.id.toUpperCase(),
+      locale: Get.context?.l10n.localeName,
     );
     var numberFormatTo = NumberFormat.simpleCurrency(
       name: toCurrency.id.toUpperCase(),
+      locale: Get.context?.l10n.localeName,
     );
 
     String amountStr = numberFormatTo.format(convertedAmount);

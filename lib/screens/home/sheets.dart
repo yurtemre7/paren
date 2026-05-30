@@ -74,12 +74,6 @@ class _SheetsState extends State<Sheets> {
                       spacing: 8,
                       runSpacing: 8,
                       children: [
-                        // TextButton(
-                        //   onPressed: () {
-                        //     isEditing.toggle();
-                        //   },
-                        //   child: Text(isEditing.value ? l10n.save : l10n.edit),
-                        // ),
                         ChoiceChip(
                           label: Text(isEditing.value ? l10n.save : l10n.edit),
                           selected: isEditing.value,

@@ -390,6 +390,7 @@ class _ExChartState extends State<ExChart> {
     const style = TextStyle(fontWeight: FontWeight.bold, fontSize: 14);
     var numberFormatTo = NumberFormat.simpleCurrency(
       name: paren.currencies[localIdxTo.value].id.toUpperCase(),
+      locale: context.l10n.localeName,
       decimalDigits: 5,
     );
 
@@ -440,6 +441,7 @@ class _ExChartState extends State<ExChart> {
 
               var numberFormatTo = NumberFormat.simpleCurrency(
                 name: paren.currencies[localIdxTo.value].id.toUpperCase(),
+                locale: context.l10n.localeName,
                 decimalDigits: 5,
               );
 

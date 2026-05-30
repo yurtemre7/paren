@@ -83,12 +83,15 @@ class _ConversionState extends State<Conversion> {
 
             var numberFormatFrom = NumberFormat.simpleCurrency(
               name: fromCurrency.id.toUpperCase(),
+              locale: context.l10n.localeName,
             );
             var numberFormatRe = NumberFormat.simpleCurrency(
               name: fromCurrency.id.toUpperCase(),
+              locale: context.l10n.localeName,
             );
             var numberFormatTo = NumberFormat.simpleCurrency(
               name: toCurrency.id.toUpperCase(),
+              locale: context.l10n.localeName,
             );
 
             String amountStr = numberFormatTo.format(convertedAmount);

@@ -49,9 +49,11 @@ class QuickConversionValues extends StatelessWidget {
     var toCurrency = paren.currencyById(toCurr);
     var numberFormatFrom = NumberFormat.simpleCurrency(
       name: fromCurrency.id.toUpperCase(),
+      locale: context.l10n.localeName,
     );
     var numberFormatTo = NumberFormat.simpleCurrency(
       name: toCurrency.id.toUpperCase(),
+      locale: context.l10n.localeName,
     );
 
     if (scrollDirection == Axis.horizontal) {

@@ -59,9 +59,11 @@ class _BudgetPlannerState extends State<BudgetPlanner> {
 
       var currencyToFormatter = NumberFormat.simpleCurrency(
         name: paren.toCurrency.value.toUpperCase(),
+        locale: context.l10n.localeName,
       );
       var currencyFromFormatter = NumberFormat.simpleCurrency(
         name: paren.fromCurrency.value.toUpperCase(),
+        locale: context.l10n.localeName,
       );
       return GestureDetector(
         onTap: hideKeyboard,
