@@ -271,10 +271,8 @@ class _ExChartState extends State<ExChart> {
                     child: LineChart(mainData(), duration: 500.milliseconds),
                   ),
                 ),
-                
                 24.h,
-                if (isLoading.value) 
-                  LinearProgressIndicator(),
+                if (isLoading.value) LinearProgressIndicator(),
                 Center(
                   child: Column(
                     children: [
