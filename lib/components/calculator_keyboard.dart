@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:liquid_glass_widgets/liquid_glass_widgets.dart';
+import 'package:paren/l10n/app_localizations_extension.dart';
 import 'package:paren/providers/extensions.dart';
 import 'package:paren/providers/paren.dart';
 
@@ -17,14 +19,20 @@ class CalculatorKeyboard extends StatefulWidget {
 class _CalculatorKeyboardState extends State<CalculatorKeyboard> {
   final Paren paren = Get.find();
   final focusNode = FocusNode();
+  final currentStrIdx = 3.obs;
 
   void _append(String value) {
     var text = widget.input.value;
     if (text.length >= 25) return;
     if (value == '.' && text.contains('.')) return;
 
+    if (!text.contains('.') && value == '.') {
+      currentStrIdx.value = 1;
+    }
+
     if (value == '.' && text.isEmpty) {
       widget.input.value = '0.';
+      currentStrIdx.value = 1;
       return;
     }
 
@@ -36,6 +44,9 @@ class _CalculatorKeyboardState extends State<CalculatorKeyboard> {
       int dotIndex = text.indexOf('.');
       int decimals = text.length - dotIndex - 1;
       if (dotIndex != -1 && decimals >= 2 && value != '.') return;
+      if (currentStrIdx.value != 0) {
+        currentStrIdx.value -= 1;
+      }
     }
 
     String newText = text + value;
@@ -53,14 +64,27 @@ class _CalculatorKeyboardState extends State<CalculatorKeyboard> {
     if (text.isNotEmpty) {
       if (text.length == 1) {
         widget.input.value = '0';
+        currentStrIdx.value = 3;
+      } else if (text.length >= 2 && text[text.length - 1] == '.') {
+        widget.input.value = text.substring(0, text.length - 2);
+        currentStrIdx.value = 3;
       } else {
         widget.input.value = text.substring(0, text.length - 1);
+        if (text.contains('.')) {
+          if (currentStrIdx.value != 1) {
+            currentStrIdx.value = currentStrIdx.value + 1;
+          } else {
+            widget.input.value = widget.input.value.replaceAll('.', '');
+            currentStrIdx.value = 3;
+          }
+        }
       }
     }
   }
 
   void _clear() {
     widget.input.value = '0';
+    currentStrIdx.value = 3;
   }
 
   void handleKeyEvent(KeyEvent event) {
@@ -76,6 +100,9 @@ class _CalculatorKeyboardState extends State<CalculatorKeyboard> {
         _delete();
       } else if (event.logicalKey == LogicalKeyboardKey.escape) {
         _clear();
+      } else if (keyLabel.toLowerCase() == 'r') {
+        paren.latestTimestamp.value = DateTime.now();
+        paren.fetchCurrencyDataOnline();
       }
     }
   }
@@ -88,8 +115,19 @@ class _CalculatorKeyboardState extends State<CalculatorKeyboard> {
 
   @override
   Widget build(BuildContext context) {
-    return Obx(
-      () => KeyboardListener(
+    return Obx(() {
+      var inputStringFormatted = NumberFormat.simpleCurrency(
+        locale: context.l10n.localeName,
+        name: '',
+        decimalDigits: 2,
+      ).format(double.tryParse(widget.input.value) ?? 0.0);
+
+      var inputStringFormattedRev = inputStringFormatted.characters
+          .toList()
+          .reversed
+          .join();
+
+      return KeyboardListener(
         focusNode: focusNode,
         autofocus: true,
         onKeyEvent: handleKeyEvent,
@@ -112,16 +150,9 @@ class _CalculatorKeyboardState extends State<CalculatorKeyboard> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Align(
-                      alignment: Alignment.centerRight,
-                      child: SelectableText(
-                        widget.input.value,
-                        style: TextStyle(
-                          fontSize: 22,
-                          color: context.theme.colorScheme.onSurfaceVariant,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
+                    AnimatedText(
+                      inputStringFormattedRev: inputStringFormattedRev,
+                      currentStrIdx: currentStrIdx.value,
                     ),
                     10.h,
                     GridView.count(
@@ -150,7 +181,83 @@ class _CalculatorKeyboardState extends State<CalculatorKeyboard> {
             ),
           ),
         ),
-      ),
+      );
+    });
+  }
+}
+
+class AnimatedText extends StatefulWidget {
+  const AnimatedText({
+    super.key,
+    required this.inputStringFormattedRev,
+    required this.currentStrIdx,
+  });
+
+  final String inputStringFormattedRev;
+  final int currentStrIdx;
+
+  @override
+  State<AnimatedText> createState() => _AnimatedTextState();
+}
+
+class _AnimatedTextState extends State<AnimatedText>
+    with TickerProviderStateMixin {
+  late AnimationController _pulseController;
+  late Animation<Color?> _decorationColorAnimation;
+  @override
+  void initState() {
+    super.initState();
+    _pulseController = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 1),
+      animationBehavior: .preserve,
+    )..repeat(reverse: true);
+  }
+
+  @override
+  void dispose() {
+    _pulseController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    _decorationColorAnimation = ColorTween(
+      begin: context.theme.colorScheme.onSurfaceVariant,
+      end: Colors.transparent,
+    ).animate(_pulseController);
+    return AnimatedBuilder(
+      animation: _pulseController,
+      builder: (context, child) {
+        return Align(
+          alignment: Alignment.centerRight,
+          child: SelectableText.rich(
+            TextSpan(
+              children: [
+                ...widget.inputStringFormattedRev.characters.indexed
+                    .map(
+                      ((int, String) element) => TextSpan(
+                        text: element.$2,
+                        style: TextStyle(
+                          fontSize: 22,
+                          color: context.theme.colorScheme.onSurfaceVariant,
+                          fontWeight: FontWeight.w700,
+                          decoration: element.$1 == widget.currentStrIdx
+                              ? .underline
+                              : .none,
+                          decorationColor: element.$1 == widget.currentStrIdx
+                              ? _decorationColorAnimation.value
+                              : Colors.transparent,
+                        ),
+                      ),
+                    )
+                    .toList()
+                    .reversed,
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 }
