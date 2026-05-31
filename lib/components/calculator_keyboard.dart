@@ -21,6 +21,19 @@ class _CalculatorKeyboardState extends State<CalculatorKeyboard> {
   final focusNode = FocusNode();
   final currentStrIdx = 3.obs;
 
+  int newCursorPosition(String number) {
+    var cursorIdx = 0;
+    var len = number.length;
+    if (number[len - 1] == '0') {
+      cursorIdx = 1;
+      if (number[len - 2] == '0') {
+        cursorIdx = 3; // left of the separator (, or .)
+      }
+    }
+
+    return cursorIdx;
+  }
+
   void _append(String value) {
     var text = widget.input.value;
     if (text.length >= 25) return;
@@ -109,18 +122,6 @@ class _CalculatorKeyboardState extends State<CalculatorKeyboard> {
         clipboardText = clipboardText.replaceAll(',', '.')..trim();
         var clipboardDouble = double.tryParse(clipboardText) ?? 0.0;
         clipboardText = clipboardDouble.toStringAsFixed(2);
-        int newCursorPosition(String number) {
-          var cursorIdx = 0;
-          var len = number.length;
-          if (number[len - 1] == '0') {
-            cursorIdx = 1;
-            if (number[len - 2] == '0') {
-              cursorIdx = 3; // left of the separator (, or .)
-            }
-          }
-
-          return cursorIdx;
-        }
 
         var cursorPosition = newCursorPosition(clipboardText);
         widget.input.value = clipboardText.substring(
@@ -130,6 +131,13 @@ class _CalculatorKeyboardState extends State<CalculatorKeyboard> {
         currentStrIdx.value = cursorPosition;
       }
     }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    var input = (double.tryParse(widget.input.value) ?? 0.0).toStringAsFixed(2);
+    currentStrIdx.value = newCursorPosition(input);
   }
 
   @override
@@ -190,7 +198,10 @@ class _CalculatorKeyboardState extends State<CalculatorKeyboard> {
                       children: [
                         for (var i = 1; i <= 9; i++)
                           _CalcButton(label: '$i', onTap: () => _append('$i')),
-                        _CalcButton(label: '.', onTap: () => _append('.')),
+                        _CalcButton(
+                          label: context.localeDecimalSeparator,
+                          onTap: () => _append('.'),
+                        ),
                         _CalcButton(label: '0', onTap: () => _append('0')),
                         _CalcButton(
                           label: '⌫',

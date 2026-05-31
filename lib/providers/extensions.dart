@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:paren/l10n/app_localizations_extension.dart';
 
 extension SizedBoxExtensionInt on int {
   SizedBox get h => SizedBox(height: toDouble());
@@ -18,4 +20,12 @@ extension ColorValueExt on Color {
       _floatToInt8(r) << 16 |
       _floatToInt8(g) << 8 |
       _floatToInt8(b) << 0;
+}
+
+extension BuildContextExt on BuildContext {
+  String get localeDecimalSeparator => NumberFormat.simpleCurrency(
+    decimalDigits: 1,
+    name: '',
+    locale: l10n.localeName,
+  ).format(1.00)[1];
 }
