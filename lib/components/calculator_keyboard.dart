@@ -229,31 +229,33 @@ class _AnimatedTextState extends State<AnimatedText>
     return AnimatedBuilder(
       animation: _pulseController,
       builder: (context, child) {
-        return Align(
-          alignment: Alignment.centerRight,
-          child: SelectableText.rich(
-            TextSpan(
-              children: [
-                ...widget.inputStringFormattedRev.characters.indexed
-                    .map(
-                      ((int, String) element) => TextSpan(
-                        text: element.$2,
-                        style: TextStyle(
-                          fontSize: 22,
-                          color: context.theme.colorScheme.onSurfaceVariant,
-                          fontWeight: FontWeight.w700,
-                          decoration: element.$1 == widget.currentStrIdx
-                              ? .underline
-                              : .none,
-                          decorationColor: element.$1 == widget.currentStrIdx
-                              ? _decorationColorAnimation.value
-                              : Colors.transparent,
+        return SelectionArea(
+          child: Align(
+            alignment: Alignment.centerRight,
+            child: Text.rich(
+              TextSpan(
+                children: [
+                  ...widget.inputStringFormattedRev.characters.indexed
+                      .map(
+                        ((int, String) element) => TextSpan(
+                          text: element.$2,
+                          style: TextStyle(
+                            fontSize: 22,
+                            color: context.theme.colorScheme.onSurfaceVariant,
+                            fontWeight: FontWeight.w700,
+                            decoration: element.$1 == widget.currentStrIdx
+                                ? .underline
+                                : .none,
+                            decorationColor: element.$1 == widget.currentStrIdx
+                                ? _decorationColorAnimation.value
+                                : Colors.transparent,
+                          ),
                         ),
-                      ),
-                    )
-                    .toList()
-                    .reversed,
-              ],
+                      )
+                      .toList()
+                      .reversed,
+                ],
+              ),
             ),
           ),
         );
