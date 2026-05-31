@@ -9,6 +9,7 @@ import 'package:get/get.dart';
 import 'package:liquid_glass_widgets/liquid_glass_widgets.dart';
 import 'package:paren/classes/sheet.dart';
 import 'package:paren/components/adaptive_overlay.dart';
+import 'package:paren/components/adaptive_snackbar.dart';
 import 'package:paren/components/sheet_form_bottom_sheet.dart';
 import 'package:paren/l10n/app_localizations.dart';
 import 'package:paren/l10n/app_localizations_extension.dart';
@@ -80,25 +81,17 @@ class _HomeState extends State<Home> {
     }
     if (res != null) {
       // Show success message
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            l10n.createdSheet(res.name),
-            style: TextStyle(color: context.theme.colorScheme.primary),
-          ),
-          duration: const Duration(seconds: 1),
-          backgroundColor: context.theme.colorScheme.primaryContainer,
-          action: SnackBarAction(
-            label: l10n.ok,
-            onPressed: () {
-              pageController.animateToPage(
-                0,
-                duration: 300.milliseconds,
-                curve: Curves.ease,
-              );
-            },
-          ),
-        ),
+      AdaptiveSnackbar.showSnackBar(
+        context,
+        title: l10n.createdSheet(res.name),
+        actionLabel: l10n.ok,
+        actionPressed: () {
+          pageController.animateToPage(
+            0,
+            duration: 300.milliseconds,
+            curve: Curves.ease,
+          );
+        },
       );
     }
   }

@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:paren/classes/sheet_entry.dart';
 import 'package:paren/components/adaptive_overlay.dart';
+import 'package:paren/components/adaptive_snackbar.dart';
 import 'package:paren/components/calculator_keyboard.dart';
 import 'package:paren/components/currency_changer_row.dart';
 import 'package:paren/l10n/app_localizations_extension.dart';
@@ -254,23 +255,14 @@ class _ConversionState extends State<Conversion> {
                   Icons.copy,
                   color: context.theme.colorScheme.primary,
                 ),
-                onPressed: () {
-                  Clipboard.setData(
+                onPressed: () async {
+                  await Clipboard.setData(
                     ClipboardData(text: '$inputStr ➜ $amountStr'),
                   );
                   if (!mounted) return;
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(
-                        l10n.copiedToClipboard('$inputStr ➜ $amountStr'),
-                        style: TextStyle(
-                          color: context.theme.colorScheme.primary,
-                        ),
-                      ),
-                      duration: const Duration(seconds: 1),
-                      backgroundColor:
-                          context.theme.colorScheme.primaryContainer,
-                    ),
+                  AdaptiveSnackbar.showSnackBar(
+                    context,
+                    title: l10n.copiedToClipboard('$inputStr ➜ $amountStr'),
                   );
                 },
                 tooltip: l10n.copy,

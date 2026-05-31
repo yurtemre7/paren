@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:paren/classes/sheet.dart';
 import 'package:paren/classes/sheet_entry.dart';
 import 'package:paren/components/adaptive_overlay.dart';
+import 'package:paren/components/adaptive_snackbar.dart';
 import 'package:paren/components/sheet_form_bottom_sheet.dart';
 import 'package:paren/l10n/app_localizations_extension.dart';
 import 'package:paren/providers/paren.dart';
@@ -202,16 +203,7 @@ class _SheetDetailState extends State<SheetDetail> {
     if (!mounted || res == null) {
       return;
     }
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
-          l10n.updatedSheet(res.name),
-          style: TextStyle(color: context.theme.colorScheme.primary),
-        ),
-        duration: const Duration(seconds: 1),
-        backgroundColor: context.theme.colorScheme.primaryContainer,
-      ),
-    );
+    AdaptiveSnackbar.showSnackBar(context, title: l10n.updatedSheet(res.name));
   }
 
   Future<void> _showSortSheet() {

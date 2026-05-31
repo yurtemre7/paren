@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:paren/classes/sheet.dart';
 import 'package:paren/components/adaptive_overlay.dart';
+import 'package:paren/components/adaptive_snackbar.dart';
 import 'package:paren/components/sheet_form_bottom_sheet.dart';
 import 'package:paren/l10n/app_localizations_extension.dart';
 import 'package:paren/providers/constants.dart';
@@ -119,7 +120,7 @@ class _SheetsState extends State<Sheets> {
               child: ReorderableListView.builder(
                 buildDefaultDragHandles: false,
                 itemCount: filteredSheets.length,
-                itemBuilder: (context, index) {
+                itemBuilder: (itemContext, index) {
                   var sheet = filteredSheets[index];
                   return ReorderableDelayedDragStartListener(
                     key: Key(sheet.id),
@@ -136,8 +137,10 @@ class _SheetsState extends State<Sheets> {
                       confirmDismiss: (direction) {
                         return Get.dialog<bool>(
                           AlertDialog(
-                            constraints: adaptiveDialogConstraints(context),
-                            insetPadding: adaptiveDialogInsetPadding(context),
+                            constraints: adaptiveDialogConstraints(itemContext),
+                            insetPadding: adaptiveDialogInsetPadding(
+                              itemContext,
+                            ),
                             title: Text(l10n.deleteSheetTitle),
                             content: Text(
                               l10n.deleteSheetContent(
@@ -149,9 +152,11 @@ class _SheetsState extends State<Sheets> {
                               OutlinedButton(
                                 style: OutlinedButton.styleFrom(
                                   foregroundColor:
-                                      context.theme.colorScheme.error,
-                                  backgroundColor:
-                                      context.theme.colorScheme.errorContainer,
+                                      itemContext.theme.colorScheme.error,
+                                  backgroundColor: itemContext
+                                      .theme
+                                      .colorScheme
+                                      .errorContainer,
                                 ),
                                 onPressed: () {
                                   Get.back(result: true);
@@ -168,21 +173,16 @@ class _SheetsState extends State<Sheets> {
                           ),
                         );
                       },
-                      onDismissed: (_) {
-                        paren.removeSheet(sheet.id);
-                    
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text(
-                              l10n.deletedSheet(sheet.name),
-                              style: TextStyle(
-                                color: context.theme.colorScheme.primary,
-                              ),
-                            ),
-                            duration: const Duration(seconds: 1),
-                            backgroundColor:
-                                context.theme.colorScheme.primaryContainer,
-                          ),
+                      onDismissed: (_) async {
+                        await paren.removeSheet(sheet.id);
+
+                        if (!context.mounted) {
+                          return;
+                        }
+
+                        AdaptiveSnackbar.showSnackBar(
+                          context,
+                          title: l10n.deletedSheet(sheet.name),
                         );
                       },
                       child: ListTile(
@@ -193,17 +193,19 @@ class _SheetsState extends State<Sheets> {
                         trailing: !isEditing.value
                             ? Icon(
                                 Icons.keyboard_arrow_right,
-                                color: context.theme.colorScheme.primary,
+                                color: itemContext.theme.colorScheme.primary,
                               )
                             : Icon(
                                 Icons.edit,
-                                color: context.theme.colorScheme.primary,
+                                color: itemContext.theme.colorScheme.primary,
                               ),
                         onTap: () async {
                           if (!isEditing.value) {
-                            return await Get.to(() => SheetDetail(sheet: sheet));
+                            return await Get.to(
+                              () => SheetDetail(sheet: sheet),
+                            );
                           }
-                    
+
                           var res = await Navigator.of(context).push<Sheet>(
                             adaptiveSheetRoute(
                               originateAboveBottomViewInset: true,
@@ -215,18 +217,9 @@ class _SheetsState extends State<Sheets> {
                           }
                           if (res != null) {
                             // Show success message
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text(
-                                  l10n.updatedSheet(sheet.name),
-                                  style: TextStyle(
-                                    color: context.theme.colorScheme.primary,
-                                  ),
-                                ),
-                                duration: const Duration(seconds: 1),
-                                backgroundColor:
-                                    context.theme.colorScheme.primaryContainer,
-                              ),
+                            AdaptiveSnackbar.showSnackBar(
+                              context,
+                              title: l10n.updatedSheet(sheet.name),
                             );
                           }
                         },

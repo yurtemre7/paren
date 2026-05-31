@@ -3,6 +3,7 @@ import 'package:flutter/widget_previews.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:get/get.dart';
 import 'package:paren/components/adaptive_overlay.dart';
+import 'package:paren/components/adaptive_snackbar.dart';
 import 'package:paren/components/budget_planner.dart';
 import 'package:paren/l10n/app_localizations.dart';
 import 'package:paren/l10n/app_localizations_extension.dart';
@@ -70,15 +71,9 @@ class _CustomizationState extends State<Customization> {
           onTap: () async {
             Get.back();
             if (paren.fromCurrency.value == paren.toCurrency.value) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(
-                    l10n.chartDoesNotExist,
-                    style: TextStyle(color: context.theme.colorScheme.primary),
-                  ),
-                  duration: const Duration(seconds: 1),
-                  backgroundColor: context.theme.colorScheme.primaryContainer,
-                ),
+              AdaptiveSnackbar.showSnackBar(
+                context,
+                title: l10n.chartDoesNotExist,
               );
               return;
             }
