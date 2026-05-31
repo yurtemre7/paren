@@ -3,7 +3,6 @@ import 'dart:io';
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter/widget_previews.dart';
 import 'package:get/get.dart';
 import 'package:liquid_glass_widgets/liquid_glass_widgets.dart';
@@ -37,8 +36,6 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   final Paren paren = Get.find();
-
-  final scaffoldKey = GlobalKey<ScaffoldState>();
   final pageController = PageController(initialPage: 1);
 
   @override
@@ -48,7 +45,6 @@ class _HomeState extends State<Home> {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       if (!mounted) return;
       await initParen();
-      await SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
     });
   }
 
@@ -113,9 +109,6 @@ class _HomeState extends State<Home> {
           canPop: false,
           onPopInvokedWithResult: (didPop, result) async {
             if (!didPop) {
-              if (scaffoldKey.currentState?.isEndDrawerOpen ?? false) {
-                scaffoldKey.currentState?.closeEndDrawer();
-              }
               if (paren.currentPage.value != 1) {
                 await pageController.animateToPage(
                   1,
@@ -126,7 +119,6 @@ class _HomeState extends State<Home> {
             }
           },
           child: Scaffold(
-            key: scaffoldKey,
             backgroundColor: context.theme.colorScheme.surface,
             resizeToAvoidBottomInset: false,
             appBar: PreferredSize(
