@@ -87,7 +87,7 @@ class _CalculatorKeyboardState extends State<CalculatorKeyboard> {
     currentStrIdx.value = 3;
   }
 
-  void handleKeyEvent(KeyEvent event) {
+  Future<void> handleKeyEvent(KeyEvent event) async {
     if (event is KeyDownEvent || event is KeyRepeatEvent) {
       var keyLabel = event.logicalKey.keyLabel;
 
@@ -103,6 +103,30 @@ class _CalculatorKeyboardState extends State<CalculatorKeyboard> {
       } else if (keyLabel.toLowerCase() == 'r') {
         paren.latestTimestamp.value = DateTime.now();
         paren.fetchCurrencyDataOnline();
+      } else if (keyLabel.toLowerCase() == 'v') {
+        var clipboardData = await Clipboard.getData('text/plain');
+        var parsedAsDouble =
+            double.tryParse(clipboardData?.text ?? '0.0') ?? 0.0;
+        var parsedBackAsStringAsFixed2 = parsedAsDouble.toStringAsFixed(2);
+        int newCursorPosition(String number) {
+          var cursorIdx = 0;
+          var len = number.length;
+          if (number[len - 1] == '0') {
+            cursorIdx = 1;
+            if (number[len - 2] == '0') {
+              cursorIdx = 3; // left of the separator (, or .)
+            }
+          }
+
+          return cursorIdx;
+        }
+
+        var cursorPosition = newCursorPosition(parsedBackAsStringAsFixed2);
+        widget.input.value = parsedBackAsStringAsFixed2.substring(
+          0,
+          parsedBackAsStringAsFixed2.length - cursorPosition,
+        );
+        currentStrIdx.value = cursorPosition;
       }
     }
   }
