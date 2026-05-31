@@ -381,7 +381,6 @@ class Paren extends GetxController {
   Future<void> reorderFavorites(int oldIndex, int newIndex) async {
     if (oldIndex < 0 || oldIndex >= favorites.length) return;
     if (newIndex < 0 || newIndex > favorites.length) return;
-    if (oldIndex < newIndex) newIndex -= 1;
     var item = favorites.removeAt(oldIndex);
     favorites.insert(newIndex, item);
     await _saveFavorites();
@@ -437,7 +436,6 @@ class Paren extends GetxController {
   Future<void> reorderSheets(int oldIndex, int newIndex) async {
     if (oldIndex < 0 || oldIndex >= sheets.length) return;
     if (newIndex < 0 || newIndex > sheets.length) return;
-    if (oldIndex < newIndex) newIndex -= 1;
     var item = sheets.removeAt(oldIndex);
     sheets.insert(newIndex, item);
     await _saveSheets();
@@ -510,38 +508,6 @@ class Paren extends GetxController {
         sheets[sheetIndex] = updatedSheet;
         await _saveSheets();
       }
-    }
-  }
-
-  Future<void> reorderSheetEntries(
-    String sheetId,
-    int oldIndex,
-    int newIndex,
-  ) async {
-    var sheetIndex = sheets.indexWhere((sheet) => sheet.id == sheetId);
-    if (sheetIndex != -1) {
-      var sheet = sheets[sheetIndex];
-      if (oldIndex < 0 ||
-          oldIndex >= sheet.entries.length ||
-          newIndex < 0 ||
-          newIndex > sheet.entries.length) {
-        return;
-      }
-      if (oldIndex < newIndex) newIndex -= 1;
-      var updatedEntries = List<SheetEntry>.from(sheet.entries);
-      var item = updatedEntries.removeAt(oldIndex);
-      updatedEntries.insert(newIndex, item);
-      var updatedSheet = Sheet(
-        id: sheet.id,
-        name: sheet.name,
-        fromCurrency: sheet.fromCurrency,
-        toCurrency: sheet.toCurrency,
-        createdAt: sheet.createdAt,
-        updatedAt: DateTime.now(),
-        entries: updatedEntries,
-      );
-      sheets[sheetIndex] = updatedSheet;
-      await _saveSheets();
     }
   }
 

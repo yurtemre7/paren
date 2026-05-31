@@ -117,115 +117,120 @@ class _SheetsState extends State<Sheets> {
           if (filteredSheets.isNotEmpty)
             Expanded(
               child: ReorderableListView.builder(
+                buildDefaultDragHandles: false,
                 itemCount: filteredSheets.length,
                 itemBuilder: (context, index) {
                   var sheet = filteredSheets[index];
-                  return Dismissible(
+                  return ReorderableDelayedDragStartListener(
                     key: Key(sheet.id),
-                    direction: DismissDirection.endToStart,
-                    background: Container(
-                      color: Colors.red,
-                      alignment: Alignment.center,
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      child: Icon(Icons.delete, color: Colors.white),
-                    ),
-                    confirmDismiss: (direction) {
-                      return Get.dialog<bool>(
-                        AlertDialog(
-                          constraints: adaptiveDialogConstraints(context),
-                          insetPadding: adaptiveDialogInsetPadding(context),
-                          title: Text(l10n.deleteSheetTitle),
-                          content: Text(
-                            l10n.deleteSheetContent(
-                              sheet.entries.length,
-                              sheet.name,
-                            ),
-                          ),
-                          actions: [
-                            OutlinedButton(
-                              style: OutlinedButton.styleFrom(
-                                foregroundColor:
-                                    context.theme.colorScheme.error,
-                                backgroundColor:
-                                    context.theme.colorScheme.errorContainer,
-                              ),
-                              onPressed: () {
-                                Get.back(result: true);
-                              },
-                              child: Text(l10n.confirm),
-                            ),
-                            TextButton(
-                              onPressed: () {
-                                Get.back(result: false);
-                              },
-                              child: Text(l10n.cancel),
-                            ),
-                          ],
-                        ),
-                      );
-                    },
-                    onDismissed: (_) {
-                      paren.removeSheet(sheet.id);
-
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text(
-                            l10n.deletedSheet(sheet.name),
-                            style: TextStyle(
-                              color: context.theme.colorScheme.primary,
-                            ),
-                          ),
-                          duration: const Duration(seconds: 1),
-                          backgroundColor:
-                              context.theme.colorScheme.primaryContainer,
-                        ),
-                      );
-                    },
-                    child: ListTile(
-                      title: Text(sheet.name),
-                      subtitle: Text(
-                        '${sheet.fromCurrency.toUpperCase()} → ${sheet.toCurrency.toUpperCase()}',
+                    index: index,
+                    child: Dismissible(
+                      key: Key(sheet.id),
+                      direction: DismissDirection.endToStart,
+                      background: Container(
+                        color: Colors.red,
+                        alignment: Alignment.center,
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: Icon(Icons.delete, color: Colors.white),
                       ),
-                      trailing: !isEditing.value
-                          ? Icon(
-                              Icons.keyboard_arrow_right,
-                              color: context.theme.colorScheme.primary,
-                            )
-                          : Icon(
-                              Icons.edit,
-                              color: context.theme.colorScheme.primary,
+                      confirmDismiss: (direction) {
+                        return Get.dialog<bool>(
+                          AlertDialog(
+                            constraints: adaptiveDialogConstraints(context),
+                            insetPadding: adaptiveDialogInsetPadding(context),
+                            title: Text(l10n.deleteSheetTitle),
+                            content: Text(
+                              l10n.deleteSheetContent(
+                                sheet.entries.length,
+                                sheet.name,
+                              ),
                             ),
-                      onTap: () async {
-                        if (!isEditing.value) {
-                          return await Get.to(() => SheetDetail(sheet: sheet));
-                        }
-
-                        var res = await Navigator.of(context).push<Sheet>(
-                          adaptiveSheetRoute(
-                            originateAboveBottomViewInset: true,
-                            child: SheetFormBottomSheet(sheet: sheet),
+                            actions: [
+                              OutlinedButton(
+                                style: OutlinedButton.styleFrom(
+                                  foregroundColor:
+                                      context.theme.colorScheme.error,
+                                  backgroundColor:
+                                      context.theme.colorScheme.errorContainer,
+                                ),
+                                onPressed: () {
+                                  Get.back(result: true);
+                                },
+                                child: Text(l10n.confirm),
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  Get.back(result: false);
+                                },
+                                child: Text(l10n.cancel),
+                              ),
+                            ],
                           ),
                         );
-                        if (!context.mounted) {
-                          return;
-                        }
-                        if (res != null) {
-                          // Show success message
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(
-                                l10n.updatedSheet(sheet.name),
-                                style: TextStyle(
-                                  color: context.theme.colorScheme.primary,
-                                ),
+                      },
+                      onDismissed: (_) {
+                        paren.removeSheet(sheet.id);
+                    
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                              l10n.deletedSheet(sheet.name),
+                              style: TextStyle(
+                                color: context.theme.colorScheme.primary,
                               ),
-                              duration: const Duration(seconds: 1),
-                              backgroundColor:
-                                  context.theme.colorScheme.primaryContainer,
+                            ),
+                            duration: const Duration(seconds: 1),
+                            backgroundColor:
+                                context.theme.colorScheme.primaryContainer,
+                          ),
+                        );
+                      },
+                      child: ListTile(
+                        title: Text(sheet.name),
+                        subtitle: Text(
+                          '${sheet.fromCurrency.toUpperCase()} → ${sheet.toCurrency.toUpperCase()}',
+                        ),
+                        trailing: !isEditing.value
+                            ? Icon(
+                                Icons.keyboard_arrow_right,
+                                color: context.theme.colorScheme.primary,
+                              )
+                            : Icon(
+                                Icons.edit,
+                                color: context.theme.colorScheme.primary,
+                              ),
+                        onTap: () async {
+                          if (!isEditing.value) {
+                            return await Get.to(() => SheetDetail(sheet: sheet));
+                          }
+                    
+                          var res = await Navigator.of(context).push<Sheet>(
+                            adaptiveSheetRoute(
+                              originateAboveBottomViewInset: true,
+                              child: SheetFormBottomSheet(sheet: sheet),
                             ),
                           );
-                        }
-                      },
+                          if (!context.mounted) {
+                            return;
+                          }
+                          if (res != null) {
+                            // Show success message
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(
+                                  l10n.updatedSheet(sheet.name),
+                                  style: TextStyle(
+                                    color: context.theme.colorScheme.primary,
+                                  ),
+                                ),
+                                duration: const Duration(seconds: 1),
+                                backgroundColor:
+                                    context.theme.colorScheme.primaryContainer,
+                              ),
+                            );
+                          }
+                        },
+                      ),
                     ),
                   );
                 },
