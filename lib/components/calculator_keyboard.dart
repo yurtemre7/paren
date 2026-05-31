@@ -105,9 +105,10 @@ class _CalculatorKeyboardState extends State<CalculatorKeyboard> {
         paren.fetchCurrencyDataOnline();
       } else if (keyLabel.toLowerCase() == 'v') {
         var clipboardData = await Clipboard.getData('text/plain');
-        var parsedAsDouble =
-            double.tryParse(clipboardData?.text ?? '0.0') ?? 0.0;
-        var parsedBackAsStringAsFixed2 = parsedAsDouble.toStringAsFixed(2);
+        var clipboardText = clipboardData?.text ?? '0.0';
+        clipboardText = clipboardText.replaceAll(',', '.')..trim();
+        var clipboardDouble = double.tryParse(clipboardText) ?? 0.0;
+        clipboardText = clipboardDouble.toStringAsFixed(2);
         int newCursorPosition(String number) {
           var cursorIdx = 0;
           var len = number.length;
@@ -121,10 +122,10 @@ class _CalculatorKeyboardState extends State<CalculatorKeyboard> {
           return cursorIdx;
         }
 
-        var cursorPosition = newCursorPosition(parsedBackAsStringAsFixed2);
-        widget.input.value = parsedBackAsStringAsFixed2.substring(
+        var cursorPosition = newCursorPosition(clipboardText);
+        widget.input.value = clipboardText.substring(
           0,
-          parsedBackAsStringAsFixed2.length - cursorPosition,
+          clipboardText.length - cursorPosition,
         );
         currentStrIdx.value = cursorPosition;
       }
