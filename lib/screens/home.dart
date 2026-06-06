@@ -216,7 +216,7 @@ class _HomeState extends State<Home> {
       unselectedIconColor: colorScheme.secondary,
       selectedIconColor: colorScheme.primary,
       indicatorColor: colorScheme.primary.withValues(alpha: 0.1),
-      glassSettings: LiquidGlassSettings().copyWith(
+      settings: LiquidGlassSettings().copyWith(
         glassColor: colorScheme.surface,
         thickness: Platform.isWindows || Platform.isMacOS ? 0 : null,
       ),
