@@ -1,9 +1,12 @@
+import 'dart:io';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_web_plugins/url_strategy.dart';
 import 'package:get/get.dart';
 import 'package:home_widget/home_widget.dart';
 import 'package:liquid_glass_widgets/liquid_glass_setup.dart';
+import 'package:liquid_glass_widgets/widgets/shared/glass_adaptive_scope.dart';
 import 'package:paren/l10n/app_localizations.dart';
 import 'package:paren/providers/paren.dart';
 import 'package:paren/screens/home.dart';
@@ -27,6 +30,13 @@ class MyApp extends StatelessWidget {
     Paren paren = Get.find();
     return Obx(
       () => LiquidGlassWidgets.wrap(
+        adaptiveQuality: true,
+        // ignore: experimental_member_use
+        adaptiveConfig: GlassAdaptiveScopeConfig(
+          maxQuality: Platform.isAndroid || Platform.isWindows
+              ? .standard
+              : .premium,
+        ),
         child: GetMaterialApp(
           title: 'paren',
           debugShowCheckedModeBanner: false,
