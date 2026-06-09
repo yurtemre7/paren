@@ -5,13 +5,13 @@ import 'package:get/get.dart';
 import 'package:paren/components/adaptive_overlay.dart';
 import 'package:paren/components/adaptive_snackbar.dart';
 import 'package:paren/components/budget_planner.dart';
+import 'package:paren/components/exchart.dart';
+import 'package:paren/components/favorites.dart';
+import 'package:paren/components/quick_conversions.dart';
 import 'package:paren/l10n/app_localizations.dart';
 import 'package:paren/l10n/app_localizations_extension.dart';
 import 'package:paren/providers/extensions.dart';
 import 'package:paren/providers/paren.dart';
-import 'package:paren/components/exchart.dart';
-import 'package:paren/components/favorites.dart';
-import 'package:paren/components/quick_conversions.dart';
 import 'package:paren/screens/home/settings.dart';
 
 @Preview()

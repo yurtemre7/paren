@@ -44,6 +44,7 @@ linter:
     require_trailing_commas: true
     omit_obvious_local_variable_types: true
     omit_obvious_property_types: true
+    directives_ordering: true
 
 # Additional information about this file can be found at
 # https://dart.dev/guides/language/analysis-options

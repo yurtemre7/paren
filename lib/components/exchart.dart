@@ -5,10 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:paren/components/adaptive_overlay.dart';
+import 'package:paren/l10n/app_localizations_extension.dart';
 import 'package:paren/providers/constants.dart';
 import 'package:paren/providers/extensions.dart';
 import 'package:paren/providers/paren.dart';
-import 'package:paren/l10n/app_localizations_extension.dart';
 
 class ExChart extends StatefulWidget {
   final String idFrom;

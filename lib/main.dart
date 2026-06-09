@@ -1,12 +1,12 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_web_plugins/url_strategy.dart';
 import 'package:get/get.dart';
 import 'package:home_widget/home_widget.dart';
 import 'package:liquid_glass_widgets/liquid_glass_setup.dart';
 import 'package:paren/l10n/app_localizations.dart';
 import 'package:paren/providers/paren.dart';
 import 'package:paren/screens/home.dart';
-import 'package:flutter_web_plugins/url_strategy.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

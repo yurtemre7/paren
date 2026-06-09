@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:paren/providers/extensions.dart';
 import 'package:paren/l10n/app_localizations_extension.dart';
+import 'package:paren/providers/extensions.dart';
 
 class HomeHeader extends StatelessWidget implements PreferredSizeWidget {
   final VoidCallback onInfo;

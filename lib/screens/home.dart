@@ -9,6 +9,7 @@ import 'package:liquid_glass_widgets/liquid_glass_widgets.dart';
 import 'package:paren/classes/sheet.dart';
 import 'package:paren/components/adaptive_overlay.dart';
 import 'package:paren/components/adaptive_snackbar.dart';
+import 'package:paren/components/home_header.dart';
 import 'package:paren/components/sheet_form_bottom_sheet.dart';
 import 'package:paren/l10n/app_localizations.dart';
 import 'package:paren/l10n/app_localizations_extension.dart';
@@ -17,7 +18,6 @@ import 'package:paren/providers/extensions.dart';
 import 'package:paren/providers/paren.dart';
 import 'package:paren/screens/home/conversion.dart';
 import 'package:paren/screens/home/customization.dart';
-import 'package:paren/components/home_header.dart';
 import 'package:paren/screens/home/sheets.dart';
 import 'package:url_launcher/url_launcher.dart';
 

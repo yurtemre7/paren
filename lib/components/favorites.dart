@@ -3,8 +3,8 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:paren/providers/paren.dart';
 import 'package:paren/l10n/app_localizations_extension.dart';
+import 'package:paren/providers/paren.dart';
 
 class FavoritesScreen extends StatelessWidget {
   const FavoritesScreen({super.key});

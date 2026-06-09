@@ -9,8 +9,8 @@ import 'package:paren/components/adaptive_overlay.dart';
 import 'package:paren/components/adaptive_snackbar.dart';
 import 'package:paren/components/sheet_form_bottom_sheet.dart';
 import 'package:paren/l10n/app_localizations_extension.dart';
-import 'package:paren/providers/paren.dart';
 import 'package:paren/providers/extensions.dart';
+import 'package:paren/providers/paren.dart';
 import 'package:paren/providers/sheets_provider.dart';
 import 'package:share_plus/share_plus.dart';
 
