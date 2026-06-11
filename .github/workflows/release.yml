@@ -1,0 +1,236 @@
+name: 🚀 Flutter Release Build
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # ─────────────────────────────────────────
+  # 1. Code Quality (runs first, fast)
+  # ─────────────────────────────────────────
+  quality:
+    name: 🔍 Format & Analyze
+    runs-on: ubuntu-latest
+    steps:
+      - name: 📥 Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0   # needed for commit count
+
+      - name: 🐦 Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: 📦 Get dependencies
+        run: flutter pub get
+
+      - name: 🎨 Check formatting
+        run: dart format --output=none --set-exit-if-changed .
+
+      - name: 🔬 Run analyzer
+        run: flutter analyze --fatal-infos
+
+  # ─────────────────────────────────────────
+  # 2. Extract version info (shared across build jobs)
+  # ─────────────────────────────────────────
+  version:
+    name: 🏷️ Resolve Version
+    runs-on: ubuntu-latest
+    needs: quality
+    if: github.event_name != 'pull_request'
+    outputs:
+      version_name: ${{ steps.ver.outputs.version_name }}
+      build_number: ${{ steps.ver.outputs.build_number }}
+      tag: ${{ steps.ver.outputs.tag }}
+    steps:
+      - name: 📥 Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: 🔢 Extract version + commit count
+        id: ver
+        run: |
+          VERSION=$(grep '^version:' pubspec.yaml | sed 's/version: //' | cut -d'+' -f1 | xargs)
+          BUILD_NUMBER=$(git rev-list --count HEAD)
+          TAG="v${VERSION}+${BUILD_NUMBER}"
+          echo "version_name=${VERSION}" >> "$GITHUB_OUTPUT"
+          echo "build_number=${BUILD_NUMBER}" >> "$GITHUB_OUTPUT"
+          echo "tag=${TAG}" >> "$GITHUB_OUTPUT"
+          echo "📌 Version: ${VERSION} | Build: ${BUILD_NUMBER} | Tag: ${TAG}"
+
+  # ─────────────────────────────────────────
+  # 3a. Android APK build
+  # ─────────────────────────────────────────
+  build-apk:
+    name: 🤖 Build Android APK
+    runs-on: ubuntu-latest
+    needs: version
+    if: github.event_name != 'pull_request'
+    steps:
+      - name: 📥 Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: 🐦 Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: ☕ Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: 🗄️ Cache Gradle
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: gradle-
+
+      - name: 📦 Get dependencies
+        run: flutter pub get
+
+      - name: 🔨 Build APK (release)
+        run: |
+          flutter build apk --release \
+            --build-name=${{ needs.version.outputs.version_name }} \
+            --build-number=${{ needs.version.outputs.build_number }}
+
+      - name: 📤 Upload APK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: paren-android-apk
+          path: build/app/outputs/flutter-apk/app-release.apk
+          if-no-files-found: error
+
+  # ─────────────────────────────────────────
+  # 3b. Windows MSIX build
+  # ─────────────────────────────────────────
+  build-windows:
+    name: 🪟 Build Windows MSIX
+    runs-on: windows-latest
+    needs: version
+    if: github.event_name != 'pull_request'
+    steps:
+      - name: 📥 Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: 🐦 Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: 📦 Get dependencies
+        run: flutter pub get
+
+      - name: 🔨 Build Windows (release)
+        run: |
+          flutter build windows --release `
+            --build-name=${{ needs.version.outputs.version_name }} `
+            --build-number=${{ needs.version.outputs.build_number }}
+
+      - name: 📦 Create MSIX package
+        run: dart run msix:create
+
+      - name: 📤 Upload MSIX artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: paren-windows-msix
+          path: build/windows/x64/runner/Release/*.msix
+          if-no-files-found: error
+
+  # ─────────────────────────────────────────
+  # 3c. Linux build
+  # ─────────────────────────────────────────
+  build-linux:
+    name: 🐧 Build Linux
+    runs-on: ubuntu-latest
+    needs: version
+    if: github.event_name != 'pull_request'
+    steps:
+      - name: 📥 Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: 🐦 Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: 🛠️ Install Linux build dependencies
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends \
+            clang cmake ninja-build pkg-config \
+            libgtk-3-dev libblkid-dev liblzma-dev
+
+      - name: 📦 Get dependencies
+        run: flutter pub get
+
+      - name: 🔨 Build Linux (release)
+        run: |
+          flutter build linux --release \
+            --build-name=${{ needs.version.outputs.version_name }} \
+            --build-number=${{ needs.version.outputs.build_number }}
+
+      - name: 🗜️ Bundle Linux release
+        run: |
+          cd build/linux/x64/release/bundle
+          tar -czf ../../../../../paren-linux.tar.gz .
+
+      - name: 📤 Upload Linux artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: paren-linux-bundle
+          path: paren-linux.tar.gz
+          if-no-files-found: error
+
+  # ─────────────────────────────────────────
+  # 4. Create GitHub Release (all builds done)
+  # ─────────────────────────────────────────
+  release:
+    name: 🎉 Create GitHub Release
+    runs-on: ubuntu-latest
+    needs: [version, build-apk, build-windows, build-linux]
+    if: github.event_name != 'pull_request'
+    permissions:
+      contents: write
+    steps:
+      - name: 📥 Download all artifacts
+        uses: actions/download-artifact@v7
+        with:
+          path: dist/
+
+      - name: 🏷️ Create Release & Upload Assets
+        uses: softprops/action-gh-release@v3
+        with:
+          tag_name: ${{ needs.version.outputs.tag }}
+          name: "paren ${{ needs.version.outputs.tag }}"
+          draft: false
+          prerelease: false
+          generate_release_notes: true
+          files: |
+            dist/paren-android-apk/app-release.apk
+            dist/paren-windows-msix/*.msix
+            dist/paren-linux-bundle/paren-linux.tar.gz
