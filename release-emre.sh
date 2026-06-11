@@ -13,6 +13,9 @@ if [[ ! $selection =~ ^[0-9]+$ ]] ; then
     exit
 fi
 
+flutter doctor --verbose
+flutter clean && flutter pub get
+
 if [ $selection = "0" ] ; then
     echo "Pushing all"
     echo ""
