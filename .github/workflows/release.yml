@@ -2,89 +2,20 @@ name: 🚀 Flutter Release Build
 
 on:
   push:
-    branches: [main, release]
-  pull_request:
-    branches: [main, release]
+    branches: [release]
   workflow_dispatch:
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
+  group: release-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
   # ─────────────────────────────────────────
-  # 1. Code Quality (runs first, fast)
-  # ─────────────────────────────────────────
-  quality:
-    name: 🔍 Format & Analyze
-    runs-on: ubuntu-latest
-    steps:
-      - name: 📥 Checkout
-        uses: actions/checkout@v6
-        with:
-          fetch-depth: 0   # needed for commit count
-
-      - name: 📄 Load versions
-        id: versions
-        run: |
-          source .github/versions.env
-          echo "flutter_version=${FLUTTER_VERSION}" >> "$GITHUB_OUTPUT"
-
-      - name: 🐦 Setup Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          flutter-version: ${{ steps.versions.outputs.flutter_version }}
-          channel: stable
-          cache: true
-
-      - name: 📦 Get dependencies
-        run: flutter pub get
-
-      - name: 🎨 Check formatting
-        run: dart format --output=none --set-exit-if-changed .
-
-      - name: 🔬 Run analyzer
-        run: flutter analyze --fatal-infos
-
-  # ─────────────────────────────────────────
-  # 2. Tests (runs in parallel with quality)
-  # ─────────────────────────────────────────
-  # test:
-  #   name: 🧪 Flutter Tests
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: 📥 Checkout
-  #       uses: actions/checkout@v6
-
-  #     - name: 📄 Load versions
-  #       id: versions
-  #       run: |
-  #       source .github/versions.env
-  #       echo "flutter_version=${FLUTTER_VERSION}" >> "$GITHUB_OUTPUT"
-  #       echo "cmake_version=${CMAKE_VERSION}" >> "$GITHUB_OUTPUT"
-  #
-  #     - name: 🐦 Setup Flutter
-  #       uses: subosito/flutter-action@v2
-  #       with:
-  #         flutter-version: ${{ steps.versions.outputs.flutter_version }}
-  #         channel: stable
-  #         cache: true
-  #
-  #     - name: 📦 Get dependencies
-  #       run: flutter pub get
-  #
-  #     - name: 🧪 Run tests
-  #       run: flutter test --reporter=github
-  #
-
-  # ─────────────────────────────────────────
-  # 2. Extract version info (shared across build jobs)
+  # 1. Extract version info (shared across build jobs)
   # ─────────────────────────────────────────
   version:
     name: 🏷️ Resolve Version
     runs-on: ubuntu-latest
-    needs: quality
-    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/release'
     outputs:
       version_name: ${{ steps.ver.outputs.version_name }}
       build_number: ${{ steps.ver.outputs.build_number }}
@@ -107,19 +38,18 @@ jobs:
           echo "📌 Version: ${VERSION} | Build: ${BUILD_NUMBER} | Tag: ${TAG}"
 
   # ─────────────────────────────────────────
-  # 3a. Android APK build
+  # 2a. Android APK build
   # ─────────────────────────────────────────
   build-apk:
     name: 🤖 Build Android APK
     runs-on: ubuntu-latest
     needs: version
-    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/release'
     steps:
       - name: 📥 Checkout
         uses: actions/checkout@v6
         with:
           fetch-depth: 0
-      
+
       - name: 📄 Load versions
         id: versions
         run: |
@@ -180,19 +110,18 @@ jobs:
           if-no-files-found: error
 
   # ─────────────────────────────────────────
-  # 3b. Windows MSIX build
+  # 2b. Windows MSIX build
   # ─────────────────────────────────────────
   build-windows:
     name: 🪟 Build Windows MSIX
     runs-on: windows-latest
     needs: version
-    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/release'
     steps:
       - name: 📥 Checkout
         uses: actions/checkout@v6
         with:
           fetch-depth: 0
-      
+
       - name: 📄 Load versions
         id: versions
         run: |
@@ -228,25 +157,23 @@ jobs:
           if-no-files-found: error
 
   # ─────────────────────────────────────────
-  # 3c. Linux build
+  # 2c. Linux build
   # ─────────────────────────────────────────
   build-linux:
     name: 🐧 Build Linux
     runs-on: ubuntu-latest
     needs: version
-    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/release'
     steps:
       - name: 📥 Checkout
         uses: actions/checkout@v6
         with:
           fetch-depth: 0
-      
+
       - name: 📄 Load versions
         id: versions
         run: |
           source .github/versions.env
           echo "flutter_version=${FLUTTER_VERSION}" >> "$GITHUB_OUTPUT"
-          echo "cmake_version=${CMAKE_VERSION}" >> "$GITHUB_OUTPUT"
 
       - name: 🐦 Setup Flutter
         uses: subosito/flutter-action@v2
@@ -284,13 +211,12 @@ jobs:
           if-no-files-found: error
 
   # ─────────────────────────────────────────
-  # 4. Create GitHub Release (all builds done)
+  # 3. Create GitHub Release (all builds done)
   # ─────────────────────────────────────────
   release:
     name: 🎉 Create GitHub Release
     runs-on: ubuntu-latest
     needs: [version, build-apk, build-windows, build-linux]
-    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/release'
     permissions:
       contents: write
     steps:
