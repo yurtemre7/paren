@@ -1,8 +1,6 @@
 name: 🔍 Code Quality
 
 on:
-  push:
-    branches: [main, release]
   pull_request:
     branches: [main, release]
 
@@ -46,7 +44,25 @@ jobs:
         run: flutter analyze --fatal-infos
 
   # ─────────────────────────────────────────
-  # 2. Tests (runs in parallel with quality)
+  # 2. Conventional Commits check
+  # ─────────────────────────────────────────
+  conventional-commits:
+    name: 📝 Conventional Commits
+    runs-on: ubuntu-latest
+    steps:
+      - name: 📥 Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: 📝 Check conventional commits
+        uses: taskmedia/action-conventional-commits@v1.1.26
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          types: "feat|fix|docs|style|refactor|perf|test|chore|ci|build"
+
+  # ─────────────────────────────────────────
+  # 3. Tests (runs in parallel with quality)
   # ─────────────────────────────────────────
   # test:
   #   name: 🧪 Flutter Tests
