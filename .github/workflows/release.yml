@@ -40,6 +40,29 @@ jobs:
         run: flutter analyze --fatal-infos
 
   # ─────────────────────────────────────────
+  # 2. Tests (runs in parallel with quality)
+  # ─────────────────────────────────────────
+  # test:
+  #   name: 🧪 Flutter Tests
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: 📥 Checkout
+  #       uses: actions/checkout@v6
+  #
+  #     - name: 🐦 Setup Flutter
+  #       uses: subosito/flutter-action@v2
+  #       with:
+  #         channel: stable
+  #         cache: true
+  #
+  #     - name: 📦 Get dependencies
+  #       run: flutter pub get
+  #
+  #     - name: 🧪 Run tests
+  #       run: flutter test --reporter=github
+  #
+
+  # ─────────────────────────────────────────
   # 2. Extract version info (shared across build jobs)
   # ─────────────────────────────────────────
   version:
