@@ -240,7 +240,7 @@ jobs:
         uses: softprops/action-gh-release@v3
         with:
           tag_name: ${{ needs.version.outputs.tag }}
-          name: "paren ${{ needs.version.outputs.tag }}"
+          name: "Par円 ${{ needs.version.outputs.tag }}"
           draft: false
           prerelease: false
           generate_release_notes: true
