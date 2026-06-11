@@ -1,0 +1,91 @@
+name: 🔍 Code Quality
+
+on:
+  pull_request:
+    branches: [main, release]
+
+concurrency:
+  group: quality-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # ─────────────────────────────────────────
+  # 1. Code Quality (runs first, fast)
+  # ─────────────────────────────────────────
+  quality:
+    name: 🔍 Format & Analyze
+    runs-on: ubuntu-latest
+    steps:
+      - name: 📥 Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0   # needed for commit count
+
+      - name: 📄 Load versions
+        id: versions
+        run: |
+          source .github/versions.env
+          echo "flutter_version=${FLUTTER_VERSION}" >> "$GITHUB_OUTPUT"
+
+      - name: 🐦 Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ steps.versions.outputs.flutter_version }}
+          channel: stable
+          cache: true
+
+      - name: 📦 Get dependencies
+        run: flutter pub get
+
+      - name: 🎨 Check formatting
+        run: dart format --output=none --set-exit-if-changed .
+
+      - name: 🔬 Run analyzer
+        run: flutter analyze --fatal-infos
+
+  # ─────────────────────────────────────────
+  # 2. Conventional Commits check
+  # ─────────────────────────────────────────
+  conventional-commits:
+    name: 📝 Conventional Commits
+    runs-on: ubuntu-latest
+    steps:
+      - name: 📥 Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: 📝 Check conventional commits
+        uses: taskmedia/action-conventional-commits@v1.1.26
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          types: "feat|fix|docs|style|refactor|perf|test|chore|ci|build"
+
+  # ─────────────────────────────────────────
+  # 3. Tests (runs in parallel with quality)
+  # ─────────────────────────────────────────
+  # test:
+  #   name: 🧪 Flutter Tests
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: 📥 Checkout
+  #       uses: actions/checkout@v6
+  #
+  #     - name: 📄 Load versions
+  #       id: versions
+  #       run: |
+  #         source .github/versions.env
+  #         echo "flutter_version=${FLUTTER_VERSION}" >> "$GITHUB_OUTPUT"
+  #
+  #     - name: 🐦 Setup Flutter
+  #       uses: subosito/flutter-action@v2
+  #       with:
+  #         flutter-version: ${{ steps.versions.outputs.flutter_version }}
+  #         channel: stable
+  #         cache: true
+  #
+  #     - name: 📦 Get dependencies
+  #       run: flutter pub get
+  #
+  #     - name: 🧪 Run tests
+  #       run: flutter test --reporter=github
