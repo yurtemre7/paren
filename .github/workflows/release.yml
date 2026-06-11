@@ -89,7 +89,7 @@ jobs:
           cache: true
 
       - name: ☕ Setup Java
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           distribution: temurin
           java-version: '17'
@@ -113,7 +113,7 @@ jobs:
           cat > android/app/key.properties <<EOF
           storeFile=keystore.jks
           storePassword=${{ secrets.STORE_PASSWORD }}
-          keyAlias=${{ secrets.KEY_ALIAS }}
+          keyAlias=upload
           keyPassword=${{ secrets.KEY_PASSWORD }}
           EOF
 
@@ -127,7 +127,7 @@ jobs:
             --build-number=${{ needs.version.outputs.build_number }}
 
       - name: 📤 Upload APK artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: paren-android-apk
           path: build/app/outputs/flutter-apk/app-release.apk
@@ -166,7 +166,7 @@ jobs:
         run: dart run msix:create --install-certificate=false
 
       - name: 📤 Upload MSIX artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: paren-windows-msix
           path: build/windows/x64/runner/Release/*.msix
