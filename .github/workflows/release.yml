@@ -94,15 +94,16 @@ jobs:
           distribution: temurin
           java-version: '17'
 
-      - name: 🗄️ Cache Gradle
+      - name: 🗄️ Cache Gradle & Android SDK components
         uses: actions/cache@v5
         with:
           path: |
             ~/.gradle/caches
             ~/.gradle/wrapper
-          key: gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-          restore-keys: gradle-
-      
+            /usr/local/lib/android/sdk/cmake
+          key: android-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: android-
+
       - name: 🔑 Decode keystore
         run: |
           echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 --decode > android/app/keystore.jks
@@ -162,7 +163,7 @@ jobs:
             --build-number=${{ needs.version.outputs.build_number }}
 
       - name: 📦 Create MSIX package
-        run: dart run msix:create
+        run: dart run msix:create --install-certificate=false
 
       - name: 📤 Upload MSIX artifact
         uses: actions/upload-artifact@v4
