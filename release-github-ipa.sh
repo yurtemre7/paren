@@ -13,7 +13,7 @@ fi
 echo "==> flutter build ipa --release --build-number='$git_count'"
 flutter build ipa --release --build-number="$git_count"
 
-IPA_PATH="$(find build/ios/ipa -maxdepth 1 -type f -name '*.ipa' -print0 | xargs -0 ls -t | head -n 1)"
+IPA_PATH="$(find build/ios/ipa -maxdepth 1 -type f -name '*.ipa' -print0 | xargs -r -0 ls -t | head -n 1)"
 
 if [[ -z "$IPA_PATH" || ! -f "$IPA_PATH" ]]; then
   echo "Error: no IPA found in build/ios/ipa." >&2
