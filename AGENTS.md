@@ -25,8 +25,7 @@
 - Install dependencies with `fvm flutter pub get` before finalizing code changes.
 - Run targeted checks first, then broader ones as needed.
 - Useful commands:
-- `fvm flutter test integration_test`
-- `dart format lib test integration_test`
+- `dart format lib test`
 - `fvm flutter analyze`
 
 ## Repo Notes

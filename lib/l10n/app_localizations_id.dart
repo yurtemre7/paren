@@ -513,4 +513,109 @@ class AppLocalizationsId extends AppLocalizations {
   String deleteEntryContent(Object description) {
     return 'Apakah Anda yakin ingin menghapus \"$description\"?';
   }
+
+  @override
+  String get apply => 'Terapkan';
+
+  @override
+  String get submit => 'Kirim';
+
+  @override
+  String get quiz => 'Kuis';
+
+  @override
+  String get quizSettings => 'Pengaturan kuis';
+
+  @override
+  String quizRoundsPerGame(Object count) {
+    return 'Ronde per game: $count';
+  }
+
+  @override
+  String get quizChoices => 'Pilihan';
+
+  @override
+  String get quizInput => 'Input';
+
+  @override
+  String quizEstimateInCurrency(Object currency) {
+    return 'Perkirakan dalam $currency';
+  }
+
+  @override
+  String get quizYourEstimate => 'Perkiraanmu';
+
+  @override
+  String get quizGoodCalibration => 'Kalibrasi bagus';
+
+  @override
+  String get quizKeepCalibrating => 'Terus kalibrasi';
+
+  @override
+  String quizCorrectAmount(Object amount) {
+    return 'Benar: $amount';
+  }
+
+  @override
+  String quizYourGuess(Object amount) {
+    return 'Tebakanmu: $amount';
+  }
+
+  @override
+  String quizYouWereOff(Object percent) {
+    return 'Kamu meleset $percent%';
+  }
+
+  @override
+  String get quizShowSummary => 'Tampilkan ringkasan';
+
+  @override
+  String get quizNextRound => 'Ronde berikutnya';
+
+  @override
+  String get quizSummary => 'Ringkasan kuis';
+
+  @override
+  String get quizScore => 'Skor';
+
+  @override
+  String get quizBestStreak => 'Rentetan terbaik';
+
+  @override
+  String get quizWithinTenPercent => 'Dalam 10%';
+
+  @override
+  String get quizAverageMiss => 'Rata-rata meleset';
+
+  @override
+  String quizSummaryCorrect(Object amount, Object percent) {
+    return 'Benar $amount · meleset $percent%';
+  }
+
+  @override
+  String get quizPlayAgain => 'Main lagi';
+
+  @override
+  String get quizScenarioBottleOfWater => 'Sebotol air';
+
+  @override
+  String get quizScenarioCoffee => 'Kopi';
+
+  @override
+  String get quizScenarioStreetSnack => 'Camilan kaki lima';
+
+  @override
+  String get quizScenarioLunch => 'Makan siang';
+
+  @override
+  String get quizScenarioTaxiRide => 'Naik taksi';
+
+  @override
+  String get quizScenarioMuseumTicket => 'Tiket museum';
+
+  @override
+  String get quizScenarioGroceries => 'Belanja bahan makanan';
+
+  @override
+  String get quizScenarioHotelNight => 'Semalam di hotel';
 }

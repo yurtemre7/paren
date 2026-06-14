@@ -513,4 +513,109 @@ class AppLocalizationsHi extends AppLocalizations {
   String deleteEntryContent(Object description) {
     return 'क्या आप वाकई \"$description\" को हटाना चाहते हैं?';
   }
+
+  @override
+  String get apply => 'लागू करें';
+
+  @override
+  String get submit => 'जमा करें';
+
+  @override
+  String get quiz => 'क्विज़';
+
+  @override
+  String get quizSettings => 'क्विज़ सेटिंग्स';
+
+  @override
+  String quizRoundsPerGame(Object count) {
+    return 'प्रति गेम राउंड: $count';
+  }
+
+  @override
+  String get quizChoices => 'विकल्प';
+
+  @override
+  String get quizInput => 'इनपुट';
+
+  @override
+  String quizEstimateInCurrency(Object currency) {
+    return '$currency में अनुमान लगाएं';
+  }
+
+  @override
+  String get quizYourEstimate => 'आपका अनुमान';
+
+  @override
+  String get quizGoodCalibration => 'अच्छा अनुमान';
+
+  @override
+  String get quizKeepCalibrating => 'अभ्यास जारी रखें';
+
+  @override
+  String quizCorrectAmount(Object amount) {
+    return 'सही: $amount';
+  }
+
+  @override
+  String quizYourGuess(Object amount) {
+    return 'आपका अनुमान: $amount';
+  }
+
+  @override
+  String quizYouWereOff(Object percent) {
+    return 'आप $percent% चूके';
+  }
+
+  @override
+  String get quizShowSummary => 'सारांश दिखाएं';
+
+  @override
+  String get quizNextRound => 'अगला राउंड';
+
+  @override
+  String get quizSummary => 'क्विज़ सारांश';
+
+  @override
+  String get quizScore => 'स्कोर';
+
+  @override
+  String get quizBestStreak => 'सबसे अच्छी स्ट्रीक';
+
+  @override
+  String get quizWithinTenPercent => '10% के भीतर';
+
+  @override
+  String get quizAverageMiss => 'औसत चूक';
+
+  @override
+  String quizSummaryCorrect(Object amount, Object percent) {
+    return 'सही $amount · $percent% चूक';
+  }
+
+  @override
+  String get quizPlayAgain => 'फिर खेलें';
+
+  @override
+  String get quizScenarioBottleOfWater => 'पानी की बोतल';
+
+  @override
+  String get quizScenarioCoffee => 'कॉफी';
+
+  @override
+  String get quizScenarioStreetSnack => 'स्ट्रीट स्नैक';
+
+  @override
+  String get quizScenarioLunch => 'दोपहर का भोजन';
+
+  @override
+  String get quizScenarioTaxiRide => 'टैक्सी यात्रा';
+
+  @override
+  String get quizScenarioMuseumTicket => 'संग्रहालय टिकट';
+
+  @override
+  String get quizScenarioGroceries => 'किराने का सामान';
+
+  @override
+  String get quizScenarioHotelNight => 'होटल की रात';
 }
