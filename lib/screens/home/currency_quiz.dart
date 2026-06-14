@@ -176,7 +176,8 @@ class _CurrencyQuizScreenState extends State<CurrencyQuizScreen> {
       options[random.nextInt(options.length)] = correctOption;
     }
 
-    while (options.toSet().length < options.length) {
+    var cycleCount = 0;
+    while (options.toSet().length < options.length && cycleCount++ < 10) {
       var duplicateIndex = options.indexWhere(
         (option) => options.where((other) => other == option).length > 1,
       );
