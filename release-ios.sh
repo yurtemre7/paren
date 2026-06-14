@@ -8,7 +8,7 @@ cd ios || exit
 echo "==> bundler exec fastlane release"
 bundler exec fastlane release
 cd .. || exit
-./release-github-ipa.sh
+./release-github-darwin.sh
 git add ./ios/
 git commit -m "chore: update ios version"
 git push
