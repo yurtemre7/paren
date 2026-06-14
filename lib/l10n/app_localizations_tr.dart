@@ -512,4 +512,109 @@ class AppLocalizationsTr extends AppLocalizations {
   String deleteEntryContent(Object description) {
     return '\"$description\" kaydını silmek istediğinizden emin misiniz?';
   }
+
+  @override
+  String get apply => 'Uygula';
+
+  @override
+  String get submit => 'Gönder';
+
+  @override
+  String get quiz => 'Test';
+
+  @override
+  String get quizSettings => 'Test ayarları';
+
+  @override
+  String quizRoundsPerGame(Object count) {
+    return 'Oyun başına tur: $count';
+  }
+
+  @override
+  String get quizChoices => 'Seçenekler';
+
+  @override
+  String get quizInput => 'Giriş';
+
+  @override
+  String quizEstimateInCurrency(Object currency) {
+    return '$currency olarak tahmin et';
+  }
+
+  @override
+  String get quizYourEstimate => 'Tahminin';
+
+  @override
+  String get quizGoodCalibration => 'İyi kalibrasyon';
+
+  @override
+  String get quizKeepCalibrating => 'Kalibre etmeye devam';
+
+  @override
+  String quizCorrectAmount(Object amount) {
+    return 'Doğru: $amount';
+  }
+
+  @override
+  String quizYourGuess(Object amount) {
+    return 'Senin tahminin: $amount';
+  }
+
+  @override
+  String quizYouWereOff(Object percent) {
+    return '%$percent saptın';
+  }
+
+  @override
+  String get quizShowSummary => 'Özeti göster';
+
+  @override
+  String get quizNextRound => 'Sonraki tur';
+
+  @override
+  String get quizSummary => 'Test özeti';
+
+  @override
+  String get quizScore => 'Puan';
+
+  @override
+  String get quizBestStreak => 'En iyi seri';
+
+  @override
+  String get quizWithinTenPercent => '%10 içinde';
+
+  @override
+  String get quizAverageMiss => 'Ortalama sapma';
+
+  @override
+  String quizSummaryCorrect(Object amount, Object percent) {
+    return 'Doğru $amount · %$percent sapma';
+  }
+
+  @override
+  String get quizPlayAgain => 'Tekrar oyna';
+
+  @override
+  String get quizScenarioBottleOfWater => 'Bir şişe su';
+
+  @override
+  String get quizScenarioCoffee => 'Kahve';
+
+  @override
+  String get quizScenarioStreetSnack => 'Sokak atıştırmalığı';
+
+  @override
+  String get quizScenarioLunch => 'Öğle yemeği';
+
+  @override
+  String get quizScenarioTaxiRide => 'Taksi yolculuğu';
+
+  @override
+  String get quizScenarioMuseumTicket => 'Müze bileti';
+
+  @override
+  String get quizScenarioGroceries => 'Market alışverişi';
+
+  @override
+  String get quizScenarioHotelNight => 'Otel gecesi';
 }

@@ -514,4 +514,109 @@ class AppLocalizationsFr extends AppLocalizations {
   String deleteEntryContent(Object description) {
     return 'Voulez-vous vraiment supprimer \"$description\" ?';
   }
+
+  @override
+  String get apply => 'Appliquer';
+
+  @override
+  String get submit => 'Envoyer';
+
+  @override
+  String get quiz => 'Quiz';
+
+  @override
+  String get quizSettings => 'Paramètres du quiz';
+
+  @override
+  String quizRoundsPerGame(Object count) {
+    return 'Manches par partie : $count';
+  }
+
+  @override
+  String get quizChoices => 'Choix';
+
+  @override
+  String get quizInput => 'Saisie';
+
+  @override
+  String quizEstimateInCurrency(Object currency) {
+    return 'Estimez en $currency';
+  }
+
+  @override
+  String get quizYourEstimate => 'Votre estimation';
+
+  @override
+  String get quizGoodCalibration => 'Bonne calibration';
+
+  @override
+  String get quizKeepCalibrating => 'Continuez à calibrer';
+
+  @override
+  String quizCorrectAmount(Object amount) {
+    return 'Correct : $amount';
+  }
+
+  @override
+  String quizYourGuess(Object amount) {
+    return 'Votre estimation : $amount';
+  }
+
+  @override
+  String quizYouWereOff(Object percent) {
+    return 'Vous aviez $percent % d\'écart';
+  }
+
+  @override
+  String get quizShowSummary => 'Afficher le résumé';
+
+  @override
+  String get quizNextRound => 'Manche suivante';
+
+  @override
+  String get quizSummary => 'Résumé du quiz';
+
+  @override
+  String get quizScore => 'Score';
+
+  @override
+  String get quizBestStreak => 'Meilleure série';
+
+  @override
+  String get quizWithinTenPercent => 'À moins de 10 %';
+
+  @override
+  String get quizAverageMiss => 'Écart moyen';
+
+  @override
+  String quizSummaryCorrect(Object amount, Object percent) {
+    return 'Correct $amount · écart $percent %';
+  }
+
+  @override
+  String get quizPlayAgain => 'Rejouer';
+
+  @override
+  String get quizScenarioBottleOfWater => 'Bouteille d\'eau';
+
+  @override
+  String get quizScenarioCoffee => 'Café';
+
+  @override
+  String get quizScenarioStreetSnack => 'Snack de rue';
+
+  @override
+  String get quizScenarioLunch => 'Déjeuner';
+
+  @override
+  String get quizScenarioTaxiRide => 'Course en taxi';
+
+  @override
+  String get quizScenarioMuseumTicket => 'Billet de musée';
+
+  @override
+  String get quizScenarioGroceries => 'Courses';
+
+  @override
+  String get quizScenarioHotelNight => 'Nuit d\'hôtel';
 }

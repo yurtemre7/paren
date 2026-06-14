@@ -1001,6 +1001,192 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Are you sure you want to delete \"{description}\"?'**
   String deleteEntryContent(Object description);
+
+  /// No description provided for @apply.
+  ///
+  /// In en, this message translates to:
+  /// **'Apply'**
+  String get apply;
+
+  /// No description provided for @submit.
+  ///
+  /// In en, this message translates to:
+  /// **'Submit'**
+  String get submit;
+
+  /// No description provided for @quiz.
+  ///
+  /// In en, this message translates to:
+  /// **'Quiz'**
+  String get quiz;
+
+  /// No description provided for @quizSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Quiz settings'**
+  String get quizSettings;
+
+  /// No description provided for @quizRoundsPerGame.
+  ///
+  /// In en, this message translates to:
+  /// **'Rounds per game: {count}'**
+  String quizRoundsPerGame(Object count);
+
+  /// No description provided for @quizChoices.
+  ///
+  /// In en, this message translates to:
+  /// **'Choices'**
+  String get quizChoices;
+
+  /// No description provided for @quizInput.
+  ///
+  /// In en, this message translates to:
+  /// **'Input'**
+  String get quizInput;
+
+  /// No description provided for @quizEstimateInCurrency.
+  ///
+  /// In en, this message translates to:
+  /// **'Estimate it in {currency}'**
+  String quizEstimateInCurrency(Object currency);
+
+  /// No description provided for @quizYourEstimate.
+  ///
+  /// In en, this message translates to:
+  /// **'Your estimate'**
+  String get quizYourEstimate;
+
+  /// No description provided for @quizGoodCalibration.
+  ///
+  /// In en, this message translates to:
+  /// **'Good calibration'**
+  String get quizGoodCalibration;
+
+  /// No description provided for @quizKeepCalibrating.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep calibrating'**
+  String get quizKeepCalibrating;
+
+  /// No description provided for @quizCorrectAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'Correct: {amount}'**
+  String quizCorrectAmount(Object amount);
+
+  /// No description provided for @quizYourGuess.
+  ///
+  /// In en, this message translates to:
+  /// **'Your guess: {amount}'**
+  String quizYourGuess(Object amount);
+
+  /// No description provided for @quizYouWereOff.
+  ///
+  /// In en, this message translates to:
+  /// **'You were {percent}% off'**
+  String quizYouWereOff(Object percent);
+
+  /// No description provided for @quizShowSummary.
+  ///
+  /// In en, this message translates to:
+  /// **'Show summary'**
+  String get quizShowSummary;
+
+  /// No description provided for @quizNextRound.
+  ///
+  /// In en, this message translates to:
+  /// **'Next round'**
+  String get quizNextRound;
+
+  /// No description provided for @quizSummary.
+  ///
+  /// In en, this message translates to:
+  /// **'Quiz summary'**
+  String get quizSummary;
+
+  /// No description provided for @quizScore.
+  ///
+  /// In en, this message translates to:
+  /// **'Score'**
+  String get quizScore;
+
+  /// No description provided for @quizBestStreak.
+  ///
+  /// In en, this message translates to:
+  /// **'Best streak'**
+  String get quizBestStreak;
+
+  /// No description provided for @quizWithinTenPercent.
+  ///
+  /// In en, this message translates to:
+  /// **'Within 10%'**
+  String get quizWithinTenPercent;
+
+  /// No description provided for @quizAverageMiss.
+  ///
+  /// In en, this message translates to:
+  /// **'Average miss'**
+  String get quizAverageMiss;
+
+  /// No description provided for @quizSummaryCorrect.
+  ///
+  /// In en, this message translates to:
+  /// **'Correct {amount} · {percent}% off'**
+  String quizSummaryCorrect(Object amount, Object percent);
+
+  /// No description provided for @quizPlayAgain.
+  ///
+  /// In en, this message translates to:
+  /// **'Play again'**
+  String get quizPlayAgain;
+
+  /// No description provided for @quizScenarioBottleOfWater.
+  ///
+  /// In en, this message translates to:
+  /// **'Bottle of water'**
+  String get quizScenarioBottleOfWater;
+
+  /// No description provided for @quizScenarioCoffee.
+  ///
+  /// In en, this message translates to:
+  /// **'Coffee'**
+  String get quizScenarioCoffee;
+
+  /// No description provided for @quizScenarioStreetSnack.
+  ///
+  /// In en, this message translates to:
+  /// **'Street snack'**
+  String get quizScenarioStreetSnack;
+
+  /// No description provided for @quizScenarioLunch.
+  ///
+  /// In en, this message translates to:
+  /// **'Lunch'**
+  String get quizScenarioLunch;
+
+  /// No description provided for @quizScenarioTaxiRide.
+  ///
+  /// In en, this message translates to:
+  /// **'Taxi ride'**
+  String get quizScenarioTaxiRide;
+
+  /// No description provided for @quizScenarioMuseumTicket.
+  ///
+  /// In en, this message translates to:
+  /// **'Museum ticket'**
+  String get quizScenarioMuseumTicket;
+
+  /// No description provided for @quizScenarioGroceries.
+  ///
+  /// In en, this message translates to:
+  /// **'Groceries'**
+  String get quizScenarioGroceries;
+
+  /// No description provided for @quizScenarioHotelNight.
+  ///
+  /// In en, this message translates to:
+  /// **'Hotel night'**
+  String get quizScenarioHotelNight;
 }
 
 class _AppLocalizationsDelegate

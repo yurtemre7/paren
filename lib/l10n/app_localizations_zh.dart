@@ -506,4 +506,109 @@ class AppLocalizationsZh extends AppLocalizations {
   String deleteEntryContent(Object description) {
     return '确定要删除“$description”吗？';
   }
+
+  @override
+  String get apply => '应用';
+
+  @override
+  String get submit => '提交';
+
+  @override
+  String get quiz => '测验';
+
+  @override
+  String get quizSettings => '测验设置';
+
+  @override
+  String quizRoundsPerGame(Object count) {
+    return '每局轮数：$count';
+  }
+
+  @override
+  String get quizChoices => '选项';
+
+  @override
+  String get quizInput => '输入';
+
+  @override
+  String quizEstimateInCurrency(Object currency) {
+    return '估算为 $currency';
+  }
+
+  @override
+  String get quizYourEstimate => '你的估算';
+
+  @override
+  String get quizGoodCalibration => '校准不错';
+
+  @override
+  String get quizKeepCalibrating => '继续校准';
+
+  @override
+  String quizCorrectAmount(Object amount) {
+    return '正确：$amount';
+  }
+
+  @override
+  String quizYourGuess(Object amount) {
+    return '你的猜测：$amount';
+  }
+
+  @override
+  String quizYouWereOff(Object percent) {
+    return '你偏差了 $percent%';
+  }
+
+  @override
+  String get quizShowSummary => '显示总结';
+
+  @override
+  String get quizNextRound => '下一轮';
+
+  @override
+  String get quizSummary => '测验总结';
+
+  @override
+  String get quizScore => '得分';
+
+  @override
+  String get quizBestStreak => '最佳连击';
+
+  @override
+  String get quizWithinTenPercent => '10%以内';
+
+  @override
+  String get quizAverageMiss => '平均偏差';
+
+  @override
+  String quizSummaryCorrect(Object amount, Object percent) {
+    return '正确 $amount · 偏差 $percent%';
+  }
+
+  @override
+  String get quizPlayAgain => '再玩一次';
+
+  @override
+  String get quizScenarioBottleOfWater => '一瓶水';
+
+  @override
+  String get quizScenarioCoffee => '咖啡';
+
+  @override
+  String get quizScenarioStreetSnack => '街头小吃';
+
+  @override
+  String get quizScenarioLunch => '午餐';
+
+  @override
+  String get quizScenarioTaxiRide => '出租车行程';
+
+  @override
+  String get quizScenarioMuseumTicket => '博物馆门票';
+
+  @override
+  String get quizScenarioGroceries => '日用品';
+
+  @override
+  String get quizScenarioHotelNight => '酒店一晚';
 }

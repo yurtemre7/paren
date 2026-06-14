@@ -67,9 +67,13 @@ class AdaptiveSheetLayout extends StatelessWidget {
 StupidSimpleSheetRoute<T> adaptiveSheetRoute<T>({
   required Widget child,
   bool originateAboveBottomViewInset = false,
+  bool barrierDismissible = true,
+  bool draggable = true,
 }) {
   return StupidSimpleSheetRoute<T>(
     originateAboveBottomViewInset: originateAboveBottomViewInset,
+    barrierDismissible: barrierDismissible,
+    draggable: draggable,
     child: AdaptiveSheetLayout(child: child),
   );
 }

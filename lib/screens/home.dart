@@ -17,6 +17,7 @@ import 'package:paren/providers/constants.dart';
 import 'package:paren/providers/extensions.dart';
 import 'package:paren/providers/paren.dart';
 import 'package:paren/screens/home/conversion.dart';
+import 'package:paren/screens/home/currency_quiz.dart';
 import 'package:paren/screens/home/customization.dart';
 import 'package:paren/screens/home/sheets.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -167,6 +168,11 @@ class _HomeState extends State<Home> {
                         color: context.theme.colorScheme.outlineVariant,
                       ),
                       Expanded(child: Conversion()),
+                      Container(
+                        width: 1,
+                        color: context.theme.colorScheme.outlineVariant,
+                      ),
+                      Expanded(child: CurrencyQuizScreen()),
                       // add border
                       Container(
                         width: 1,
@@ -185,7 +191,12 @@ class _HomeState extends State<Home> {
                   onPageChanged: (value) {
                     paren.currentPage.value = value;
                   },
-                  children: [Sheets(), Conversion(), Customization()],
+                  children: [
+                    Sheets(),
+                    Conversion(),
+                    CurrencyQuizScreen(),
+                    Customization(),
+                  ],
                 );
               }),
             ),
@@ -231,6 +242,7 @@ class _HomeState extends State<Home> {
           icon: Icon(Icons.calculate_outlined),
           label: l10n.calculation,
         ),
+        GlassBottomBarTab(icon: Icon(Icons.quiz_outlined), label: l10n.quiz),
         GlassBottomBarTab(icon: Icon(Icons.settings), label: l10n.settings),
       ],
       extraButton: GlassBottomBarExtraButton(

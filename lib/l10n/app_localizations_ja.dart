@@ -508,4 +508,109 @@ class AppLocalizationsJa extends AppLocalizations {
   String deleteEntryContent(Object description) {
     return '「$description」を本当に削除しますか？';
   }
+
+  @override
+  String get apply => '適用';
+
+  @override
+  String get submit => '送信';
+
+  @override
+  String get quiz => 'クイズ';
+
+  @override
+  String get quizSettings => 'クイズ設定';
+
+  @override
+  String quizRoundsPerGame(Object count) {
+    return '1ゲームのラウンド数: $count';
+  }
+
+  @override
+  String get quizChoices => '選択肢';
+
+  @override
+  String get quizInput => '入力';
+
+  @override
+  String quizEstimateInCurrency(Object currency) {
+    return '$currencyで見積もる';
+  }
+
+  @override
+  String get quizYourEstimate => 'あなたの見積もり';
+
+  @override
+  String get quizGoodCalibration => '感覚は良好';
+
+  @override
+  String get quizKeepCalibrating => 'もう少し調整';
+
+  @override
+  String quizCorrectAmount(Object amount) {
+    return '正解: $amount';
+  }
+
+  @override
+  String quizYourGuess(Object amount) {
+    return 'あなたの予想: $amount';
+  }
+
+  @override
+  String quizYouWereOff(Object percent) {
+    return '$percent%ずれていました';
+  }
+
+  @override
+  String get quizShowSummary => '結果を表示';
+
+  @override
+  String get quizNextRound => '次のラウンド';
+
+  @override
+  String get quizSummary => 'クイズ結果';
+
+  @override
+  String get quizScore => 'スコア';
+
+  @override
+  String get quizBestStreak => '最高連続正解';
+
+  @override
+  String get quizWithinTenPercent => '10%以内';
+
+  @override
+  String get quizAverageMiss => '平均誤差';
+
+  @override
+  String quizSummaryCorrect(Object amount, Object percent) {
+    return '正解 $amount · $percent%ずれ';
+  }
+
+  @override
+  String get quizPlayAgain => 'もう一度';
+
+  @override
+  String get quizScenarioBottleOfWater => '水のボトル';
+
+  @override
+  String get quizScenarioCoffee => 'コーヒー';
+
+  @override
+  String get quizScenarioStreetSnack => '屋台の軽食';
+
+  @override
+  String get quizScenarioLunch => 'ランチ';
+
+  @override
+  String get quizScenarioTaxiRide => 'タクシー移動';
+
+  @override
+  String get quizScenarioMuseumTicket => '美術館チケット';
+
+  @override
+  String get quizScenarioGroceries => '食料品';
+
+  @override
+  String get quizScenarioHotelNight => 'ホテル1泊';
 }
