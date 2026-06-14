@@ -41,7 +41,7 @@ class HomeHeader extends StatelessWidget implements PreferredSizeWidget {
               width: 52,
               child: isDesktop
                   ? buildInfoIconButton(context, colorScheme)
-                  : index != 2
+                  : index != 3
                   ? buildNavigateIconButtonForward(colorScheme)
                   : buildInfoIconButton(context, colorScheme),
             ),
