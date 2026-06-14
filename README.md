@@ -24,7 +24,7 @@ Head over to the [**latest release**](https://github.com/yurtemre7/paren/release
 | Android (emulator / x86) | `paren-x86_64.apk` |
 | iOS (most phones, sideloading) | `paren.ipa` |
 | Windows | `paren-*.msix` |
-| macOS | `paren.app` |
+| macOS | `paren.zip` |
 | Linux | `paren-linux.tar.gz` |
 
 > Not sure which APK on your Android? Grab `paren-arm64-v8a.apk`.
