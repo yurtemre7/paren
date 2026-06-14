@@ -678,7 +678,7 @@ class _AnswerCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var colorScheme = context.theme.colorScheme;
-    var color = colorScheme.surfaceContainerHighest;
+    var color = colorScheme.surface;
     var borderColor = colorScheme.outlineVariant;
     var icon = Icons.circle_outlined;
 
