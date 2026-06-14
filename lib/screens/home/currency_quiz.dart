@@ -94,10 +94,20 @@ class _CurrencyQuizScreenState extends State<CurrencyQuizScreen> {
     (scenario: QuizScenario.hotelNight, eurMin: 70.0, eurMax: 190.0),
   ];
 
+  Worker? workerFrom;
+  Worker? workerTo;
+
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      startGame();
+    });
+
+    workerFrom = ever(paren.fromCurrency, (_) {
+      startGame();
+    });
+    workerTo = ever(paren.toCurrency, (_) {
       startGame();
     });
   }
@@ -105,6 +115,8 @@ class _CurrencyQuizScreenState extends State<CurrencyQuizScreen> {
   @override
   void dispose() {
     inputController.dispose();
+    workerFrom?.dispose();
+    workerTo?.dispose();
     super.dispose();
   }
 
@@ -368,6 +380,7 @@ class _CurrencyQuizScreenState extends State<CurrencyQuizScreen> {
   Widget build(BuildContext context) {
     return Obx(() {
       var round = currentRound.value;
+
       if (round == null) {
         return const Center(child: CircularProgressIndicator());
       }
@@ -380,7 +393,6 @@ class _CurrencyQuizScreenState extends State<CurrencyQuizScreen> {
             score: score.value,
             bestStreak: bestStreak.value,
             answers: answers,
-            homeCurrencyId: round.homeCurrency.id,
             formatAmount: _formatAmount,
             onRestart: startGame,
           ),
@@ -894,7 +906,6 @@ class QuizSummaryScreen extends StatelessWidget {
   final int score;
   final int bestStreak;
   final List<QuizAnswer> answers;
-  final String homeCurrencyId;
   final String Function(double amount, String currencyId) formatAmount;
   final VoidCallback onRestart;
 
@@ -903,7 +914,6 @@ class QuizSummaryScreen extends StatelessWidget {
     required this.score,
     required this.bestStreak,
     required this.answers,
-    required this.homeCurrencyId,
     required this.formatAmount,
     required this.onRestart,
   });
@@ -982,7 +992,10 @@ class QuizSummaryScreen extends StatelessWidget {
             ),
             subtitle: Text(
               context.l10n.quizSummaryCorrect(
-                formatAmount(answer.round.correctAmount, homeCurrencyId),
+                formatAmount(
+                  answer.round.correctAmount,
+                  answer.round.homeCurrency.id,
+                ),
                 (answer.deviation * 100).round(),
               ),
             ),
