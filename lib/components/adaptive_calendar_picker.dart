@@ -9,10 +9,7 @@ class AdaptiveCalendarPicker {
   // Allow future dates up to 1 year
   static var lastDate = DateTime.now().add(Duration(days: 365));
 
-  static Future<DateTime?> show(
-    BuildContext context, {
-    DateTime? initialDate,
-  }) async {
+  static Future<DateTime?> show(BuildContext context, {DateTime? initialDate}) {
     if (Platform.isIOS || Platform.isMacOS) {
       return cupertinoCalendarPicker(context, initialDate: initialDate);
     }
@@ -23,7 +20,7 @@ class AdaptiveCalendarPicker {
   static Future<DateTime?> materialCalendarPicker(
     BuildContext context, {
     DateTime? initialDate,
-  }) async {
+  }) {
     return showDatePicker(
       context: context,
       initialDate: initialDate,
@@ -35,7 +32,7 @@ class AdaptiveCalendarPicker {
   static Future<DateTime?> cupertinoCalendarPicker(
     BuildContext context, {
     DateTime? initialDate,
-  }) async {
+  }) {
     var renderBox = context.findRenderObject() as RenderBox?;
 
     return showCupertinoCalendarPicker(
