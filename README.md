@@ -22,16 +22,18 @@ Head over to the [**latest release**](https://github.com/yurtemre7/paren/release
 | Android (most phones, 2016+) | `paren-arm64-v8a.apk` |
 | Android (older 32-bit devices) | `paren-armeabi-v7a.apk` |
 | Android (emulator / x86) | `paren-x86_64.apk` |
+| iOS (most phones, sideloading) | `paren.ipa` |
 | Windows | `paren-*.msix` |
+| macOS | `paren.zip` |
 | Linux | `paren-linux.tar.gz` |
 
-> Not sure which APK? Grab `paren-arm64-v8a.apk`.
+> Not sure which APK on your Android? Grab `paren-arm64-v8a.apk`.
 
 ***
 
 ## Code
 
-The project is written in [Flutter](https://flutter.dev/) and targets Android, Windows, and Linux.  
+The project is written in [Flutter](https://flutter.dev/) and targets Android, iOS, macOS, Windows, and Linux.
 Browse the codebase freely — check if the app behaves the way you want it to.
 
 ***

@@ -279,7 +279,7 @@ class _CustomizationState extends State<Customization> {
                     3,
                     (i) => i == paren.appThemeMode.value.index,
                   ),
-                  onPressed: (int index) async {
+                  onPressed: (int index) {
                     if (paren.appThemeMode.value.index == index) return;
                     paren.appThemeMode.value = ThemeMode.values[index];
                     paren.setTheme();
