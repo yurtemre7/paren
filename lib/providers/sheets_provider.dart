@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:paren/classes/sheet.dart';
 import 'package:paren/classes/sheet_entry.dart';
+import 'package:paren/components/adaptive_calendar_picker.dart';
 import 'package:paren/components/adaptive_overlay.dart';
 import 'package:paren/l10n/app_localizations_extension.dart';
 import 'package:paren/providers/constants.dart';
@@ -229,36 +230,37 @@ class SheetsProvider extends GetxController {
                             );
                           }),
                           12.h,
-                          TextField(
-                            controller: dateCtrl,
-                            onTap: () async {
-                              var pickedDate = await showDatePicker(
-                                context: context,
-                                initialDate: selectedDate,
-                                firstDate: DateTime(2000),
-                                lastDate: DateTime.now().add(
-                                  Duration(days: 365),
-                                ), // Allow future dates up to 1 year
+                          Builder(
+                            builder: (context) {
+                              return TextField(
+                                controller: dateCtrl,
+                                onTap: () async {
+                                  var pickedDate =
+                                      await AdaptiveCalendarPicker.show(
+                                        context,
+                                        initialDate: selectedDate,
+                                      );
+                                  if (pickedDate != null && context.mounted) {
+                                    setState(() {
+                                      selectedDate = DateTime(
+                                        pickedDate.year,
+                                        pickedDate.month,
+                                        pickedDate.day,
+                                        12,
+                                      );
+                                      dateCtrl.text = dateFormatter.format(
+                                        selectedDate,
+                                      );
+                                    });
+                                  }
+                                },
+                                readOnly: true,
+                                decoration: InputDecoration(
+                                  label: Text(l10n.date),
+                                  suffixIcon: Icon(Icons.date_range),
+                                ),
                               );
-                              if (pickedDate != null && context.mounted) {
-                                setState(() {
-                                  selectedDate = DateTime(
-                                    pickedDate.year,
-                                    pickedDate.month,
-                                    pickedDate.day,
-                                    12,
-                                  );
-                                  dateCtrl.text = dateFormatter.format(
-                                    selectedDate,
-                                  );
-                                });
-                              }
                             },
-                            readOnly: true,
-                            decoration: InputDecoration(
-                              label: Text(l10n.date),
-                              suffixIcon: Icon(Icons.date_range),
-                            ),
                           ),
                           if (entry != null && sheet != null) ...[
                             12.h,
