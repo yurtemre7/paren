@@ -238,14 +238,11 @@ class _HomeState extends State<Home> {
       ),
       tabs: [
         GlassTab(icon: Icon(Icons.list), label: l10n.sheets),
-        GlassTab(
-          icon: Icon(Icons.calculate_outlined),
-          label: l10n.calculation,
-        ),
+        GlassTab(icon: Icon(Icons.calculate_outlined), label: l10n.calculation),
         GlassTab(icon: Icon(Icons.quiz_outlined), label: l10n.quiz),
         GlassTab(icon: Icon(Icons.settings), label: l10n.settings),
       ],
-      extraButton: GlassBottomBarExtraButton(
+      extraButton: GlassTabBarExtraButton(
         onTap: createSheetDialog,
         icon: Icon(Icons.add),
         label: l10n.createSheet,
