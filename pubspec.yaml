@@ -46,7 +46,7 @@ dev_dependencies:
   # `dart run build_runner build`
   build_runner: 2.15.0
   # `dart run msix:create`
-  msix: 3.17.0
+  msix: 3.18.0
   integration_test:
     sdk: flutter
 
