@@ -611,4 +611,24 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get quizScenarioHotelNight => '酒店一晚';
+
+  @override
+  String get customRateOverride => '自定义汇率';
+
+  @override
+  String customRateLabel(Object from, Object to) {
+    return '1 $from 的自定义汇率 ($to)';
+  }
+
+  @override
+  String get resetToLiveRate => '重置为实时汇率';
+
+  @override
+  String get customRateActive => '自定义汇率已激活';
+
+  @override
+  String get customRateHelper => '输入您实际获得的汇率（例如现金或刷卡汇率）';
+
+  @override
+  String get invalidNumber => '请输入有效的正数';
 }

@@ -618,4 +618,25 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get quizScenarioHotelNight => 'होटल की रात';
+
+  @override
+  String get customRateOverride => 'कस्टम दर';
+
+  @override
+  String customRateLabel(Object from, Object to) {
+    return '1 $from के लिए $to में कस्टम दर';
+  }
+
+  @override
+  String get resetToLiveRate => 'लाइव दर पर रीसेट करें';
+
+  @override
+  String get customRateActive => 'कस्टम दर सक्रिय';
+
+  @override
+  String get customRateHelper =>
+      'वह दर दर्ज करें जो आपको वास्तव में मिली (जैसे नकद या कार्ड दर)';
+
+  @override
+  String get invalidNumber => 'कृपया एक मान्य सकारात्मक संख्या दर्ज करें';
 }

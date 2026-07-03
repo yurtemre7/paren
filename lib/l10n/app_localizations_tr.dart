@@ -617,4 +617,25 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get quizScenarioHotelNight => 'Otel gecesi';
+
+  @override
+  String get customRateOverride => 'Özel Döviz Kuru';
+
+  @override
+  String customRateLabel(Object from, Object to) {
+    return '1 $from için özel kur ($to)';
+  }
+
+  @override
+  String get resetToLiveRate => 'Canlı Kura Sıfırla';
+
+  @override
+  String get customRateActive => 'Özel Kur Aktif';
+
+  @override
+  String get customRateHelper =>
+      'Gerçekte aldığınız döviz kurunu girin (ör. nakit veya kart komisyonlu kur)';
+
+  @override
+  String get invalidNumber => 'Lütfen geçerli ve pozitif bir sayı girin';
 }

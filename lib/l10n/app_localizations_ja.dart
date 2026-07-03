@@ -613,4 +613,24 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get quizScenarioHotelNight => 'ホテル1泊';
+
+  @override
+  String get customRateOverride => 'カスタムレート設定';
+
+  @override
+  String customRateLabel(Object from, Object to) {
+    return '1 $from あたりのカスタムレート（$to）';
+  }
+
+  @override
+  String get resetToLiveRate => '現在のレートに戻す';
+
+  @override
+  String get customRateActive => 'カスタムレート適用中';
+
+  @override
+  String get customRateHelper => '実際に適用されたレートを入力してください（現金両替やカード支払い時のレートなど）';
+
+  @override
+  String get invalidNumber => '有効な正の数値を入力してください';
 }

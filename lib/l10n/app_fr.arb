@@ -180,5 +180,11 @@
   "quizScenarioTaxiRide": "Course en taxi",
   "quizScenarioMuseumTicket": "Billet de musée",
   "quizScenarioGroceries": "Courses",
-  "quizScenarioHotelNight": "Nuit d'hôtel"
+  "quizScenarioHotelNight": "Nuit d'hôtel",
+  "customRateOverride": "Taux personnalisé",
+  "customRateLabel": "Taux personnalisé pour 1 {from} en {to}",
+  "resetToLiveRate": "Réinitialiser au taux en direct",
+  "customRateActive": "Taux personnalisé actif",
+  "customRateHelper": "Entrez le taux que vous avez réellement obtenu (par exemple, le taux en espèces ou par carte)",
+  "invalidNumber": "Veuillez entrer un nombre positif valide"
 }

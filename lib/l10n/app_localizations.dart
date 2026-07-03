@@ -1187,6 +1187,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Hotel night'**
   String get quizScenarioHotelNight;
+
+  /// No description provided for @customRateOverride.
+  ///
+  /// In en, this message translates to:
+  /// **'Custom Rate Override'**
+  String get customRateOverride;
+
+  /// No description provided for @customRateLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Custom rate for 1 {from} in {to}'**
+  String customRateLabel(Object from, Object to);
+
+  /// No description provided for @resetToLiveRate.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset to Live Rate'**
+  String get resetToLiveRate;
+
+  /// No description provided for @customRateActive.
+  ///
+  /// In en, this message translates to:
+  /// **'Custom Rate Active'**
+  String get customRateActive;
+
+  /// No description provided for @customRateHelper.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the rate you actually got (e.g., card or cash rate)'**
+  String get customRateHelper;
+
+  /// No description provided for @invalidNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a valid positive number'**
+  String get invalidNumber;
 }
 
 class _AppLocalizationsDelegate

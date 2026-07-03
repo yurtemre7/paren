@@ -618,4 +618,25 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get quizScenarioHotelNight => 'Semalam di hotel';
+
+  @override
+  String get customRateOverride => 'Kurs Kustom';
+
+  @override
+  String customRateLabel(Object from, Object to) {
+    return 'Kurs kustom untuk 1 $from ke $to';
+  }
+
+  @override
+  String get resetToLiveRate => 'Atur ulang ke kurs langsung';
+
+  @override
+  String get customRateActive => 'Kurs kustom aktif';
+
+  @override
+  String get customRateHelper =>
+      'Masukkan kurs yang sebenarnya Anda dapatkan (misalnya kurs tunai atau kartu)';
+
+  @override
+  String get invalidNumber => 'Harap masukkan angka positif yang valid';
 }

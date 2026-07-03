@@ -180,5 +180,11 @@
   "quizScenarioTaxiRide": "Taksi yolculuğu",
   "quizScenarioMuseumTicket": "Müze bileti",
   "quizScenarioGroceries": "Market alışverişi",
-  "quizScenarioHotelNight": "Otel gecesi"
+  "quizScenarioHotelNight": "Otel gecesi",
+  "customRateOverride": "Özel Döviz Kuru",
+  "customRateLabel": "1 {from} için özel kur ({to})",
+  "resetToLiveRate": "Canlı Kura Sıfırla",
+  "customRateActive": "Özel Kur Aktif",
+  "customRateHelper": "Gerçekte aldığınız döviz kurunu girin (ör. nakit veya kart komisyonlu kur)",
+  "invalidNumber": "Lütfen geçerli ve pozitif bir sayı girin"
 }

@@ -619,4 +619,25 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get quizScenarioHotelNight => 'Nuit d\'hôtel';
+
+  @override
+  String get customRateOverride => 'Taux personnalisé';
+
+  @override
+  String customRateLabel(Object from, Object to) {
+    return 'Taux personnalisé pour 1 $from en $to';
+  }
+
+  @override
+  String get resetToLiveRate => 'Réinitialiser au taux en direct';
+
+  @override
+  String get customRateActive => 'Taux personnalisé actif';
+
+  @override
+  String get customRateHelper =>
+      'Entrez le taux que vous avez réellement obtenu (par exemple, le taux en espèces ou par carte)';
+
+  @override
+  String get invalidNumber => 'Veuillez entrer un nombre positif valide';
 }

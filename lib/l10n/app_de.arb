@@ -177,5 +177,11 @@
     "quizScenarioTaxiRide": "Taxifahrt",
     "quizScenarioMuseumTicket": "Museumsticket",
     "quizScenarioGroceries": "Lebensmittel",
-    "quizScenarioHotelNight": "Hotelnacht"
+    "quizScenarioHotelNight": "Hotelnacht",
+    "customRateOverride": "Eigener Wechselkurs",
+    "customRateLabel": "Eigener Kurs für 1 {from} in {to}",
+    "resetToLiveRate": "Auf Live-Kurs zurücksetzen",
+    "customRateActive": "Eigener Kurs aktiv",
+    "customRateHelper": "Gib den Kurs ein, den du tatsächlich erhalten hast (z.B. Bar- oder Kartengebühr-Kurs)",
+    "invalidNumber": "Bitte gib eine gültige positive Zahl ein"
 }

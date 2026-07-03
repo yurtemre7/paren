@@ -180,5 +180,11 @@
   "quizScenarioTaxiRide": "出租车行程",
   "quizScenarioMuseumTicket": "博物馆门票",
   "quizScenarioGroceries": "日用品",
-  "quizScenarioHotelNight": "酒店一晚"
+  "quizScenarioHotelNight": "酒店一晚",
+  "customRateOverride": "自定义汇率",
+  "customRateLabel": "1 {from} 的自定义汇率 ({to})",
+  "resetToLiveRate": "重置为实时汇率",
+  "customRateActive": "自定义汇率已激活",
+  "customRateHelper": "输入您实际获得的汇率（例如现金或刷卡汇率）",
+  "invalidNumber": "请输入有效的正数"
 }
