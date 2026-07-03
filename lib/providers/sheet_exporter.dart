@@ -25,7 +25,11 @@ class SheetExporter {
     String toCurrency,
     Paren paren,
   ) {
-    return paren.convertValue(fromAmount, fromId: fromCurrency, toId: toCurrency);
+    return paren.convertValue(
+      fromAmount,
+      fromId: fromCurrency,
+      toId: toCurrency,
+    );
   }
 
   static Map<String, double> calculateStats(List<SheetEntry> entries) {
@@ -71,7 +75,10 @@ class SheetExporter {
     return {'sum': sum, 'avg': avg, 'min': min, 'max': max};
   }
 
-  static String getCategoryLabel(SheetEntryCategory category, AppLocalizations l10n) {
+  static String getCategoryLabel(
+    SheetEntryCategory category,
+    AppLocalizations l10n,
+  ) {
     return switch (category) {
       SheetEntryCategory.food => l10n.categoryFood,
       SheetEntryCategory.transport => l10n.categoryTransport,
