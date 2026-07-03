@@ -640,4 +640,36 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get invalidNumber => 'Veuillez entrer un nombre positif valide';
+
+  @override
+  String get splitBill => 'Partager l\'addition';
+
+  @override
+  String get splitBillTab => 'Partager';
+
+  @override
+  String get numberOfPeople => 'Nombre de personnes';
+
+  @override
+  String get perPerson => 'Par personne';
+
+  @override
+  String get denominationBreakdown => 'Décomposition';
+
+  @override
+  String get walletCheck => 'Puis-je payer ?';
+
+  @override
+  String get youHaveEnough => 'Vous avez assez !';
+
+  @override
+  String youAreShort(Object amount) {
+    return 'Il vous manque $amount';
+  }
+
+  @override
+  String get walletTotal => 'Portefeuille';
+
+  @override
+  String get required => 'Requis';
 }

@@ -631,4 +631,36 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get invalidNumber => '请输入有效的正数';
+
+  @override
+  String get splitBill => '分摊账单';
+
+  @override
+  String get splitBillTab => '分摊';
+
+  @override
+  String get numberOfPeople => '人数';
+
+  @override
+  String get perPerson => '每人';
+
+  @override
+  String get denominationBreakdown => '面额分解';
+
+  @override
+  String get walletCheck => '我能付款吗？';
+
+  @override
+  String get youHaveEnough => '您的钱够了！';
+
+  @override
+  String youAreShort(Object amount) {
+    return '您还差 $amount';
+  }
+
+  @override
+  String get walletTotal => '钱包';
+
+  @override
+  String get required => '所需金额';
 }

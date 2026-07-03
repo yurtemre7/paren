@@ -638,4 +638,36 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get invalidNumber => 'Lütfen geçerli ve pozitif bir sayı girin';
+
+  @override
+  String get splitBill => 'Hesap Böl';
+
+  @override
+  String get splitBillTab => 'Böl';
+
+  @override
+  String get numberOfPeople => 'Kişi Sayısı';
+
+  @override
+  String get perPerson => 'Kişi başı';
+
+  @override
+  String get denominationBreakdown => 'Para Dökümü';
+
+  @override
+  String get walletCheck => 'Ödeyebilir miyim?';
+
+  @override
+  String get youHaveEnough => 'Yeterli paranız var!';
+
+  @override
+  String youAreShort(Object amount) {
+    return '$amount eksiğiniz var';
+  }
+
+  @override
+  String get walletTotal => 'Cüzdan';
+
+  @override
+  String get required => 'Gereken';
 }

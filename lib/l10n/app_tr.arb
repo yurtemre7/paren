@@ -186,5 +186,15 @@
   "resetToLiveRate": "Canlı Kura Sıfırla",
   "customRateActive": "Özel Kur Aktif",
   "customRateHelper": "Gerçekte aldığınız döviz kurunu girin (ör. nakit veya kart komisyonlu kur)",
-  "invalidNumber": "Lütfen geçerli ve pozitif bir sayı girin"
+  "invalidNumber": "Lütfen geçerli ve pozitif bir sayı girin",
+  "splitBill": "Hesap Böl",
+  "splitBillTab": "Böl",
+  "numberOfPeople": "Kişi Sayısı",
+  "perPerson": "Kişi başı",
+  "denominationBreakdown": "Para Dökümü",
+  "walletCheck": "Ödeyebilir miyim?",
+  "youHaveEnough": "Yeterli paranız var!",
+  "youAreShort": "{amount} eksiğiniz var",
+  "walletTotal": "Cüzdan",
+  "required": "Gereken"
 }

@@ -186,5 +186,15 @@
   "resetToLiveRate": "लाइव दर पर रीसेट करें",
   "customRateActive": "कस्टम दर सक्रिय",
   "customRateHelper": "वह दर दर्ज करें जो आपको वास्तव में मिली (जैसे नकद या कार्ड दर)",
-  "invalidNumber": "कृपया एक मान्य सकारात्मक संख्या दर्ज करें"
+  "invalidNumber": "कृपया एक मान्य सकारात्मक संख्या दर्ज करें",
+  "splitBill": "बिल बाँटें",
+  "splitBillTab": "बाँटें",
+  "numberOfPeople": "लोगों की संख्या",
+  "perPerson": "प्रति व्यक्ति",
+  "denominationBreakdown": "मुद्रा विभाजन",
+  "walletCheck": "क्या मैं भुगतान कर सकता हूँ?",
+  "youHaveEnough": "आपके पास पर्याप्त राशि है!",
+  "youAreShort": "आपके पास {amount} कम है",
+  "walletTotal": "बटुआ",
+  "required": "आवश्यक"
 }

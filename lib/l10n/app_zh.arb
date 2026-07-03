@@ -186,5 +186,15 @@
   "resetToLiveRate": "重置为实时汇率",
   "customRateActive": "自定义汇率已激活",
   "customRateHelper": "输入您实际获得的汇率（例如现金或刷卡汇率）",
-  "invalidNumber": "请输入有效的正数"
+  "invalidNumber": "请输入有效的正数",
+  "splitBill": "分摊账单",
+  "splitBillTab": "分摊",
+  "numberOfPeople": "人数",
+  "perPerson": "每人",
+  "denominationBreakdown": "面额分解",
+  "walletCheck": "我能付款吗？",
+  "youHaveEnough": "您的钱够了！",
+  "youAreShort": "您还差 {amount}",
+  "walletTotal": "钱包",
+  "required": "所需金额"
 }

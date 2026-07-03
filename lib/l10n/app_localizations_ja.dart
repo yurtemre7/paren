@@ -633,4 +633,36 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get invalidNumber => '有効な正の数値を入力してください';
+
+  @override
+  String get splitBill => '割り勘';
+
+  @override
+  String get splitBillTab => '割り勘';
+
+  @override
+  String get numberOfPeople => '人数';
+
+  @override
+  String get perPerson => '1人あたり';
+
+  @override
+  String get denominationBreakdown => '両替内訳';
+
+  @override
+  String get walletCheck => '支払えますか？';
+
+  @override
+  String get youHaveEnough => '支払えます！';
+
+  @override
+  String youAreShort(Object amount) {
+    return '$amount足りません';
+  }
+
+  @override
+  String get walletTotal => 'お財布';
+
+  @override
+  String get required => '必要金額';
 }

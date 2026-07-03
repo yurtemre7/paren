@@ -183,5 +183,15 @@
     "resetToLiveRate": "Auf Live-Kurs zurücksetzen",
     "customRateActive": "Eigener Kurs aktiv",
     "customRateHelper": "Gib den Kurs ein, den du tatsächlich erhalten hast (z.B. Bar- oder Kartengebühr-Kurs)",
-    "invalidNumber": "Bitte gib eine gültige positive Zahl ein"
+    "invalidNumber": "Bitte gib eine gültige positive Zahl ein",
+    "splitBill": "Rechnung teilen",
+    "splitBillTab": "Teilen",
+    "numberOfPeople": "Anzahl Personen",
+    "perPerson": "Pro Person",
+    "denominationBreakdown": "Stückelung",
+    "walletCheck": "Kann ich zahlen?",
+    "youHaveEnough": "Du hast genug!",
+    "youAreShort": "Dir fehlen {amount}",
+    "walletTotal": "Geldbörse",
+    "required": "Benötigt"
 }

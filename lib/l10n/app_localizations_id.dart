@@ -639,4 +639,36 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get invalidNumber => 'Harap masukkan angka positif yang valid';
+
+  @override
+  String get splitBill => 'Bagi Tagihan';
+
+  @override
+  String get splitBillTab => 'Bagi';
+
+  @override
+  String get numberOfPeople => 'Jumlah Orang';
+
+  @override
+  String get perPerson => 'Per orang';
+
+  @override
+  String get denominationBreakdown => 'Pecahan';
+
+  @override
+  String get walletCheck => 'Bisa Bayar?';
+
+  @override
+  String get youHaveEnough => 'Uang Anda cukup!';
+
+  @override
+  String youAreShort(Object amount) {
+    return 'Kurang $amount';
+  }
+
+  @override
+  String get walletTotal => 'Dompet';
+
+  @override
+  String get required => 'Dibutuhkan';
 }

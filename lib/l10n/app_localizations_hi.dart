@@ -639,4 +639,36 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get invalidNumber => 'कृपया एक मान्य सकारात्मक संख्या दर्ज करें';
+
+  @override
+  String get splitBill => 'बिल बाँटें';
+
+  @override
+  String get splitBillTab => 'बाँटें';
+
+  @override
+  String get numberOfPeople => 'लोगों की संख्या';
+
+  @override
+  String get perPerson => 'प्रति व्यक्ति';
+
+  @override
+  String get denominationBreakdown => 'मुद्रा विभाजन';
+
+  @override
+  String get walletCheck => 'क्या मैं भुगतान कर सकता हूँ?';
+
+  @override
+  String get youHaveEnough => 'आपके पास पर्याप्त राशि है!';
+
+  @override
+  String youAreShort(Object amount) {
+    return 'आपके पास $amount कम है';
+  }
+
+  @override
+  String get walletTotal => 'बटुआ';
+
+  @override
+  String get required => 'आवश्यक';
 }

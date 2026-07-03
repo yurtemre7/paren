@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:paren/classes/sheet_entry.dart';
 import 'package:paren/components/adaptive_overlay.dart';
 import 'package:paren/components/adaptive_snackbar.dart';
+import 'package:paren/components/bill_splitter_sheet.dart';
 import 'package:paren/components/calculator_keyboard.dart';
 import 'package:paren/components/currency_changer_row.dart';
 import 'package:paren/l10n/app_localizations_extension.dart';
@@ -337,6 +338,25 @@ class _ConversionState extends State<Conversion> {
                 ),
             ],
           ),
+        ),
+        IconButton(
+          icon: Icon(
+            Icons.call_split_outlined,
+            color: context.theme.colorScheme.primary,
+          ),
+          tooltip: l10n.splitBill,
+          onPressed: () {
+            Navigator.of(context).push(
+              adaptiveSheetRoute(
+                child: BillSplitterSheet(
+                  initialAmount:
+                      double.tryParse(paren.currencyTextInput.value) ?? 0,
+                  fromCurrencyId: paren.fromCurrency.value,
+                  toCurrencyId: paren.toCurrency.value,
+                ),
+              ),
+            );
+          },
         ),
         IconButton(
           icon: Obx(() {

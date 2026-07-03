@@ -639,4 +639,36 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get invalidNumber => 'Bitte gib eine gültige positive Zahl ein';
+
+  @override
+  String get splitBill => 'Rechnung teilen';
+
+  @override
+  String get splitBillTab => 'Teilen';
+
+  @override
+  String get numberOfPeople => 'Anzahl Personen';
+
+  @override
+  String get perPerson => 'Pro Person';
+
+  @override
+  String get denominationBreakdown => 'Stückelung';
+
+  @override
+  String get walletCheck => 'Kann ich zahlen?';
+
+  @override
+  String get youHaveEnough => 'Du hast genug!';
+
+  @override
+  String youAreShort(Object amount) {
+    return 'Dir fehlen $amount';
+  }
+
+  @override
+  String get walletTotal => 'Geldbörse';
+
+  @override
+  String get required => 'Benötigt';
 }

@@ -1223,6 +1223,66 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Please enter a valid positive number'**
   String get invalidNumber;
+
+  /// No description provided for @splitBill.
+  ///
+  /// In en, this message translates to:
+  /// **'Split Bill'**
+  String get splitBill;
+
+  /// No description provided for @splitBillTab.
+  ///
+  /// In en, this message translates to:
+  /// **'Split'**
+  String get splitBillTab;
+
+  /// No description provided for @numberOfPeople.
+  ///
+  /// In en, this message translates to:
+  /// **'Number of People'**
+  String get numberOfPeople;
+
+  /// No description provided for @perPerson.
+  ///
+  /// In en, this message translates to:
+  /// **'Per person'**
+  String get perPerson;
+
+  /// No description provided for @denominationBreakdown.
+  ///
+  /// In en, this message translates to:
+  /// **'Breakdown'**
+  String get denominationBreakdown;
+
+  /// No description provided for @walletCheck.
+  ///
+  /// In en, this message translates to:
+  /// **'Can I Pay?'**
+  String get walletCheck;
+
+  /// No description provided for @youHaveEnough.
+  ///
+  /// In en, this message translates to:
+  /// **'You have enough!'**
+  String get youHaveEnough;
+
+  /// No description provided for @youAreShort.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'re {amount} short'**
+  String youAreShort(Object amount);
+
+  /// No description provided for @walletTotal.
+  ///
+  /// In en, this message translates to:
+  /// **'Wallet'**
+  String get walletTotal;
+
+  /// No description provided for @required.
+  ///
+  /// In en, this message translates to:
+  /// **'Required'**
+  String get required;
 }
 
 class _AppLocalizationsDelegate

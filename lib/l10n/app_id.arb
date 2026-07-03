@@ -186,5 +186,15 @@
   "resetToLiveRate": "Atur ulang ke kurs langsung",
   "customRateActive": "Kurs kustom aktif",
   "customRateHelper": "Masukkan kurs yang sebenarnya Anda dapatkan (misalnya kurs tunai atau kartu)",
-  "invalidNumber": "Harap masukkan angka positif yang valid"
+  "invalidNumber": "Harap masukkan angka positif yang valid",
+  "splitBill": "Bagi Tagihan",
+  "splitBillTab": "Bagi",
+  "numberOfPeople": "Jumlah Orang",
+  "perPerson": "Per orang",
+  "denominationBreakdown": "Pecahan",
+  "walletCheck": "Bisa Bayar?",
+  "youHaveEnough": "Uang Anda cukup!",
+  "youAreShort": "Kurang {amount}",
+  "walletTotal": "Dompet",
+  "required": "Dibutuhkan"
 }
