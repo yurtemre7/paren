@@ -618,4 +618,57 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get quizScenarioHotelNight => 'Hotel night';
+
+  @override
+  String get customRateOverride => 'Custom Rate Override';
+
+  @override
+  String customRateLabel(Object from, Object to) {
+    return 'Custom rate for 1 $from in $to';
+  }
+
+  @override
+  String get resetToLiveRate => 'Reset to Live Rate';
+
+  @override
+  String get customRateActive => 'Custom Rate Active';
+
+  @override
+  String get customRateHelper =>
+      'Enter the rate you actually got (e.g., card or cash rate)';
+
+  @override
+  String get invalidNumber => 'Please enter a valid positive number';
+
+  @override
+  String get splitBill => 'Split Bill';
+
+  @override
+  String get splitBillTab => 'Split';
+
+  @override
+  String get numberOfPeople => 'Number of People';
+
+  @override
+  String get perPerson => 'Per person';
+
+  @override
+  String get denominationBreakdown => 'Breakdown';
+
+  @override
+  String get walletCheck => 'Can I Pay?';
+
+  @override
+  String get youHaveEnough => 'You have enough!';
+
+  @override
+  String youAreShort(Object amount) {
+    return 'You\'re $amount short';
+  }
+
+  @override
+  String get walletTotal => 'Wallet';
+
+  @override
+  String get required => 'Required';
 }

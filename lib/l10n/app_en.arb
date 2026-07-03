@@ -180,5 +180,21 @@
   "quizScenarioTaxiRide": "Taxi ride",
   "quizScenarioMuseumTicket": "Museum ticket",
   "quizScenarioGroceries": "Groceries",
-  "quizScenarioHotelNight": "Hotel night"
+  "quizScenarioHotelNight": "Hotel night",
+  "customRateOverride": "Custom Rate Override",
+  "customRateLabel": "Custom rate for 1 {from} in {to}",
+  "resetToLiveRate": "Reset to Live Rate",
+  "customRateActive": "Custom Rate Active",
+  "customRateHelper": "Enter the rate you actually got (e.g., card or cash rate)",
+  "invalidNumber": "Please enter a valid positive number",
+  "splitBill": "Split Bill",
+  "splitBillTab": "Split",
+  "numberOfPeople": "Number of People",
+  "perPerson": "Per person",
+  "denominationBreakdown": "Breakdown",
+  "walletCheck": "Can I Pay?",
+  "youHaveEnough": "You have enough!",
+  "youAreShort": "You're {amount} short",
+  "walletTotal": "Wallet",
+  "required": "Required"
 }

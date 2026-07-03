@@ -177,5 +177,21 @@
   "quizScenarioTaxiRide": "タクシー移動",
   "quizScenarioMuseumTicket": "美術館チケット",
   "quizScenarioGroceries": "食料品",
-  "quizScenarioHotelNight": "ホテル1泊"
+  "quizScenarioHotelNight": "ホテル1泊",
+  "customRateOverride": "カスタムレート設定",
+  "customRateLabel": "1 {from} あたりのカスタムレート（{to}）",
+  "resetToLiveRate": "現在のレートに戻す",
+  "customRateActive": "カスタムレート適用中",
+  "customRateHelper": "実際に適用されたレートを入力してください（現金両替やカード支払い時のレートなど）",
+  "invalidNumber": "有効な正の数値を入力してください",
+  "splitBill": "割り勘",
+  "splitBillTab": "割り勘",
+  "numberOfPeople": "人数",
+  "perPerson": "1人あたり",
+  "denominationBreakdown": "両替内訳",
+  "walletCheck": "支払えますか？",
+  "youHaveEnough": "支払えます！",
+  "youAreShort": "{amount}足りません",
+  "walletTotal": "お財布",
+  "required": "必要金額"
 }

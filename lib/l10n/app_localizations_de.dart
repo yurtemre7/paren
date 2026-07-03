@@ -618,4 +618,57 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get quizScenarioHotelNight => 'Hotelnacht';
+
+  @override
+  String get customRateOverride => 'Eigener Wechselkurs';
+
+  @override
+  String customRateLabel(Object from, Object to) {
+    return 'Eigener Kurs für 1 $from in $to';
+  }
+
+  @override
+  String get resetToLiveRate => 'Auf Live-Kurs zurücksetzen';
+
+  @override
+  String get customRateActive => 'Eigener Kurs aktiv';
+
+  @override
+  String get customRateHelper =>
+      'Gib den Kurs ein, den du tatsächlich erhalten hast (z.B. Bar- oder Kartengebühr-Kurs)';
+
+  @override
+  String get invalidNumber => 'Bitte gib eine gültige positive Zahl ein';
+
+  @override
+  String get splitBill => 'Rechnung teilen';
+
+  @override
+  String get splitBillTab => 'Teilen';
+
+  @override
+  String get numberOfPeople => 'Anzahl Personen';
+
+  @override
+  String get perPerson => 'Pro Person';
+
+  @override
+  String get denominationBreakdown => 'Stückelung';
+
+  @override
+  String get walletCheck => 'Kann ich zahlen?';
+
+  @override
+  String get youHaveEnough => 'Du hast genug!';
+
+  @override
+  String youAreShort(Object amount) {
+    return 'Dir fehlen $amount';
+  }
+
+  @override
+  String get walletTotal => 'Geldbörse';
+
+  @override
+  String get required => 'Benötigt';
 }

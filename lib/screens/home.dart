@@ -222,7 +222,7 @@ class _HomeState extends State<Home> {
       return 0.h;
     }
 
-    return GlassBottomBar(
+    return GlassTabBar.bottom(
       verticalPadding: Platform.isIOS ? 20 : 38,
       unselectedIconColor: colorScheme.secondary,
       selectedIconColor: colorScheme.primary,
@@ -237,15 +237,12 @@ class _HomeState extends State<Home> {
         glassColor: colorScheme.onSurface.withValues(alpha: 0.1),
       ),
       tabs: [
-        GlassBottomBarTab(icon: Icon(Icons.list), label: l10n.sheets),
-        GlassBottomBarTab(
-          icon: Icon(Icons.calculate_outlined),
-          label: l10n.calculation,
-        ),
-        GlassBottomBarTab(icon: Icon(Icons.quiz_outlined), label: l10n.quiz),
-        GlassBottomBarTab(icon: Icon(Icons.settings), label: l10n.settings),
+        GlassTab(icon: Icon(Icons.list), label: l10n.sheets),
+        GlassTab(icon: Icon(Icons.calculate_outlined), label: l10n.calculation),
+        GlassTab(icon: Icon(Icons.quiz_outlined), label: l10n.quiz),
+        GlassTab(icon: Icon(Icons.settings), label: l10n.settings),
       ],
-      extraButton: GlassBottomBarExtraButton(
+      extraButton: GlassTabBarExtraButton(
         onTap: createSheetDialog,
         icon: Icon(Icons.add),
         label: l10n.createSheet,

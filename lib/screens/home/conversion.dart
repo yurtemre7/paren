@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:paren/classes/sheet_entry.dart';
 import 'package:paren/components/adaptive_overlay.dart';
 import 'package:paren/components/adaptive_snackbar.dart';
+import 'package:paren/components/bill_splitter_sheet.dart';
 import 'package:paren/components/calculator_keyboard.dart';
 import 'package:paren/components/currency_changer_row.dart';
 import 'package:paren/l10n/app_localizations_extension.dart';
@@ -68,19 +69,18 @@ class _ConversionState extends State<Conversion> {
               (element) => element.id == paren.toCurrency.value,
             );
 
-            var fromRate = fromCurrency.rate;
-            var toRate = toCurrency.rate;
-
             var inputConverted =
                 (double.tryParse(paren.currencyTextInput.value) ?? 0);
-            var convertedAmount =
-                (double.tryParse(paren.currencyTextInput.value) ?? 0) *
-                toRate /
-                fromRate;
-            var reConvertedAmount =
-                (double.tryParse(paren.currencyTextInput.value) ?? 0) *
-                fromRate /
-                toRate;
+            var convertedAmount = paren.convertValue(
+              inputConverted,
+              fromId: fromCurrency.id,
+              toId: toCurrency.id,
+            );
+            var reConvertedAmount = paren.convertValue(
+              inputConverted,
+              fromId: toCurrency.id,
+              toId: fromCurrency.id,
+            );
 
             var numberFormatFrom = NumberFormat.simpleCurrency(
               name: fromCurrency.id.toUpperCase(),
@@ -99,6 +99,11 @@ class _ConversionState extends State<Conversion> {
             String reAmountStr = numberFormatRe.format(reConvertedAmount);
             String inputStr = numberFormatFrom.format(inputConverted);
             String inputStrRe = numberFormatTo.format(inputConverted);
+
+            var hasOverride = paren.hasCustomRate(
+              fromCurrency.id,
+              toCurrency.id,
+            );
 
             return SelectionArea(
               child: Column(
@@ -179,6 +184,45 @@ class _ConversionState extends State<Conversion> {
                       ),
                     ],
                   ),
+                  if (hasOverride)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 8.0),
+                      child: InputChip(
+                        avatar: Icon(
+                          Icons.edit,
+                          size: 16,
+                          color: context.theme.colorScheme.primary,
+                        ),
+                        label: Text(
+                          context.l10n.customRateActive,
+                          style: TextStyle(
+                            color: context.theme.colorScheme.onPrimaryContainer,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 12,
+                          ),
+                        ),
+                        onDeleted: () {
+                          paren.removeCustomRate(
+                            fromCurrency.id,
+                            toCurrency.id,
+                          );
+                        },
+                        deleteIconColor: context.theme.colorScheme.primary,
+                        backgroundColor: context
+                            .theme
+                            .colorScheme
+                            .primaryContainer
+                            .withValues(alpha: 0.5),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                          side: BorderSide(
+                            color: context.theme.colorScheme.primary.withValues(
+                              alpha: 0.3,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
                   12.h,
                   buildConversionActions(inputConverted, inputStr, amountStr),
                 ],
@@ -296,6 +340,41 @@ class _ConversionState extends State<Conversion> {
           ),
         ),
         IconButton(
+          icon: Icon(
+            Icons.call_split_outlined,
+            color: context.theme.colorScheme.primary,
+          ),
+          tooltip: l10n.splitBill,
+          onPressed: () {
+            Navigator.of(context).push(
+              adaptiveSheetRoute(
+                child: BillSplitterSheet(
+                  initialAmount:
+                      double.tryParse(paren.currencyTextInput.value) ?? 0,
+                  fromCurrencyId: paren.fromCurrency.value,
+                  toCurrencyId: paren.toCurrency.value,
+                ),
+              ),
+            );
+          },
+        ),
+        IconButton(
+          icon: Obx(() {
+            var active = paren.hasCustomRate(
+              paren.fromCurrency.value,
+              paren.toCurrency.value,
+            );
+            return Icon(
+              Icons.price_change_outlined,
+              color: active
+                  ? context.theme.colorScheme.primary
+                  : context.theme.colorScheme.primary.withValues(alpha: 0.6),
+            );
+          }),
+          onPressed: () => _showCustomRateDialog(context),
+          tooltip: l10n.customRateOverride,
+        ),
+        IconButton(
           onPressed: () async {
             await Navigator.of(
               context,
@@ -406,6 +485,97 @@ class _ConversionState extends State<Conversion> {
             ],
           );
         }),
+      ),
+    );
+  }
+
+  void _showCustomRateDialog(BuildContext context) {
+    var l10n = context.l10n;
+    var fromId = paren.fromCurrency.value.toUpperCase();
+    var toId = paren.toCurrency.value.toUpperCase();
+
+    var currentOverride = paren.getCustomRate(
+      paren.fromCurrency.value,
+      paren.toCurrency.value,
+    );
+    var liveFrom = paren.currencyById(paren.fromCurrency.value);
+    var liveTo = paren.currencyById(paren.toCurrency.value);
+    var currentRate = currentOverride ?? (liveTo.rate / liveFrom.rate);
+
+    var controller = TextEditingController(
+      text: currentRate.toStringAsFixed(4),
+    );
+
+    Get.dialog(
+      AlertDialog(
+        constraints: adaptiveDialogConstraints(context),
+        insetPadding: adaptiveDialogInsetPadding(context),
+        title: Text(l10n.customRateOverride),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              l10n.customRateLabel(fromId, toId),
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            8.h,
+            TextField(
+              controller: controller,
+              keyboardType: const TextInputType.numberWithOptions(
+                decimal: true,
+              ),
+              inputFormatters: [
+                TextInputFormatter.withFunction((oldValue, newValue) {
+                  var normalized = newValue.text.replaceAll(',', '.');
+                  return newValue.copyWith(text: normalized);
+                }),
+              ],
+              decoration: InputDecoration(
+                hintText: 'e.g. ${currentRate.toStringAsFixed(4)}',
+                helperText: l10n.customRateHelper,
+                helperMaxLines: 2,
+                border: const OutlineInputBorder(),
+              ),
+            ),
+          ],
+        ),
+        actions: [
+          if (currentOverride != null)
+            TextButton(
+              onPressed: () {
+                paren.removeCustomRate(
+                  paren.fromCurrency.value,
+                  paren.toCurrency.value,
+                );
+                Get.back();
+              },
+              child: Text(
+                l10n.resetToLiveRate,
+                style: TextStyle(color: context.theme.colorScheme.error),
+              ),
+            ),
+          TextButton(onPressed: () => Get.back(), child: Text(l10n.cancel)),
+          OutlinedButton(
+            onPressed: () {
+              var val = double.tryParse(controller.text);
+              if (val != null && val > 0) {
+                paren.setCustomRate(
+                  paren.fromCurrency.value,
+                  paren.toCurrency.value,
+                  val,
+                );
+                Get.back();
+              } else {
+                AdaptiveSnackbar.showSnackBar(
+                  context,
+                  title: l10n.invalidNumber,
+                );
+              }
+            },
+            child: Text(l10n.apply),
+          ),
+        ],
       ),
     );
   }

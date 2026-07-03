@@ -617,4 +617,57 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get quizScenarioHotelNight => 'Otel gecesi';
+
+  @override
+  String get customRateOverride => 'Özel Döviz Kuru';
+
+  @override
+  String customRateLabel(Object from, Object to) {
+    return '1 $from için özel kur ($to)';
+  }
+
+  @override
+  String get resetToLiveRate => 'Canlı Kura Sıfırla';
+
+  @override
+  String get customRateActive => 'Özel Kur Aktif';
+
+  @override
+  String get customRateHelper =>
+      'Gerçekte aldığınız döviz kurunu girin (ör. nakit veya kart komisyonlu kur)';
+
+  @override
+  String get invalidNumber => 'Lütfen geçerli ve pozitif bir sayı girin';
+
+  @override
+  String get splitBill => 'Hesap Böl';
+
+  @override
+  String get splitBillTab => 'Böl';
+
+  @override
+  String get numberOfPeople => 'Kişi Sayısı';
+
+  @override
+  String get perPerson => 'Kişi başı';
+
+  @override
+  String get denominationBreakdown => 'Para Dökümü';
+
+  @override
+  String get walletCheck => 'Ödeyebilir miyim?';
+
+  @override
+  String get youHaveEnough => 'Yeterli paranız var!';
+
+  @override
+  String youAreShort(Object amount) {
+    return '$amount eksiğiniz var';
+  }
+
+  @override
+  String get walletTotal => 'Cüzdan';
+
+  @override
+  String get required => 'Gereken';
 }

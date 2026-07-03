@@ -11,6 +11,7 @@ import 'package:paren/components/sheet_form_bottom_sheet.dart';
 import 'package:paren/l10n/app_localizations_extension.dart';
 import 'package:paren/providers/extensions.dart';
 import 'package:paren/providers/paren.dart';
+import 'package:paren/providers/sheet_exporter.dart';
 import 'package:paren/providers/sheets_provider.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -47,12 +48,6 @@ class _SheetDetailState extends State<SheetDetail> {
   final reversedSorting = false.obs;
   final selectedCategoryFilter = Rxn<SheetEntryCategory>();
 
-  String _csvEscape(String value) {
-    return '"${value.replaceAll('"', '""')}"';
-  }
-
-  String _formatCsvAmount(double amount) => amount.toStringAsFixed(2);
-
   String _categoryLabel(SheetEntryCategory category) {
     var l10n = context.l10n;
     return switch (category) {
@@ -78,14 +73,6 @@ class _SheetDetailState extends State<SheetDetail> {
     return entries.where((entry) => entry.category == category).toList();
   }
 
-  String _csvFileName(String sheetName) {
-    var sanitized = sheetName
-        .trim()
-        .replaceAll(RegExp(r'[^\w\s-]'), '')
-        .replaceAll(RegExp(r'\s+'), '_');
-    return sanitized.isEmpty ? 'sheet_export.csv' : '$sanitized.csv';
-  }
-
   // Format currency amounts based on the currency code
   String formatCurrencyAmount(double amount, String currencyCode) {
     var numberFormat = NumberFormat.simpleCurrency(
@@ -101,82 +88,22 @@ class _SheetDetailState extends State<SheetDetail> {
     String fromCurrency,
     String toCurrency,
   ) {
-    var fromC = paren.currencies.firstWhere(
-      (currency) => currency.id == fromCurrency,
-      orElse: () => paren.currencies.first,
+    return SheetExporter.calculateConvertedAmount(
+      fromAmount,
+      fromCurrency,
+      toCurrency,
+      paren,
     );
-    var toC = paren.currencies.firstWhere(
-      (currency) => currency.id == toCurrency,
-      orElse: () => paren.currencies.first,
-    );
-
-    // Convert through EUR base rate
-    var inEur = fromAmount / fromC.rate;
-    return inEur * toC.rate;
-  }
-
-  String _buildCsvContent(Sheet sheet, List<SheetEntry> entries) {
-    var l10n = context.l10n;
-    var dateFormat = DateFormat('dd. MMMM yyyy');
-    var stats = _calculateStats(entries);
-    var convertedStats = _calculateConvertedStats(entries, sheet);
-    var lines = <String>[
-      [
-        l10n.date,
-        l10n.description,
-        l10n.category,
-        sheet.fromCurrency.toUpperCase(),
-        sheet.toCurrency.toUpperCase(),
-      ].map(_csvEscape).join(','),
-      ...entries.map((entry) {
-        var convertedAmount = calculateConvertedAmount(
-          entry.amount,
-          sheet.fromCurrency,
-          sheet.toCurrency,
-        );
-
-        return [
-          dateFormat.format(entry.createdAt),
-          entry.name,
-          _categoryLabel(entry.category),
-          _formatCsvAmount(entry.amount),
-          _formatCsvAmount(convertedAmount),
-        ].map(_csvEscape).join(',');
-      }),
-      '',
-      [
-        l10n.statistics,
-        sheet.fromCurrency.toUpperCase(),
-        sheet.toCurrency.toUpperCase(),
-      ].map(_csvEscape).join(','),
-      [
-        l10n.total,
-        _formatCsvAmount(stats['sum'] ?? 0.0),
-        _formatCsvAmount(convertedStats['sum'] ?? 0.0),
-      ].map(_csvEscape).join(','),
-      [
-        l10n.average,
-        _formatCsvAmount(stats['avg'] ?? 0.0),
-        _formatCsvAmount(convertedStats['avg'] ?? 0.0),
-      ].map(_csvEscape).join(','),
-      [
-        l10n.minimum,
-        _formatCsvAmount(stats['min'] ?? 0.0),
-        _formatCsvAmount(convertedStats['min'] ?? 0.0),
-      ].map(_csvEscape).join(','),
-      [
-        l10n.maximum,
-        _formatCsvAmount(stats['max'] ?? 0.0),
-        _formatCsvAmount(convertedStats['max'] ?? 0.0),
-      ].map(_csvEscape).join(','),
-    ];
-
-    return lines.join('\n');
   }
 
   Future<void> _exportSheetAsCsv(Sheet sheet) async {
     var sortedEntries = sortBy(List<SheetEntry>.from(sheet.entries));
-    var csvContent = _buildCsvContent(sheet, sortedEntries);
+    var csvContent = SheetExporter.buildCsvContent(
+      sheet,
+      sortedEntries,
+      paren,
+      context.l10n,
+    );
     var box = context.findRenderObject() as RenderBox?;
     Rect? rect;
     if (box != null) {
@@ -186,7 +113,7 @@ class _SheetDetailState extends State<SheetDetail> {
     await SharePlus.instance.share(
       ShareParams(
         files: [XFile.fromData(utf8.encode(csvContent), mimeType: 'text/csv')],
-        fileNameOverrides: [_csvFileName(sheet.name)],
+        fileNameOverrides: [SheetExporter.csvFileName(sheet.name)],
         sharePositionOrigin: rect,
       ),
     );
@@ -375,18 +302,7 @@ class _SheetDetailState extends State<SheetDetail> {
 
   // Calculate statistics for the entries
   Map<String, double> _calculateStats(List<SheetEntry> entries) {
-    if (entries.isEmpty) {
-      return {'sum': 0.0, 'avg': 0.0, 'min': 0.0, 'max': 0.0};
-    }
-
-    var fromAmounts = entries.map((e) => e.amount).toList();
-
-    var sum = fromAmounts.reduce((a, b) => a + b);
-    var avg = sum / fromAmounts.length;
-    var min = fromAmounts.reduce((a, b) => a < b ? a : b);
-    var max = fromAmounts.reduce((a, b) => a > b ? a : b);
-
-    return {'sum': sum, 'avg': avg, 'min': min, 'max': max};
+    return SheetExporter.calculateStats(entries);
   }
 
   // Calculate statistics for the converted amounts
@@ -394,26 +310,7 @@ class _SheetDetailState extends State<SheetDetail> {
     List<SheetEntry> entries,
     Sheet sheet,
   ) {
-    if (entries.isEmpty) {
-      return {'sum': 0.0, 'avg': 0.0, 'min': 0.0, 'max': 0.0};
-    }
-
-    var convertedAmounts = entries
-        .map(
-          (e) => calculateConvertedAmount(
-            e.amount,
-            sheet.fromCurrency,
-            sheet.toCurrency,
-          ),
-        )
-        .toList();
-
-    var sum = convertedAmounts.reduce((a, b) => a + b);
-    var avg = sum / convertedAmounts.length;
-    var min = convertedAmounts.reduce((a, b) => a < b ? a : b);
-    var max = convertedAmounts.reduce((a, b) => a > b ? a : b);
-
-    return {'sum': sum, 'avg': avg, 'min': min, 'max': max};
+    return SheetExporter.calculateConvertedStats(entries, sheet, paren);
   }
 
   List<SheetEntry> sortBy(List<SheetEntry> entries) {

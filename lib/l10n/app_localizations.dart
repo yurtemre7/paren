@@ -1187,6 +1187,102 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Hotel night'**
   String get quizScenarioHotelNight;
+
+  /// No description provided for @customRateOverride.
+  ///
+  /// In en, this message translates to:
+  /// **'Custom Rate Override'**
+  String get customRateOverride;
+
+  /// No description provided for @customRateLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Custom rate for 1 {from} in {to}'**
+  String customRateLabel(Object from, Object to);
+
+  /// No description provided for @resetToLiveRate.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset to Live Rate'**
+  String get resetToLiveRate;
+
+  /// No description provided for @customRateActive.
+  ///
+  /// In en, this message translates to:
+  /// **'Custom Rate Active'**
+  String get customRateActive;
+
+  /// No description provided for @customRateHelper.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the rate you actually got (e.g., card or cash rate)'**
+  String get customRateHelper;
+
+  /// No description provided for @invalidNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a valid positive number'**
+  String get invalidNumber;
+
+  /// No description provided for @splitBill.
+  ///
+  /// In en, this message translates to:
+  /// **'Split Bill'**
+  String get splitBill;
+
+  /// No description provided for @splitBillTab.
+  ///
+  /// In en, this message translates to:
+  /// **'Split'**
+  String get splitBillTab;
+
+  /// No description provided for @numberOfPeople.
+  ///
+  /// In en, this message translates to:
+  /// **'Number of People'**
+  String get numberOfPeople;
+
+  /// No description provided for @perPerson.
+  ///
+  /// In en, this message translates to:
+  /// **'Per person'**
+  String get perPerson;
+
+  /// No description provided for @denominationBreakdown.
+  ///
+  /// In en, this message translates to:
+  /// **'Breakdown'**
+  String get denominationBreakdown;
+
+  /// No description provided for @walletCheck.
+  ///
+  /// In en, this message translates to:
+  /// **'Can I Pay?'**
+  String get walletCheck;
+
+  /// No description provided for @youHaveEnough.
+  ///
+  /// In en, this message translates to:
+  /// **'You have enough!'**
+  String get youHaveEnough;
+
+  /// No description provided for @youAreShort.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'re {amount} short'**
+  String youAreShort(Object amount);
+
+  /// No description provided for @walletTotal.
+  ///
+  /// In en, this message translates to:
+  /// **'Wallet'**
+  String get walletTotal;
+
+  /// No description provided for @required.
+  ///
+  /// In en, this message translates to:
+  /// **'Required'**
+  String get required;
 }
 
 class _AppLocalizationsDelegate

@@ -37,6 +37,7 @@ class Paren extends GetxController {
 
   final favorites = <FavoriteConversion>[].obs;
   final sheets = <Sheet>[].obs;
+  final customRates = <String, double>{}.obs;
 
   final currencyTextInput = '1'.obs;
   final currentPage = 1.obs;
@@ -45,7 +46,7 @@ class Paren extends GetxController {
   Paren();
 
   Future<void> init() async {
-    await Future.wait([initCurrencies(), initFavorites(), initSheets()]);
+    await Future.wait([initCurrencies(), initFavorites(), initSheets(), initCustomRates()]);
 
     updateWidgetData();
   }
@@ -63,6 +64,7 @@ class Paren extends GetxController {
     calculatorInputHeight.value = 225.0;
     clearFavorites();
     clearSheets();
+    customRates.clear();
   }
 
   Future<void> fetchCurrencyDataOnline() async {
@@ -393,11 +395,69 @@ class Paren extends GetxController {
     );
   }
 
+  Future<void> initCustomRates() async {
+    try {
+      var customRatesString = await sp.getString('customRates');
+      if (customRatesString != null) {
+        Map<String, dynamic> decoded = jsonDecode(customRatesString);
+        customRates.value = decoded.map((key, value) => MapEntry(key, double.tryParse(value.toString()) ?? 0.0));
+      }
+    } catch (e) {
+      logError('Error initializing custom rates', error: e);
+    }
+  }
+
+  Future<void> saveCustomRates() async {
+    await sp.setString('customRates', jsonEncode(customRates));
+  }
+
+  bool hasCustomRate(String fromId, String toId) {
+    return customRates.containsKey('${fromId.toLowerCase()}_${toId.toLowerCase()}') ||
+        customRates.containsKey('${toId.toLowerCase()}_${fromId.toLowerCase()}');
+  }
+
+  double? getCustomRate(String fromId, String toId) {
+    var key = '${fromId.toLowerCase()}_${toId.toLowerCase()}';
+    if (customRates.containsKey(key)) {
+      return customRates[key];
+    }
+    var revKey = '${toId.toLowerCase()}_${fromId.toLowerCase()}';
+    if (customRates.containsKey(revKey)) {
+      var val = customRates[revKey];
+      if (val != null && val != 0.0) {
+        return 1.0 / val;
+      }
+    }
+    return null;
+  }
+
+  Future<void> setCustomRate(String fromId, String toId, double rate) async {
+    var key = '${fromId.toLowerCase()}_${toId.toLowerCase()}';
+    var revKey = '${toId.toLowerCase()}_${fromId.toLowerCase()}';
+    customRates.remove(revKey);
+    customRates[key] = rate;
+    await saveCustomRates();
+    updateWidgetData();
+  }
+
+  Future<void> removeCustomRate(String fromId, String toId) async {
+    var key = '${fromId.toLowerCase()}_${toId.toLowerCase()}';
+    var revKey = '${toId.toLowerCase()}_${fromId.toLowerCase()}';
+    customRates.remove(key);
+    customRates.remove(revKey);
+    await saveCustomRates();
+    updateWidgetData();
+  }
+
   double convertValue(
     double amount, {
     required String fromId,
     required String toId,
   }) {
+    var customRate = getCustomRate(fromId, toId);
+    if (customRate != null) {
+      return amount * customRate;
+    }
     var from = currencyById(fromId);
     var to = currencyById(toId);
     return amount * to.rate / from.rate;

@@ -613,4 +613,56 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get quizScenarioHotelNight => 'ホテル1泊';
+
+  @override
+  String get customRateOverride => 'カスタムレート設定';
+
+  @override
+  String customRateLabel(Object from, Object to) {
+    return '1 $from あたりのカスタムレート（$to）';
+  }
+
+  @override
+  String get resetToLiveRate => '現在のレートに戻す';
+
+  @override
+  String get customRateActive => 'カスタムレート適用中';
+
+  @override
+  String get customRateHelper => '実際に適用されたレートを入力してください（現金両替やカード支払い時のレートなど）';
+
+  @override
+  String get invalidNumber => '有効な正の数値を入力してください';
+
+  @override
+  String get splitBill => '割り勘';
+
+  @override
+  String get splitBillTab => '割り勘';
+
+  @override
+  String get numberOfPeople => '人数';
+
+  @override
+  String get perPerson => '1人あたり';
+
+  @override
+  String get denominationBreakdown => '両替内訳';
+
+  @override
+  String get walletCheck => '支払えますか？';
+
+  @override
+  String get youHaveEnough => '支払えます！';
+
+  @override
+  String youAreShort(Object amount) {
+    return '$amount足りません';
+  }
+
+  @override
+  String get walletTotal => 'お財布';
+
+  @override
+  String get required => '必要金額';
 }

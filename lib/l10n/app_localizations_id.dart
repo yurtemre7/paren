@@ -618,4 +618,57 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get quizScenarioHotelNight => 'Semalam di hotel';
+
+  @override
+  String get customRateOverride => 'Kurs Kustom';
+
+  @override
+  String customRateLabel(Object from, Object to) {
+    return 'Kurs kustom untuk 1 $from ke $to';
+  }
+
+  @override
+  String get resetToLiveRate => 'Atur ulang ke kurs langsung';
+
+  @override
+  String get customRateActive => 'Kurs kustom aktif';
+
+  @override
+  String get customRateHelper =>
+      'Masukkan kurs yang sebenarnya Anda dapatkan (misalnya kurs tunai atau kartu)';
+
+  @override
+  String get invalidNumber => 'Harap masukkan angka positif yang valid';
+
+  @override
+  String get splitBill => 'Bagi Tagihan';
+
+  @override
+  String get splitBillTab => 'Bagi';
+
+  @override
+  String get numberOfPeople => 'Jumlah Orang';
+
+  @override
+  String get perPerson => 'Per orang';
+
+  @override
+  String get denominationBreakdown => 'Pecahan';
+
+  @override
+  String get walletCheck => 'Bisa Bayar?';
+
+  @override
+  String get youHaveEnough => 'Uang Anda cukup!';
+
+  @override
+  String youAreShort(Object amount) {
+    return 'Kurang $amount';
+  }
+
+  @override
+  String get walletTotal => 'Dompet';
+
+  @override
+  String get required => 'Dibutuhkan';
 }
