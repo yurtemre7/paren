@@ -196,5 +196,7 @@
   "youHaveEnough": "Uang Anda cukup!",
   "youAreShort": "Kurang {amount}",
   "walletTotal": "Dompet",
-  "required": "Dibutuhkan"
+  "required": "Dibutuhkan",
+  "liveRateWouldBe": "Kurs langsung: {amount}",
+  "exchangeLoss": "Kerugian: {amount}"
 }

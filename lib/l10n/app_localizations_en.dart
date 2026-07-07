@@ -671,4 +671,14 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get required => 'Required';
+
+  @override
+  String liveRateWouldBe(Object amount) {
+    return 'Live rate: $amount';
+  }
+
+  @override
+  String exchangeLoss(Object amount) {
+    return 'Loss: $amount';
+  }
 }

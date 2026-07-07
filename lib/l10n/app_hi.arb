@@ -196,5 +196,7 @@
   "youHaveEnough": "आपके पास पर्याप्त राशि है!",
   "youAreShort": "आपके पास {amount} कम है",
   "walletTotal": "बटुआ",
-  "required": "आवश्यक"
+  "required": "आवश्यक",
+  "liveRateWouldBe": "लाइव दर: {amount}",
+  "exchangeLoss": "नुकसान: {amount}"
 }

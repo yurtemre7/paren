@@ -193,5 +193,7 @@
     "youHaveEnough": "Du hast genug!",
     "youAreShort": "Dir fehlen {amount}",
     "walletTotal": "Geldbörse",
-    "required": "Benötigt"
+    "required": "Benötigt",
+    "liveRateWouldBe": "Live-Kurs: {amount}",
+    "exchangeLoss": "Verlust: {amount}"
 }

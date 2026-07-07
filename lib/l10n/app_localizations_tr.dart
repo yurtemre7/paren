@@ -670,4 +670,14 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get required => 'Gereken';
+
+  @override
+  String liveRateWouldBe(Object amount) {
+    return 'Canlı kur: $amount';
+  }
+
+  @override
+  String exchangeLoss(Object amount) {
+    return 'Kayıp: $amount';
+  }
 }
