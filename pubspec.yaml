@@ -19,7 +19,7 @@ dependencies:
   get:
     git:
       url: https://github.com/yurtemre7/flutter-get
-  dio: 5.10.0
+  dio: 5.11.0
   shared_preferences: 2.5.5
   url_launcher: 6.3.2
   share_plus: 13.2.0
