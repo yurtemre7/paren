@@ -196,5 +196,7 @@
   "youHaveEnough": "You have enough!",
   "youAreShort": "You're {amount} short",
   "walletTotal": "Wallet",
-  "required": "Required"
+  "required": "Required",
+  "liveRateWouldBe": "Live rate: {amount}",
+  "exchangeLoss": "Loss: {amount}"
 }

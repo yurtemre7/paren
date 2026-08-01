@@ -671,4 +671,14 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get required => 'आवश्यक';
+
+  @override
+  String liveRateWouldBe(Object amount) {
+    return 'लाइव दर: $amount';
+  }
+
+  @override
+  String exchangeLoss(Object amount) {
+    return 'नुकसान: $amount';
+  }
 }

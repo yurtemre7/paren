@@ -46,7 +46,12 @@ class Paren extends GetxController {
   Paren();
 
   Future<void> init() async {
-    await Future.wait([initCurrencies(), initFavorites(), initSheets(), initCustomRates()]);
+    await Future.wait([
+      initCurrencies(),
+      initFavorites(),
+      initSheets(),
+      initCustomRates(),
+    ]);
 
     updateWidgetData();
   }
@@ -400,7 +405,10 @@ class Paren extends GetxController {
       var customRatesString = await sp.getString('customRates');
       if (customRatesString != null) {
         Map<String, dynamic> decoded = jsonDecode(customRatesString);
-        customRates.value = decoded.map((key, value) => MapEntry(key, double.tryParse(value.toString()) ?? 0.0));
+        customRates.value = decoded.map(
+          (key, value) =>
+              MapEntry(key, double.tryParse(value.toString()) ?? 0.0),
+        );
       }
     } catch (e) {
       logError('Error initializing custom rates', error: e);
@@ -412,8 +420,12 @@ class Paren extends GetxController {
   }
 
   bool hasCustomRate(String fromId, String toId) {
-    return customRates.containsKey('${fromId.toLowerCase()}_${toId.toLowerCase()}') ||
-        customRates.containsKey('${toId.toLowerCase()}_${fromId.toLowerCase()}');
+    return customRates.containsKey(
+          '${fromId.toLowerCase()}_${toId.toLowerCase()}',
+        ) ||
+        customRates.containsKey(
+          '${toId.toLowerCase()}_${fromId.toLowerCase()}',
+        );
   }
 
   double? getCustomRate(String fromId, String toId) {

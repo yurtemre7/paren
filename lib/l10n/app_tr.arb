@@ -196,5 +196,7 @@
   "youHaveEnough": "Yeterli paranız var!",
   "youAreShort": "{amount} eksiğiniz var",
   "walletTotal": "Cüzdan",
-  "required": "Gereken"
+  "required": "Gereken",
+  "liveRateWouldBe": "Canlı kur: {amount}",
+  "exchangeLoss": "Kayıp: {amount}"
 }

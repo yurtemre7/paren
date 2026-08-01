@@ -196,5 +196,7 @@
   "youHaveEnough": "Vous avez assez !",
   "youAreShort": "Il vous manque {amount}",
   "walletTotal": "Portefeuille",
-  "required": "Requis"
+  "required": "Requis",
+  "liveRateWouldBe": "Taux en direct : {amount}",
+  "exchangeLoss": "Perte : {amount}"
 }

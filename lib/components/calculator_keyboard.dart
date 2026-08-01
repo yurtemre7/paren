@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:liquid_glass_widgets/liquid_glass_widgets.dart';
 import 'package:paren/l10n/app_localizations_extension.dart';
 import 'package:paren/providers/extensions.dart';
 import 'package:paren/providers/paren.dart';
@@ -332,8 +331,18 @@ class _CalcButtonState extends State<_CalcButton> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onLongPress: widget.onLongPress != null ? _onLongPress : null,
-      child: GlassIconButton(
-        icon: Center(
+      child: FilledButton.tonal(
+        onPressed: _onTap,
+        style: FilledButton.styleFrom(
+          backgroundColor: widget.color?.withValues(alpha: 0.16) ??
+              context.theme.colorScheme.surface,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+          padding: EdgeInsets.zero,
+          elevation: 0,
+        ),
+        child: Center(
           child: Text(
             widget.label,
             style: TextStyle(
@@ -343,14 +352,6 @@ class _CalcButtonState extends State<_CalcButton> {
             ),
           ),
         ),
-        onPressed: _onTap,
-        glowRadius: 0,
-        settings: LiquidGlassSettings().copyWith(
-          glassColor:
-              widget.color?.withValues(alpha: 0.16) ??
-              context.theme.colorScheme.surface,
-        ),
-        shape: GlassIconButtonShape.roundedSquare,
       ),
     );
   }

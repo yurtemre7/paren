@@ -665,4 +665,14 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get required => '必要金額';
+
+  @override
+  String liveRateWouldBe(Object amount) {
+    return '公式レート: $amount';
+  }
+
+  @override
+  String exchangeLoss(Object amount) {
+    return '損失: $amount';
+  }
 }

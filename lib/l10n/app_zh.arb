@@ -196,5 +196,7 @@
   "youHaveEnough": "您的钱够了！",
   "youAreShort": "您还差 {amount}",
   "walletTotal": "钱包",
-  "required": "所需金额"
+  "required": "所需金额",
+  "liveRateWouldBe": "实时汇率：{amount}",
+  "exchangeLoss": "损失：{amount}"
 }

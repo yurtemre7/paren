@@ -105,6 +105,11 @@ class _ConversionState extends State<Conversion> {
               toCurrency.id,
             );
 
+            // Compute live (non-overridden) amount for loss display
+            var liveConvertedAmount =
+                inputConverted * toCurrency.rate / fromCurrency.rate;
+            var lossAmount = (liveConvertedAmount - convertedAmount).abs();
+
             return SelectionArea(
               child: Column(
                 children: [
@@ -221,6 +226,41 @@ class _ConversionState extends State<Conversion> {
                             ),
                           ),
                         ),
+                      ),
+                    ),
+                  if (hasOverride && inputConverted > 0)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 6.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.trending_down,
+                            size: 14,
+                            color: context.theme.colorScheme.error,
+                          ),
+                          4.w,
+                          Text(
+                            context.l10n.liveRateWouldBe(
+                              numberFormatTo.format(liveConvertedAmount),
+                            ),
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: context.theme.colorScheme.onSurfaceVariant,
+                            ),
+                          ),
+                          8.w,
+                          Text(
+                            context.l10n.exchangeLoss(
+                              numberFormatTo.format(lossAmount),
+                            ),
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold,
+                              color: context.theme.colorScheme.error,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   12.h,

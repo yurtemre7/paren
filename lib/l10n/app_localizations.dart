@@ -1283,6 +1283,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Required'**
   String get required;
+
+  /// No description provided for @liveRateWouldBe.
+  ///
+  /// In en, this message translates to:
+  /// **'Live rate: {amount}'**
+  String liveRateWouldBe(Object amount);
+
+  /// No description provided for @exchangeLoss.
+  ///
+  /// In en, this message translates to:
+  /// **'Loss: {amount}'**
+  String exchangeLoss(Object amount);
 }
 
 class _AppLocalizationsDelegate

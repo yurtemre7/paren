@@ -1,11 +1,8 @@
 import 'dart:async';
-import 'dart:io';
-
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widget_previews.dart';
 import 'package:get/get.dart';
-import 'package:liquid_glass_widgets/liquid_glass_widgets.dart';
 import 'package:paren/classes/sheet.dart';
 import 'package:paren/components/adaptive_overlay.dart';
 import 'package:paren/components/adaptive_snackbar.dart';
@@ -200,14 +197,12 @@ class _HomeState extends State<Home> {
                 );
               }),
             ),
-            floatingActionButtonLocation: .startFloat,
-            floatingActionButton: (context.width >= 1000)
-                ? FloatingActionButton.extended(
-                    onPressed: createSheetDialog,
-                    icon: Icon(Icons.add),
-                    label: Text(l10n.createSheet),
-                  )
-                : null,
+            floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+            floatingActionButton: FloatingActionButton(
+              onPressed: createSheetDialog,
+              tooltip: l10n.createSheet,
+              child: Icon(Icons.add),
+            ),
             bottomNavigationBar: buildBottomBar(width, l10n),
           ),
         ),
@@ -216,75 +211,42 @@ class _HomeState extends State<Home> {
   }
 
   Widget? buildBottomBar(double width, AppLocalizations l10n) {
-    var colorScheme = context.theme.colorScheme;
-
     if (width >= 1000) {
       return 0.h;
     }
 
-    return GlassTabBar.bottom(
-      verticalPadding: Platform.isIOS ? 20 : 38,
-      unselectedIconColor: colorScheme.secondary,
-      selectedIconColor: colorScheme.primary,
-      indicatorColor: colorScheme.primary.withValues(alpha: 0.1),
-      settings: LiquidGlassSettings().copyWith(
-        glassColor: colorScheme.surface,
-        thickness: Platform.isWindows || Platform.isMacOS ? 0 : null,
-      ),
-      indicatorSettings: LiquidGlassSettings().copyWith(
-        thickness: Platform.isWindows || Platform.isMacOS ? 0 : null,
-        blur: 0,
-        glassColor: colorScheme.onSurface.withValues(alpha: 0.1),
-      ),
-      tabs: [
-        GlassTab(icon: Icon(Icons.list), label: l10n.sheets),
-        GlassTab(icon: Icon(Icons.calculate_outlined), label: l10n.calculation),
-        GlassTab(icon: Icon(Icons.quiz_outlined), label: l10n.quiz),
-        GlassTab(icon: Icon(Icons.settings), label: l10n.settings),
-      ],
-      extraButton: GlassTabBarExtraButton(
-        onTap: createSheetDialog,
-        icon: Icon(Icons.add),
-        label: l10n.createSheet,
-      ),
-      onTabSelected: (value) {
+    return NavigationBar(
+      selectedIndex: paren.currentPage.value,
+      onDestinationSelected: (value) {
         pageController.animateToPage(
           value,
           duration: 300.milliseconds,
           curve: Curves.ease,
         );
       },
-      selectedIndex: paren.currentPage.value,
+      destinations: [
+        NavigationDestination(
+          icon: Icon(Icons.list_outlined),
+          selectedIcon: Icon(Icons.list),
+          label: l10n.sheets,
+        ),
+        NavigationDestination(
+          icon: Icon(Icons.calculate_outlined),
+          selectedIcon: Icon(Icons.calculate),
+          label: l10n.calculation,
+        ),
+        NavigationDestination(
+          icon: Icon(Icons.quiz_outlined),
+          selectedIcon: Icon(Icons.quiz),
+          label: l10n.quiz,
+        ),
+        NavigationDestination(
+          icon: Icon(Icons.settings_outlined),
+          selectedIcon: Icon(Icons.settings),
+          label: l10n.settings,
+        ),
+      ],
     );
-
-    // return (width < 1000)
-    //     ? NavigationBar(
-    //         selectedIndex: paren.currentPage.value,
-    //         onDestinationSelected: (value) {
-    //           // paren.currentPage.value = value;
-    //           pageController.animateToPage(
-    //             value,
-    //             duration: 250.milliseconds,
-    //             curve: Curves.ease,
-    //           );
-    //         },
-    //         destinations: [
-    //           NavigationDestination(
-    //             icon: FaIcon(FontAwesomeIcons.list),
-    //             selectedIcon: FaIcon(FontAwesomeIcons.listUl),
-    //             label: l10n.sheets,
-    //           ),
-    //           NavigationDestination(
-    //             icon: FaIcon(FontAwesomeIcons.calculator),
-    //             label: l10n.calculation,
-    //           ),
-    //           NavigationDestination(
-    //             icon: FaIcon(FontAwesomeIcons.gear),
-    //             label: l10n.settings,
-    //           ),
-    //         ],
-    //       )
-    //     : null;
   }
 
   Widget buildDataInfoSheet() {

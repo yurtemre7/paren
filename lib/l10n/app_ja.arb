@@ -193,5 +193,7 @@
   "youHaveEnough": "支払えます！",
   "youAreShort": "{amount}足りません",
   "walletTotal": "お財布",
-  "required": "必要金額"
+  "required": "必要金額",
+  "liveRateWouldBe": "公式レート: {amount}",
+  "exchangeLoss": "損失: {amount}"
 }

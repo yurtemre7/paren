@@ -663,4 +663,14 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get required => '所需金额';
+
+  @override
+  String liveRateWouldBe(Object amount) {
+    return '实时汇率：$amount';
+  }
+
+  @override
+  String exchangeLoss(Object amount) {
+    return '损失：$amount';
+  }
 }
