@@ -19,10 +19,10 @@ dependencies:
   get:
     git:
       url: https://github.com/yurtemre7/flutter-get
-  dio: 5.10.0
+  dio: 5.11.0
   shared_preferences: 2.5.5
   url_launcher: 6.3.2
-  share_plus: 13.2.0
+  share_plus: 13.3.0
   fl_chart: 1.2.0
   home_widget:
     git:
@@ -31,7 +31,7 @@ dependencies:
   flutter_colorpicker: 1.1.0
   stupid_simple_sheet: 0.9.1+1
   json_annotation: 4.12.0
-  liquid_glass_widgets: ^0.21.3
+  liquid_glass_widgets: ^0.26.1
   cupertino_calendar_picker: ^2.2.6
   # image_picker: 1.1.2
 
@@ -42,7 +42,7 @@ dev_dependencies:
   flutter_lints: 6.0.0
   # `flutter pub run flutter_launcher_icons:main`
   flutter_launcher_icons: 0.14.4
-  json_serializable: 6.14.0
+  json_serializable: 6.14.1
   # `dart run build_runner build`
   build_runner: 2.15.1
   # `dart run msix:create`
