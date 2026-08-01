@@ -334,7 +334,8 @@ class _CalcButtonState extends State<_CalcButton> {
       child: FilledButton.tonal(
         onPressed: _onTap,
         style: FilledButton.styleFrom(
-          backgroundColor: widget.color?.withValues(alpha: 0.16) ??
+          backgroundColor:
+              widget.color?.withValues(alpha: 0.16) ??
               context.theme.colorScheme.surface,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
