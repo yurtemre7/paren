@@ -82,9 +82,7 @@ class Paren extends GetxController {
       ]);
       List rates = responds[0].data;
       List currencieNamesList = responds[1].data;
-      var onlineCurrencies = <Currency>[
-        Currency(id: 'eur', name: 'Euro', symbol: '€', rate: 1.0),
-      ];
+      var onlineCurrencies = <Currency>[];
 
       for (var rate in rates) {
         var currencyInfo = currencieNamesList.firstWhere(
