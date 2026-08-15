@@ -570,12 +570,33 @@ class _SheetDetailState extends State<SheetDetail> {
                                       ),
                                     ),
                                     Flexible(
-                                      child: Text(
-                                        '${formatCurrencyAmount(entry.amount, sheet.fromCurrency)} / ${formatCurrencyAmount(convertedAmount, sheet.toCurrency)}',
-                                        textAlign: TextAlign.center,
-                                        style: Theme.of(
-                                          context,
-                                        ).textTheme.titleMedium,
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.end,
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Text(
+                                            '${formatCurrencyAmount(entry.amount, sheet.fromCurrency)} / ${formatCurrencyAmount(convertedAmount, sheet.toCurrency)}',
+                                            textAlign: TextAlign.end,
+                                            style: Theme.of(
+                                              context,
+                                            ).textTheme.titleMedium,
+                                          ),
+                                          if (entry.exchangeRate != null)
+                                            Text(
+                                              '${l10n.saved}: ${formatCurrencyAmount(entry.amount * entry.exchangeRate!, sheet.toCurrency)}',
+                                              textAlign: TextAlign.end,
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .bodySmall
+                                                  ?.copyWith(
+                                                    color: context
+                                                        .theme
+                                                        .colorScheme
+                                                        .onSurfaceVariant,
+                                                  ),
+                                            ),
+                                        ],
                                       ),
                                     ),
                                   ],

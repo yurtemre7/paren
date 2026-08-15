@@ -12,6 +12,7 @@ FavoriteConversion _$FavoriteConversionFromJson(Map<String, dynamic> json) =>
       fromCurrency: json['fromCurrency'] as String,
       toCurrency: json['toCurrency'] as String,
       amount: (json['amount'] as num).toDouble(),
+      exchangeRate: (json['exchangeRate'] as num?)?.toDouble(),
       timestamp: json['timestamp'] == null
           ? null
           : DateTime.parse(json['timestamp'] as String),
@@ -24,4 +25,5 @@ Map<String, dynamic> _$FavoriteConversionToJson(FavoriteConversion instance) =>
       'toCurrency': instance.toCurrency,
       'amount': instance.amount,
       'timestamp': instance.timestamp.toIso8601String(),
+      'exchangeRate': instance.exchangeRate,
     };

@@ -204,6 +204,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get savedConversions => '保存的转换';
 
   @override
+  String get saved => '已保存';
+
+  @override
   String get budgetPlanner => '预算规划器';
 
   @override

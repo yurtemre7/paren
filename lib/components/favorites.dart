@@ -61,11 +61,28 @@ class FavoritesScreen extends StatelessWidget {
                 locale: context.l10n.localeName,
               );
 
-              var convertedAmount =
-                  favorite.amount * toCurrency.rate / fromCurrency.rate;
+              var convertedAmount = paren.convertValue(
+                favorite.amount,
+                fromId: favorite.fromCurrency,
+                toId: favorite.toCurrency,
+              );
 
               String inputFrom = numberFormatFrom.format(favorite.amount);
               String inputTo = numberFormatTo.format(convertedAmount);
+
+              String? historicalConversion;
+              if (favorite.exchangeRate != null) {
+                var historicalConvertedAmount =
+                    favorite.amount * favorite.exchangeRate!;
+                var historicalInputTo = numberFormatTo.format(
+                  historicalConvertedAmount,
+                );
+                var formattedDate = DateFormat(
+                  'dd.MM.yyyy',
+                ).format(favorite.timestamp);
+                historicalConversion =
+                    '${context.l10n.saved} ($formattedDate): $historicalInputTo';
+              }
 
               return Dismissible(
                 key: Key(favorite.id),
@@ -78,9 +95,22 @@ class FavoritesScreen extends StatelessWidget {
                 direction: DismissDirection.endToStart,
                 child: ListTile(
                   title: Text('$inputFrom ➜ $inputTo'),
-                  subtitle: Text(
-                    '${fromCurrency.id.toUpperCase()} ➜ ${toCurrency.id.toUpperCase()}',
+                  subtitle: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        '${fromCurrency.id.toUpperCase()} ➜ ${toCurrency.id.toUpperCase()}',
+                      ),
+                      if (historicalConversion != null)
+                        Text(
+                          historicalConversion,
+                          style: context.theme.textTheme.bodySmall?.copyWith(
+                            color: context.theme.colorScheme.onSurfaceVariant,
+                          ),
+                        ),
+                    ],
                   ),
+                  isThreeLine: historicalConversion != null,
                   onTap: () {
                     paren.fromCurrency.value = favorite.fromCurrency;
                     paren.toCurrency.value = favorite.toCurrency;

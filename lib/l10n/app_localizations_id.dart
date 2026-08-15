@@ -210,6 +210,9 @@ class AppLocalizationsId extends AppLocalizations {
   String get savedConversions => 'Konversi Tersimpan';
 
   @override
+  String get saved => 'Tersimpan';
+
+  @override
   String get budgetPlanner => 'Perencana Anggaran';
 
   @override

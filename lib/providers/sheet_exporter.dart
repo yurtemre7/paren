@@ -106,22 +106,27 @@ class SheetExporter {
         l10n.description,
         l10n.category,
         sheet.fromCurrency.toUpperCase(),
+        '${sheet.toCurrency.toUpperCase()} (${l10n.saved})',
         sheet.toCurrency.toUpperCase(),
       ].map(_csvEscape).join(','),
       ...entries.map((entry) {
-        var convertedAmount = calculateConvertedAmount(
+        var currentConvertedAmount = calculateConvertedAmount(
           entry.amount,
           sheet.fromCurrency,
           sheet.toCurrency,
           paren,
         );
+        var savedConvertedAmount = entry.exchangeRate != null
+            ? entry.amount * entry.exchangeRate!
+            : currentConvertedAmount;
 
         return [
           dateFormat.format(entry.createdAt),
           entry.name,
           getCategoryLabel(entry.category, l10n),
           _formatCsvAmount(entry.amount),
-          _formatCsvAmount(convertedAmount),
+          _formatCsvAmount(savedConvertedAmount),
+          _formatCsvAmount(currentConvertedAmount),
         ].map(_csvEscape).join(',');
       }),
       '',

@@ -360,6 +360,15 @@ class SheetsProvider extends GetxController {
                                             category: selectedCategory.value,
                                             createdAt: selectedDate,
                                             updatedAt: DateTime.now(),
+                                            exchangeRate:
+                                                entry?.exchangeRate ??
+                                                paren.convertValue(
+                                                  1.0,
+                                                  fromId: selectedSheet!
+                                                      .fromCurrency,
+                                                  toId:
+                                                      selectedSheet!.toCurrency,
+                                                ),
                                           );
 
                                           if (isEditing) {

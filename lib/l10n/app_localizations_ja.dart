@@ -206,6 +206,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get savedConversions => '保存された変換';
 
   @override
+  String get saved => '保存時';
+
+  @override
   String get budgetPlanner => '予算プランナー';
 
   @override

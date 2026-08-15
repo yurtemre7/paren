@@ -210,6 +210,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get savedConversions => 'Conversions enregistrées';
 
   @override
+  String get saved => 'Enregistré';
+
+  @override
   String get budgetPlanner => 'Planificateur de budget';
 
   @override

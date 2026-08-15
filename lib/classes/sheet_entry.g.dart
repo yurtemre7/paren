@@ -15,6 +15,7 @@ SheetEntry _$SheetEntryFromJson(Map<String, dynamic> json) => SheetEntry(
   category:
       $enumDecodeNullable(_$SheetEntryCategoryEnumMap, json['category']) ??
       SheetEntryCategory.other,
+  exchangeRate: (json['exchangeRate'] as num?)?.toDouble(),
 );
 
 Map<String, dynamic> _$SheetEntryToJson(SheetEntry instance) =>
@@ -25,6 +26,7 @@ Map<String, dynamic> _$SheetEntryToJson(SheetEntry instance) =>
       'updatedAt': instance.updatedAt.toIso8601String(),
       'amount': instance.amount,
       'category': _$SheetEntryCategoryEnumMap[instance.category]!,
+      'exchangeRate': instance.exchangeRate,
     };
 
 const _$SheetEntryCategoryEnumMap = {

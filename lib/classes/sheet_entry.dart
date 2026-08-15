@@ -11,6 +11,7 @@ class SheetEntry {
   final double amount;
   @JsonKey(defaultValue: SheetEntryCategory.other)
   final SheetEntryCategory category;
+  final double? exchangeRate;
 
   SheetEntry({
     required this.id,
@@ -19,6 +20,7 @@ class SheetEntry {
     required this.updatedAt,
     required this.amount,
     this.category = SheetEntryCategory.other,
+    this.exchangeRate,
   });
 
   factory SheetEntry.fromJson(Map<String, dynamic> json) =>

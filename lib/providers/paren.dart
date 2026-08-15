@@ -362,6 +362,7 @@ class Paren extends GetxController {
       favorites.remove(existing);
     } else {
       var now = DateTime.now();
+      var currentRate = convertValue(1.0, fromId: from, toId: to);
       favorites.add(
         FavoriteConversion(
           id: now.millisecondsSinceEpoch.toString(),
@@ -369,6 +370,7 @@ class Paren extends GetxController {
           toCurrency: to,
           amount: amount,
           timestamp: now,
+          exchangeRate: currentRate,
         ),
       );
     }
@@ -522,7 +524,23 @@ class Paren extends GetxController {
     var sheetIndex = sheets.indexWhere((sheet) => sheet.id == sheetId);
     if (sheetIndex != -1) {
       var sheet = sheets[sheetIndex];
-      var updatedEntries = List<SheetEntry>.from(sheet.entries)..add(entry);
+      var entryToAdd = entry.exchangeRate == null
+          ? SheetEntry(
+              id: entry.id,
+              name: entry.name,
+              createdAt: entry.createdAt,
+              updatedAt: entry.updatedAt,
+              amount: entry.amount,
+              category: entry.category,
+              exchangeRate: convertValue(
+                1.0,
+                fromId: sheet.fromCurrency,
+                toId: sheet.toCurrency,
+              ),
+            )
+          : entry;
+      var updatedEntries = List<SheetEntry>.from(sheet.entries)
+        ..add(entryToAdd);
       var updatedSheet = Sheet(
         id: sheet.id,
         name: sheet.name,

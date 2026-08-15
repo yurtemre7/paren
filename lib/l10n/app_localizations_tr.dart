@@ -208,6 +208,9 @@ class AppLocalizationsTr extends AppLocalizations {
   String get savedConversions => 'Kaydedilen Dönüştürmeler';
 
   @override
+  String get saved => 'Kaydedilen';
+
+  @override
   String get budgetPlanner => 'Bütçe Planlayıcı';
 
   @override

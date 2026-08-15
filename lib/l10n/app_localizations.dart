@@ -434,6 +434,12 @@ abstract class AppLocalizations {
   /// **'Saved Conversions'**
   String get savedConversions;
 
+  /// No description provided for @saved.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved'**
+  String get saved;
+
   /// No description provided for @budgetPlanner.
   ///
   /// In en, this message translates to:

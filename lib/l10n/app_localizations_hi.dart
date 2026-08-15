@@ -209,6 +209,9 @@ class AppLocalizationsHi extends AppLocalizations {
   String get savedConversions => 'सहेजे गए रूपांतरण';
 
   @override
+  String get saved => 'सहेजा गया';
+
+  @override
   String get budgetPlanner => 'बजट योजनाकर्ता';
 
   @override

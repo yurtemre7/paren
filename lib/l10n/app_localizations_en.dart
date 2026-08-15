@@ -210,6 +210,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get savedConversions => 'Saved Conversions';
 
   @override
+  String get saved => 'Saved';
+
+  @override
   String get budgetPlanner => 'Budget Planner';
 
   @override

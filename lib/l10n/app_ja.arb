@@ -53,6 +53,7 @@
   "chartDoesNotExist": "この構成ではチャートが存在しません。",
   "quickConversions": "クイック変換",
   "savedConversions": "保存された変換",
+  "saved": "保存時",
   "budgetPlanner": "予算プランナー",
   "favorite": "お気に入り",
   "share": "共有",
