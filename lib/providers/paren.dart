@@ -82,24 +82,28 @@ class Paren extends GetxController {
       ]);
       List rates = responds[0].data;
       List currencieNamesList = responds[1].data;
+      var seenIds = <String>{};
       var onlineCurrencies = <Currency>[];
 
       for (var rate in rates) {
-        var currencyInfo = currencieNamesList.firstWhere(
-          (element) =>
-              element['iso_code'].toString().toLowerCase() ==
-              rate['quote'].toString().toLowerCase(),
+        var id = rate['quote'].toString().toLowerCase();
+        if (!seenIds.add(id)) continue;
+
+        var currencyInfo = currencieNamesList.firstWhereOrNull(
+          (element) => element['iso_code'].toString().toLowerCase() == id,
         );
-        onlineCurrencies.add(
-          Currency(
-            id: rate['quote'].toString().toLowerCase(),
-            name: currencyInfo['name'],
-            // INFO: maybe use currencyInfo['symbol'] later
-            symbol: currencyInfo['symbol'],
-            // symbol: NumberFormat().simpleCurrencySymbol(currencyInfo['iso_code']),
-            rate: double.tryParse(rate['rate'].toString()) ?? 1.0,
-          ),
-        );
+        if (currencyInfo != null) {
+          onlineCurrencies.add(
+            Currency(
+              id: id,
+              name: currencyInfo['name'],
+              // INFO: maybe use currencyInfo['symbol'] later
+              symbol: currencyInfo['symbol'],
+              // symbol: NumberFormat().simpleCurrencySymbol(currencyInfo['iso_code']),
+              rate: double.tryParse(rate['rate'].toString()) ?? 1.0,
+            ),
+          );
+        }
       }
 
       onlineCurrencies.sort((c1, c2) => c1.name.compareTo(c2.name));
@@ -200,11 +204,28 @@ class Paren extends GetxController {
   Future<void> initCurrencies() async {
     var currencyList = await sp.getStringList('currencies') ?? [];
     try {
-      currencies.value = currencyList
+      var loadedCurrencies = currencyList
           .map(
             (e) => Currency.fromJson(Map<String, dynamic>.from(json.decode(e))),
           )
           .toList();
+
+      var seenIds = <String>{};
+      var uniqueCurrencies = <Currency>[];
+      for (var currency in loadedCurrencies) {
+        if (seenIds.add(currency.id.toLowerCase())) {
+          uniqueCurrencies.add(currency);
+        }
+      }
+
+      currencies.value = uniqueCurrencies;
+
+      if (uniqueCurrencies.length != loadedCurrencies.length) {
+        var cleanedList = uniqueCurrencies
+            .map((e) => json.encode(e.toJson()))
+            .toList();
+        await sp.setStringList('currencies', cleanedList);
+      }
     } catch (error, stackTrace) {
       logError('An error happened.', error: error, stackTrace: stackTrace);
     }
