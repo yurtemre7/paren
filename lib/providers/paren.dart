@@ -41,6 +41,7 @@ class Paren extends GetxController {
 
   final currencyTextInput = '1'.obs;
   final currentPage = 1.obs;
+  final isEditingSheets = false.obs;
   final loading = true.obs;
 
   Paren();
@@ -70,6 +71,7 @@ class Paren extends GetxController {
     clearFavorites();
     clearSheets();
     customRates.clear();
+    isEditingSheets.value = false;
   }
 
   Future<void> fetchCurrencyDataOnline() async {

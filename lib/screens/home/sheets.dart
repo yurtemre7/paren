@@ -5,7 +5,6 @@ import 'package:paren/components/adaptive_overlay.dart';
 import 'package:paren/components/adaptive_snackbar.dart';
 import 'package:paren/components/sheet_form_bottom_sheet.dart';
 import 'package:paren/l10n/app_localizations_extension.dart';
-import 'package:paren/providers/constants.dart';
 import 'package:paren/providers/paren.dart';
 import 'package:paren/screens/home/details/sheet_detail.dart';
 
@@ -19,13 +18,18 @@ class Sheets extends StatefulWidget {
 class _SheetsState extends State<Sheets> {
   final Paren paren = Get.find();
   final searchController = TextEditingController();
-  final isEditing = false.obs;
-  final isSearching = false.obs;
+
+  @override
+  void dispose() {
+    searchController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     var l10n = context.l10n;
     return Obx(() {
+      var isEditing = paren.isEditingSheets.value;
       var filteredSheets = paren.sheets.where((sheet) {
         var searchText = searchController.text.toLowerCase();
         return sheet.name.toLowerCase().contains(searchText) ||
@@ -37,80 +41,50 @@ class _SheetsState extends State<Sheets> {
         mainAxisAlignment: MainAxisAlignment.center,
         mainAxisSize: MainAxisSize.min,
         children: [
-          // Search
-          AnimatedContainer(
-            height: isSearching.value ? 75 : 0,
-            duration: 250.milliseconds,
-            child: AnimatedOpacity(
-              opacity: isSearching.value ? 1 : 0,
-              duration: 250.milliseconds,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: TextField(
-                  controller: searchController,
-                  decoration: InputDecoration(
-                    labelText: l10n.searchSheets,
-                    prefixIcon: Icon(Icons.search),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8.0),
-                    ),
-                  ),
-                  onChanged: (value) {
-                    setState(() {});
-                  },
-                  autocorrect: false,
+          // Permanent Search
+          Padding(
+            padding: const EdgeInsets.fromLTRB(8.0, 4.0, 8.0, 4.0),
+            child: TextField(
+              controller: searchController,
+              decoration: InputDecoration(
+                labelText: l10n.searchSheets,
+                prefixIcon: const Icon(Icons.search),
+                suffixIcon: searchController.text.isNotEmpty
+                    ? IconButton(
+                        icon: const Icon(Icons.clear),
+                        onPressed: () {
+                          searchController.clear();
+                          setState(() {});
+                        },
+                      )
+                    : null,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8.0),
                 ),
               ),
+              onChanged: (value) {
+                setState(() {});
+              },
+              autocorrect: false,
             ),
           ),
 
-          if (filteredSheets.isNotEmpty)
+          if (paren.sheets.isNotEmpty)
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0),
-              child: Row(
-                mainAxisAlignment: .spaceBetween,
-                children: [
-                  Flexible(
-                    child: Wrap(
-                      spacing: 8,
-                      runSpacing: 8,
-                      children: [
-                        ChoiceChip(
-                          label: Text(isEditing.value ? l10n.save : l10n.edit),
-                          selected: isEditing.value,
-                          showCheckmark: false,
-                          onSelected: (value) {
-                            isEditing.toggle();
-                          },
-                        ),
-                        ChoiceChip(
-                          selected: isSearching.value,
-                          showCheckmark: false,
-                          onSelected: (value) {
-                            hideKeyboard();
-                            isSearching.toggle();
-                          },
-                          label: Text(
-                            isSearching.value ? l10n.hideSearch : l10n.search,
-                          ),
-                        ),
-                      ],
-                    ),
+              padding: const EdgeInsets.symmetric(
+                horizontal: 16.0,
+                vertical: 4.0,
+              ),
+              child: Align(
+                alignment: Alignment.centerRight,
+                child: Text(
+                  l10n.sheetCount(filteredSheets.length),
+                  style: TextStyle(
+                    color: context.theme.colorScheme.secondary,
+                    fontSize: 12,
                   ),
-
-                  Flexible(
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 8),
-                      child: Text(
-                        l10n.sheetCount(filteredSheets.length),
-                        style: TextStyle(
-                          color: context.theme.colorScheme.secondary,
-                        ),
-                        overflow: .ellipsis,
-                      ),
-                    ),
-                  ),
-                ],
+                  overflow: TextOverflow.ellipsis,
+                ),
               ),
             ),
 
@@ -132,7 +106,7 @@ class _SheetsState extends State<Sheets> {
                         color: Colors.red,
                         alignment: Alignment.center,
                         padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child: Icon(Icons.delete, color: Colors.white),
+                        child: const Icon(Icons.delete, color: Colors.white),
                       ),
                       confirmDismiss: (direction) {
                         return Get.dialog<bool>(
@@ -190,7 +164,7 @@ class _SheetsState extends State<Sheets> {
                         subtitle: Text(
                           '${sheet.fromCurrency.toUpperCase()} → ${sheet.toCurrency.toUpperCase()}',
                         ),
-                        trailing: !isEditing.value
+                        trailing: !isEditing
                             ? Icon(
                                 Icons.keyboard_arrow_right,
                                 color: itemContext.theme.colorScheme.primary,
@@ -200,7 +174,7 @@ class _SheetsState extends State<Sheets> {
                                 color: itemContext.theme.colorScheme.primary,
                               ),
                         onTap: () async {
-                          if (!isEditing.value) {
+                          if (!isEditing) {
                             return await Get.to(
                               () => SheetDetail(sheet: sheet),
                             );

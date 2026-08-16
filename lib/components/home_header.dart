@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:paren/l10n/app_localizations_extension.dart';
-import 'package:paren/providers/extensions.dart';
+import 'package:paren/providers/paren.dart';
 
 class HomeHeader extends StatelessWidget implements PreferredSizeWidget {
   final VoidCallback onInfo;
@@ -31,10 +32,10 @@ class HomeHeader extends StatelessWidget implements PreferredSizeWidget {
             SizedBox(
               width: 52,
               child: isDesktop
-                  ? buildEmptyIcon(colorScheme)
+                  ? buildEditSheetsIconButton(context, colorScheme)
                   : index != 0
                   ? buildNavigateIconButtonBackward(colorScheme)
-                  : buildEmptyIcon(colorScheme),
+                  : buildEditSheetsIconButton(context, colorScheme),
             ),
             Expanded(child: buildHeroTitle(colorScheme)),
             SizedBox(
@@ -144,16 +145,26 @@ class HomeHeader extends StatelessWidget implements PreferredSizeWidget {
     );
   }
 
-  IconButton buildEmptyIcon(ColorScheme colorScheme) {
-    return IconButton(
-      icon: 0.h,
-      color: colorScheme.primary,
-      onPressed: null,
-      style: IconButton.styleFrom(
-        shape: const CircleBorder(),
-        backgroundColor: colorScheme.primaryContainer.withValues(alpha: 0.15),
-      ),
-    );
+  Widget buildEditSheetsIconButton(
+    BuildContext context,
+    ColorScheme colorScheme,
+  ) {
+    var paren = Get.find<Paren>();
+    return Obx(() {
+      var isEditing = paren.isEditingSheets.value;
+      return IconButton(
+        icon: Icon(isEditing ? Icons.save : Icons.edit),
+        color: colorScheme.primary,
+        tooltip: isEditing ? context.l10n.save : context.l10n.edit,
+        onPressed: () {
+          paren.isEditingSheets.toggle();
+        },
+        style: IconButton.styleFrom(
+          shape: const CircleBorder(),
+          backgroundColor: colorScheme.primaryContainer.withValues(alpha: 0.15),
+        ),
+      );
+    });
   }
 
   @override
