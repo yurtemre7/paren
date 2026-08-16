@@ -151,9 +151,8 @@ class _SheetDetailState extends State<SheetDetail> {
               children: [
                 Text(
                   l10n.sortIt,
-                  style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: Theme.of(context).textTheme.headlineSmall
+                      ?.copyWith(fontWeight: FontWeight.bold),
                 ),
                 ...SheetSorting.values.map((sheetSorting) {
                   return ListTile(
@@ -541,9 +540,9 @@ class _SheetDetailState extends State<SheetDetail> {
                                         children: [
                                           Text(
                                             entry.name,
-                                            style: Theme.of(
-                                              context,
-                                            ).textTheme.titleMedium,
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .titleMedium,
                                           ),
                                           Text(
                                             _categoryLabel(entry.category),
@@ -559,12 +558,11 @@ class _SheetDetailState extends State<SheetDetail> {
                                                 ),
                                           ),
                                           Text(
-                                            DateFormat(
-                                              'dd. MMMM yyyy',
-                                            ).format(entry.createdAt),
-                                            style: Theme.of(
-                                              context,
-                                            ).textTheme.bodySmall,
+                                            DateFormat('dd. MMMM yyyy')
+                                                .format(entry.createdAt),
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodySmall,
                                           ),
                                         ],
                                       ),
@@ -578,9 +576,9 @@ class _SheetDetailState extends State<SheetDetail> {
                                           Text(
                                             '${formatCurrencyAmount(entry.amount, sheet.fromCurrency)} / ${formatCurrencyAmount(convertedAmount, sheet.toCurrency)}',
                                             textAlign: TextAlign.end,
-                                            style: Theme.of(
-                                              context,
-                                            ).textTheme.titleMedium,
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .titleMedium,
                                           ),
                                           if (entry.exchangeRate != null)
                                             Text(

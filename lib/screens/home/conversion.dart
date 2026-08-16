@@ -416,9 +416,8 @@ class _ConversionState extends State<Conversion> {
         ),
         IconButton(
           onPressed: () async {
-            await Navigator.of(
-              context,
-            ).push(adaptiveSheetRoute(child: buildTextSizeAdjustSheet()));
+            await Navigator.of(context)
+                .push(adaptiveSheetRoute(child: buildTextSizeAdjustSheet()));
             paren.saveSettings();
           },
           tooltip: l10n.adjustSizes,
@@ -446,9 +445,8 @@ class _ConversionState extends State<Conversion> {
             children: [
               Text(
                 l10n.adjustSizes,
-                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
+                style: Theme.of(context).textTheme.headlineSmall
+                    ?.copyWith(fontWeight: FontWeight.bold),
               ),
               16.h,
               Row(

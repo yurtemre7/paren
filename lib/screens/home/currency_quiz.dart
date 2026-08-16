@@ -601,10 +601,8 @@ class QuizQuestionCard extends StatelessWidget {
             fit: BoxFit.scaleDown,
             child: Text(
               '$sourceAmount (${round.sourceCurrency.id.toUpperCase()}) ➜ ?',
-              style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                fontWeight: FontWeight.w800,
-                letterSpacing: 0,
-              ),
+              style: Theme.of(context).textTheme.headlineMedium
+                  ?.copyWith(fontWeight: FontWeight.w800, letterSpacing: 0),
             ),
           ),
           8.h,
@@ -859,9 +857,8 @@ class _ResultPanel extends StatelessWidget {
                   answer.streakHit
                       ? context.l10n.quizGoodCalibration
                       : context.l10n.quizKeepCalibrating,
-                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.w800,
-                  ),
+                  style: Theme.of(context).textTheme.titleMedium
+                      ?.copyWith(fontWeight: FontWeight.w800),
                 ),
               ),
               Text('+${answer.points}'),
@@ -946,10 +943,8 @@ class QuizSummaryScreen extends StatelessWidget {
             children: [
               Text(
                 context.l10n.quizSummary,
-                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                  fontWeight: FontWeight.w800,
-                  letterSpacing: 0,
-                ),
+                style: Theme.of(context).textTheme.headlineSmall
+                    ?.copyWith(fontWeight: FontWeight.w800, letterSpacing: 0),
               ),
               14.h,
               Wrap(
@@ -1050,9 +1045,8 @@ class _SummaryTile extends StatelessWidget {
           6.h,
           Text(
             value,
-            style: Theme.of(
-              context,
-            ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w800),
+            style: Theme.of(context).textTheme.titleLarge
+                ?.copyWith(fontWeight: FontWeight.w800),
           ),
         ],
       ),

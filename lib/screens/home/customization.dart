@@ -130,9 +130,8 @@ class _CustomizationState extends State<Customization> {
             title: Text(l10n.quickConversions),
             onTap: () async {
               Get.back();
-              var result = await Navigator.of(
-                context,
-              ).push(adaptiveSheetRoute(child: buildQuickConversions()));
+              var result = await Navigator.of(context)
+                  .push(adaptiveSheetRoute(child: buildQuickConversions()));
               if (result != null) {
                 paren.currencyTextInput.value = result.toString();
               }
@@ -165,9 +164,8 @@ class _CustomizationState extends State<Customization> {
         ),
         onTap: () async {
           Get.back();
-          await Navigator.of(
-            context,
-          ).push(adaptiveSheetRoute(child: buildFavoriteSheet()));
+          await Navigator.of(context)
+              .push(adaptiveSheetRoute(child: buildFavoriteSheet()));
         },
       ),
     );
@@ -186,9 +184,8 @@ class _CustomizationState extends State<Customization> {
         trailing: Icon(Icons.savings, color: context.theme.colorScheme.primary),
         onTap: () async {
           Get.back();
-          await Navigator.of(
-            context,
-          ).push(adaptiveSheetRoute(child: const BudgetPlanner()));
+          await Navigator.of(context)
+              .push(adaptiveSheetRoute(child: const BudgetPlanner()));
         },
       ),
     );

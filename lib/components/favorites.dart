@@ -77,9 +77,8 @@ class FavoritesScreen extends StatelessWidget {
                 var historicalInputTo = numberFormatTo.format(
                   historicalConvertedAmount,
                 );
-                var formattedDate = DateFormat(
-                  'dd.MM.yyyy',
-                ).format(favorite.timestamp);
+                var formattedDate = DateFormat('dd.MM.yyyy')
+                    .format(favorite.timestamp);
                 historicalConversion =
                     '${context.l10n.saved} ($formattedDate): $historicalInputTo';
               }

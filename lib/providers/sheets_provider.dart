@@ -266,17 +266,15 @@ class SheetsProvider extends GetxController {
                             12.h,
                             Text(
                               l10n.originalCreated(
-                                DateFormat(
-                                  'dd. MMMM yyyy, HH:mm',
-                                ).format(entry.createdAt),
+                                DateFormat('dd. MMMM yyyy, HH:mm')
+                                    .format(entry.createdAt),
                               ),
                               style: Theme.of(context).textTheme.bodySmall,
                             ),
                             Text(
                               l10n.updated(
-                                DateFormat(
-                                  'dd. MMMM yyyy, HH:mm',
-                                ).format(entry.updatedAt),
+                                DateFormat('dd. MMMM yyyy, HH:mm')
+                                    .format(entry.updatedAt),
                               ),
                               style: Theme.of(context).textTheme.bodySmall,
                             ),

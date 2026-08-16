@@ -70,9 +70,8 @@ class _SheetFormBottomSheetState extends State<SheetFormBottomSheet> {
                 isEditing
                     ? context.l10n.editSheet
                     : context.l10n.createNewSheet,
-                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
+                style: Theme.of(context).textTheme.headlineSmall
+                    ?.copyWith(fontWeight: FontWeight.bold),
               ),
               16.h,
               // Name input
