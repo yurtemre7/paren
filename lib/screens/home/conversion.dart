@@ -9,6 +9,7 @@ import 'package:paren/components/adaptive_snackbar.dart';
 import 'package:paren/components/bill_splitter_sheet.dart';
 import 'package:paren/components/calculator_keyboard.dart';
 import 'package:paren/components/currency_changer_row.dart';
+import 'package:paren/components/favorites.dart';
 import 'package:paren/l10n/app_localizations_extension.dart';
 import 'package:paren/providers/extensions.dart';
 import 'package:paren/providers/paren.dart';
@@ -310,6 +311,11 @@ class _ConversionState extends State<Conversion> {
                       paren.toCurrency.value,
                     );
                   }
+                },
+                onLongPress: () async {
+                  HapticFeedback.mediumImpact();
+                  await Navigator.of(context)
+                      .push(adaptiveSheetRoute(child: const FavoritesScreen()));
                 },
                 tooltip: l10n.favorite,
               ),
