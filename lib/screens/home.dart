@@ -127,24 +127,6 @@ class _HomeState extends State<Home> {
                 onInfo: () {
                   Get.dialog(buildDataInfoSheet());
                 },
-                onForward: () async {
-                  if (paren.currencies.isEmpty) {
-                    return;
-                  }
-                  await pageController.nextPage(
-                    duration: 250.milliseconds,
-                    curve: Curves.ease,
-                  );
-                },
-                onBackward: () async {
-                  if (paren.currencies.isEmpty) {
-                    return;
-                  }
-                  await pageController.previousPage(
-                    duration: 250.milliseconds,
-                    curve: Curves.ease,
-                  );
-                },
               ),
             ),
             body: SafeArea(

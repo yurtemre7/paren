@@ -5,17 +5,9 @@ import 'package:paren/providers/paren.dart';
 
 class HomeHeader extends StatelessWidget implements PreferredSizeWidget {
   final VoidCallback onInfo;
-  final VoidCallback onForward;
-  final VoidCallback onBackward;
   final int index;
 
-  const HomeHeader({
-    super.key,
-    required this.onInfo,
-    required this.onForward,
-    required this.onBackward,
-    this.index = 1,
-  });
+  const HomeHeader({super.key, required this.onInfo, this.index = 1});
 
   @override
   Widget build(BuildContext context) {
@@ -31,20 +23,14 @@ class HomeHeader extends StatelessWidget implements PreferredSizeWidget {
           children: [
             SizedBox(
               width: 52,
-              child: isDesktop
+              child: isDesktop || index == 0
                   ? buildEditSheetsIconButton(context, colorScheme)
-                  : index != 0
-                  ? buildNavigateIconButtonBackward(colorScheme)
-                  : buildEditSheetsIconButton(context, colorScheme),
+                  : const SizedBox.shrink(),
             ),
             Expanded(child: buildHeroTitle(colorScheme)),
             SizedBox(
               width: 52,
-              child: isDesktop
-                  ? buildInfoIconButton(context, colorScheme)
-                  : index != 3
-                  ? buildNavigateIconButtonForward(colorScheme)
-                  : buildInfoIconButton(context, colorScheme),
+              child: buildInfoIconButton(context, colorScheme),
             ),
           ],
         ),
@@ -53,10 +39,7 @@ class HomeHeader extends StatelessWidget implements PreferredSizeWidget {
   }
 
   Widget buildHeroTitle(ColorScheme colorScheme) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [buildLogo(colorScheme)],
-    );
+    return FittedBox(fit: BoxFit.scaleDown, child: buildLogo(colorScheme));
   }
 
   Row buildLogo(ColorScheme colorScheme) {
@@ -114,30 +97,6 @@ class HomeHeader extends StatelessWidget implements PreferredSizeWidget {
       color: colorScheme.primary,
       tooltip: context.l10n.lastUpdateInfo,
       onPressed: onInfo,
-      style: IconButton.styleFrom(
-        shape: const CircleBorder(),
-        backgroundColor: colorScheme.primaryContainer.withValues(alpha: 0.15),
-      ),
-    );
-  }
-
-  IconButton buildNavigateIconButtonForward(ColorScheme colorScheme) {
-    return IconButton(
-      icon: const Icon(Icons.keyboard_arrow_right),
-      color: colorScheme.primary,
-      onPressed: onForward,
-      style: IconButton.styleFrom(
-        shape: const CircleBorder(),
-        backgroundColor: colorScheme.primaryContainer.withValues(alpha: 0.15),
-      ),
-    );
-  }
-
-  IconButton buildNavigateIconButtonBackward(ColorScheme colorScheme) {
-    return IconButton(
-      icon: const Icon(Icons.keyboard_arrow_left),
-      color: colorScheme.primary,
-      onPressed: onBackward,
       style: IconButton.styleFrom(
         shape: const CircleBorder(),
         backgroundColor: colorScheme.primaryContainer.withValues(alpha: 0.15),

@@ -9,8 +9,10 @@ import 'package:paren/components/adaptive_snackbar.dart';
 import 'package:paren/components/bill_splitter_sheet.dart';
 import 'package:paren/components/calculator_keyboard.dart';
 import 'package:paren/components/currency_changer_row.dart';
+import 'package:paren/components/exchart.dart';
 import 'package:paren/components/favorites.dart';
 import 'package:paren/l10n/app_localizations_extension.dart';
+import 'package:paren/providers/constants.dart';
 import 'package:paren/providers/extensions.dart';
 import 'package:paren/providers/paren.dart';
 import 'package:paren/providers/sheets_provider.dart';
@@ -111,163 +113,191 @@ class _ConversionState extends State<Conversion> {
                 inputConverted * toCurrency.rate / fromCurrency.rate;
             var lossAmount = (liveConvertedAmount - convertedAmount).abs();
 
-            return SelectionArea(
-              child: Column(
-                children: [
-                  Wrap(
-                    spacing: 12,
-                    alignment: WrapAlignment.center,
-                    crossAxisAlignment: WrapCrossAlignment.center,
-                    children: [
-                      Text(
-                        inputStr,
-                        style: TextStyle(
-                          fontSize: paren.conv1Size.value,
-                          fontWeight: FontWeight.bold,
-                          color: context.theme.colorScheme.primary,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                      Text(
-                        '➜',
-                        style: TextStyle(
-                          fontSize: paren.conv1Size.value,
-                          fontWeight: FontWeight.bold,
-                          color: context.theme.colorScheme.primary,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                      Text(
-                        amountStr,
-                        style: TextStyle(
-                          fontSize: paren.conv1Size.value,
-                          fontWeight: FontWeight.bold,
-                          color: context.theme.colorScheme.primary,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                    ],
-                  ),
-                  Wrap(
-                    spacing: 12,
-                    alignment: WrapAlignment.center,
-                    crossAxisAlignment: WrapCrossAlignment.center,
-                    children: [
-                      Text(
-                        inputStrRe,
-                        style: TextStyle(
-                          fontSize: paren.conv2Size.value,
-                          fontWeight: FontWeight.bold,
-                          color: context.theme.colorScheme.primary.withValues(
-                            alpha: 0.75,
-                          ),
-                          height: 1.05,
-                        ),
-
-                        textAlign: TextAlign.center,
-                      ),
-                      Text(
-                        '➜',
-                        style: TextStyle(
-                          fontSize: paren.conv2Size.value,
-                          fontWeight: FontWeight.bold,
-                          color: context.theme.colorScheme.primary.withValues(
-                            alpha: 0.75,
-                          ),
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                      Text(
-                        reAmountStr,
-                        style: TextStyle(
-                          fontSize: paren.conv2Size.value,
-                          fontWeight: FontWeight.bold,
-                          color: context.theme.colorScheme.primary.withValues(
-                            alpha: 0.75,
-                          ),
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                    ],
-                  ),
-                  if (hasOverride)
-                    Padding(
-                      padding: const EdgeInsets.only(top: 8.0),
-                      child: InputChip(
-                        avatar: Icon(
-                          Icons.edit,
-                          size: 16,
-                          color: context.theme.colorScheme.primary,
-                        ),
-                        label: Text(
-                          context.l10n.customRateActive,
-                          style: TextStyle(
-                            color: context.theme.colorScheme.onPrimaryContainer,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 12,
-                          ),
-                        ),
-                        onDeleted: () {
-                          paren.removeCustomRate(
-                            fromCurrency.id,
-                            toCurrency.id,
-                          );
-                        },
-                        deleteIconColor: context.theme.colorScheme.primary,
-                        backgroundColor: context
-                            .theme
-                            .colorScheme
-                            .primaryContainer
-                            .withValues(alpha: 0.5),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20),
-                          side: BorderSide(
-                            color: context.theme.colorScheme.primary.withValues(
-                              alpha: 0.3,
+            return Column(
+              children: [
+                InkWell(
+                  onTap: () {
+                    HapticFeedback.selectionClick();
+                    _showHistoricalChart(context);
+                  },
+                  borderRadius: BorderRadius.circular(16),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 6,
+                    ),
+                    child: Column(
+                      children: [
+                        Wrap(
+                          spacing: 12,
+                          alignment: WrapAlignment.center,
+                          crossAxisAlignment: WrapCrossAlignment.center,
+                          children: [
+                            Text(
+                              inputStr,
+                              style: TextStyle(
+                                fontSize: paren.conv1Size.value,
+                                fontWeight: FontWeight.bold,
+                                color: context.theme.colorScheme.primary,
+                              ),
+                              textAlign: TextAlign.center,
                             ),
+                            Text(
+                              '➜',
+                              style: TextStyle(
+                                fontSize: paren.conv1Size.value,
+                                fontWeight: FontWeight.bold,
+                                color: context.theme.colorScheme.primary,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                            Text(
+                              amountStr,
+                              style: TextStyle(
+                                fontSize: paren.conv1Size.value,
+                                fontWeight: FontWeight.bold,
+                                color: context.theme.colorScheme.primary,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          ],
+                        ),
+                        Wrap(
+                          spacing: 12,
+                          alignment: WrapAlignment.center,
+                          crossAxisAlignment: WrapCrossAlignment.center,
+                          children: [
+                            Text(
+                              inputStrRe,
+                              style: TextStyle(
+                                fontSize: paren.conv2Size.value,
+                                fontWeight: FontWeight.bold,
+                                color: context.theme.colorScheme.primary
+                                    .withValues(alpha: 0.75),
+                                height: 1.05,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                            Text(
+                              '➜',
+                              style: TextStyle(
+                                fontSize: paren.conv2Size.value,
+                                fontWeight: FontWeight.bold,
+                                color: context.theme.colorScheme.primary
+                                    .withValues(alpha: 0.75),
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                            Text(
+                              reAmountStr,
+                              style: TextStyle(
+                                fontSize: paren.conv2Size.value,
+                                fontWeight: FontWeight.bold,
+                                color: context.theme.colorScheme.primary
+                                    .withValues(alpha: 0.75),
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          ],
+                        ),
+                        4.h,
+                        Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(
+                              Icons.show_chart,
+                              size: 13,
+                              color: context.theme.colorScheme.secondary,
+                            ),
+                            4.w,
+                            Text(
+                              timestampToString(paren.latestTimestamp.value),
+                              style: TextStyle(
+                                fontSize: 11,
+                                color: context.theme.colorScheme.secondary,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                if (hasOverride)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8.0),
+                    child: InputChip(
+                      avatar: Icon(
+                        Icons.edit,
+                        size: 16,
+                        color: context.theme.colorScheme.primary,
+                      ),
+                      label: Text(
+                        context.l10n.customRateActive,
+                        style: TextStyle(
+                          color: context.theme.colorScheme.onPrimaryContainer,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 12,
+                        ),
+                      ),
+                      onDeleted: () {
+                        paren.removeCustomRate(fromCurrency.id, toCurrency.id);
+                      },
+                      deleteIconColor: context.theme.colorScheme.primary,
+                      backgroundColor: context
+                          .theme
+                          .colorScheme
+                          .primaryContainer
+                          .withValues(alpha: 0.5),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20),
+                        side: BorderSide(
+                          color: context.theme.colorScheme.primary.withValues(
+                            alpha: 0.3,
                           ),
                         ),
                       ),
                     ),
-                  if (hasOverride && inputConverted > 0)
-                    Padding(
-                      padding: const EdgeInsets.only(top: 6.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.trending_down,
-                            size: 14,
+                  ),
+                if (hasOverride && inputConverted > 0)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 6.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.trending_down,
+                          size: 14,
+                          color: context.theme.colorScheme.error,
+                        ),
+                        4.w,
+                        Text(
+                          context.l10n.liveRateWouldBe(
+                            numberFormatTo.format(liveConvertedAmount),
+                          ),
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: context.theme.colorScheme.onSurfaceVariant,
+                          ),
+                        ),
+                        8.w,
+                        Text(
+                          context.l10n.exchangeLoss(
+                            numberFormatTo.format(lossAmount),
+                          ),
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
                             color: context.theme.colorScheme.error,
                           ),
-                          4.w,
-                          Text(
-                            context.l10n.liveRateWouldBe(
-                              numberFormatTo.format(liveConvertedAmount),
-                            ),
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: context.theme.colorScheme.onSurfaceVariant,
-                            ),
-                          ),
-                          8.w,
-                          Text(
-                            context.l10n.exchangeLoss(
-                              numberFormatTo.format(lossAmount),
-                            ),
-                            style: TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.bold,
-                              color: context.theme.colorScheme.error,
-                            ),
-                          ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
-                  12.h,
-                  buildConversionActions(inputConverted, inputStr, amountStr),
-                ],
-              ),
+                  ),
+                12.h,
+                buildConversionActions(inputConverted, inputStr, amountStr),
+              ],
             );
           }),
           12.h,
@@ -282,157 +312,217 @@ class _ConversionState extends State<Conversion> {
     String amountStr,
   ) {
     var l10n = context.l10n;
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Expanded(
-          child: Wrap(
-            children: [
-              IconButton(
-                icon: Obx(() {
-                  return Icon(
-                    paren.favorites.any((fav) {
-                          return fav.fromCurrency == paren.fromCurrency.value &&
-                              fav.toCurrency == paren.toCurrency.value &&
-                              fav.amount.toStringAsFixed(2) ==
-                                  inputConverted.toStringAsFixed(2);
-                        })
-                        ? Icons.favorite
-                        : Icons.favorite_border,
-                    color: context.theme.colorScheme.primary,
-                  );
-                }),
-                onPressed: () {
-                  var amount = inputConverted;
-                  if (amount > 0) {
-                    paren.toggleFavorite(
-                      amount,
-                      paren.fromCurrency.value,
-                      paren.toCurrency.value,
-                    );
-                  }
-                },
-                onLongPress: () async {
-                  HapticFeedback.mediumImpact();
-                  await Navigator.of(context)
-                      .push(adaptiveSheetRoute(child: const FavoritesScreen()));
-                },
-                tooltip: l10n.favorite,
-              ),
-              IconButton(
-                icon: Icon(
-                  Icons.ios_share,
-                  color: context.theme.colorScheme.primary,
-                ),
-                onPressed: () {
-                  var box = context.findRenderObject() as RenderBox?;
-                  Rect? rect;
-                  if (box != null) {
-                    rect = box.localToGlobal(Offset.zero) & box.size;
-                  }
+    var hasSheets = paren.sheets.any(
+      (sheet) => sheet.fromCurrency == paren.fromCurrency.value,
+    );
 
-                  SharePlus.instance.share(
-                    ShareParams(
-                      text: '$inputStr ➜ $amountStr',
-                      sharePositionOrigin: rect,
-                    ),
-                  );
-                },
-                tooltip: l10n.share,
-              ),
-              IconButton(
-                icon: Icon(
-                  Icons.copy,
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+      decoration: BoxDecoration(
+        color: context.theme.colorScheme.surfaceContainerHighest.withValues(
+          alpha: 0.35,
+        ),
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Wrap(
+        alignment: WrapAlignment.center,
+        crossAxisAlignment: WrapCrossAlignment.center,
+        spacing: 2,
+        runSpacing: 2,
+        children: [
+          IconButton(
+            visualDensity: VisualDensity.compact,
+            icon: Obx(() {
+              return Icon(
+                paren.favorites.any((fav) {
+                      return fav.fromCurrency == paren.fromCurrency.value &&
+                          fav.toCurrency == paren.toCurrency.value &&
+                          fav.amount.toStringAsFixed(2) ==
+                              inputConverted.toStringAsFixed(2);
+                    })
+                    ? Icons.favorite
+                    : Icons.favorite_border,
+                color: context.theme.colorScheme.primary,
+              );
+            }),
+            onPressed: () {
+              var amount = inputConverted;
+              if (amount > 0) {
+                paren.toggleFavorite(
+                  amount,
+                  paren.fromCurrency.value,
+                  paren.toCurrency.value,
+                );
+              }
+            },
+            onLongPress: () async {
+              HapticFeedback.mediumImpact();
+              await Navigator.of(context)
+                  .push(adaptiveSheetRoute(child: const FavoritesScreen()));
+            },
+            tooltip: l10n.favorite,
+          ),
+          IconButton(
+            visualDensity: VisualDensity.compact,
+            icon: Icon(Icons.copy, color: context.theme.colorScheme.primary),
+            onPressed: () async {
+              await Clipboard.setData(
+                ClipboardData(text: '$inputStr ➜ $amountStr'),
+              );
+              if (!mounted) return;
+              AdaptiveSnackbar.showSnackBar(
+                context,
+                title: l10n.copiedToClipboard('$inputStr ➜ $amountStr'),
+              );
+            },
+            tooltip: l10n.copy,
+          ),
+          IconButton(
+            visualDensity: VisualDensity.compact,
+            icon: Icon(
+              Icons.ios_share,
+              color: context.theme.colorScheme.primary,
+            ),
+            onPressed: () {
+              var box = context.findRenderObject() as RenderBox?;
+              Rect? rect;
+              if (box != null) {
+                rect = box.localToGlobal(Offset.zero) & box.size;
+              }
+
+              SharePlus.instance.share(
+                ShareParams(
+                  text: '$inputStr ➜ $amountStr',
+                  sharePositionOrigin: rect,
+                ),
+              );
+            },
+            tooltip: l10n.share,
+          ),
+          if (hasSheets)
+            IconButton(
+              visualDensity: VisualDensity.compact,
+              onPressed: () async {
+                var fromCurrency = paren.currencies.firstWhere(
+                  (element) => element.id == paren.fromCurrency.value,
+                );
+                var sheetsProvider = SheetsProvider(
+                  paren,
+                  context,
+                  fromCurrency.id.toUpperCase(),
+                );
+                var newEntry = SheetEntry(
+                  id: DateTime.now().millisecondsSinceEpoch.toString(),
+                  name: '',
+                  amount: inputConverted,
+                  createdAt: DateTime.now(),
+                  updatedAt: DateTime.now(),
+                );
+                await sheetsProvider.showEntryDialog(null, entry: newEntry);
+              },
+              color: context.theme.colorScheme.primary,
+              icon: const Icon(Icons.format_list_bulleted_add),
+              tooltip: l10n.addEntry,
+            ),
+          IconButton(
+            visualDensity: VisualDensity.compact,
+            icon: Icon(
+              Icons.call_split_outlined,
+              color: context.theme.colorScheme.primary,
+            ),
+            tooltip: l10n.splitBill,
+            onPressed: () {
+              Navigator.of(context).push(
+                adaptiveSheetRoute(
+                  child: BillSplitterSheet(
+                    initialAmount:
+                        double.tryParse(paren.currencyTextInput.value) ?? 0,
+                    fromCurrencyId: paren.fromCurrency.value,
+                    toCurrencyId: paren.toCurrency.value,
+                  ),
+                ),
+              );
+            },
+          ),
+          IconButton(
+            visualDensity: VisualDensity.compact,
+            icon: Obx(() {
+              var active = paren.hasCustomRate(
+                paren.fromCurrency.value,
+                paren.toCurrency.value,
+              );
+              return Badge(
+                isLabelVisible: active,
+                smallSize: 8,
+                child: Icon(
+                  Icons.price_change_outlined,
                   color: context.theme.colorScheme.primary,
                 ),
-                onPressed: () async {
-                  await Clipboard.setData(
-                    ClipboardData(text: '$inputStr ➜ $amountStr'),
-                  );
-                  if (!mounted) return;
-                  AdaptiveSnackbar.showSnackBar(
-                    context,
-                    title: l10n.copiedToClipboard('$inputStr ➜ $amountStr'),
-                  );
-                },
-                tooltip: l10n.copy,
-              ),
-              if (paren.sheets.any(
-                (sheet) => sheet.fromCurrency == paren.fromCurrency.value,
-              ))
-                IconButton(
-                  onPressed: () async {
-                    var fromCurrency = paren.currencies.firstWhere(
-                      (element) => element.id == paren.fromCurrency.value,
-                    );
-                    var sheetsProvider = SheetsProvider(
-                      paren,
-                      context,
-                      fromCurrency.id.toUpperCase(),
-                    );
-                    var newEntry = SheetEntry(
-                      id: DateTime.now().millisecondsSinceEpoch.toString(),
-                      name: '',
-                      amount: inputConverted,
-                      createdAt: DateTime.now(),
-                      updatedAt: DateTime.now(),
-                    );
-                    await sheetsProvider.showEntryDialog(null, entry: newEntry);
-                  },
-                  color: context.theme.colorScheme.primary,
-                  icon: Icon(Icons.format_list_bulleted_add),
-                ),
-            ],
+              );
+            }),
+            onPressed: () => _showCustomRateDialog(context),
+            tooltip: l10n.customRateOverride,
           ),
-        ),
-        IconButton(
-          icon: Icon(
-            Icons.call_split_outlined,
-            color: context.theme.colorScheme.primary,
+          IconButton(
+            visualDensity: VisualDensity.compact,
+            icon: Icon(
+              Icons.text_fields,
+              color: context.theme.colorScheme.primary,
+            ),
+            tooltip: l10n.adjustSizes,
+            onPressed: () async {
+              await Navigator.of(context)
+                  .push(adaptiveSheetRoute(child: buildTextSizeAdjustSheet()));
+              paren.saveSettings();
+            },
           ),
-          tooltip: l10n.splitBill,
-          onPressed: () {
-            Navigator.of(context).push(
-              adaptiveSheetRoute(
-                child: BillSplitterSheet(
-                  initialAmount:
-                      double.tryParse(paren.currencyTextInput.value) ?? 0,
-                  fromCurrencyId: paren.fromCurrency.value,
-                  toCurrencyId: paren.toCurrency.value,
-                ),
-              ),
-            );
+        ],
+      ),
+    );
+  }
+
+  Future<void> _showHistoricalChart(BuildContext context) async {
+    var l10n = context.l10n;
+    if (paren.fromCurrency.value == paren.toCurrency.value) {
+      AdaptiveSnackbar.showSnackBar(context, title: l10n.chartDoesNotExist);
+      return;
+    }
+    await Navigator.of(context).push(
+      adaptiveSheetRoute(
+        child: ExChart(
+          idFrom: paren.fromCurrency.value,
+          idxFrom: paren.currencies.indexWhere(
+            (element) => element.id == paren.fromCurrency.value,
+          ),
+          idTo: paren.toCurrency.value,
+          idxTo: paren.currencies.indexWhere(
+            (element) => element.id == paren.toCurrency.value,
+          ),
+          localizedMonths: {
+            DateTime.january: l10n.monthJan,
+            DateTime.february: l10n.monthFeb,
+            DateTime.march: l10n.monthMar,
+            DateTime.april: l10n.monthApr,
+            DateTime.may: l10n.monthMay,
+            DateTime.june: l10n.monthJun,
+            DateTime.july: l10n.monthJul,
+            DateTime.august: l10n.monthAug,
+            DateTime.september: l10n.monthSep,
+            DateTime.october: l10n.monthOct,
+            DateTime.november: l10n.monthNov,
+            DateTime.december: l10n.monthDec,
+          },
+          localizedWeekdays: {
+            DateTime.monday: l10n.weekdayMon,
+            DateTime.tuesday: l10n.weekdayTue,
+            DateTime.wednesday: l10n.weekdayWed,
+            DateTime.thursday: l10n.weekdayThu,
+            DateTime.friday: l10n.weekdayFri,
+            DateTime.saturday: l10n.weekdaySat,
+            DateTime.sunday: l10n.weekdaySun,
           },
         ),
-        IconButton(
-          icon: Obx(() {
-            var active = paren.hasCustomRate(
-              paren.fromCurrency.value,
-              paren.toCurrency.value,
-            );
-            return Icon(
-              Icons.price_change_outlined,
-              color: active
-                  ? context.theme.colorScheme.primary
-                  : context.theme.colorScheme.primary.withValues(alpha: 0.6),
-            );
-          }),
-          onPressed: () => _showCustomRateDialog(context),
-          tooltip: l10n.customRateOverride,
-        ),
-        IconButton(
-          onPressed: () async {
-            await Navigator.of(context)
-                .push(adaptiveSheetRoute(child: buildTextSizeAdjustSheet()));
-            paren.saveSettings();
-          },
-          tooltip: l10n.adjustSizes,
-          icon: Icon(
-            Icons.text_fields,
-            color: context.theme.colorScheme.primary,
-          ),
-        ),
-      ],
+      ),
     );
   }
 
