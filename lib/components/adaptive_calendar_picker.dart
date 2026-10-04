@@ -41,7 +41,7 @@ class AdaptiveCalendarPicker {
       minimumDateTime: firstDate,
       initialDateTime: initialDate,
       maximumDateTime: lastDate,
-      dismissBehavior: CalendarDismissBehavior.onOusideTapOrDateSelect,
+      dismissBehavior: CalendarDismissBehavior.onOutsideTapOrDateSelect,
     );
   }
 }

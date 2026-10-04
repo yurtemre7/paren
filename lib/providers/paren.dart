@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:home_widget/home_widget.dart';
 import 'package:intl/intl.dart';
+import 'package:paren/classes/api_currency.dart';
+import 'package:paren/classes/api_rate.dart';
 import 'package:paren/classes/currency.dart';
 import 'package:paren/classes/favorite_conversion.dart';
 import 'package:paren/classes/sheet.dart';
@@ -82,52 +84,57 @@ class Paren extends GetxController {
         dio.get(latestRates),
         dio.get(currencieNames),
       ]);
-      List rates = responds[0].data;
-      List currencieNamesList = responds[1].data;
+      var rates = (responds[0].data as List)
+          .map(
+            (json) => ApiRate.fromJson(Map<String, dynamic>.from(json as Map)),
+          )
+          .toList();
+      var currencyInfoByCode = <String, ApiCurrency>{};
+      for (var json in responds[1].data as List) {
+        var currencyInfo = ApiCurrency.fromJson(
+          Map<String, dynamic>.from(json as Map),
+        );
+        currencyInfoByCode[currencyInfo.isoCode.toLowerCase()] = currencyInfo;
+      }
       var seenIds = <String>{};
       var onlineCurrencies = <Currency>[];
 
       for (var rate in rates) {
-        var id = rate['quote'].toString().toLowerCase();
+        var id = rate.quote.toLowerCase();
         if (!seenIds.add(id)) continue;
 
-        var currencyInfo = currencieNamesList.firstWhereOrNull(
-          (element) => element['iso_code'].toString().toLowerCase() == id,
-        );
+        var currencyInfo = currencyInfoByCode[id];
         if (currencyInfo != null) {
+          var symbol = currencyInfo.symbol?.trim();
           onlineCurrencies.add(
             Currency(
               id: id,
-              name: currencyInfo['name'],
-              // INFO: maybe use currencyInfo['symbol'] later
-              symbol: currencyInfo['symbol'],
-              // symbol: NumberFormat().simpleCurrencySymbol(currencyInfo['iso_code']),
-              rate: double.tryParse(rate['rate'].toString()) ?? 1.0,
+              name: currencyInfo.name,
+              // ISO code is an unambiguous fallback when no symbol is known.
+              symbol: symbol != null && symbol.isNotEmpty
+                  ? symbol
+                  : currencyInfo.isoCode,
+              rate: rate.rate,
             ),
           );
         }
       }
 
+      if (onlineCurrencies.isEmpty) {
+        throw const FormatException('No usable currency rates were returned.');
+      }
+
       onlineCurrencies.sort((c1, c2) => c1.name.compareTo(c2.name));
 
       currencies.value = onlineCurrencies;
-      if (!currencieNamesList.any(
-        (element) =>
-            element['iso_code'].toString().toLowerCase() ==
-            fromCurrency.value.toLowerCase(),
-      )) {
-        fromCurrency.value = currencieNamesList.first['iso_code']
-            .toString()
-            .toLowerCase();
+      var availableCurrencyIds = onlineCurrencies
+          .map((currency) => currency.id)
+          .toSet();
+      if (!availableCurrencyIds.contains(fromCurrency.value.toLowerCase())) {
+        fromCurrency.value = onlineCurrencies.first.id;
       }
-      if (!currencieNamesList.any(
-        (element) =>
-            element['iso_code'].toString().toLowerCase() ==
-            toCurrency.value.toLowerCase(),
-      )) {
-        toCurrency.value = currencieNamesList.first['iso_code']
-            .toString()
-            .toLowerCase();
+      if (!availableCurrencyIds.contains(toCurrency.value.toLowerCase())) {
+        toCurrency.value = onlineCurrencies.first.id;
       }
       updateCurrencies();
       updateDefaultConversion();

@@ -4,6 +4,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:paren/classes/api_rate.dart';
 import 'package:paren/components/adaptive_overlay.dart';
 import 'package:paren/l10n/app_localizations_extension.dart';
 import 'package:paren/providers/constants.dart';
@@ -99,13 +100,20 @@ class _ExChartState extends State<ExChart> {
       );
 
       if (resp.statusCode == 200) {
-        List body = resp.data;
-        var ratesList = body.map((element) {
-          var key = element['date'].toString();
-          var dateKey = DateTime.parse(key);
-          var dataValue = double.tryParse(element['rate'].toString()) ?? 0.0;
-          return (x: dateKey.millisecondsSinceEpoch.toDouble(), y: dataValue);
-        }).toList();
+        var body = (resp.data as List)
+            .map(
+              (json) =>
+                  ApiRate.fromJson(Map<String, dynamic>.from(json as Map)),
+            )
+            .toList();
+        var ratesList = body
+            .map(
+              (rate) => (
+                x: rate.date.millisecondsSinceEpoch.toDouble(),
+                y: rate.rate,
+              ),
+            )
+            .toList();
         currencyDataList.value = ratesList;
         // Generate prediction if enabled
         if (showPrediction.value && ratesList.isNotEmpty) {
