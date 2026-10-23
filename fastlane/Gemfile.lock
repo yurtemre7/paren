@@ -8,7 +8,7 @@ GEM
     artifactory (3.0.17)
     atomos (0.1.3)
     aws-eventstream (1.4.1)
-    aws-partitions (1.1297.0)
+    aws-partitions (1.1298.0)
     aws-sdk-core (3.260.0)
       aws-eventstream (~> 1, >= 1.4.1)
       aws-partitions (~> 1, >= 1.992.0)
@@ -122,7 +122,7 @@ GEM
     gh_inspector (1.1.3)
     google-apis-androidpublisher_v3 (0.110.0)
       google-apis-core (>= 0.15.0, < 2.a)
-    google-apis-core (1.3.2)
+    google-apis-core (1.4.0)
       addressable (~> 2.9)
       faraday (~> 2.13)
       faraday-follow_redirects (~> 0.3)
@@ -272,7 +272,7 @@ CHECKSUMS
   artifactory (3.0.17) sha256=3023d5c964c31674090d655a516f38ca75665c15084140c08b7f2841131af263
   atomos (0.1.3) sha256=7d43b22f2454a36bace5532d30785b06de3711399cb1c6bf932573eda536789f
   aws-eventstream (1.4.1) sha256=ceb6a99c61df4bb00344e54aed0351574beca24f87a0d1487d1d2ed80929ce96
-  aws-partitions (1.1297.0) sha256=ea84c3a800f8757e02a5bde8d324f68ee4d964dcd29ed33ef6b858c29de6b69a
+  aws-partitions (1.1298.0) sha256=c729707ab271e561bbb2c20078ed77cf210d1ba6541177fbd6b16f3c4b792938
   aws-sdk-core (3.260.0) sha256=cb09c6c0ca86f2779e8672ae214c044f07b76f2540d81f44c894d465f8a68bd5
   aws-sdk-kms (1.135.0) sha256=8879a194c716a9ee0df14b59c6bf27c7b6879fc251e206262a781d49a8455475
   aws-sdk-s3 (1.235.0) sha256=e42c1d4ee18014fe0b7d92267e97f20bb02634e35aa604443f76869255be5660
@@ -306,7 +306,7 @@ CHECKSUMS
   fastlane-sirp (1.1.0) sha256=10bc94f9682efd8e1badfb31452a76dd8981f1f3a33717c765fde6d75b54d847
   gh_inspector (1.1.3) sha256=04cca7171b87164e053aa43147971d3b7f500fcb58177698886b48a9fc4a1939
   google-apis-androidpublisher_v3 (0.110.0) sha256=0b0b84af02fb7f3a062849bc60d545ff8b37670ea7e90bd947199cc671916513
-  google-apis-core (1.3.2) sha256=dec616d1fee423b4337ca3a802efc61cff0739aa6a6de1ebd16ba30c1b7b6dd7
+  google-apis-core (1.4.0) sha256=74e838a334926e79ce685d3ff9f418956cc23e48c5fd7cade779fea933e96582
   google-apis-iamcredentials_v1 (0.28.0) sha256=0a92ffe6cc39c569554af2a77a25dfc61519ed8bbb64ab04cffdd352dc5ef106
   google-apis-playcustomapp_v1 (0.18.0) sha256=44b277b9dee4a59ac5e9d98be1485edc5e382d2f9d73c79ae8908a455786a254
   google-apis-storage_v1 (0.69.0) sha256=ca5faad4a244c609bb434f81884432c449e34b31a87623f7c32b582e464ca7c8
