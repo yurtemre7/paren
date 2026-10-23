@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -489,28 +491,50 @@ class _CalculatorKeyboardState extends State<CalculatorKeyboard> {
                       ],
                     ),
                     6.h,
-                    GridView.count(
-                      crossAxisCount: 3,
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      mainAxisSpacing: 6,
-                      crossAxisSpacing: 6,
-                      childAspectRatio: 1.2,
-                      children: [
-                        for (var i = 1; i <= 9; i++)
-                          _CalcButton(label: '$i', onTap: () => _append('$i')),
-                        _CalcButton(
-                          label: context.localeDecimalSeparator,
-                          onTap: () => _append('.'),
-                        ),
-                        _CalcButton(label: '0', onTap: () => _append('0')),
-                        _CalcButton(
-                          label: '⌫',
-                          onTap: _delete,
-                          onLongPress: _clear,
-                          color: Theme.of(context).colorScheme.error,
-                        ),
-                      ],
+                    // Keys keep a 1.2 aspect ratio, but get flatter when the
+                    // parent limits the keyboard's height.
+                    Flexible(
+                      child: LayoutBuilder(
+                        builder: (context, constraints) {
+                          var keyWidth = (constraints.maxWidth - 12) / 3;
+                          var keyHeight = math.min(
+                            keyWidth / 1.2,
+                            (constraints.maxHeight - 18) / 4,
+                          );
+                          return GridView(
+                            gridDelegate:
+                                SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 3,
+                                  mainAxisSpacing: 6,
+                                  crossAxisSpacing: 6,
+                                  mainAxisExtent: math.max(keyHeight, 40),
+                                ),
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            children: [
+                              for (var i = 1; i <= 9; i++)
+                                _CalcButton(
+                                  label: '$i',
+                                  onTap: () => _append('$i'),
+                                ),
+                              _CalcButton(
+                                label: context.localeDecimalSeparator,
+                                onTap: () => _append('.'),
+                              ),
+                              _CalcButton(
+                                label: '0',
+                                onTap: () => _append('0'),
+                              ),
+                              _CalcButton(
+                                label: '⌫',
+                                onTap: _delete,
+                                onLongPress: _clear,
+                                color: Theme.of(context).colorScheme.error,
+                              ),
+                            ],
+                          );
+                        },
+                      ),
                     ),
                   ],
                 ),

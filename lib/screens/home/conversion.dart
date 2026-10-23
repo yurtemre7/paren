@@ -36,6 +36,17 @@ class _ConversionState extends State<Conversion> {
 
   @override
   Widget build(BuildContext context) {
+    return LayoutBuilder(builder: buildLayout);
+  }
+
+  Widget buildLayout(BuildContext context, BoxConstraints constraints) {
+    // On short screens (e.g. a folded foldable), shrink the keypad so the
+    // conversion result and currency selectors above it stay visible.
+    // 310 fits the keypad with 40pt keys, so keys never get squashed.
+    var keyboardMaxHeight = (constraints.maxHeight - 220).clamp(
+      310.0,
+      double.infinity,
+    );
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -54,7 +65,10 @@ class _ConversionState extends State<Conversion> {
           ),
         ),
         8.h,
-        CalculatorKeyboard(input: paren.currencyTextInput),
+        ConstrainedBox(
+          constraints: BoxConstraints(maxHeight: keyboardMaxHeight),
+          child: CalculatorKeyboard(input: paren.currencyTextInput),
+        ),
       ],
     );
   }
