@@ -2,6 +2,8 @@ import 'dart:async';
 import 'dart:math' as math;
 import 'dart:ui' show DisplayFeature, DisplayFeatureType;
 
+import 'package:flutter/foundation.dart'
+    show TargetPlatform, defaultTargetPlatform;
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widget_previews.dart';
@@ -312,15 +314,19 @@ class _HomeState extends State<Home> {
     );
   }
 
-  /// Shrinks the home-indicator inset below the nav bar; the full inset leaves
-  /// a large empty strip on devices like foldables.
+  /// Drops the status-bar inset above the nav bar (its SafeArea would pad the
+  /// top) and shrinks the home-indicator inset below it; the full inset leaves
+  /// a large empty strip on devices like foldables. The bottom cap is iOS
+  /// only: on Android the inset is the system navigation bar, which the nav
+  /// bar must stay above.
   Widget buildCompactNavBar(Widget navigationBar) {
     var mediaQuery = MediaQuery.of(context);
+    var bottom = defaultTargetPlatform == TargetPlatform.iOS
+        ? math.min(mediaQuery.padding.bottom, 16.0)
+        : mediaQuery.padding.bottom;
     return MediaQuery(
       data: mediaQuery.copyWith(
-        padding: mediaQuery.padding.copyWith(
-          bottom: math.min(mediaQuery.padding.bottom, 16),
-        ),
+        padding: mediaQuery.padding.copyWith(top: 0, bottom: bottom),
       ),
       child: navigationBar,
     );
