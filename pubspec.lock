@@ -372,7 +372,7 @@ packages:
     description:
       path: "packages/home_widget"
       ref: HEAD
-      resolved-ref: "097149e422a9a1943408155905655cfc52306c01"
+      resolved-ref: "635f001d8e1287739f00dba4c7ff823a73d1f3a3"
       url: "https://github.com/ABausG/home_widget"
     source: git
     version: "0.10.0"
